@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+/* .mat-row:nth-child(even){
+    background-color:red;
+    } */
+
+.mat-row:nth-child(odd){
+    background-color:#dee2e6;
+    }
