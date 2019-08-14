@@ -1,0 +1,22 @@
+<h1>Apartments</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+<p *ngIf="!apartments"><em>Loading...</em></p>
+
+<table class='table table-striped' *ngIf="apartments">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Address</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let apartment of apartments">
+      <td>{{ apartment.id }}</td>
+      <td>{{ apartment.address }}</td>
+      <td>{{ apartment.status }}</td>
+    </tr>
+  </tbody>
+</table>

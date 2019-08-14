@@ -1,0 +1,23 @@
+<div class="container">
+    <form [formGroup]="apartmentForm" (ngSubmit)="saveApartment(apartmentForm.value)">
+      <h3>Add new apartment</h3>
+
+      <fieldset><label>Address</label>
+        <input  formControlName="address"   placeholder="Address" type="text" tabindex="1" required autofocus>
+      </fieldset>
+      <fieldset><label>Status</label>
+        <!-- <input  formControlName="status"   placeholder="Status" type="text" tabindex="1" required autofocus> -->
+        <select formControlName="status">
+          <option value="0">Select Status</option>
+          <option *ngFor="let stat of statuses" value="{{stat.key}}">
+            {{stat.value}}
+          </option>
+        </select>
+       </fieldset> 
+      <fieldset>
+        <button name="submit"  type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
+
+      </fieldset>
+
+    </form>
+  </div>
