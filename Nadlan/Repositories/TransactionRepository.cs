@@ -15,9 +15,16 @@ namespace Nadlan.Repositories
             _context = context;
         }
 
+        public override async Task Add(Transaction transaction)
+        {
+            Account account = _context.Accounts.First(a => a.Id == transaction.AccountId);
+            transaction.Amount = !account.IsIncome ? transaction.Amount * -1 : transaction.Amount;
+            await _context.Set<Transaction>().AddAsync(transaction);
+        }
+
         public override async Task<List<Transaction>> GetAllAsync()
         {
-            return await _context.Transactions.Include(a => a.Account).Include(a => a.Apartment).ToListAsync();
+            return await _context.Transactions.OrderByDescending(a => a.Date).Include(a => a.Account).Include(a => a.Apartment).ToListAsync();
         }
     }
 }

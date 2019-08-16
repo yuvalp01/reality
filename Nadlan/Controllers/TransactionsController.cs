@@ -105,9 +105,10 @@ namespace Nadlan.Controllers
             }
 
             var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
-
-            _context.Transactions.Add(transaction);
-            await _context.SaveChangesAsync();
+            _repositoryWraper.Transaction.Add(transaction);
+            await _repositoryWraper.Transaction.SaveAsync(transaction);
+            //_context.Transactions.Add(transaction);
+            //await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
         }

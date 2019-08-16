@@ -13,9 +13,9 @@ namespace Nadlan.Repositories
         {
             _context = conext;
         }
-        public void Add(T entity)
+        public virtual async Task Add(T entity)
         {
-            _context.Set<T>().Add(entity);
+           await _context.Set<T>().AddAsync(entity);
         }
         public void Update(T entity)
         {
