@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, ViewChild } from "@angular/core";
+import { Component, OnInit, NgZone, ViewChild, Output, Inject } from "@angular/core";
 import { ApartmentService } from "../services/apartment.service";
 import { IApartment, ITransaction, IAccount } from "../shared/models";
 import { FormControl, FormGroup } from "@angular/forms";
@@ -7,6 +7,8 @@ import { TransactionService } from "../services/transaction.service";
 import { Router } from "@angular/router";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import {take} from 'rxjs/operators';
+import { EventEmitter } from "events";
+import { MAT_DIALOG_DATA } from "@angular/material";
 
 
 @Component(
@@ -20,7 +22,9 @@ export class AddTransactionComponent implements OnInit
                  private accountService: AccountService,
                  private transactionService: TransactionService,
                  private router:Router,
-                 private _ngZone: NgZone)
+                 private _ngZone: NgZone,
+                // @Inject(MAT_DIALOG_DATA) public data: any
+                 )
                  {
 
                  }
@@ -28,7 +32,11 @@ export class AddTransactionComponent implements OnInit
     accounts:IAccount[];
     transactionForm: FormGroup;
 
+    //@Output() test = new EventEmitter();
+
     ngOnInit(): void {
+
+      // console.log(this.data);
 
       this.apartmentService.getApartments().subscribe(result=> this.apartments = result,error=>console.error(error));
       this.accountService.getAccounts().subscribe(result=>this.accounts = result, error=>console.error(error));
@@ -54,8 +62,12 @@ export class AddTransactionComponent implements OnInit
     }
     saveTransaction(formValues: any):void{
       var transaction:ITransaction = Object.assign({},formValues);
-      debugger
-        console.log(transaction);
+      //debugger
+        //console.log(transaction);
+        //this.transactionService.getTransactions().subscribe(result=>this.data=result, error=>console.error(error));
+        
+        // this.test.emit("sdf");
+        
         this.transactionService.addTransaction(transaction).subscribe(()=>{
             console.log("success!");
             this.router.navigate(['/fetch-transactions']);
@@ -69,11 +81,3 @@ export class AddTransactionComponent implements OnInit
     }
 
 }
-
-
-// export interface ITransaction {
-//     isPurchaseCost: boolean;
-//     amount: number;
-//     apartmentId:number;
-//     accountId:number;
-//   }
