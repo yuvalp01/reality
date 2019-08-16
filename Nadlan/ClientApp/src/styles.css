@@ -8,3 +8,7 @@
 .mat-row:nth-child(odd){
     background-color:#dee2e6;
     }
+
+.mat-column-comments {
+  max-width: 500px;
+}
