@@ -10,7 +10,7 @@ using Nadlan.Repositories;
 namespace Nadlan.Migrations
 {
     [DbContext(typeof(NadlanConext))]
-    [Migration("20190813174850_InitialCreate")]
+    [Migration("20190814161917_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
