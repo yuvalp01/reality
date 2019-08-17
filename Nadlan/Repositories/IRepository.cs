@@ -8,9 +8,9 @@ namespace Nadlan.Repositories
     public interface IRepository<T>
     {
         Task<List<T>> GetAllAsync();
-        Task Add(T entity);
+        void Create(T entity);
         void Update(T entity);
         void Delete(T entity);
-        Task<T> SaveAsync(T entity);
+        Task SaveAsync();
     }
 }

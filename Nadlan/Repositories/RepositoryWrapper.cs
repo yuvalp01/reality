@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Nadlan.Repositories
 {
-    public class RepositoryWrapper: IRepositoryWrapper
+    public class RepositoryWrapper : IRepositoryWrapper
     {
         private NadlanConext _conext;
         private TransactionRepository _transaction;
@@ -22,7 +22,7 @@ namespace Nadlan.Repositories
             {
                 if (_transaction == null)
                 {
-                    return new TransactionRepository(_conext);
+                    _transaction = new TransactionRepository(_conext);
                 }
                 return _transaction;
             }
@@ -33,7 +33,7 @@ namespace Nadlan.Repositories
             {
                 if (_account == null)
                 {
-                    return new AccountRepository(_conext);
+                    _account = new AccountRepository(_conext);
                 }
                 return _account;
             }

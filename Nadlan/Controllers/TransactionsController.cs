@@ -34,8 +34,6 @@ namespace Nadlan.Controllers
         [HttpGet]
         public async Task<IEnumerable<TransactionDto>> GetTransactions()
         {
-            //var transactions_ = _context.Transactions.Include(a=>a.Account).Include(a=>a.Apartment);
-            //var transactions = await  _repository.GetAllAsync();
             var transactions = await  _repositoryWraper.Transaction.GetAllAsync();
             var transactionsDto =   _mapper.Map<List<Transaction>, IEnumerable<TransactionDto>>(transactions);
             return transactionsDto;
@@ -105,8 +103,8 @@ namespace Nadlan.Controllers
             }
 
             var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
-            _repositoryWraper.Transaction.Add(transaction);
-            await _repositoryWraper.Transaction.SaveAsync(transaction);
+            await  _repositoryWraper.Transaction.CreateTransactionAsync(transaction);
+            //await _repositoryWraper.Transaction.SaveAsync(transaction);
             //_context.Transactions.Add(transaction);
             //await _context.SaveChangesAsync();
 

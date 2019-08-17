@@ -8,35 +8,36 @@ namespace Nadlan.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly NadlanConext _context;
+
+        protected NadlanConext Context { get; set; }
         public Repository(NadlanConext conext)
         {
-            _context = conext;
+            Context = conext;
         }
-        public virtual async Task Add(T entity)
+
+        public void Create(T entity)
         {
-           await _context.Set<T>().AddAsync(entity);
+            Context.Set<T>().Add(entity);
         }
         public void Update(T entity)
         {
-            _context.Set<T>().Update(entity);
+            Context.Set<T>().Update(entity);
         }
         public void Delete(T entity)
         {
-            _context.Set<T>().Remove(entity);
+            Context.Set<T>().Remove(entity);
         }
 
-        public async virtual Task<List<T>> GetAllAsync()
+        public virtual Task<List<T>> GetAllAsync()
         {
-            return await _context.Set<T>().ToListAsync();
+            return Context.Set<T>().ToListAsync();
         }
 
-        public async Task<T> SaveAsync(T entity)
+        public async Task SaveAsync()
         {
-            await _context.SaveChangesAsync();
-            return entity;
+            await Context.SaveChangesAsync();
         }
-       
+
 
     }
 }
