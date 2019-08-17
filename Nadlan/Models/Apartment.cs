@@ -16,5 +16,6 @@ namespace Nadlan.Models
         public string Door { get; set; }
         public decimal CurrentRent { get; set; }
         public ICollection<Transaction> Transactions { get; set; }
+        public ICollection<RenovationLine> RenovationLines { get; set; }
     }
 }
