@@ -53,9 +53,7 @@ namespace Nadlan.Repositories
             && t.ApartmentId == apartmentId
             && t.Date.Year == year;
 
-
             Func<Transaction, bool> pred = year == 0 ? predAll : predWithYear;
-
 
             var grossIncome = Context.Transactions.Where(pred)
                 .Where(a => a.AccountId == 1);
@@ -84,48 +82,6 @@ namespace Nadlan.Repositories
         }
     }
 
-    //var grossIncome_old = Context.Transactions.Where(a =>
-    //              a.IsPurchaseCost == false
-    //           && a.Apartment.Id == apartmentId
-    //           && a.Date.Year == year
-    //           && a.AccountId == 1);//.Sum(b => b.Amount);
-
-    //        var expenses_old = Context.Transactions.Where(a =>
-    //               a.IsPurchaseCost == false
-    //            && a.Apartment.Id == apartmentId
-    //            && a.Date.Year == year
-    //            && a.AccountId != 5
-    //            && a.Amount <= 0);//.Sum(b => b.Amount);
-
-    //        var tax_old = Context.Transactions.Where(a =>
-    //               a.IsPurchaseCost == false
-    //            && a.Apartment.Id == apartmentId
-    //            && a.Date.Year == year
-    //            && a.AccountId == 5
-    //            && a.Amount <= 0);//.Sum(b => b.Amount);
-
-    //        var netIncome_old = Context.Transactions.Where(a =>
-    //               a.IsPurchaseCost == false
-    //            && a.Apartment.Id == apartmentId
-    //            && a.Date.Year == year);//.Sum(b => b.Amount);
-
-    //        var forDistribution_old = Context.Transactions.Where(a =>
-    //               a.IsPurchaseCost == false
-    //            && a.Apartment.Id == apartmentId
-    //            && a.Date.Year == year);//.Sum(b => b.Amount) / 2;
-
-            //SummaryReport summaryReport_ = new SummaryReport
-            //{
-            //    GrossIncome = await grossIncome_old.SumAsync(b => b.Amount),
-            //    Expenses = await expenses_old.SumAsync(b => b.Amount),
-            //    Tax = await tax_old.SumAsync(b => b.Amount),
-            //    NetIcome = await netIncome_old.SumAsync(b => b.Amount),
-            //    ForDistribution = await netIncome.SumAsync(b => b.Amount) / 2,
-            //};
-
-
-
-
 
     public class SummaryReport
     {
@@ -137,3 +93,43 @@ namespace Nadlan.Repositories
     }
 
 }
+
+
+//var grossIncome_old = Context.Transactions.Where(a =>
+//              a.IsPurchaseCost == false
+//           && a.Apartment.Id == apartmentId
+//           && a.Date.Year == year
+//           && a.AccountId == 1);//.Sum(b => b.Amount);
+
+//        var expenses_old = Context.Transactions.Where(a =>
+//               a.IsPurchaseCost == false
+//            && a.Apartment.Id == apartmentId
+//            && a.Date.Year == year
+//            && a.AccountId != 5
+//            && a.Amount <= 0);//.Sum(b => b.Amount);
+
+//        var tax_old = Context.Transactions.Where(a =>
+//               a.IsPurchaseCost == false
+//            && a.Apartment.Id == apartmentId
+//            && a.Date.Year == year
+//            && a.AccountId == 5
+//            && a.Amount <= 0);//.Sum(b => b.Amount);
+
+//        var netIncome_old = Context.Transactions.Where(a =>
+//               a.IsPurchaseCost == false
+//            && a.Apartment.Id == apartmentId
+//            && a.Date.Year == year);//.Sum(b => b.Amount);
+
+//        var forDistribution_old = Context.Transactions.Where(a =>
+//               a.IsPurchaseCost == false
+//            && a.Apartment.Id == apartmentId
+//            && a.Date.Year == year);//.Sum(b => b.Amount) / 2;
+
+//SummaryReport summaryReport_ = new SummaryReport
+//{
+//    GrossIncome = await grossIncome_old.SumAsync(b => b.Amount),
+//    Expenses = await expenses_old.SumAsync(b => b.Amount),
+//    Tax = await tax_old.SumAsync(b => b.Amount),
+//    NetIcome = await netIncome_old.SumAsync(b => b.Amount),
+//    ForDistribution = await netIncome.SumAsync(b => b.Amount) / 2,
+//};

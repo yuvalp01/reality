@@ -10,7 +10,7 @@ using Nadlan.Repositories;
 namespace Nadlan.Migrations
 {
     [DbContext(typeof(NadlanConext))]
-    [Migration("20190814161917_InitialCreate")]
+    [Migration("20190817193659_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,11 +44,65 @@ namespace Nadlan.Migrations
 
                     b.Property<string>("Address");
 
+                    b.Property<decimal>("CurrentRent");
+
+                    b.Property<string>("Door");
+
+                    b.Property<int>("Floor");
+
+                    b.Property<DateTime>("PurchaseDate");
+
+                    b.Property<int>("Size");
+
                     b.Property<short>("Status");
 
                     b.HasKey("Id");
 
                     b.ToTable("Apartments");
+                });
+
+            modelBuilder.Entity("Nadlan.Models.RenovationItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Cost");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("link");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RenovationItems");
+                });
+
+            modelBuilder.Entity("Nadlan.Models.RenovationLine", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ApartmentId");
+
+                    b.Property<string>("Comments");
+
+                    b.Property<int>("Quantity");
+
+                    b.Property<int>("RenovationItemId");
+
+                    b.Property<string>("Title");
+
+                    b.Property<decimal>("WorkCost");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApartmentId");
+
+                    b.HasIndex("RenovationItemId");
+
+                    b.ToTable("RenovationLines");
                 });
 
             modelBuilder.Entity("Nadlan.Models.Transaction", b =>
@@ -76,6 +130,19 @@ namespace Nadlan.Migrations
                     b.HasIndex("ApartmentId");
 
                     b.ToTable("Transactions");
+                });
+
+            modelBuilder.Entity("Nadlan.Models.RenovationLine", b =>
+                {
+                    b.HasOne("Nadlan.Models.Apartment", "Apartment")
+                        .WithMany("RenovationLines")
+                        .HasForeignKey("ApartmentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Nadlan.Models.RenovationItem", "RenovationItem")
+                        .WithMany("Lines")
+                        .HasForeignKey("RenovationItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Nadlan.Models.Transaction", b =>

@@ -73,7 +73,7 @@ namespace Nadlan.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RenovationItem");
+                    b.ToTable("RenovationItems");
                 });
 
             modelBuilder.Entity("Nadlan.Models.RenovationLine", b =>
@@ -100,7 +100,7 @@ namespace Nadlan.Migrations
 
                     b.HasIndex("RenovationItemId");
 
-                    b.ToTable("RenovationLine");
+                    b.ToTable("RenovationLines");
                 });
 
             modelBuilder.Entity("Nadlan.Models.Transaction", b =>
