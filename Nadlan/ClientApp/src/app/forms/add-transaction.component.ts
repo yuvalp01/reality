@@ -60,14 +60,14 @@ export class AddTransactionComponent implements OnInit
 
             });
     }
-    saveTransaction(formValues: any):void{
-      var transaction:ITransaction = Object.assign({},formValues);
-      //debugger
-        //console.log(transaction);
-        //this.transactionService.getTransactions().subscribe(result=>this.data=result, error=>console.error(error));
-        
-        // this.test.emit("sdf");
-        
+  saveTransaction(formValues: any): void{
+
+      
+    var transaction: ITransaction = Object.assign({}, formValues);
+    ///fix UTC issue:
+    let date = transaction.date;
+    transaction.date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + 12);
+    ///
         this.transactionService.addTransaction(transaction).subscribe(()=>{
             console.log("success!");
             this.router.navigate(['/fetch-transactions']);
