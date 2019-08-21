@@ -17,7 +17,9 @@ import { TransactionService } from './services/transaction.service';
 import { TransactionListComponent } from './fetch-data/fetch-transactions.component';
 import { AddApartmentForm } from './forms/add-apartment.component';
 import { AddTransactionComponent} from './forms/add-transaction.component';
-import {AddAccoutComponent} from './forms/add-account.component';
+import { AddAccoutComponent } from './forms/add-account.component';
+import { ReportService } from './services/reports.service';
+import { ReportsComponent } from './fetch-data/reports.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyOwnCustomMaterialModule } from './shared/cusotom-material';
 import { MAT_DATE_LOCALE } from '@angular/material';
@@ -33,7 +35,8 @@ import { MAT_DATE_LOCALE } from '@angular/material';
     AccountListComponent,
     TransactionListComponent,
     AddTransactionComponent,
-    AddAccoutComponent
+    AddAccoutComponent,
+    ReportsComponent
     
   ],
   imports: [
@@ -52,10 +55,25 @@ import { MAT_DATE_LOCALE } from '@angular/material';
       { path: 'fetch-accounts', component: AccountListComponent },
       { path: 'fetch-transactions', component: TransactionListComponent },
       { path: 'add-transaction', component: AddTransactionComponent },
-      { path: 'add-account', component:AddAccoutComponent}
+      { path: 'add-account', component: AddAccoutComponent },
+      { path: 'reports', component: ReportsComponent },
+      { path: 'reports/:apartmentId', component: ReportsComponent },
+
+      //{
+      //  path: 'reports', component: ReportsComponent, children[
+      //    {
+      //      path: '',
+      //      component:
+      //    }
+      //              {
+      //      path: '',
+      //      component:
+      //    }
+      //  ]
+      //}
     ])
   ],
-  providers: [ApartmentService, AccountService, TransactionService, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
+  providers: [ApartmentService, AccountService, TransactionService, ReportService, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

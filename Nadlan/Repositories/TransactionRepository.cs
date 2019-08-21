@@ -16,7 +16,7 @@ namespace Nadlan.Repositories
 
         public override async Task<List<Transaction>> GetAllAsync()
         {
-            return await Context.Transactions.OrderByDescending(a => a.Date).Include(a => a.Account).Include(a => a.Apartment).ToListAsync();
+            return await Context.Transactions.OrderByDescending(a => a.Id).Include(a => a.Account).Include(a => a.Apartment).ToListAsync();
         }
 
         public async Task CreateTransactionAsync(Transaction transaction)
@@ -43,9 +43,41 @@ namespace Nadlan.Repositories
             return Context.Transactions.FindAsync(id);
         }
 
+        public async Task<PurchaseReport> GetPurchaseReport(int apartmentId)
+        {
+            Func<Transaction, bool> basicPredicate = t => t.IsPurchaseCost && t.ApartmentId == apartmentId;
+            var investment = Context.Transactions
+                .Where(basicPredicate).Where(a => a.AccountId == 15);
+            var totalCost = Context.Transactions.Where(basicPredicate)
+                .Where(a => a.Amount <= 0);
+            var renovationCost = Context.Transactions.Where(basicPredicate)
+                .Where(a => a.AccountId == 6);
+            var expensesNoRenovation = Context.Transactions.Where(basicPredicate)
+                .Where(a => a.Amount <= 0 && a.AccountId != 6 && a.AccountId != 14);
+            var accountSummary = Context.Transactions.Include(a=>a.Account).Where(basicPredicate).GroupBy(g => new { g.AccountId, g.Account.Name })
+                .Select(a => new AccountSummary
+                {
+                    AccountId = a.Key.AccountId,
+                    Name = a.Key.Name,
+                    Total = a.Sum(s => s.Amount)
+                }); ;
 
 
-        public async Task<SummaryReport> GetReport(int apartmentId, int year)
+            PurchaseReport purchaseReport = new PurchaseReport
+            {
+                Investment = await Task.FromResult(investment.Sum(a => a.Amount)),
+                TotalCost = await Task.FromResult(totalCost.Sum(a => a.Amount)),
+                RenovationCost = await Task.FromResult(renovationCost.Sum(a => a.Amount)),
+                ExpensesNoRenovation = await Task.FromResult(expensesNoRenovation.Sum(a => a.Amount)),
+                AccountsSum = await Task.FromResult(accountSummary.ToList())
+            };
+
+            purchaseReport.Remainder = purchaseReport.Investment + purchaseReport.TotalCost;
+
+            return purchaseReport;
+        }
+
+        public async Task<SummaryReport> GetSummaryReport(int apartmentId, int year)
         {
             Func<Transaction, bool> predAll = t => t.IsPurchaseCost == false && t.ApartmentId == apartmentId;
             Func<Transaction, bool> predWithYear = t =>
@@ -75,7 +107,7 @@ namespace Nadlan.Repositories
                 GrossIncome = await Task.FromResult(grossIncome.Sum(b => b.Amount)),
                 Expenses = await Task.FromResult(expenses.Sum(b => b.Amount)),
                 Tax = await Task.FromResult(tax.Sum(b => b.Amount)),
-                NetIcome = await Task.FromResult(netIncome.Sum(b => b.Amount)),
+                NetIncome = await Task.FromResult(netIncome.Sum(b => b.Amount)),
                 ForDistribution = await Task.FromResult(netIncome.Sum(b => b.Amount)) / 2
             };
             return summaryReport;
@@ -83,14 +115,7 @@ namespace Nadlan.Repositories
     }
 
 
-    public class SummaryReport
-    {
-        public decimal GrossIncome { get; set; }
-        public decimal Expenses { get; set; }
-        public decimal Tax { get; set; }
-        public decimal NetIcome { get; set; }
-        public decimal ForDistribution { get; set; }
-    }
+
 
 }
 

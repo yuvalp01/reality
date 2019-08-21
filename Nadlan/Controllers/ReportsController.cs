@@ -25,40 +25,42 @@ namespace Nadlan.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Transactions
-        [HttpGet]
-        public async Task<IEnumerable<SummaryReport>> GetReports()
+
+        [HttpGet("GetPurchaseReport/{apartmentId}")]
+        public async Task<IActionResult> GetPurchaseReport([FromRoute] int apartmentId)
         {
 
-            Task<List<SummaryReport>> task = Task.Run(() => new List<SummaryReport>());
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            return await task;
+            PurchaseReport purchaseReport = await _repositoryWraper.Transaction.GetPurchaseReport(apartmentId);
+            if (purchaseReport == null)
+            {
+                return NotFound();
+            }
 
-
-
-            //var transactions = await  _repositoryWraper.Transaction.GetAllAsync();
-            //var transactionsDto =   _mapper.Map<List<Transaction>, IEnumerable<TransactionDto>>(transactions);
-            //return transactionsDto;
+            return Ok(purchaseReport);
         }
 
-        // GET: api/Transactions/5
-        //[HttpGet("{id}")]
-        [HttpGet("{apartmentId}/{year=0}")]
-        public async Task<IActionResult> GetReport([FromRoute] int apartmentId, int year)
+
+        [HttpGet("GetIncomeReports/{apartmentId}/{year=0}")]
+        public async Task<IActionResult> GetIncomeReports([FromRoute] int apartmentId, int year)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var report = await _repositoryWraper.Transaction.GetReport(apartmentId, year);
+            SummaryReport summaryReport = await _repositoryWraper.Transaction.GetSummaryReport(apartmentId, year);
 
-            if (report == null)
+            if (summaryReport == null)
             {
                 return NotFound();
             }
 
-            return Ok(report);
+            return Ok(summaryReport);
         }
 
     }

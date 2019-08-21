@@ -1,0 +1,224 @@
+<h1>Reports</h1>
+
+<p>This component demonstrates fetching data from the server....</p>
+
+<!--<mat-drawer-container class="example-container">
+  <mat-drawer mode="side" opened>
+
+    <mat-list-item role="listitem">
+      <li class="nav-item" [routerLinkActive]='["link-active"]'>
+        <a class="nav-link text-dark" [routerLink]='["/reports/1"]'>Apartment 1</a>
+      </li>
+    </mat-list-item>
+    <mat-list-item role="listitem">
+      <li class="nav-item" [routerLinkActive]='["link-active"]'>
+        <a class="nav-link text-dark" [routerLink]='["/reports/2"]'>Apartment 2</a>
+      </li>
+    </mat-list-item>
+    <mat-list-item role="listitem">
+      <li class="nav-item" [routerLinkActive]='["link-active"]'>
+        <a class="nav-link text-dark" [routerLink]='["/reports/3"]'>Apartment 3</a>
+      </li>
+    </mat-list-item>
+    <mat-list-item role="listitem">
+      <li class="nav-item" [routerLinkActive]='["link-active"]'>
+        <a class="nav-link text-dark" [routerLink]='["/reports/4"]'>Apartment 4</a>
+      </li>
+    </mat-list-item>
+  </mat-drawer>
+  <mat-drawer-content>-->
+
+
+<mat-grid-list cols="2" rowHeight="420px">
+  <mat-grid-tile>
+    <mat-card>
+      <table class='table table-striped' *ngIf="incomeReport">
+        <tbody>
+          <tr>
+            <td>Investment</td>
+            <td>{{ purchaseReport.investment | currency:'EUR' : number:'1.0-0'}}</td>
+          </tr>
+          <tr>
+            <td>Total Cost </td>
+            <td>{{ purchaseReport.totalCost | currency:'EUR' : number:'1.0-0' }}</td>
+          </tr>
+          <tr>
+            <td>RenovationCost</td>
+            <td>{{ purchaseReport.renovationCost | currency:'EUR' : number:'1.0-0' }}</td>
+          </tr>
+          <tr>
+            <td>Expenses without renovation </td>
+            <td>{{ purchaseReport.expensesNoRenovation | currency:'EUR' : number:'1.0-0' }}</td>
+          </tr>
+          <tr>
+            <td>Remainder </td>
+            <td>{{ purchaseReport.remainder | currency:'EUR' : number:'1.0-0'}}</td>
+          </tr>
+          <!--<tr>
+    <td colspan="2">Accounts Sum</td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <table class='table table-striped'>
+
+        <tr *ngFor="let account of purchaseReport.accountsSum">
+
+          <td> {{ account.accountId }}</td>
+          <td> {{ account.name }}</td>
+          <td> {{ account.total }}</td>
+        </tr>
+      </table>
+
+
+    </td>
+  </tr>-->
+
+        </tbody>
+      </table>
+
+    </mat-card>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+
+    <mat-card>
+      <mat-card-title>Income Report</mat-card-title>
+      <mat-card-subtitle>
+        <form #yearForm="ngForm">
+          <mat-form-field style="width: 100%" appearance="outline">
+            <mat-label>Year</mat-label>
+            <mat-select (selectionChange)="onChange($event)" [(ngModel)]="selectedYear" name="selectedYear">
+              <mat-option *ngFor="let year of years" [value]="year">
+                {{year}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </form>
+      </mat-card-subtitle>
+      <mat-card-content>
+        <table class='table table-striped' *ngIf="incomeReport">
+
+          <tbody>
+            <tr>
+              <td>Gross Income</td>
+              <td>{{ incomeReport.grossIncome| currency:'EUR' : number:'1.0-0' }}</td>
+            </tr>
+            <tr>
+              <td>Expenses </td>
+              <td>{{ incomeReport.expenses| currency:'EUR' : number:'1.0-0' }}</td>
+            </tr>
+            <tr>
+              <td>Tax</td>
+              <td>{{ incomeReport.tax | currency:'EUR' : number:'1.0-0'}}</td>
+            </tr>
+            <tr>
+              <td>Net Income </td>
+              <td>{{ incomeReport.netIncome| currency:'EUR' : number:'1.0-0' }}</td>
+            </tr>
+            <tr>
+              <td>Available For Distribution</td>
+              <td>{{ incomeReport.forDistribution| currency:'EUR' : number:'1.0-0' }}</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>
+
+
+
+
+
+
+<!--<mat-card class="example-card">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>Shiba Inu</mat-card-title>
+    <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+  </mat-card-header>
+  <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+  <mat-card-content>
+    <p>
+      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+      bred for hunting.
+    </p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button>LIKE</button>
+    <button mat-button>SHARE</button>
+  </mat-card-actions>
+</mat-card>-->
+
+
+<!--<table class='table table-striped' *ngIf="incomeReport">
+  <tbody>
+    <tr>
+      <td>Investment</td>
+      <td>{{ purchaseReport.investment }}</td>
+    </tr>
+    <tr>
+      <td>Total Cost </td>
+      <td>{{ purchaseReport.totalCost }}</td>
+    </tr>
+    <tr>
+      <td>renovationCost</td>
+      <td>{{ purchaseReport.renovationCost }}</td>
+    </tr>
+    <tr>
+      <td>expensesNoRenovation </td>
+      <td>{{ purchaseReport.expensesNoRenovation }}</td>
+    </tr>
+    <tr>
+      <td colspan="2">Accounts Sum</td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <table class='table table-striped'>
+
+          <tr *ngFor="let account of purchaseReport.accountsSum">
+
+            <td> {{ account.accountId }}</td>
+            <td> {{ account.name }}</td>
+            <td> {{ account.total }}</td>
+          </tr>
+        </table>
+
+
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<br /><br />
+<table class='table table-striped' *ngIf="incomeReport">
+
+  <tbody>
+    <tr>
+      <td>Gross Income</td>
+      <td>{{ incomeReport.grossIncome }}</td>
+    </tr>
+    <tr>
+      <td>Expenses </td>
+      <td>{{ incomeReport.expenses }}</td>
+    </tr>
+    <tr>
+      <td>Tax</td>
+      <td>{{ incomeReport.tax }}</td>
+    </tr>
+    <tr>
+      <td>Net Income </td>
+      <td>{{ incomeReport.netIncome }}</td>
+    </tr>
+    <tr>
+      <td>Available For Distribution</td>
+      <td>{{ incomeReport.forDistribution }}</td>
+    </tr>
+
+  </tbody>
+</table>-->
+
+
+

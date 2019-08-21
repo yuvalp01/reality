@@ -12,3 +12,13 @@
 .mat-column-comments {
   max-width: 500px;
 }
+mat-grid-tile {
+  background: lightblue;
+}
+.example-container {
+  width: 100%;
+  border: 1px solid #555;
+}
+.mat-card {
+  min-width: 350px;
+}
