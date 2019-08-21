@@ -15,6 +15,7 @@ export class TransactionListComponent implements OnInit {
   //transactions: ITransaction[];
   dataSource = new MatTableDataSource<ITransaction>();
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+  selectedApartment: any;
   constructor(private transactionService: TransactionService, private dialog: MatDialog) {
   }
   ngOnInit(): void {
@@ -24,11 +25,11 @@ export class TransactionListComponent implements OnInit {
       //this.transactions = result;
       this.dataSource = new MatTableDataSource(result);
       this.dataSource.sort = this.sort;
-      //this.dataSource.filter = 'x';
+      this.dataSource.filter = this.selectedApartment;
 
 
       this.dataSource.filterPredicate = function (data, filter: string): boolean {
-        return data.apartmentId.toString() === filter;
+        return data.apartmentAddress.toLowerCase().includes(filter);
       };
 
 
@@ -58,5 +59,11 @@ openDialog()
 ngAfterViewInit(): void {
   this.dataSource.sort = this.sort;
 }
+
+  doFilter(value: string) {
+    this.dataSource.filter = value.trim().toLocaleLowerCase();
+  }
+
+
 
 }

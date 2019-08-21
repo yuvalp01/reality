@@ -6,17 +6,14 @@
 <button mat-mini-fab (click)="openDialog()">
     <mat-icon>add</mat-icon>
   </button>
-
+<mat-form-field>
+  <input type="text" matInput (keyup)="doFilter($event.target.value)"  [(ngModel)]="selectedApartment"  name="selectedApartment">
+</mat-form-field>
 <table  mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" >
-
-
       <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
       <td mat-cell *matCellDef="let transaction">{{transaction.id}}</td>
     </ng-container>
-
-
-
 
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
