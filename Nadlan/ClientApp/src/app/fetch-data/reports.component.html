@@ -87,7 +87,8 @@
         <form #yearForm="ngForm">
           <mat-form-field style="width: 100%" appearance="outline">
             <mat-label>Year</mat-label>
-            <mat-select (selectionChange)="onChange($event)" [(ngModel)]="selectedYear" name="selectedYear">
+            <mat-select (selectionChange)="onChange($event)" [(ngModel)]="selectedYear" placeholder="Placeholder" name="selectedYear">
+              <mat-option [value]="0">All</mat-option>
               <mat-option *ngFor="let year of years" [value]="year">
                 {{year}}
               </mat-option>

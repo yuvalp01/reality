@@ -25,7 +25,7 @@ export class TransactionListComponent implements OnInit {
       //this.transactions = result;
       this.dataSource = new MatTableDataSource(result);
       this.dataSource.sort = this.sort;
-      this.dataSource.filter = this.selectedApartment;
+      //this.dataSource.filter = this.selectedApartment;
 
 
       this.dataSource.filterPredicate = function (data, filter: string): boolean {
@@ -50,6 +50,7 @@ openDialog()
       //this.transactions = result;
       this.dataSource = new MatTableDataSource(result);
       this.dataSource.sort = this.sort
+      //this.filter();
     }, error => console.error(error));
 
     //this.transactionService.getTransactions().subscribe(result=>this.transactions=result, error=>console.error(error));
@@ -58,12 +59,18 @@ openDialog()
 
 ngAfterViewInit(): void {
   this.dataSource.sort = this.sort;
+ // this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
+
 }
 
   doFilter(value: string) {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
   }
 
+  filter() {
+    this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
+
+  }
 
 
 }

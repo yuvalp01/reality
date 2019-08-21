@@ -14,7 +14,7 @@ export class ReportsComponent implements OnInit
     incomeReport: IIncomeReport;
     purchaseReport: IPurchaseReport;
     years: number[] = [2018,2019];
-    selectedYear: number = 2019;
+    selectedYear: number = 0;
     apartmentId: number = 0;
   constructor(private reportsService: ReportService, private route: ActivatedRoute)
     {
