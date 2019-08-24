@@ -5,19 +5,22 @@
     background-color:red;
     } */
 
-.mat-row:nth-child(odd){
-    background-color:#dee2e6;
-    }
+.mat-row:nth-child(odd) {
+  background-color: #dee2e6;
+}
 
 .mat-column-comments {
   max-width: 400px;
 }
 
 .mat-column-amount {
-  padding-left:10px !important;
-/*text-align:center*/
-
+  padding-left: 10px !important;
+  /*text-align:center*/
 }
+
+/*.mat-expansion-panel {
+  width: 700px;
+}*/
 /*mat-grid-tile {
   background: lightblue;
 }*/
@@ -25,9 +28,11 @@
   width: 100%;
   border: 1px solid #555;
 }
+
 .mat-card {
   min-width: 350px;
 }
+
 .positive {
   color: green;
 }
@@ -35,3 +40,16 @@
 .negative {
   color: red;
 }
+
+.mat-accordion#report .mat-expansion-panel-header-title {
+  color:black;
+}
+
+.mat-expansion-panel-header-title {
+  width: 300px;
+}
+
+.mat-list-item-content span:nth-child(4) {
+  width: 280px
+}
+

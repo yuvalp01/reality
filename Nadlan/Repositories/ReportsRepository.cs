@@ -9,7 +9,7 @@ namespace Nadlan.Repositories
 {
     public class ReportRepository : Repository<Transaction>
     {
-        
+
         const decimal ANNUAL_COSTS = 100 + 350;
         public ReportRepository(NadlanConext context) : base(context)
         {
@@ -49,10 +49,11 @@ namespace Nadlan.Repositories
         public async Task<SummaryReport> GetSummaryReport(int apartmentId)
         {
 
-            Func<Transaction, bool> basicPredicate = t => t.IsPurchaseCost && t.ApartmentId == apartmentId;
-            var investment = Context.Transactions.Where(basicPredicate).Where(a => a.AccountId == 13);
-            var netIncome = Context.Transactions.Where(basicPredicate);
-            var totalCost = Context.Transactions.Where(basicPredicate).Where(a => a.Amount <= 0);
+            Func<Transaction, bool> basicPredicatePurchase = t => t.IsPurchaseCost && t.ApartmentId == apartmentId;
+            Func<Transaction, bool> basicPredicateIncome = t => !t.IsPurchaseCost && t.ApartmentId == apartmentId;
+            var investment = Context.Transactions.Where(basicPredicatePurchase).Where(a => a.AccountId == 13);
+            var netIncome = Context.Transactions.Where(basicPredicateIncome);
+            var totalCost = Context.Transactions.Where(basicPredicatePurchase).Where(a => a.Amount <= 0);
             SummaryReport summaryReport = new SummaryReport
             {
                 Investment = await Task.FromResult(investment.Sum(a => a.Amount)),
@@ -75,8 +76,8 @@ namespace Nadlan.Repositories
 
         private decimal CalcPredictedROI(Apartment apartment, decimal investment)
         {
-           // decimal yearlyCosts = 100 + 350;
-           //TODO - find formula for enfia
+            // decimal yearlyCosts = 100 + 350;
+            //TODO - find formula for enfia
             decimal netRent = apartment.CurrentRent * 0.85m - apartment.FixedMaintanance - ANNUAL_COSTS / 12;
             decimal anualNetIncome = netRent * 11;
             decimal predictedRoi = anualNetIncome / investment;
@@ -105,13 +106,14 @@ namespace Nadlan.Repositories
                 .Where(a => a.AccountId == 6);
             var expensesNoRenovation = Context.Transactions.Where(basicPredicate)
                 .Where(a => a.Amount <= 0 && a.AccountId != 6 && a.AccountId != 12);
-            var accountSummary = Context.Transactions.Include(a => a.Account).Where(basicPredicate).GroupBy(g => new { g.AccountId, g.Account.Name })
+            var accountSummary = Context.Transactions.Include(a => a.Account).Where(basicPredicate).Where(a => a.AccountId != 13).GroupBy(g => new { g.AccountId, g.Account.Name })
+                .OrderBy(a => a.Sum(s => s.Amount))
                 .Select(a => new AccountSummary
                 {
                     AccountId = a.Key.AccountId,
                     Name = a.Key.Name,
-                    Total = a.Sum(s => s.Amount)
-                }); ;
+                    Total = Math.Abs(a.Sum(s => s.Amount))
+                });
 
 
             PurchaseReport purchaseReport = new PurchaseReport
@@ -152,6 +154,15 @@ namespace Nadlan.Repositories
 
             var netIncome = Context.Transactions.Where(basicPredicate);
 
+            var accountSummary = Context.Transactions.Include(a => a.Account).Where(basicPredicate).GroupBy(g => new { g.AccountId, g.Account.Name })
+                .OrderBy(a => a.Sum(s => s.Amount))
+                .Select(a => new AccountSummary
+                {
+                    AccountId = a.Key.AccountId,
+                    Name = a.Key.Name,
+                    Total = Math.Abs(a.Sum(s => s.Amount))
+                });
+
 
             IncomeReport summaryReport = new IncomeReport
             {
@@ -159,7 +170,9 @@ namespace Nadlan.Repositories
                 Expenses = await Task.FromResult(expenses.Sum(b => b.Amount)),
                 Tax = await Task.FromResult(tax.Sum(b => b.Amount)),
                 NetIncome = await Task.FromResult(netIncome.Sum(b => b.Amount)),
-                ForDistribution = await Task.FromResult(netIncome.Sum(b => b.Amount)) / 2
+                ForDistribution = await Task.FromResult(netIncome.Sum(b => b.Amount)) / 2,
+                AccountsSum = await Task.FromResult(accountSummary.ToList())
+
             };
             return summaryReport;
         }

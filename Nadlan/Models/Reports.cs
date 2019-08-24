@@ -35,6 +35,7 @@ namespace Nadlan.Models
         public decimal Tax { get; set; }
         public decimal NetIncome { get; set; }
         public decimal ForDistribution { get; set; }
+        public IEnumerable<AccountSummary> AccountsSum { get; set; }
     }
 
     public class AccountSummary

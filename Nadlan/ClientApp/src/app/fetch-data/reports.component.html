@@ -1,39 +1,42 @@
 <h1>Reports</h1>
 
 
-<mat-tab-group>
+<mat-tab-group dynamicHeight="true">
   <mat-tab label="Summary">
     <mat-card>
       <mat-card-title>Investment Summary</mat-card-title>
       <mat-list *ngIf="summaryReport">
-
-
-
         <mat-list-item>
           <mat-icon mat-list-icon>business_center</mat-icon>
           <span style="width:260px">Investment</span>
-          <span>{{summaryReport.investment | currency:'EUR' : number:'1.0-0'}}</span>
+          <span [ngClass]="'positive'">{{summaryReport.investment | currency:'EUR' : number:'1.0-0'}}</span>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item>
           <mat-icon mat-list-icon>business_center</mat-icon>
           <span style="width:260px">Net Income up-to-date</span>
-          <span>{{summaryReport.netIncome| currency:'EUR' : number:'1.0-0'}} </span>
+          <span [ngClass]="'positive'">{{summaryReport.netIncome| currency:'EUR' : number:'1.0-0'}}</span>
         </mat-list-item>
         <mat-divider></mat-divider>
 
+        <mat-list-item>
+          <mat-icon mat-list-icon>business_center</mat-icon>
+          <span style="width:260px">Renovation Cost</span>
+          <span [ngClass]="'negative'">{{purchaseReport.renovationCost| currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
+        </mat-list-item>
+        <mat-divider></mat-divider>
 
         <mat-list-item>
           <mat-icon mat-list-icon>business_center</mat-icon>
           <span style="width:260px">Initial Remainder</span>
-          <span>{{summaryReport.initialRemainder| currency:'EUR' : number:'1.0-0'}} </span>
+          <span [ngClass]="'positive'">{{summaryReport.initialRemainder| currency:'EUR' : number:'1.0-0'}}</span>
         </mat-list-item>
         <mat-divider></mat-divider>
 
         <mat-list-item>
           <mat-icon mat-list-icon>business_center</mat-icon>
           <span matTooltip="Net income + Initial reminder" style="width:260px">Balance</span>
-          <span>{{summaryReport.balance| currency:'EUR' : number:'1.0-0'}} </span>
+          <span [ngClass]="'positive'">{{summaryReport.balance| currency:'EUR' : number:'1.0-0'}}</span>
         </mat-list-item>
 
         <mat-divider></mat-divider>
@@ -125,8 +128,111 @@
   </mat-tab>
   <mat-tab label="Purchase Report">
     <mat-card>
+      <mat-card-title>Income Report</mat-card-title>
+
+      <mat-card-content>
+
+              <mat-accordion id="report" *ngIf="purchaseReport">
+        <mat-expansion-panel disabled="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon mat-list-icon>business_center</mat-icon>
+              <span>Investment</span>
+            </mat-panel-title>
+            <mat-panel-description>
+              <span [ngClass]="{
+          positive: isPositive(purchaseReport.investment),
+          negative: !isPositive(purchaseReport.investment)
+        }">{{purchaseReport.investment | currency:'EUR' : number:'1.0-0'| minusSignToParens}}</span>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon mat-list-icon>business_center</mat-icon>
+              <span>Total Cost</span>
+            </mat-panel-title>
+            <mat-panel-description>
+              <mat-list-item>
+                <span [ngClass]="{
+          positive: isPositive(purchaseReport.totalCost),
+          negative: !isPositive(purchaseReport.totalCost)
+        }">{{purchaseReport.totalCost| currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
+              </mat-list-item>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-list>
+            <mat-list-item style="color:dimgray" *ngFor="let account of purchaseReport?.accountsSum" id="{{account.accountId}}">
+              <mat-icon mat-list-icon>business_center</mat-icon>
+              <span>{{account.name}}</span>
+              <span>{{account.total | currency:'EUR' : number:'1.0-0'}}</span>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+          </mat-list>
+        </mat-expansion-panel>
+
+
+
+        <mat-expansion-panel disabled="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon mat-list-icon>business_center</mat-icon>
+              <span>Renovation Cost</span>
+            </mat-panel-title>
+            <mat-panel-description>
+              <span [ngClass]="{
+          positive: isPositive(purchaseReport.renovationCost),
+          negative: !isPositive(purchaseReport.renovationCost)
+        }">{{purchaseReport.renovationCost | currency:'EUR' : number:'1.0-0'| minusSignToParens}}</span>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel disabled="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon mat-list-icon>business_center</mat-icon>
+              <span>Expenses without renovation</span>
+            </mat-panel-title>
+            <mat-panel-description>
+              <span [ngClass]="{
+          positive: isPositive(purchaseReport.expensesNoRenovation),
+          negative: !isPositive(purchaseReport.expensesNoRenovation)
+        }">{{purchaseReport.expensesNoRenovation | currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+        </mat-expansion-panel>
+        <mat-expansion-panel disabled="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon mat-list-icon>business_center</mat-icon>
+              <span>Remanider</span>
+            </mat-panel-title>
+            <mat-panel-description>
+              <span [ngClass]="{
+          positive: isPositive(purchaseReport.remainder),
+          negative: !isPositive(purchaseReport.remainder)
+        }">{{purchaseReport.remainder | currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+        </mat-expansion-panel>
+      </mat-accordion>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>
+
+
+
+
+
+
+
+    <!--<mat-card>
       <mat-card-title>Purchase Report</mat-card-title>
-      <mat-list *ngIf="purchaseReport" >
+      <mat-list *ngIf="purchaseReport">
         <mat-list-item>
           <mat-icon mat-list-icon>business_center</mat-icon>
           <span style="width:260px">Investment</span>
@@ -138,7 +244,7 @@
         <mat-divider></mat-divider>
         <mat-list-item>
           <mat-icon mat-list-icon>business_center</mat-icon>
-          <span  style="width:260px">Total Cost</span>
+          <span style="width:260px">Total Cost</span>
           <span [ngClass]="{
           positive: isPositive(purchaseReport.totalCost),
           negative: !isPositive(purchaseReport.totalCost)
@@ -172,34 +278,7 @@
         }">{{purchaseReport.remainder| currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
         </mat-list-item>
       </mat-list>
-    </mat-card>
-  </mat-tab>
-</mat-tab-group>
-
-
-
-
-<mat-grid-list cols="2" rowHeight="1:1">
-  <mat-grid-tile>
-
-
-  </mat-grid-tile>
-  <mat-grid-tile style="margin-top:-150px !important">
-
-
-  </mat-grid-tile>
-
-
-</mat-grid-list>
-
-
-
-
-
-
-
-
-
+    </mat-card>-->
 
 
 
@@ -368,103 +447,3 @@
   </mat-list-item>
 </mat-drawer>
 <mat-drawer-content>-->
-<!--<tr>
-  <td colspan="2">
-    <table class='table table-striped'>
-
-      <tr *ngFor="let account of purchaseReport.accountsSum">
-
-        <td> {{ account.accountId }}</td>
-        <td> {{ account.name }}</td>
-        <td> {{ account.total }}</td>
-      </tr>
-    </table>
-
-
-  </td>
-</tr>-->
-<!--<mat-card class="example-card">
-  <mat-card-header>
-    <div mat-card-avatar class="example-header-image"></div>
-    <mat-card-title>Shiba Inu</mat-card-title>
-    <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-  </mat-card-header>
-  <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-  <mat-card-content>
-    <p>
-      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-      bred for hunting.
-    </p>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-button>LIKE</button>
-    <button mat-button>SHARE</button>
-  </mat-card-actions>
-</mat-card>-->
-<!--<table class='table table-striped' *ngIf="incomeReport">
-  <tbody>
-    <tr>
-      <td>Investment</td>
-      <td>{{ purchaseReport.investment }}</td>
-    </tr>
-    <tr>
-      <td>Total Cost </td>
-      <td>{{ purchaseReport.totalCost }}</td>
-    </tr>
-    <tr>
-      <td>renovationCost</td>
-      <td>{{ purchaseReport.renovationCost }}</td>
-    </tr>
-    <tr>
-      <td>expensesNoRenovation </td>
-      <td>{{ purchaseReport.expensesNoRenovation }}</td>
-    </tr>
-    <tr>
-      <td colspan="2">Accounts Sum</td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <table class='table table-striped'>
-
-          <tr *ngFor="let account of purchaseReport.accountsSum">
-
-            <td> {{ account.accountId }}</td>
-            <td> {{ account.name }}</td>
-            <td> {{ account.total }}</td>
-          </tr>
-        </table>
-
-
-      </td>
-    </tr>
-
-  </tbody>
-</table>
-<br /><br />
-<table class='table table-striped' *ngIf="incomeReport">
-
-  <tbody>
-    <tr>
-      <td>Gross Income</td>
-      <td>{{ incomeReport.grossIncome }}</td>
-    </tr>
-    <tr>
-      <td>Expenses </td>
-      <td>{{ incomeReport.expenses }}</td>
-    </tr>
-    <tr>
-      <td>Tax</td>
-      <td>{{ incomeReport.tax }}</td>
-    </tr>
-    <tr>
-      <td>Net Income </td>
-      <td>{{ incomeReport.netIncome }}</td>
-    </tr>
-    <tr>
-      <td>Available For Distribution</td>
-      <td>{{ incomeReport.forDistribution }}</td>
-    </tr>
-
-  </tbody>
-</table>-->
