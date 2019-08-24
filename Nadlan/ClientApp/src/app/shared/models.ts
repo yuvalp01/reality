@@ -41,6 +41,7 @@ export interface IIncomeReport {
   tax:number,
   netIncome: number,
   forDistribution: number,
+  accountsSum: IAccountsSum,
 }
 
 export interface IPurchaseReport {
