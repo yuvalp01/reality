@@ -130,29 +130,14 @@
               </mat-panel-title>
               <mat-panel-description>
                 <span [ngClass]="{
-          positive: isPositive(purchaseReport.netIncome),
-          negative: !isPositive(purchaseReport.netIncome)
+          positive: isPositive(incomeReport.netIncome),
+          negative: !isPositive(incomeReport.netIncome)
         }">{{incomeReport.netIncome | currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
               </mat-panel-description>
             </mat-expansion-panel-header>
           </mat-expansion-panel>
 
         </mat-accordion>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
       </mat-card-content>
     </mat-card>
