@@ -12,9 +12,9 @@
 .mat-column-comments {
   max-width: 500px;
 }
-mat-grid-tile {
+/*mat-grid-tile {
   background: lightblue;
-}
+}*/
 .example-container {
   width: 100%;
   border: 1px solid #555;

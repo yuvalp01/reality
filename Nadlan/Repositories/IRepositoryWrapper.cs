@@ -9,6 +9,7 @@ namespace Nadlan.Repositories
     {
         TransactionRepository Transaction { get; }
         AccountRepository Account { get; }
+        ReportRepository Report { get; }
         void Save();
 
     }

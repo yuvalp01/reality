@@ -24,6 +24,17 @@ export interface ITransaction {
     isIncome: boolean;
 }
 
+
+export interface ISummaryReport {
+  investment: number,
+  netIncome: number,
+  roi: number,
+  predictedROI: number;
+  initialRemainder: number,
+  balance: number,
+}
+
+
 export interface IIncomeReport {
   grossIncome:number,
   expenses: number,

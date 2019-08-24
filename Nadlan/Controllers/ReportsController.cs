@@ -25,6 +25,43 @@ namespace Nadlan.Controllers
             _mapper = mapper;
         }
 
+        //[HttpGet("GetDiagnosticReport")]
+        //public async Task<IActionResult> GetDiagnosticReport([FromQuery(Name = "identifier")] DiagnosticRequest diagnosticRequest)
+       [HttpPost("GetDiagnosticReport")]
+        public async Task<IActionResult> GetDiagnosticReport([FromBody] DiagnosticRequest diagnosticRequest)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            DiagnosticReport diagnosticReport = await _repositoryWraper.Report.GetDiagnosticReport(diagnosticRequest);
+            if (diagnosticReport == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(diagnosticReport);
+        }
+
+        [HttpGet("GetSummaryReport/{apartmentId}")]
+        public async Task<IActionResult> GetSummaryReport([FromRoute] int apartmentId)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            SummaryReport purchaseReport = await _repositoryWraper.Report.GetSummaryReport(apartmentId);
+            if (purchaseReport == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(purchaseReport);
+        }
 
         [HttpGet("GetPurchaseReport/{apartmentId}")]
         public async Task<IActionResult> GetPurchaseReport([FromRoute] int apartmentId)
@@ -35,7 +72,7 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
 
-            PurchaseReport purchaseReport = await _repositoryWraper.Transaction.GetPurchaseReport(apartmentId);
+            PurchaseReport purchaseReport = await _repositoryWraper.Report.GetPurchaseReport(apartmentId);
             if (purchaseReport == null)
             {
                 return NotFound();
@@ -45,15 +82,15 @@ namespace Nadlan.Controllers
         }
 
 
-        [HttpGet("GetIncomeReports/{apartmentId}/{year=0}")]
-        public async Task<IActionResult> GetIncomeReports([FromRoute] int apartmentId, int year)
+        [HttpGet("GetIncomeReport/{apartmentId}/{year=0}")]
+        public async Task<IActionResult> GetIncomeReport([FromRoute] int apartmentId, int year)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            SummaryReport summaryReport = await _repositoryWraper.Transaction.GetSummaryReport(apartmentId, year);
+            IncomeReport summaryReport = await _repositoryWraper.Report.GetIncomeReport(apartmentId, year);
 
             if (summaryReport == null)
             {

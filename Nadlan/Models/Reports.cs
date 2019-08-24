@@ -6,6 +6,18 @@ using System.Threading.Tasks;
 
 namespace Nadlan.Models
 {
+
+    public class SummaryReport
+    {
+        public decimal Investment { get; set; }
+        public decimal NetIncome { get; set; }
+        public decimal ROI { get; set; }
+        public decimal PredictedROI { get; set; }
+        public decimal InitialRemainder { get; set; }
+        public decimal Balance { get; set; }
+
+    }
+
     public class PurchaseReport
     {
         public decimal Investment { get; set; }
@@ -16,7 +28,7 @@ namespace Nadlan.Models
         public IEnumerable<AccountSummary> AccountsSum { get; set; }
     }
 
-    public class SummaryReport
+    public class IncomeReport
     {
         public decimal GrossIncome { get; set; }
         public decimal Expenses { get; set; }
@@ -31,4 +43,30 @@ namespace Nadlan.Models
         public string Name { get; set; }
         public decimal Total { get; set; }
     }
+
+    public class DiagnosticRequest
+    {
+        public decimal Price { get; set; }
+        public decimal Renovation { get; set; }
+        public decimal PredictedRent { get; set; }
+        public decimal KnowExtraCosts { get; set; }
+        public int Size { get; set; }
+    }
+
+
+    public class DiagnosticReport
+    {
+        public decimal Legal { get; set; }
+        public decimal Research { get; set; }
+        public decimal PurchaseTax { get; set; }
+        public decimal Agency { get; set; }
+        public decimal Accountency { get; set; }
+        public decimal Supervision { get; set; }
+        public decimal Registration { get; set; }
+        public decimal Unpredicted { get; set; }
+        public decimal UnpredictedRenovation { get; set; }
+        public decimal TotalCost { get; set; }
+        public decimal ROI { get; set; }
+    }
+
 }

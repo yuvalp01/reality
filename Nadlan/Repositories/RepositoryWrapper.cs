@@ -10,6 +10,7 @@ namespace Nadlan.Repositories
         private NadlanConext _conext;
         private TransactionRepository _transaction;
         private AccountRepository _account;
+        private ReportRepository _report;
 
         public RepositoryWrapper(NadlanConext conext)
         {
@@ -39,9 +40,20 @@ namespace Nadlan.Repositories
             }
         }
 
+        public ReportRepository Report
+        {
+            get
+            {
+                if (_report == null)
+                {
+                    _report = new ReportRepository(_conext);
+                }
+                return _report;
+            }
+        }
         public void Save()
         {
-            _conext.SaveChanges();
+            throw new Exception("It is not possible to save reports");
         }
     }
 }

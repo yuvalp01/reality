@@ -1,5 +1,5 @@
 import {Component, OnInit, Output} from '@angular/core';
-import { IIncomeReport, IPurchaseReport } from '../shared/models';
+import { IIncomeReport, IPurchaseReport, ISummaryReport } from '../shared/models';
 import { ReportService } from '../services/reports.service';
 import { ActivatedRoute, RouterEvent, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -13,6 +13,7 @@ export class ReportsComponent implements OnInit
     displayedColumns: string[] = ['date','amount', 'apartmentId','accountId','isPurchaseCost','comments'];
     incomeReport: IIncomeReport;
     purchaseReport: IPurchaseReport;
+    summaryReport: ISummaryReport;
     years: number[] = [2018,2019];
     selectedYear: number = 0;
     apartmentId: number = 0;
@@ -24,7 +25,19 @@ export class ReportsComponent implements OnInit
     if (this.apartmentId) {
       console.log(this.apartmentId);
       this.reportsService.getPurchaseReport(this.apartmentId).subscribe(result => this.purchaseReport = result, error => console.error(error));
-      this.reportsService.getIncomeReports(this.apartmentId, this.selectedYear).subscribe(result => this.incomeReport = result, error => console.error(error));
+      this.reportsService.getSummaryReport(this.apartmentId).subscribe(result => this.summaryReport = result, error => console.error(error));
+      this.reportsService.getIncomeReport(this.apartmentId, this.selectedYear).subscribe(result => {
+        this.incomeReport = result;
+        //this.ROI = this.incomeReport.netIncome / this.purchaseReport.investment;
+
+        //const date1 = new Date('7/13/2010');
+        //const date2 = new Date('12/15/2010');
+        //const diffTime = Math.abs(date2.getTime() - date1.getTime());
+        //const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24*12));
+        //console.log(diffDays);
+
+
+    }, error => console.error(error));
     }
 
 
@@ -38,7 +51,7 @@ export class ReportsComponent implements OnInit
   }
 
   onChange(e) {
-    this.reportsService.getIncomeReports(this.apartmentId, this.selectedYear).subscribe(result => this.incomeReport = result, error => console.error(error));
+    this.reportsService.getIncomeReport(this.apartmentId, this.selectedYear).subscribe(result => this.incomeReport = result, error => console.error(error));
   }
 
 }

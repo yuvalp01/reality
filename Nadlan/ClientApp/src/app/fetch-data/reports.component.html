@@ -1,86 +1,59 @@
 <h1>Reports</h1>
 
-<p>This component demonstrates fetching data from the server....</p>
 
-<!--<mat-drawer-container class="example-container">
-  <mat-drawer mode="side" opened>
-
-    <mat-list-item role="listitem">
-      <li class="nav-item" [routerLinkActive]='["link-active"]'>
-        <a class="nav-link text-dark" [routerLink]='["/reports/1"]'>Apartment 1</a>
-      </li>
-    </mat-list-item>
-    <mat-list-item role="listitem">
-      <li class="nav-item" [routerLinkActive]='["link-active"]'>
-        <a class="nav-link text-dark" [routerLink]='["/reports/2"]'>Apartment 2</a>
-      </li>
-    </mat-list-item>
-    <mat-list-item role="listitem">
-      <li class="nav-item" [routerLinkActive]='["link-active"]'>
-        <a class="nav-link text-dark" [routerLink]='["/reports/3"]'>Apartment 3</a>
-      </li>
-    </mat-list-item>
-    <mat-list-item role="listitem">
-      <li class="nav-item" [routerLinkActive]='["link-active"]'>
-        <a class="nav-link text-dark" [routerLink]='["/reports/4"]'>Apartment 4</a>
-      </li>
-    </mat-list-item>
-  </mat-drawer>
-  <mat-drawer-content>-->
-
-
-<mat-grid-list cols="2" rowHeight="420px">
-  <mat-grid-tile>
+<mat-tab-group>
+  <mat-tab label="Summary">
     <mat-card>
-      <table class='table table-striped' *ngIf="incomeReport">
-        <tbody>
-          <tr>
-            <td>Investment</td>
-            <td>{{ purchaseReport.investment | currency:'EUR' : number:'1.0-0'}}</td>
-          </tr>
-          <tr>
-            <td>Total Cost </td>
-            <td>{{ purchaseReport.totalCost | currency:'EUR' : number:'1.0-0' }}</td>
-          </tr>
-          <tr>
-            <td>RenovationCost</td>
-            <td>{{ purchaseReport.renovationCost | currency:'EUR' : number:'1.0-0' }}</td>
-          </tr>
-          <tr>
-            <td>Expenses without renovation </td>
-            <td>{{ purchaseReport.expensesNoRenovation | currency:'EUR' : number:'1.0-0' }}</td>
-          </tr>
-          <tr>
-            <td>Remainder </td>
-            <td>{{ purchaseReport.remainder | currency:'EUR' : number:'1.0-0'}}</td>
-          </tr>
-          <!--<tr>
-    <td colspan="2">Accounts Sum</td>
-  </tr>
-  <tr>
-    <td colspan="2">
-      <table class='table table-striped'>
-
-        <tr *ngFor="let account of purchaseReport.accountsSum">
-
-          <td> {{ account.accountId }}</td>
-          <td> {{ account.name }}</td>
-          <td> {{ account.total }}</td>
-        </tr>
-      </table>
+      <mat-card-title>Investment Summary</mat-card-title>
+      <mat-list *ngIf="summaryReport">
 
 
-    </td>
-  </tr>-->
 
-        </tbody>
-      </table>
+        <mat-list-item>
+          <mat-icon mat-list-icon>business_center</mat-icon>
+          <span style="width:260px">Investment</span>
+          <span style="color:darkgreen">{{summaryReport.investment | currency:'EUR' : number:'1.0-0'}} </span>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <mat-icon mat-list-icon>business_center</mat-icon>
+          <span style="width:260px">Net Income up-to-date</span>
+          <span>{{summaryReport.netIncome| currency:'EUR' : number:'1.0-0'}} </span>
+        </mat-list-item>
+        <mat-divider></mat-divider>
 
+
+        <mat-list-item>
+          <mat-icon mat-list-icon>business_center</mat-icon>
+          <span style="width:260px">Initial Remainder</span>
+          <span>{{summaryReport.initialRemainder| currency:'EUR' : number:'1.0-0'}} </span>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+
+        <mat-list-item>
+          <mat-icon mat-list-icon>business_center</mat-icon>
+          <span matTooltip="Net income + Initial reminder" style="width:260px">Balance</span>
+          <span>{{summaryReport.balance| currency:'EUR' : number:'1.0-0'}} </span>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <mat-icon mat-list-icon>business_center</mat-icon>
+          <span style="width:260px">Predicted ROI (rent)</span>
+          <span>{{summaryReport.predictedROI|percent:'1.1'}} </span>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <mat-icon mat-list-icon>business_center</mat-icon>
+          <span style="width:260px">ROI up-to-date (rent)</span>
+          <span>{{summaryReport.roi|percent:'1.1'}} </span>
+        </mat-list-item>
+
+      </mat-list>
     </mat-card>
-  </mat-grid-tile>
-
-  <mat-grid-tile>
-
+  </mat-tab>
+  <mat-tab label="Income Report">
     <mat-card>
       <mat-card-title>Income Report</mat-card-title>
       <mat-card-subtitle>
@@ -97,35 +70,91 @@
         </form>
       </mat-card-subtitle>
       <mat-card-content>
-        <table class='table table-striped' *ngIf="incomeReport">
 
-          <tbody>
-            <tr>
-              <td>Gross Income</td>
-              <td>{{ incomeReport.grossIncome| currency:'EUR' : number:'1.0-0' }}</td>
-            </tr>
-            <tr>
-              <td>Expenses </td>
-              <td>{{ incomeReport.expenses| currency:'EUR' : number:'1.0-0' }}</td>
-            </tr>
-            <tr>
-              <td>Tax</td>
-              <td>{{ incomeReport.tax | currency:'EUR' : number:'1.0-0'}}</td>
-            </tr>
-            <tr>
-              <td>Net Income </td>
-              <td>{{ incomeReport.netIncome| currency:'EUR' : number:'1.0-0' }}</td>
-            </tr>
-            <tr>
-              <td>Available For Distribution</td>
-              <td>{{ incomeReport.forDistribution| currency:'EUR' : number:'1.0-0' }}</td>
-            </tr>
 
-          </tbody>
-        </table>
+        <mat-list *ngIf="incomeReport">
+          <mat-list-item>
+            <mat-icon mat-list-icon>business_center</mat-icon>
+            <span style="width:260px">Gross Income</span>
+            <span>{{incomeReport.grossIncome | currency:'EUR' : number:'1.0-0'}} </span>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <mat-icon mat-list-icon>business_center</mat-icon>
+            <span style="width:260px">Expenses</span>
+            <span>{{incomeReport.expenses| currency:'EUR' : number:'1.0-0'}} </span>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <mat-icon mat-list-icon>business_center</mat-icon>
+            <span style="width:260px">Tax</span>
+            <span>{{incomeReport.tax| currency:'EUR' : number:'1.0-0'}} </span>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <mat-icon mat-list-icon>business_center</mat-icon>
+            <span style="width:260px">Net Income</span>
+            <span>{{incomeReport.netIncome| currency:'EUR' : number:'1.0-0'}} </span>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <mat-icon mat-list-icon>business_center</mat-icon>
+            <span style="width:260px">Available For Distribution</span>
+            <span>{{incomeReport.forDistribution| currency:'EUR' : number:'1.0-0'}} </span>
+          </mat-list-item>
+        </mat-list>
+
       </mat-card-content>
     </mat-card>
+
+  </mat-tab>
+  <mat-tab label="Purchase Report">
+    <mat-card>
+      <mat-card-title>Purchase Report</mat-card-title>
+      <mat-list *ngIf="purchaseReport">
+        <mat-list-item>
+          <mat-icon mat-list-icon>business_center</mat-icon>
+          <span style="width:260px">Investment</span><span style="color:darkgreen">{{purchaseReport.investment | currency:'EUR' : number:'1.0-0'}} </span>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <mat-icon mat-list-icon>business_center</mat-icon>
+          <span style="width:260px">Total Cost</span><span style="color:red">{{purchaseReport.totalCost| currency:'EUR' : number:'1.0-0'}} </span>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <mat-icon mat-list-icon>business_center</mat-icon>
+          <span style="width:260px">Renovation Cost</span><span style="color:red">{{purchaseReport.renovationCost| currency:'EUR' : number:'1.0-0'}} </span>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <mat-icon mat-list-icon>business_center</mat-icon>
+          <span style="width:260px">Expenses without renovation</span><span style="color:red">{{purchaseReport.expensesNoRenovation| currency:'EUR' : number:'1.0-0'}} </span>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <mat-icon mat-list-icon>business_center</mat-icon>
+          <span style="width:260px">Remainder</span><span style="color:darkgreen">{{purchaseReport.remainder| currency:'EUR' : number:'1.0-0'}} </span>
+        </mat-list-item>
+      </mat-list>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>
+
+
+
+
+<mat-grid-list cols="2" rowHeight="1:1">
+  <mat-grid-tile>
+
+
   </mat-grid-tile>
+  <mat-grid-tile style="margin-top:-150px !important">
+
+
+  </mat-grid-tile>
+
+
 </mat-grid-list>
 
 
@@ -133,6 +162,175 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+<!--<p>This component demonstrates fetching data from the server....</p>-->
+<!--<mat-card style="    width: 45%;
+    float: left;">
+  <mat-card-title>Income Report</mat-card-title>
+  <mat-card-subtitle>
+    <form #yearForm="ngForm">
+      <mat-form-field style="width: 100%" appearance="outline">
+        <mat-label>Year</mat-label>
+        <mat-select (selectionChange)="onChange($event)" [(ngModel)]="selectedYear" placeholder="Placeholder" name="selectedYear">
+          <mat-option [value]="0">All</mat-option>
+          <mat-option *ngFor="let year of years" [value]="year">
+            {{year}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </mat-card-subtitle>
+  <mat-card-content>
+
+
+    <mat-list *ngIf="incomeReport">
+      <mat-list-item>
+        <mat-icon mat-list-icon>business_center</mat-icon>
+        <span style="width:260px">Gross Income</span>
+        <span>{{incomeReport.grossIncome | currency:'EUR' : number:'1.0-0'}} </span>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <mat-icon mat-list-icon>business_center</mat-icon>
+        <span style="width:260px">Expenses</span>
+        <span>{{incomeReport.expenses| currency:'EUR' : number:'1.0-0'}} </span>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <mat-icon mat-list-icon>business_center</mat-icon>
+        <span style="width:260px">Tax</span>
+        <span>{{incomeReport.tax| currency:'EUR' : number:'1.0-0'}} </span>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <mat-icon mat-list-icon>business_center</mat-icon>
+        <span style="width:260px">Net Income</span>
+        <span>{{incomeReport.netIncome| currency:'EUR' : number:'1.0-0'}} </span>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        <mat-icon mat-list-icon>business_center</mat-icon>
+        <span style="width:260px">Available For Distribution</span>
+        <span>{{incomeReport.forDistribution| currency:'EUR' : number:'1.0-0'}} </span>
+      </mat-list-item>
+    </mat-list>
+
+  </mat-card-content>
+</mat-card>
+<mat-card style="    width: 45%;
+    float: left;">
+  <mat-card-title>Purchase Report</mat-card-title>
+  <mat-list *ngIf="purchaseReport">
+    <mat-list-item>
+      <mat-icon mat-list-icon>business_center</mat-icon>
+      <span style="width:260px">Investment</span><span style="color:darkgreen">{{purchaseReport.investment | currency:'EUR' : number:'1.0-0'}} </span>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <mat-icon mat-list-icon>business_center</mat-icon>
+      <span style="width:260px">Total Cost</span><span style="color:red">{{purchaseReport.totalCost| currency:'EUR' : number:'1.0-0'}} </span>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <mat-icon mat-list-icon>business_center</mat-icon>
+      <span style="width:260px">Renovation Cost</span><span style="color:red">{{purchaseReport.renovationCost| currency:'EUR' : number:'1.0-0'}} </span>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <mat-icon mat-list-icon>business_center</mat-icon>
+      <span style="width:260px">Expenses without renovation</span><span style="color:red">{{purchaseReport.expensesNoRenovation| currency:'EUR' : number:'1.0-0'}} </span>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <mat-icon mat-list-icon>business_center</mat-icon>
+      <span style="width:260px">Remainder</span><span style="color:darkgreen">{{purchaseReport.remainder| currency:'EUR' : number:'1.0-0'}} </span>
+    </mat-list-item>
+  </mat-list>
+</mat-card>-->
+<!--<mat-card>
+  <mat-card-title>Purchase Report</mat-card-title>
+  <table class='table table-striped' *ngIf="purchaseReport">
+    <tbody>
+      <tr>
+        <td>Investment</td>
+        <td>{{ purchaseReport.investment | currency:'EUR' : number:'1.0-0'}}</td>
+      </tr>
+      <tr>
+        <td>Total Cost </td>
+        <td>{{ purchaseReport.totalCost | currency:'EUR' : number:'1.0-0' }}</td>
+      </tr>
+      <tr>
+        <td>RenovationCost</td>
+        <td>{{ purchaseReport.renovationCost | currency:'EUR' : number:'1.0-0' }}</td>
+      </tr>
+      <tr>
+        <td>Expenses without renovation </td>
+        <td>{{ purchaseReport.expensesNoRenovation | currency:'EUR' : number:'1.0-0' }}</td>
+      </tr>
+      <tr>
+        <td>Remainder </td>
+        <td>{{ purchaseReport.remainder | currency:'EUR' : number:'1.0-0'}}</td>
+      </tr>
+      <tr>
+        <td colspan="2">Accounts Sum</td>
+      </tr>
+
+
+
+
+    </tbody>
+  </table>
+
+</mat-card>-->
+<!--<mat-drawer-container class="example-container">
+<mat-drawer mode="side" opened>
+
+  <mat-list-item role="listitem">
+    <li class="nav-item" [routerLinkActive]='["link-active"]'>
+      <a class="nav-link text-dark" [routerLink]='["/reports/1"]'>Apartment 1</a>
+    </li>
+  </mat-list-item>
+  <mat-list-item role="listitem">
+    <li class="nav-item" [routerLinkActive]='["link-active"]'>
+      <a class="nav-link text-dark" [routerLink]='["/reports/2"]'>Apartment 2</a>
+    </li>
+  </mat-list-item>
+  <mat-list-item role="listitem">
+    <li class="nav-item" [routerLinkActive]='["link-active"]'>
+      <a class="nav-link text-dark" [routerLink]='["/reports/3"]'>Apartment 3</a>
+    </li>
+  </mat-list-item>
+  <mat-list-item role="listitem">
+    <li class="nav-item" [routerLinkActive]='["link-active"]'>
+      <a class="nav-link text-dark" [routerLink]='["/reports/4"]'>Apartment 4</a>
+    </li>
+  </mat-list-item>
+</mat-drawer>
+<mat-drawer-content>-->
+<!--<tr>
+  <td colspan="2">
+    <table class='table table-striped'>
+
+      <tr *ngFor="let account of purchaseReport.accountsSum">
+
+        <td> {{ account.accountId }}</td>
+        <td> {{ account.name }}</td>
+        <td> {{ account.total }}</td>
+      </tr>
+    </table>
+
+
+  </td>
+</tr>-->
 <!--<mat-card class="example-card">
   <mat-card-header>
     <div mat-card-avatar class="example-header-image"></div>
@@ -152,8 +350,6 @@
     <button mat-button>SHARE</button>
   </mat-card-actions>
 </mat-card>-->
-
-
 <!--<table class='table table-striped' *ngIf="incomeReport">
   <tbody>
     <tr>
@@ -220,6 +416,3 @@
 
   </tbody>
 </table>-->
-
-
-
