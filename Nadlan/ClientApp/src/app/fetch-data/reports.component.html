@@ -12,7 +12,7 @@
         <mat-list-item>
           <mat-icon mat-list-icon>business_center</mat-icon>
           <span style="width:260px">Investment</span>
-          <span style="color:darkgreen">{{summaryReport.investment | currency:'EUR' : number:'1.0-0'}} </span>
+          <span>{{summaryReport.investment | currency:'EUR' : number:'1.0-0'}}</span>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item>
@@ -76,31 +76,46 @@
           <mat-list-item>
             <mat-icon mat-list-icon>business_center</mat-icon>
             <span style="width:260px">Gross Income</span>
-            <span>{{incomeReport.grossIncome | currency:'EUR' : number:'1.0-0'}} </span>
+            <span [ngClass]="{
+          positive: isPositive(incomeReport.grossIncome),
+          negative: !isPositive(incomeReport.grossIncome)
+        }">{{incomeReport.grossIncome | currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
           </mat-list-item>
           <mat-divider></mat-divider>
           <mat-list-item>
             <mat-icon mat-list-icon>business_center</mat-icon>
             <span style="width:260px">Expenses</span>
-            <span>{{incomeReport.expenses| currency:'EUR' : number:'1.0-0'}} </span>
+            <span [ngClass]="{
+          positive: isPositive(incomeReport.expenses),
+          negative: !isPositive(incomeReport.expenses)
+        }">{{incomeReport.expenses| currency:'EUR' : number:'1.0-0' | minusSignToParens }}</span>
           </mat-list-item>
           <mat-divider></mat-divider>
           <mat-list-item>
             <mat-icon mat-list-icon>business_center</mat-icon>
             <span style="width:260px">Tax</span>
-            <span>{{incomeReport.tax| currency:'EUR' : number:'1.0-0'}} </span>
+            <span [ngClass]="{
+          positive: isPositive(incomeReport.tax),
+          negative: !isPositive(incomeReport.tax)
+        }">{{incomeReport.tax| currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
           </mat-list-item>
           <mat-divider></mat-divider>
           <mat-list-item>
             <mat-icon mat-list-icon>business_center</mat-icon>
             <span style="width:260px">Net Income</span>
-            <span>{{incomeReport.netIncome| currency:'EUR' : number:'1.0-0'}} </span>
+            <span [ngClass]="{
+          positive: isPositive(incomeReport.netIncome),
+          negative: !isPositive(incomeReport.netIncome)
+        }">{{incomeReport.netIncome| currency:'EUR' : number:'1.0-0'| minusSignToParens}}</span>
           </mat-list-item>
           <mat-divider></mat-divider>
           <mat-list-item>
             <mat-icon mat-list-icon>business_center</mat-icon>
             <span style="width:260px">Available For Distribution</span>
-            <span>{{incomeReport.forDistribution| currency:'EUR' : number:'1.0-0'}} </span>
+            <span [ngClass]="{
+          positive: isPositive(incomeReport.forDistribution),
+          negative: !isPositive(incomeReport.forDistribution)
+        }">{{incomeReport.forDistribution| currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
           </mat-list-item>
         </mat-list>
 
@@ -111,30 +126,50 @@
   <mat-tab label="Purchase Report">
     <mat-card>
       <mat-card-title>Purchase Report</mat-card-title>
-      <mat-list *ngIf="purchaseReport">
+      <mat-list *ngIf="purchaseReport" >
         <mat-list-item>
           <mat-icon mat-list-icon>business_center</mat-icon>
-          <span style="width:260px">Investment</span><span style="color:darkgreen">{{purchaseReport.investment | currency:'EUR' : number:'1.0-0'}} </span>
+          <span style="width:260px">Investment</span>
+          <span [ngClass]="{
+          positive: isPositive(purchaseReport.investment),
+          negative: !isPositive(purchaseReport.investment)
+        }">{{purchaseReport.investment | currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item>
           <mat-icon mat-list-icon>business_center</mat-icon>
-          <span style="width:260px">Total Cost</span><span style="color:red">{{purchaseReport.totalCost| currency:'EUR' : number:'1.0-0'}} </span>
+          <span  style="width:260px">Total Cost</span>
+          <span [ngClass]="{
+          positive: isPositive(purchaseReport.totalCost),
+          negative: !isPositive(purchaseReport.totalCost)
+        }">{{purchaseReport.totalCost| currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item>
           <mat-icon mat-list-icon>business_center</mat-icon>
-          <span style="width:260px">Renovation Cost</span><span style="color:red">{{purchaseReport.renovationCost| currency:'EUR' : number:'1.0-0'}} </span>
+          <span style="width:260px">Renovation Cost</span>
+          <span [ngClass]="{
+          positive: isPositive(purchaseReport.renovationCost),
+          negative: !isPositive(purchaseReport.renovationCost)
+        }">{{purchaseReport.renovationCost| currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item>
           <mat-icon mat-list-icon>business_center</mat-icon>
-          <span style="width:260px">Expenses without renovation</span><span style="color:red">{{purchaseReport.expensesNoRenovation| currency:'EUR' : number:'1.0-0'}} </span>
+          <span style="width:260px">Expenses without renovation</span>
+          <span [ngClass]="{
+          positive: isPositive(purchaseReport.renovationCost),
+          negative: !isPositive(purchaseReport.expensesNoRenovation)
+        }">{{purchaseReport.expensesNoRenovation| currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item>
           <mat-icon mat-list-icon>business_center</mat-icon>
-          <span style="width:260px">Remainder</span><span style="color:darkgreen">{{purchaseReport.remainder| currency:'EUR' : number:'1.0-0'}} </span>
+          <span style="width:260px">Remainder</span>
+          <span [ngClass]="{
+          positive: isPositive(purchaseReport.remainder),
+          negative: !isPositive(purchaseReport.remainder)
+        }">{{purchaseReport.remainder| currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
         </mat-list-item>
       </mat-list>
     </mat-card>
@@ -156,6 +191,23 @@
 
 
 </mat-grid-list>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -10,7 +10,13 @@
     }
 
 .mat-column-comments {
-  max-width: 500px;
+  max-width: 400px;
+}
+
+.mat-column-amount {
+  padding-left:10px !important;
+/*text-align:center*/
+
 }
 /*mat-grid-tile {
   background: lightblue;
@@ -21,4 +27,11 @@
 }
 .mat-card {
   min-width: 350px;
+}
+.positive {
+  color: green;
+}
+
+.negative {
+  color: red;
 }

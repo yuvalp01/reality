@@ -23,6 +23,7 @@ import { ReportsComponent } from './fetch-data/reports.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyOwnCustomMaterialModule } from './shared/cusotom-material';
 import { MAT_DATE_LOCALE } from '@angular/material';
+import { MinusSignToParens } from './shared/minusSignToParens';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,7 +37,8 @@ import { MAT_DATE_LOCALE } from '@angular/material';
     TransactionListComponent,
     AddTransactionComponent,
     AddAccoutComponent,
-    ReportsComponent
+    ReportsComponent,
+    MinusSignToParens
     
   ],
   imports: [

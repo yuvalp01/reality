@@ -71,6 +71,11 @@ ngAfterViewInit(): void {
     this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
 
   }
-
+  public isPositive(value: number): boolean {
+    if (value >= 0) {
+      return true;
+    }
+    return false;
+  }
 
 }

@@ -54,4 +54,10 @@ export class ReportsComponent implements OnInit
     this.reportsService.getIncomeReport(this.apartmentId, this.selectedYear).subscribe(result => this.incomeReport = result, error => console.error(error));
   }
 
+  public isPositive(value: number): boolean {
+    if (value >= 0) {
+      return true;
+    }
+    return false;
+  }
 }
