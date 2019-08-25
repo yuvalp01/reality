@@ -26,8 +26,8 @@
 
         <mat-list-item>
           <mat-icon mat-list-icon>business_center</mat-icon>
-          <span matTooltip="Net income + Initial reminder" style="width:260px">Balance</span>
-          <span [ngClass]="'positive'">{{summaryReport.balance| currency:'EUR' : number:'1.0-0'}}</span>
+          <span matTooltip="Net income + Initial remainder" style="width:260px">Balance</span>
+          <span style="font-weight:bold" [ngClass]="'positive'">{{summaryReport.balance| currency:'EUR' : number:'1.0-0'}}</span>
         </mat-list-item>
 
         <mat-divider></mat-divider>
@@ -92,8 +92,8 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
             <mat-list>
-              <mat-list-item (click)="showTrans(account.accountId, account.name)" style="color:dimgray" *ngFor="let account of incomeReport?.accountsSum" id="{{account.accountId}}">
-                <mat-icon mat-list-icon>business_center</mat-icon>
+              <mat-list-item (click)="showTrans(account.accountId, account.name, false)" style="color:#3764ad" *ngFor="let account of incomeReport?.accountsSum" id="{{account.accountId}}">
+                <mat-icon mat-list-icon>business_center</mat-icon><!--#8a5050-->
                 <span>{{account.name}}</span>
                 <span>{{account.total | currency:'EUR' : number:'1.0-0'}}</span>
               </mat-list-item>
@@ -112,7 +112,7 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
           </mat-expansion-panel>
-
+          <mat-divider></mat-divider>
           <mat-expansion-panel disabled="true">
             <mat-expansion-panel-header>
               <mat-panel-title>
@@ -120,7 +120,7 @@
                 <span>Net Income</span>
               </mat-panel-title>
               <mat-panel-description>
-                <span [ngClass]="{
+                <span style="font-weight:bold" [ngClass]="{
           positive: isPositive(incomeReport.netIncome),
           negative: !isPositive(incomeReport.netIncome)
         }">{{incomeReport.netIncome | currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
@@ -172,7 +172,7 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
             <mat-list>
-              <mat-list-item style="color:dimgray" *ngFor="let account of purchaseReport?.accountsSum" id="{{account.accountId}}">
+              <mat-list-item (click)="showTrans(account.accountId, account.name, true)" style="color:#3764ad" *ngFor="let account of purchaseReport?.accountsSum" id="{{account.accountId}}">
                 <mat-icon mat-list-icon>business_center</mat-icon>
                 <span>{{account.name}}</span>
                 <span>{{account.total | currency:'EUR' : number:'1.0-0'}}</span>
@@ -212,6 +212,7 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
           </mat-expansion-panel>
+          <mat-divider></mat-divider>
           <mat-expansion-panel disabled="true">
             <mat-expansion-panel-header>
               <mat-panel-title>
@@ -219,7 +220,7 @@
                 <span>Remanider</span>
               </mat-panel-title>
               <mat-panel-description>
-                <span [ngClass]="{
+                <span style="font-weight:bold" [ngClass]="{
           positive: isPositive(purchaseReport.remainder),
           negative: !isPositive(purchaseReport.remainder)
         }">{{purchaseReport.remainder | currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>

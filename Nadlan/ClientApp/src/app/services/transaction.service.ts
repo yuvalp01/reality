@@ -16,8 +16,8 @@ export class TransactionService
       return this.httpClient.get<ITransaction[]>(this.baseUrl + 'api/transactions');
     }
 
-  getTransactionsByAccount(apartmentId:number, accountId:number): Observable<ITransaction[]> {
-    return this.httpClient.get<ITransaction[]>(`${this.baseUrl}api/transactions/${apartmentId}/${accountId}`);
+  getTransactionsByAccount(apartmentId: number, accountId: number, isPurchaseCost:boolean): Observable<ITransaction[]> {
+    return this.httpClient.get<ITransaction[]>(`${this.baseUrl}api/transactions/${apartmentId}/${accountId}/${isPurchaseCost}`);
   }
 
     addTransaction(transaction:ITransaction) : Observable<ITransaction>

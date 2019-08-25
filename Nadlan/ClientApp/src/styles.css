@@ -13,7 +13,11 @@
   max-width: 400px;
 }
 
-.mat-column-amount {
+/*.mat-column-amount {
+  text-align: center !important;
+  width: 85px;
+}*/
+td.mat-column-amount {
   padding-left: 10px !important;
 }
 
@@ -41,7 +45,7 @@
 }
 
 .mat-accordion#report .mat-expansion-panel-header-title {
-  color:black;
+  color: black;
 }
 
 .mat-expansion-panel-header-title {
@@ -52,3 +56,19 @@
   width: 280px
 }
 
+#transactions-popup .mat-column-amount {
+  padding-left: 10px;
+  text-align: center;
+  width: 85px;
+}
+#transactions-popup .mat-row:nth-child(odd) {
+  background-color: floralwhite !important;
+}
+#transactions-popup tr.mat-footer-row, #transactions-popup tr.mat-row {
+  height: auto !important;
+}
+#transactions-popup tr.mat-header-row {
+  height: auto;
+  /*background-color: #c5c9da;*/
+  background-color: #376cad4a;
+}

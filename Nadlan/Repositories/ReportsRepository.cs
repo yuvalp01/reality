@@ -106,7 +106,9 @@ namespace Nadlan.Repositories
                 .Where(a => a.AccountId == 6);
             var expensesNoRenovation = Context.Transactions.Where(basicPredicate)
                 .Where(a => a.Amount <= 0 && a.AccountId != 6 && a.AccountId != 12);
-            var accountSummary = Context.Transactions.Include(a => a.Account).Where(basicPredicate).Where(a => a.AccountId != 13).GroupBy(g => new { g.AccountId, g.Account.Name })
+            var accountSummary = Context.Transactions.Include(a => a.Account)
+                .Where(basicPredicate)
+                .Where(a => a.AccountId != 13).GroupBy(g => new { g.AccountId, g.Account.Name })
                 .OrderBy(a => a.Sum(s => s.Amount))
                 .Select(a => new AccountSummary
                 {
@@ -154,7 +156,10 @@ namespace Nadlan.Repositories
 
             var netIncome = Context.Transactions.Where(basicPredicate);
 
-            var accountSummary = Context.Transactions.Include(a => a.Account).Where(basicPredicate).GroupBy(g => new { g.AccountId, g.Account.Name })
+            var accountSummary = Context.Transactions.Include(a => a.Account)
+                .Where(basicPredicate)
+                .Where(a=>a.AccountId!=1 && a.AccountId!=5)
+                .GroupBy(g => new { g.AccountId, g.Account.Name })
                 .OrderBy(a => a.Sum(s => s.Amount))
                 .Select(a => new AccountSummary
                 {

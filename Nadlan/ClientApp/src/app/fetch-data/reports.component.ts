@@ -53,8 +53,8 @@ export class ReportsComponent implements OnInit {
 
   }
 
-  showTrans(accountId, accountName) {
-    this.transactionService.getTransactionsByAccount(this.apartmentId, accountId).subscribe(
+  showTrans(accountId, accountName, isPurchaseCost) {
+    this.transactionService.getTransactionsByAccount(this.apartmentId, accountId, isPurchaseCost).subscribe(
       result => {
         //this.transactions = result;
         this.dataSource.data = result as ITransaction[];

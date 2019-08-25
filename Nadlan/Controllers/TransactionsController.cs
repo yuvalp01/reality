@@ -34,8 +34,8 @@ namespace Nadlan.Controllers
         [HttpGet]
         public async Task<IEnumerable<TransactionDto>> GetTransactions()
         {
-            var transactions = await  _repositoryWraper.Transaction.GetAllAsync();
-            var transactionsDto =   _mapper.Map<List<Transaction>, IEnumerable<TransactionDto>>(transactions);
+            var transactions = await _repositoryWraper.Transaction.GetAllAsync();
+            var transactionsDto = _mapper.Map<List<Transaction>, IEnumerable<TransactionDto>>(transactions);
             return transactionsDto;
         }
 
@@ -59,16 +59,16 @@ namespace Nadlan.Controllers
         }
 
         // GET: api/Transactions/5
-        [HttpGet("{apartmentId}/{accountId}")]
-        public async Task<IActionResult> GetTransaction([FromRoute] int apartmentId, int accountId)
+        [HttpGet("{apartmentId}/{accountId}/{isPurchaseCost}")]
+        public async Task<IActionResult> GetTransaction([FromRoute] int apartmentId, int accountId, bool isPurchaseCost)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var transaction = await _repositoryWraper.Transaction.GetByAcountAsync(apartmentId, accountId);
-
+            var transaction = await _repositoryWraper.Transaction.GetByAcountAsync(apartmentId, accountId, isPurchaseCost);
+            transaction.ForEach(a => a.Amount = Math.Abs(a.Amount));
             if (transaction == null)
             {
                 return NotFound();
@@ -123,7 +123,7 @@ namespace Nadlan.Controllers
             }
 
             var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
-            await  _repositoryWraper.Transaction.CreateTransactionAsync(transaction);
+            await _repositoryWraper.Transaction.CreateTransactionAsync(transaction);
             //await _repositoryWraper.Transaction.SaveAsync(transaction);
             //_context.Transactions.Add(transaction);
             //await _context.SaveChangesAsync();

@@ -46,9 +46,13 @@ namespace Nadlan.Repositories
             return Context.Transactions.FindAsync(id);
         }
 
-        public Task<List<Transaction>> GetByAcountAsync(int apartmentId, int accountId)
+        public Task<List<Transaction>> GetByAcountAsync(int apartmentId, int accountId, bool isPurchaseCost)
         {
-            return FindByCondition(c => c.ApartmentId == apartmentId && c.AccountId == accountId).ToListAsync();
+            return FindByCondition(c =>
+            //c.Amount <= 0  &&
+            c.ApartmentId == apartmentId 
+            && c.AccountId == accountId 
+            && c.IsPurchaseCost == isPurchaseCost).OrderByDescending( a =>a.Date).ToListAsync();
         }
 
 
