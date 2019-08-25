@@ -58,6 +58,26 @@ namespace Nadlan.Controllers
             return Ok(transaction);
         }
 
+        // GET: api/Transactions/5
+        [HttpGet("{apartmentId}/{accountId}")]
+        public async Task<IActionResult> GetTransaction([FromRoute] int apartmentId, int accountId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var transaction = await _repositoryWraper.Transaction.GetByAcountAsync(apartmentId, accountId);
+
+            if (transaction == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(transaction);
+        }
+
+
         // PUT: api/Transactions/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTransaction([FromRoute] int id, [FromBody] Apartment transaction)

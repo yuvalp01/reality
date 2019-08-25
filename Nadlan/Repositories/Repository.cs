@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Nadlan.Repositories
@@ -38,6 +39,9 @@ namespace Nadlan.Repositories
             await Context.SaveChangesAsync();
         }
 
-
+        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
+        {
+            return Context.Set<T>().Where(expression);
+        }
     }
 }

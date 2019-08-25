@@ -16,6 +16,10 @@ export class TransactionService
       return this.httpClient.get<ITransaction[]>(this.baseUrl + 'api/transactions');
     }
 
+  getTransactionsByAccount(apartmentId:number, accountId:number): Observable<ITransaction[]> {
+    return this.httpClient.get<ITransaction[]>(`${this.baseUrl}api/transactions/${apartmentId}/${accountId}`);
+  }
+
     addTransaction(transaction:ITransaction) : Observable<ITransaction>
     {
       const options  = {headers: new HttpHeaders({'Content-Type':'application/json'})};

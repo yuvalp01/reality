@@ -24,6 +24,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyOwnCustomMaterialModule } from './shared/cusotom-material';
 import { MAT_DATE_LOCALE } from '@angular/material';
 import { MinusSignToParens } from './shared/minusSignToParens';
+import { TransactionsDialogComponent } from './fetch-data/transactions-dialog.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,7 +39,8 @@ import { MinusSignToParens } from './shared/minusSignToParens';
     AddTransactionComponent,
     AddAccoutComponent,
     ReportsComponent,
-    MinusSignToParens
+    MinusSignToParens,
+    TransactionsDialogComponent
     
   ],
   imports: [
@@ -60,6 +62,7 @@ import { MinusSignToParens } from './shared/minusSignToParens';
       { path: 'add-account', component: AddAccoutComponent },
       { path: 'reports', component: ReportsComponent },
       { path: 'reports/:apartmentId', component: ReportsComponent },
+      //{ path: 'reports/:apartmentId', component: TransactionsDialogComponent },
 
       //{
       //  path: 'reports', component: ReportsComponent, children[
@@ -76,6 +79,7 @@ import { MinusSignToParens } from './shared/minusSignToParens';
     ])
   ],
   providers: [ApartmentService, AccountService, TransactionService, ReportService, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [TransactionsDialogComponent]
 })
 export class AppModule { }

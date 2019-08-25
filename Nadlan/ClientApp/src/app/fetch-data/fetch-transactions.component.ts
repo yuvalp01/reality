@@ -11,7 +11,7 @@ import { subscribeOn } from 'rxjs/operators';
   styles: ['table{width:100%}']
 })
 export class TransactionListComponent implements OnInit {
-  displayedColumns: string[] = ['id','date', 'amount', 'apartmentId', 'accountId', 'isPurchaseCost', 'comments'];
+  displayedColumns: string[] = ['id', 'date', 'apartmentId','accountId' , 'amount', 'isPurchaseCost', 'comments'];
   //transactions: ITransaction[];
   dataSource = new MatTableDataSource<ITransaction>();
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -23,7 +23,7 @@ export class TransactionListComponent implements OnInit {
 
       this.dataSource.data = result as ITransaction[];
       //this.transactions = result;
-      this.dataSource = new MatTableDataSource(result);
+      //this.dataSource = new MatTableDataSource(result);
       this.dataSource.sort = this.sort;
       //this.dataSource.filter = this.selectedApartment;
 
