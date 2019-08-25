@@ -63,8 +63,8 @@ namespace Nadlan.Repositories
             summaryReport.InitialRemainder = summaryReport.Investment + await Task.FromResult(totalCost.Sum(a => a.Amount));
             summaryReport.Balance = summaryReport.InitialRemainder + summaryReport.NetIncome;
 
-            //Apartment apartment = Context.Apartments.Where(a => a.Id == apartmentId).First();     
-            Apartment apartment = new Apartment { CurrentRent = 500, FixedMaintanance = 55, PurchaseDate = new DateTime(2017, 12, 20) };
+            Apartment apartment = Context.Apartments.Where(a => a.Id == apartmentId).First();     
+           // Apartment apartment = new Apartment { CurrentRent = 500, FixedMaintanance = 55, PurchaseDate = new DateTime(2017, 12, 20) };
 
             summaryReport.ROI = CalcROI(apartment, summaryReport);
             summaryReport.PredictedROI = CalcPredictedROI(apartment, summaryReport.Investment);

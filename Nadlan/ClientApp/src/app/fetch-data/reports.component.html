@@ -95,7 +95,7 @@
               <mat-list-item (click)="showTrans(account.accountId, account.name, false)" style="color:#3764ad" *ngFor="let account of incomeReport?.accountsSum" id="{{account.accountId}}">
                 <mat-icon mat-list-icon>business_center</mat-icon><!--#8a5050-->
                 <span>{{account.name}}</span>
-                <span>{{account.total | currency:'EUR' : number:'1.0-0'}}</span>
+                <span>{{account.total | currency:'EUR' : number:'1.0-1'}}</span>
               </mat-list-item>
               <mat-divider></mat-divider>
             </mat-list>
@@ -175,7 +175,7 @@
               <mat-list-item (click)="showTrans(account.accountId, account.name, true)" style="color:#3764ad" *ngFor="let account of purchaseReport?.accountsSum" id="{{account.accountId}}">
                 <mat-icon mat-list-icon>business_center</mat-icon>
                 <span>{{account.name}}</span>
-                <span>{{account.total | currency:'EUR' : number:'1.0-0'}}</span>
+                <span>{{account.total | currency:'EUR' : number:'1.0-1'}}</span>
               </mat-list-item>
               <mat-divider></mat-divider>
             </mat-list>

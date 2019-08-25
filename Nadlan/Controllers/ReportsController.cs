@@ -25,12 +25,9 @@ namespace Nadlan.Controllers
             _mapper = mapper;
         }
 
-        //[HttpGet("GetDiagnosticReport")]
-        //public async Task<IActionResult> GetDiagnosticReport([FromQuery(Name = "identifier")] DiagnosticRequest diagnosticRequest)
-       [HttpPost("GetDiagnosticReport")]
+        [HttpPost("GetDiagnosticReport")]
         public async Task<IActionResult> GetDiagnosticReport([FromBody] DiagnosticRequest diagnosticRequest)
         {
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
