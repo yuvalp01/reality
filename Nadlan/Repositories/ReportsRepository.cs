@@ -80,7 +80,11 @@ namespace Nadlan.Repositories
             //TODO - find formula for enfia
             decimal netRent = apartment.CurrentRent * 0.85m - apartment.FixedMaintanance - ANNUAL_COSTS / 12;
             decimal anualNetIncome = netRent * 11;
-            decimal predictedRoi = anualNetIncome / investment;
+            decimal predictedRoi = 0;
+            if (investment > 0)
+            {
+                predictedRoi = anualNetIncome / investment;
+            }
             return predictedRoi;
         }
 
@@ -90,7 +94,11 @@ namespace Nadlan.Repositories
             DateTime zeroTime = new DateTime(1, 1, 1);
             TimeSpan span = DateTime.Today - apartment.PurchaseDate;
             decimal years_dec = ((zeroTime + span).Year - 1) + ((zeroTime + span).Month - 1) / 12m;
-            decimal roi = (summaryReport.NetIncome / summaryReport.Investment) / years_dec;
+            decimal roi = 0;
+            if (summaryReport.Investment > 0)
+            {
+                roi = (summaryReport.NetIncome / summaryReport.Investment) / years_dec;
+            }
             return roi;
         }
 
@@ -158,7 +166,7 @@ namespace Nadlan.Repositories
 
             var accountSummary = Context.Transactions.Include(a => a.Account)
                 .Where(basicPredicate)
-                .Where(a=>a.AccountId!=1 && a.AccountId!=5)
+                .Where(a => a.AccountId != 1 && a.AccountId != 5)
                 .GroupBy(g => new { g.AccountId, g.Account.Name })
                 .OrderBy(a => a.Sum(s => s.Amount))
                 .Select(a => new AccountSummary
