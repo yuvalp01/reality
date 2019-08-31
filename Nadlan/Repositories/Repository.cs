@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Nadlan.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public abstract class Repository<T> : IRepository<T> where T : class
     {
 
         protected NadlanConext Context { get; set; }
@@ -43,5 +43,6 @@ namespace Nadlan.Repositories
         {
             return Context.Set<T>().Where(expression);
         }
+
     }
 }
