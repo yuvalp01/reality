@@ -4,9 +4,77 @@
 <p *ngIf="!generalLines"><em>Loading...</em></p>
 
 
+<!--<button (click)="exportAsXLSX()"><i class="fa fa-file-excel-o" style="font-size:48px;color:blue"></i>click</button>-->
 
 
 <h3 mat-subheader>  <mat-icon>gavel</mat-icon>General</h3>
+<mat-divider></mat-divider>
+<div class="lines">
+
+  <table class="table table-sm">
+    <thead>
+      <tr class="lines">
+        <th></th>
+        <th>Title</th>
+        <th>Work Cost</th>
+        <th>Items Total Price</th>
+        <th>Total Cost</th>
+        <th>Comments</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let line of generalLines;let i = index">
+      <tr class="lines">
+        <td> {{i+1}}</td>
+        <td> {{line?.title}}</td>
+        <td> {{line?.workCost}}</td>
+        <td> {{line?.itemsTotalPrice}}</td>
+        <td> {{line?.totalPrice}}</td>
+        <td> {{line?.comments}}</td>
+      </tr>
+      <tr *ngIf="line?.items.length>0">
+        <td colspan="6" style="padding-left:20px">
+          <table class="table table-sm" style="margin-bottom:0">
+            <thead>
+              <tr class="items">
+                <th style="width:320px">Description</th>
+                <th>Quantity</th>
+                <th style="width:400px">Selected Product</th>
+                <th>Price</th>
+                <th>Reference</th>
+                <th></th>
+
+                <!--<th style="width:320px">Description</th>
+  <th style="width:50px">Quantity</th>
+  <th style="width:400px">Selected Product</th>
+  <th style="width:50px">Price</th>
+  <th style="width:100px">Reference</th>
+  <th style="width:auto"></th>-->
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="items" *ngFor="let item of line?.items">
+                <td>{{item?.description}}</td>
+                <td>{{item?.quantity}}</td>
+                <td>{{item?.product.name}}</td>
+                <td>{{item?.product.price}}</td>
+                <td>{{item?.product.reference}}</td>
+                <td><a *ngIf="item?.product.link" target="_blank" href="{{item?.product.link}}">Link</a></td>
+
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+
+
+
+
+<h3 mat-subheader>  <mat-icon>kitchen</mat-icon>Kitchen</h3>
 <mat-divider></mat-divider>
 <div class="lines">
 
@@ -60,13 +128,6 @@
     </tbody>
   </table>
 </div>
-
-
-
-
-
-
-
 
 
 
