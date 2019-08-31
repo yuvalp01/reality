@@ -10,8 +10,8 @@ using Nadlan.Repositories;
 namespace Nadlan.Migrations
 {
     [DbContext(typeof(NadlanConext))]
-    [Migration("20190817193659_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20190828141537_defaultvalcost2")]
+    partial class defaultvalcost2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -48,6 +48,8 @@ namespace Nadlan.Migrations
 
                     b.Property<string>("Door");
 
+                    b.Property<decimal>("FixedMaintanance");
+
                     b.Property<int>("Floor");
 
                     b.Property<DateTime>("PurchaseDate");
@@ -61,24 +63,24 @@ namespace Nadlan.Migrations
                     b.ToTable("Apartments");
                 });
 
-            modelBuilder.Entity("Nadlan.Models.RenovationItem", b =>
+            modelBuilder.Entity("Nadlan.Models.Renovation.Item", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal>("Cost");
-
                     b.Property<string>("Description");
 
-                    b.Property<string>("link");
+                    b.Property<int?>("ProductId");
 
                     b.HasKey("Id");
 
-                    b.ToTable("RenovationItems");
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Items","renovation");
                 });
 
-            modelBuilder.Entity("Nadlan.Models.RenovationLine", b =>
+            modelBuilder.Entity("Nadlan.Models.Renovation.Line", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -86,11 +88,11 @@ namespace Nadlan.Migrations
 
                     b.Property<int>("ApartmentId");
 
+                    b.Property<int>("Category");
+
                     b.Property<string>("Comments");
 
-                    b.Property<int>("Quantity");
-
-                    b.Property<int>("RenovationItemId");
+                    b.Property<int?>("ItemId");
 
                     b.Property<string>("Title");
 
@@ -100,9 +102,28 @@ namespace Nadlan.Migrations
 
                     b.HasIndex("ApartmentId");
 
-                    b.HasIndex("RenovationItemId");
+                    b.HasIndex("ItemId");
 
-                    b.ToTable("RenovationLines");
+                    b.ToTable("Lines","renovation");
+                });
+
+            modelBuilder.Entity("Nadlan.Models.Renovation.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Cost")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(0m);
+
+                    b.Property<string>("Link");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Products","renovation");
                 });
 
             modelBuilder.Entity("Nadlan.Models.Transaction", b =>
@@ -132,28 +153,34 @@ namespace Nadlan.Migrations
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("Nadlan.Models.RenovationLine", b =>
+            modelBuilder.Entity("Nadlan.Models.Renovation.Item", b =>
+                {
+                    b.HasOne("Nadlan.Models.Renovation.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+                });
+
+            modelBuilder.Entity("Nadlan.Models.Renovation.Line", b =>
                 {
                     b.HasOne("Nadlan.Models.Apartment", "Apartment")
-                        .WithMany("RenovationLines")
+                        .WithMany()
                         .HasForeignKey("ApartmentId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Nadlan.Models.RenovationItem", "RenovationItem")
-                        .WithMany("Lines")
-                        .HasForeignKey("RenovationItemId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("Nadlan.Models.Renovation.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId");
                 });
 
             modelBuilder.Entity("Nadlan.Models.Transaction", b =>
                 {
                     b.HasOne("Nadlan.Models.Account", "Account")
-                        .WithMany("Transactions")
+                        .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Nadlan.Models.Apartment", "Apartment")
-                        .WithMany("Transactions")
+                        .WithMany()
                         .HasForeignKey("ApartmentId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

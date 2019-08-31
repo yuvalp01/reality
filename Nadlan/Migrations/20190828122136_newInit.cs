@@ -4,10 +4,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Nadlan.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class newInit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "renovation");
+
             migrationBuilder.CreateTable(
                 name: "Accounts",
                 columns: table => new
@@ -34,7 +37,8 @@ namespace Nadlan.Migrations
                     Floor = table.Column<int>(nullable: false),
                     Size = table.Column<int>(nullable: false),
                     Door = table.Column<string>(nullable: true),
-                    CurrentRent = table.Column<decimal>(nullable: false)
+                    CurrentRent = table.Column<decimal>(nullable: false),
+                    FixedMaintanance = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -42,18 +46,19 @@ namespace Nadlan.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RenovationItems",
+                name: "Product",
+                schema: "renovation",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
                     Cost = table.Column<decimal>(nullable: false),
-                    link = table.Column<string>(nullable: true)
+                    Link = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RenovationItems", x => x.Id);
+                    table.PrimaryKey("PK_Product", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -87,44 +92,58 @@ namespace Nadlan.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RenovationLines",
+                name: "Item",
+                schema: "renovation",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Description = table.Column<string>(nullable: true),
+                    ProductId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Item", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Item_Product_ProductId",
+                        column: x => x.ProductId,
+                        principalSchema: "renovation",
+                        principalTable: "Product",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Line",
+                schema: "renovation",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(nullable: true),
-                    Quantity = table.Column<int>(nullable: false),
+                    Category = table.Column<int>(nullable: false),
                     WorkCost = table.Column<decimal>(nullable: false),
                     Comments = table.Column<string>(nullable: true),
-                    RenovationItemId = table.Column<int>(nullable: false),
+                    ItemId = table.Column<int>(nullable: true),
                     ApartmentId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RenovationLines", x => x.Id);
+                    table.PrimaryKey("PK_Line", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RenovationLines_Apartments_ApartmentId",
+                        name: "FK_Line_Apartments_ApartmentId",
                         column: x => x.ApartmentId,
                         principalTable: "Apartments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RenovationLines_RenovationItems_RenovationItemId",
-                        column: x => x.RenovationItemId,
-                        principalTable: "RenovationItems",
+                        name: "FK_Line_Item_ItemId",
+                        column: x => x.ItemId,
+                        principalSchema: "renovation",
+                        principalTable: "Item",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RenovationLines_ApartmentId",
-                table: "RenovationLines",
-                column: "ApartmentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RenovationLines_RenovationItemId",
-                table: "RenovationLines",
-                column: "RenovationItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_AccountId",
@@ -135,24 +154,48 @@ namespace Nadlan.Migrations
                 name: "IX_Transactions_ApartmentId",
                 table: "Transactions",
                 column: "ApartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Item_ProductId",
+                schema: "renovation",
+                table: "Item",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Line_ApartmentId",
+                schema: "renovation",
+                table: "Line",
+                column: "ApartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Line_ItemId",
+                schema: "renovation",
+                table: "Line",
+                column: "ItemId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "RenovationLines");
-
-            migrationBuilder.DropTable(
                 name: "Transactions");
 
             migrationBuilder.DropTable(
-                name: "RenovationItems");
+                name: "Line",
+                schema: "renovation");
 
             migrationBuilder.DropTable(
                 name: "Accounts");
 
             migrationBuilder.DropTable(
                 name: "Apartments");
+
+            migrationBuilder.DropTable(
+                name: "Item",
+                schema: "renovation");
+
+            migrationBuilder.DropTable(
+                name: "Product",
+                schema: "renovation");
         }
     }
 }

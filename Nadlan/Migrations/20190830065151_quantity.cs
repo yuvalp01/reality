@@ -2,22 +2,24 @@
 
 namespace Nadlan.Migrations
 {
-    public partial class addFixedMaintanance : Migration
+    public partial class quantity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<decimal>(
-                name: "FixedMaintanance",
-                table: "Apartments",
+            migrationBuilder.AddColumn<int>(
+                name: "Quantity",
+                schema: "renovation",
+                table: "Items",
                 nullable: false,
-                defaultValue: 0m);
+                defaultValue: 1);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "FixedMaintanance",
-                table: "Apartments");
+                name: "Quantity",
+                schema: "renovation",
+                table: "Items");
         }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nadlan.Repositories;
 
 namespace Nadlan.Migrations
 {
     [DbContext(typeof(NadlanConext))]
-    partial class NadlanConextModelSnapshot : ModelSnapshot
+    [Migration("20190828171107_changeItemstolist")]
+    partial class changeItemstolist
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,10 +75,6 @@ namespace Nadlan.Migrations
 
                     b.Property<int?>("ProductId");
 
-                    b.Property<int>("Quantity")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(1);
-
                     b.HasKey("Id");
 
                     b.HasIndex("LineId");
@@ -115,15 +113,13 @@ namespace Nadlan.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Link");
-
-                    b.Property<string>("Name");
-
-                    b.Property<decimal>("Price")
+                    b.Property<decimal>("Cost")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(0m);
 
-                    b.Property<string>("Reference");
+                    b.Property<string>("Link");
+
+                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 
