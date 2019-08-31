@@ -10,6 +10,7 @@ namespace Nadlan.Repositories
         TransactionRepository Transaction { get; }
         AccountRepository Account { get; }
         ReportRepository Report { get; }
+        //RenovationItemRepository RenovationItem { get; }
         void Save();
 
     }

@@ -1,6 +1,6 @@
 import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatIconModule, MatNativeDateModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatCardModule, MatGridListModule, MatSidenavModule, MatListModule, MatSortModule, MatDividerModule, MatTabsModule, MatTooltipModule, MatExpansionModule} from '@angular/material'
+import {MatIconModule, MatNativeDateModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatCardModule, MatGridListModule, MatSidenavModule, MatListModule, MatSortModule, MatDividerModule, MatTabsModule, MatTooltipModule, MatExpansionModule, MatTreeModule} from '@angular/material'
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { NgModule } from '@angular/core';
 import {TextFieldModule} from '@angular/cdk/text-field';
@@ -28,7 +28,8 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatDividerModule,
     MatTabsModule,
     MatTooltipModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTreeModule
 
     ],
   exports: [
@@ -51,7 +52,8 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatDividerModule,
     MatTabsModule,
     MatTooltipModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTreeModule
       ],
 })
 export class MyOwnCustomMaterialModule { }

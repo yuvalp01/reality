@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ApartmentListComponent } from './fetch-data/fetch-apart.component';
 import { ApartmentService } from './services/apartment.service';
 import { AccountService } from './services/account.service';
@@ -25,13 +24,14 @@ import { MyOwnCustomMaterialModule } from './shared/cusotom-material';
 import { MAT_DATE_LOCALE } from '@angular/material';
 import { MinusSignToParens } from './shared/minusSignToParens';
 import { TransactionsDialogComponent } from './fetch-data/transactions-dialog.component';
+import { RenovationComponent } from './renovation/renovation.component';
+import { RenovationService } from './services/renovation.service';
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent,
     ApartmentListComponent,
     AddApartmentForm,
     AccountListComponent,
@@ -40,7 +40,8 @@ import { TransactionsDialogComponent } from './fetch-data/transactions-dialog.co
     AddAccoutComponent,
     ReportsComponent,
     MinusSignToParens,
-    TransactionsDialogComponent
+    TransactionsDialogComponent,
+    RenovationComponent
     
   ],
   imports: [
@@ -53,7 +54,6 @@ import { TransactionsDialogComponent } from './fetch-data/transactions-dialog.co
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
       { path: 'fetch-apartments', component: ApartmentListComponent },
       { path: 'add-apartment', component: AddApartmentForm },
       { path: 'fetch-accounts', component: AccountListComponent },
@@ -62,6 +62,7 @@ import { TransactionsDialogComponent } from './fetch-data/transactions-dialog.co
       { path: 'add-account', component: AddAccoutComponent },
       { path: 'reports', component: ReportsComponent },
       { path: 'reports/:apartmentId', component: ReportsComponent },
+      { path: 'renovation', component: RenovationComponent },
       //{ path: 'reports/:apartmentId', component: TransactionsDialogComponent },
 
       //{
@@ -78,7 +79,7 @@ import { TransactionsDialogComponent } from './fetch-data/transactions-dialog.co
       //}
     ])
   ],
-  providers: [ApartmentService, AccountService, TransactionService, ReportService, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
+  providers: [ApartmentService, AccountService, TransactionService, ReportService, RenovationService,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent],
   entryComponents: [TransactionsDialogComponent]
 })

@@ -11,6 +11,7 @@ namespace Nadlan.Repositories
         private TransactionRepository _transaction;
         private AccountRepository _account;
         private ReportRepository _report;
+        //private RenovationItemRepository _renovationItem;
 
         public RepositoryWrapper(NadlanConext conext)
         {
@@ -51,9 +52,24 @@ namespace Nadlan.Repositories
                 return _report;
             }
         }
+
+
+        //public RenovationItemRepository RenovationItem
+        //{
+        //    get
+        //    {
+        //        if (_renovationItem == null)
+        //        {
+        //            _renovationItem = new RenovationItemRepository(_conext);
+        //        }
+        //        return _renovationItem;
+        //    }
+        //}
+
         public void Save()
         {
-            throw new Exception("It is not possible to save reports");
+            _conext.SaveChanges();
+            //throw new Exception("It is not possible to save reports");
         }
     }
 }

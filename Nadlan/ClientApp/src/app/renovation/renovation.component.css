@@ -1,0 +1,37 @@
+.lines th {
+  background-color: #b7a2866e;
+}
+.lines td {
+  background-color: #f1ebe4;
+}
+/*.line-title {
+  background-color: burlywood;
+}*/
+
+.items {
+font-size:small;
+padding:0;
+/*line-height:normal;*/
+}
+
+  .items th {
+    background-color: #b5d5d6;
+    font-weight: normal;
+  }
+.items td {
+  background-color: aliceblue;
+}
+
+
+/*burlywood*/
+
+/*.lines > div > span {
+  display: inline-block;
+  width: 300px;
+  color: rebeccapurple;
+}
+
+div.items
+{
+  margin-left:50px;
+}*/

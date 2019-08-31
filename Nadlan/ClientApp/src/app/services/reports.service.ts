@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IIncomeReport, IPurchaseReport, ISummaryReport } from '../shared/models';
+import { IIncomeReport, IPurchaseReport, ISummaryReport } from '../models';
 import { strictEqual } from 'assert';
 
 @Injectable()

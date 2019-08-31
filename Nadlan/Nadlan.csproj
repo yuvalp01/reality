@@ -26,6 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Repositories\RenovationRepository.cs" />
+    <Compile Remove="ViewModels\RenovationItemDto.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="ClientApp\src\app\fetch-data\transactions-dialog.component.html" />
     <None Remove="ClientApp\src\app\fetch-data\transactions-dialog.component.ts" />
     <None Remove="ClientApp\src\app\shared\minusSignToParens.ts" />

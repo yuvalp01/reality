@@ -1,5 +1,5 @@
 import { Injectable, Inject } from "@angular/core";
-import { IApartment } from "../shared/models";
+import { IApartment } from "../models";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
 
