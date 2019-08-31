@@ -1,4 +1,6 @@
-﻿using Nadlan.Models.Renovation;
+﻿using Microsoft.EntityFrameworkCore;
+using Nadlan.Models.Renovation;
+using Nadlan.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +14,31 @@ namespace Nadlan.Repositories
         {
         }
 
+        public Task<List<ItemDto>> GetItemsDtoAsync(int apartmentId)
+        {
+
+            var items = Context.Lines.Where(a => a.ApartmentId == apartmentId).OrderBy(a=>a.Category).SelectMany(
+                a => a.Items, (line, item) => new ItemDto
+                {
+                    LineId = line.Id,
+                    LineCategory = line.Category,
+                    LineTitle = line.Title,
+                    ItemId = item.Id,
+                    ItemDescription = item.Description,
+                    Quantity = item.Quantity,
+                    ProductId = item.Product.Id,
+                    ProductName = item.Product.Name,
+                    Price = item.Product.Price,
+                    Link = item.Product.Link,
+                    Reference = item.Product.Reference,
+                    TotalPrice = item.Product.Price * item.Quantity
+                });
+            return items.ToListAsync();
+        }
+
         public Task CreateAsync(Item item)
         {
-            Create(item);          
+            Create(item);
             return Context.SaveChangesAsync();
         }
 

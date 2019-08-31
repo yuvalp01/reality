@@ -30,9 +30,9 @@ namespace Nadlan.Controllers
 
         // GET: api/Transactions
         [HttpGet("renovationItems/{apartmentId}")]
-        public async Task<IEnumerable<Item>> GetRenovationItems([FromRoute] int apartmentId)
+        public async Task<IEnumerable<ItemDto>> GetRenovationItems([FromRoute] int apartmentId)
         {
-            var renovationItems = await _repositoryWraper.RenovationItemRepository.GetAllAsync();
+            var renovationItems = await _repositoryWraper.RenovationItemRepository.GetItemsDtoAsync(apartmentId);
             //var transactionsDto = _mapper.Map<List<RenovationItem>, IEnumerable<TransactionDto>>(transactions);
             return renovationItems;
         }

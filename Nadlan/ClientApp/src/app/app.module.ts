@@ -26,6 +26,7 @@ import { MinusSignToParens } from './shared/minusSignToParens';
 import { TransactionsDialogComponent } from './fetch-data/transactions-dialog.component';
 import { RenovationComponent } from './renovation/renovation.component';
 import { RenovationService } from './services/renovation.service';
+import { ExcelService } from './services/excel.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -79,7 +80,7 @@ import { RenovationService } from './services/renovation.service';
       //}
     ])
   ],
-  providers: [ApartmentService, AccountService, TransactionService, ReportService, RenovationService,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
+  providers: [ApartmentService, AccountService, TransactionService, ReportService, RenovationService, ExcelService,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent],
   entryComponents: [TransactionsDialogComponent]
 })

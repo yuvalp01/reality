@@ -25,15 +25,18 @@ export interface IProduct {
 
 }
 
-//public class RenovationLine {
-//  public int Id { get; set; }
-//        public string Title { get; set; }
-//        public int Quantity { get; set; }
-//        public decimal WorkCost { get; set; }
-//        public string Comments { get; set; }
+export interface IItemDto {
+  itemId: number;
+  lineId: number;
+  lineTitle: string;
+  lineCategory: number;
+  itemDescription: string;
+  productId: number;
+  productName: string;
+  quantity: number;
+  price: number;
+  totalPrice: number;
+  reference: string;
+  link: string;
 
-//        public RenovationItem RenovationItem { get; set; }
-//        public int RenovationItemId { get; set; }
-//        public Apartment Apartment { get; set; }
-//        public int ApartmentId { get; set; }
-//    }
+}

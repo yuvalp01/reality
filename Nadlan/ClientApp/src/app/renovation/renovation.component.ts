@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ILine, IItem } from '../models';
+import { ExcelService } from '../services/excel.service';
+import { ILine, IItemDto } from '../models';
 import { MatTableDataSource } from '@angular/material';
 import { RenovationService } from '../services/renovation.service';
 import { debounce } from 'rxjs/operators';
@@ -10,24 +11,41 @@ import { debounce } from 'rxjs/operators';
   styleUrls: ['./renovation.component.css']
 })
 export class RenovationComponent implements OnInit {
-  constructor(private renovationService: RenovationService) { }
+  constructor(private renovationService: RenovationService, private excelService:ExcelService) { }
   displayedColumns: string[] = ['title', 'category', 'workCost', 'comments'];
   dataSource = new MatTableDataSource<ILine>();
-  //renovationLines: ILine[];
+  renovationLines: ILine[];
   generalLines: ILine[];
   kitchenLines: ILine[];
   bathLines: ILine[];
+  allItems: IItemDto[];
 
   ngOnInit() {
     this.renovationService.getRenovationLines(6).subscribe(result => {
-      //this.renovationLines = result;
+      this.renovationLines = result;
       this.generalLines = result.filter(a => a.category == 0);
       this.kitchenLines = result.filter(a => a.category == 1);
       this.bathLines = result.filter(a => a.category == 2);
       this.dataSource.data = result as ILine[];
-
-
     }, error => console.error(error));
+
+    this.renovationService.getRenovationItems(6).subscribe(result => {
+      this.allItems = result;
+    }, error => console.error(error));
+
+  }
+  exportAsXLSX(): void {
+    this.excelService.exportAsExcelFile(this.allItems, 'sample');
+  }
+}
+
+
+
+
+
+
+
+
     //this.dataSource.filterPredicate = function (data, filter: any): boolean {
     //  return data.category == filter;//apartmentAddress.toLowerCase().includes(filter);
     //};
@@ -39,6 +57,3 @@ export class RenovationComponent implements OnInit {
 
 
     //this.dataSource.filter = 
-  }
-
-}
