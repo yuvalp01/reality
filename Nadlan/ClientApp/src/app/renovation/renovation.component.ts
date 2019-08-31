@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ExcelService } from '../services/excel.service';
 import { ILine, IItemDto } from '../models';
 import { MatTableDataSource } from '@angular/material';
@@ -12,31 +12,32 @@ import { debounce } from 'rxjs/operators';
 })
 export class RenovationComponent implements OnInit {
   constructor(private renovationService: RenovationService, private excelService:ExcelService) { }
-  displayedColumns: string[] = ['title', 'category', 'workCost', 'comments'];
-  dataSource = new MatTableDataSource<ILine>();
-  renovationLines: ILine[];
-  generalLines: ILine[];
-  kitchenLines: ILine[];
-  bathLines: ILine[];
-  allItems: IItemDto[];
+  //displayedColumns: string[] = ['title', 'category', 'workCost', 'comments'];
+  //@Input() renovationLines: ILine[];
+  //@Input() generalLines: ILine[];
+  //@Input() kitchenLines: ILine[];
+  //@Input() bathLines: ILine[];
+  //allItems: IItemDto[];
+
+  @Input() data: ILine[];
 
   ngOnInit() {
-    this.renovationService.getRenovationLines(6).subscribe(result => {
-      this.renovationLines = result;
-      this.generalLines = result.filter(a => a.category == 0);
-      this.kitchenLines = result.filter(a => a.category == 1);
-      this.bathLines = result.filter(a => a.category == 2);
-      this.dataSource.data = result as ILine[];
-    }, error => console.error(error));
+    //this.renovationService.getRenovationLines(6).subscribe(result => {
+    //  //this.renovationLines = result;
+    //  this.generalLines = result.filter(a => a.category == 0);
+    //  this.kitchenLines = result.filter(a => a.category == 1);
+    //  this.bathLines = result.filter(a => a.category == 2);
+    //  this.dataSource.data = result as ILine[];
+    //}, error => console.error(error));
 
-    this.renovationService.getRenovationItems(6).subscribe(result => {
-      this.allItems = result;
-    }, error => console.error(error));
+    //this.renovationService.getRenovationItems(6).subscribe(result => {
+    //  this.allItems = result;
+    //}, error => console.error(error));
 
   }
-  exportAsXLSX(): void {
-    this.excelService.exportAsExcelFile(this.allItems, 'sample');
-  }
+  //exportAsXLSX(): void {
+  //  this.excelService.exportAsExcelFile(this.allItems, 'sample');
+  //}
 }
 
 

@@ -1,0 +1,17 @@
+<h1>Renovation</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+<p *ngIf="!generalLines"><em>Loading...</em></p>
+
+<h3 mat-subheader>  <mat-icon>gavel</mat-icon>General</h3>
+<mat-divider></mat-divider>
+<app-renovation [data]="generalLines"></app-renovation>
+<h3 mat-subheader>  <mat-icon>kitchen</mat-icon>Kitchen</h3>
+<mat-divider></mat-divider>
+<app-renovation [data]="kitchenLines"></app-renovation>
+<h3 mat-subheader>  <mat-icon>bathtub</mat-icon>Bathroom</h3>
+<mat-divider></mat-divider>
+<app-renovation [data]="bathLines"></app-renovation>
+
+
+<button mat-button color="primary" (click)="exportAsXLSX()">Export to Excel</button>

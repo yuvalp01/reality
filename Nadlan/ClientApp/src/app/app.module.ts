@@ -27,6 +27,7 @@ import { TransactionsDialogComponent } from './fetch-data/transactions-dialog.co
 import { RenovationComponent } from './renovation/renovation.component';
 import { RenovationService } from './services/renovation.service';
 import { ExcelService } from './services/excel.service';
+import { RenovationListComponent } from './renovation/renovation-list.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +43,8 @@ import { ExcelService } from './services/excel.service';
     ReportsComponent,
     MinusSignToParens,
     TransactionsDialogComponent,
-    RenovationComponent
+    RenovationComponent,
+    RenovationListComponent
     
   ],
   imports: [
@@ -64,6 +66,7 @@ import { ExcelService } from './services/excel.service';
       { path: 'reports', component: ReportsComponent },
       { path: 'reports/:apartmentId', component: ReportsComponent },
       { path: 'renovation', component: RenovationComponent },
+      { path: 'renovation-list', component: RenovationListComponent },
       //{ path: 'reports/:apartmentId', component: TransactionsDialogComponent },
 
       //{

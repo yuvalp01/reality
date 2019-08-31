@@ -1,4 +1,4 @@
-<h1>Renovation</h1>
+<!--<h1>Renovation</h1>
 
 <p>This component demonstrates fetching data from the server.</p>
 <p *ngIf="!generalLines"><em>Loading...</em></p>
@@ -8,7 +8,7 @@
 
 
 <h3 mat-subheader>  <mat-icon>gavel</mat-icon>General</h3>
-<mat-divider></mat-divider>
+<mat-divider></mat-divider>-->
 <div class="lines">
 
   <table class="table table-sm">
@@ -22,7 +22,7 @@
         <th>Comments</th>
       </tr>
     </thead>
-    <tbody *ngFor="let line of generalLines;let i = index">
+    <tbody *ngFor="let line of data;let i = index">
       <tr class="lines">
         <td> {{i+1}}</td>
         <td> {{line?.title}}</td>
@@ -42,13 +42,6 @@
                 <th>Price</th>
                 <th>Reference</th>
                 <th></th>
-
-                <!--<th style="width:320px">Description</th>
-  <th style="width:50px">Quantity</th>
-  <th style="width:400px">Selected Product</th>
-  <th style="width:50px">Price</th>
-  <th style="width:100px">Reference</th>
-  <th style="width:auto"></th>-->
               </tr>
             </thead>
             <tbody>
@@ -74,7 +67,7 @@
 
 
 
-<h3 mat-subheader>  <mat-icon>kitchen</mat-icon>Kitchen</h3>
+<!--<h3 mat-subheader>  <mat-icon>kitchen</mat-icon>Kitchen</h3>
 <mat-divider></mat-divider>
 <div class="lines">
 
@@ -127,7 +120,7 @@
       </tr>
     </tbody>
   </table>
-</div>
+</div>-->
 
 
 

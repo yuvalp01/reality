@@ -30,16 +30,7 @@ export class ReportsComponent implements OnInit {
       this.reportsService.getPurchaseReport(this.apartmentId).subscribe(result => this.purchaseReport = result, error => console.error(error));
       this.reportsService.getSummaryReport(this.apartmentId).subscribe(result => this.summaryReport = result, error => console.error(error));
       this.reportsService.getIncomeReport(this.apartmentId, this.selectedYear).subscribe(result => {
-        this.incomeReport = result;
-        //this.ROI = this.incomeReport.netIncome / this.purchaseReport.investment;
-
-        //const date1 = new Date('7/13/2010');
-        //const date2 = new Date('12/15/2010');
-        //const diffTime = Math.abs(date2.getTime() - date1.getTime());
-        //const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24*12));
-        //console.log(diffDays);
-
-
+      this.incomeReport = result;
       }, error => console.error(error));
     }
 
