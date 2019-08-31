@@ -11,6 +11,6 @@ namespace Nadlan.Models
         public string Name { get; set; }
         public bool IsIncome { get; set; }
 
-        public ICollection<Transaction> Transactions { get; set; }
+        //public ICollection<Transaction> Transactions { get; set; }
     }
 }
