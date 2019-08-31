@@ -1,6 +1,6 @@
 import { Component, OnInit, NgZone, ViewChild, Output, Inject } from "@angular/core";
 import { ApartmentService } from "../services/apartment.service";
-import { IApartment, ITransaction, IAccount } from "../shared/models";
+import { IApartment, ITransaction, IAccount } from "../models";
 import { FormControl, FormGroup } from "@angular/forms";
 import { AccountService } from "../services/account.service";
 import { TransactionService } from "../services/transaction.service";

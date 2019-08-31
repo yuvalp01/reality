@@ -1,6 +1,6 @@
 import { Component, Inject } from "@angular/core";
 import {  MatDialogRef, MAT_DIALOG_DATA   } from "@angular/material";
-import { ITransaction } from "../shared/models";
+import { ITransaction } from "../models";
 
 
 

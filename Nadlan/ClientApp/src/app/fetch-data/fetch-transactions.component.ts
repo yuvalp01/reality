@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, ViewChild } from '@angular/core';
-import { ITransaction } from '../shared/models';
+import { ITransaction } from '../models';
 import { TransactionService } from '../services/transaction.service';
 import { resource } from 'selenium-webdriver/http';
 import { AddTransactionComponent } from '../forms/add-transaction.component';
@@ -14,6 +14,7 @@ export class TransactionListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'date', 'apartmentId','accountId' , 'amount', 'isPurchaseCost', 'comments'];
   //transactions: ITransaction[];
   dataSource = new MatTableDataSource<ITransaction>();
+
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   selectedApartment: any;
   constructor(private transactionService: TransactionService, private dialog: MatDialog) {
@@ -26,6 +27,8 @@ export class TransactionListComponent implements OnInit {
       //this.dataSource = new MatTableDataSource(result);
       this.dataSource.sort = this.sort;
       //this.dataSource.filter = this.selectedApartment;
+
+
 
 
       this.dataSource.filterPredicate = function (data, filter: string): boolean {

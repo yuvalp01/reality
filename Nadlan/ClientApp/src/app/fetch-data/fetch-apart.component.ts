@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { IApartment } from '../shared/models';
+import { IApartment } from '../models';
 import { ApartmentService } from '../services/apartment.service';
 
 

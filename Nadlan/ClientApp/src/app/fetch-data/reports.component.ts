@@ -1,5 +1,5 @@
 import { Component, OnInit, Output } from '@angular/core';
-import { IIncomeReport, IPurchaseReport, ISummaryReport, ITransaction } from '../shared/models';
+import { IIncomeReport, IPurchaseReport, ISummaryReport, ITransaction } from '../models';
 import { ReportService } from '../services/reports.service';
 import { ActivatedRoute, RouterEvent, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';

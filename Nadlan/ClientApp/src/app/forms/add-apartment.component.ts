@@ -1,7 +1,7 @@
 import {  Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ApartmentService } from "../services/apartment.service";
-import { IApartment } from "../shared/models";
+import { IApartment } from "../models";
 import { Router } from "@angular/router";
 import { KeyValue } from "@angular/common";
 import { resource } from "selenium-webdriver/http";
