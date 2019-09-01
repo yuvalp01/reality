@@ -1,73 +1,62 @@
 <div class="container">
-    <form  [formGroup]="transactionForm" (ngSubmit)="saveTransaction(transactionForm.value)">
-      <h3>Add new transaction</h3>
+  <form [formGroup]="transactionForm" (ngSubmit)="saveTransaction(transactionForm.value)">
+    <h3>Add new transaction</h3>
 
-      <fieldset>
-          <!-- <input formControlName="date_"    placeholder="Transaction Date"> -->
-        <mat-form-field style="width: 100%"  appearance="outline" >
-            <mat-label>Transaction Date</mat-label>
-            <input formControlName="date"   matInput [matDatepicker]="picker" placeholder="Transaction Date">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-        </fieldset>
-          <fieldset>
-        <mat-form-field style="width: 100%"  appearance="outline" class="example-full-width">
-            <mat-label>Amount (€)</mat-label>
-            <input formControlName="amount"  type="text" matInput required placeholder="Amount (€)">
-            <!-- <mat-icon matSuffix>euro_symbol</mat-icon> -->
-          </mat-form-field>
-
-              </fieldset>
-      <fieldset>
+    <fieldset>
       <mat-form-field style="width: 100%" appearance="outline">
-          <mat-label>Apartment</mat-label>
-          <mat-select formControlName="apartmentId">
-            <mat-option  *ngFor="let apartment of apartments" [value]="apartment.id">
-              {{apartment.address}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+        <mat-label>Transaction Date</mat-label>
+        <input formControlName="date" matInput [matDatepicker]="picker" placeholder="Transaction Date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </fieldset>
+    <fieldset>
+      <mat-form-field style="width: 100%" appearance="outline" class="example-full-width">
+        <mat-label>Amount (€)</mat-label>
+        <input formControlName="amount" type="text" matInput required placeholder="Amount (€)">
+        <!-- <mat-icon matSuffix>euro_symbol</mat-icon> -->
+      </mat-form-field>
+    </fieldset>
+    <fieldset>
+      <mat-form-field style="width: 100%" appearance="outline">
+        <mat-label>Apartment</mat-label>
+        <mat-select formControlName="apartmentId">
+          <mat-option *ngFor="let apartment of apartments" [value]="apartment.id">
+            {{apartment.address}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-      </fieldset>
-      <fieldset>
-          <mat-form-field style="width: 50%"  appearance="outline">
-              <mat-label>GL Acount</mat-label>
-              <mat-select formControlName="accountId">
-                <mat-option  *ngFor="let acount of accounts" [value]="acount.id">
-                  {{acount.name}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-checkbox style="width: 50%; padding-left: 25px" formControlName="isPurchaseCost">Purchase Cost?</mat-checkbox>
-       </fieldset> 
+    </fieldset>
+    <fieldset>
+      <mat-form-field style="width: 50%" appearance="outline">
+        <mat-label>GL Acount</mat-label>
+        <mat-select formControlName="accountId">
+          <mat-option *ngFor="let acount of accounts" [value]="acount.id">
+            {{acount.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-checkbox style="width: 50%; padding-left: 25px" formControlName="isPurchaseCost">Purchase Cost?</mat-checkbox>
+    </fieldset>
 
-      <fieldset>
-        <mat-form-field appearance="outline" style="width: 100%">
-            <mat-label>Comments</mat-label>
-            <textarea formControlName="comments" 
-                      matInput 
-                      cdkTextareaAutosize
-                      #autosize="cdkTextareaAutosize"
-                      cdkAutosizeMinRows="1"
-                      cdkAutosizeMaxRows="5"></textarea>
-          </mat-form-field>
-      </fieldset>
+    <fieldset>
+      <mat-form-field appearance="outline" style="width: 100%">
+        <mat-label>Comments</mat-label>
+        <textarea formControlName="comments"
+                  matInput
+                  cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="1"
+                  cdkAutosizeMaxRows="5"></textarea>
+      </mat-form-field>
+    </fieldset>
 
 
-      <fieldset>
-        <button mat-flat-button color="primary" name="submit"  type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
+    <fieldset>
+      <button mat-flat-button color="primary" name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
 
-      </fieldset>
+    </fieldset>
 
-    </form>
-  </div>
-
-  <!-- export interface ITransaction {
-    date: Date;
-    comments: string;
-    isPurchaseCost: boolean;
-    amount: number;
-    apartmentId:number;
-    accountId:number;
-  } -->
+  </form>
+</div>

@@ -16,6 +16,7 @@ namespace Nadlan.Repositories
         }
         public DbSet<Apartment> Apartments { get; set; }
         public DbSet<Account> Accounts { get; set; }
+        public DbSet<AccountType> AccountTypes { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Line> Lines { get; set; }
         public DbSet<Item> Items { get; set; }

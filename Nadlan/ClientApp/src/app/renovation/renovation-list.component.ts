@@ -24,7 +24,7 @@ export class RenovationListComponent implements OnInit {
       //this.dataSource.data = result as ILine[];
     }, error => console.error(error));
 
-    this.renovationService.getRenovationItems(6).subscribe(result => {
+    this.renovationService.getRenovationItems(-1).subscribe(result => {
       this.allItems = result;
     }, error => console.error(error));
 

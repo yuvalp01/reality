@@ -25,7 +25,11 @@ namespace Nadlan.Repositories
         public async Task CreateTransactionAsync(Transaction transaction)
         {
             Account account = await Context.Accounts.FirstAsync(a => a.Id == transaction.AccountId);
-            transaction.Amount = !account.IsIncome ? transaction.Amount * -1 : transaction.Amount;
+            //Only for normal accouts - depends on the account isIncome property
+            if (account.AccountTypeId==0)
+            {
+                transaction.Amount = !account.IsIncome ? transaction.Amount * -1 : transaction.Amount;
+            }
             Create(transaction);
             await SaveAsync();
         }
