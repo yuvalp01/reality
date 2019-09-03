@@ -16,7 +16,7 @@ export class RenovationListComponent implements OnInit {
   //data: ILine[];
 
   ngOnInit() {
-    this.renovationService.getRenovationLines(6).subscribe(result => {
+    this.renovationService.getRenovationLines(-1).subscribe(result => {
       //this.renovationLines = result;
       this.generalLines = result.filter(a => a.category == 0);
       this.kitchenLines = result.filter(a => a.category == 1);

@@ -53,7 +53,7 @@ namespace Nadlan.Repositories
             Func<Transaction, bool> basicPredicateIncome = t => !t.IsPurchaseCost && t.ApartmentId == apartmentId;
             var investment = Context.Transactions.Where(basicPredicatePurchase).Where(a => a.AccountId == 13);
             var netIncome = Context.Transactions.Where(basicPredicateIncome);
-            var totalCost = Context.Transactions.Where(basicPredicatePurchase).Where(a => a.Amount <= 0);
+            var totalCost = Context.Transactions.Include(a => a.Account).Where(basicPredicatePurchase).Where(a => !a.Account.IsIncome);//.Where(a => a.Amount <= 0);
             SummaryReport summaryReport = new SummaryReport
             {
                 Investment = await Task.FromResult(investment.Sum(a => a.Amount)),
@@ -108,12 +108,14 @@ namespace Nadlan.Repositories
             Func<Transaction, bool> basicPredicate = t => t.IsPurchaseCost && t.ApartmentId == apartmentId;
             var investment = Context.Transactions.Where(basicPredicate).Where(a => a.AccountId == 13);
 
-            var totalCost = Context.Transactions.Where(basicPredicate)
-                .Where(a => a.Amount <= 0);
+            var totalCost = Context.Transactions.Include(a=>a.Account).Where(basicPredicate)
+                .Where(a => !a.Account.IsIncome);
+                //.Where(a => a.Amount <= 0);
             var renovationCost = Context.Transactions.Where(basicPredicate)
                 .Where(a => a.AccountId == 6);
-            var expensesNoRenovation = Context.Transactions.Where(basicPredicate)
-                .Where(a => a.Amount <= 0 && a.AccountId != 6 && a.AccountId != 12);
+            var expensesNoRenovation = Context.Transactions.Include(a => a.Account).Where(basicPredicate)
+                .Where(a => !a.Account.IsIncome && a.AccountId != 6 && a.AccountId != 12);
+               // .Where(a => a.Amount <= 0 && a.AccountId != 6 && a.AccountId != 12);
             var accountSummary = Context.Transactions.Include(a => a.Account)
                 .Where(basicPredicate)
                 .Where(a => a.AccountId != 13).GroupBy(g => new { g.AccountId, g.Account.Name })
@@ -154,13 +156,14 @@ namespace Nadlan.Repositories
                 .Where(a => a.AccountId == 1);
 
 
-            var expenses = Context.Transactions.Where(basicPredicate)
+            var expenses = Context.Transactions.Include(a=>a.Account).Where(basicPredicate)
                 .Where(a => a.AccountId != 5
-                         && a.Amount <= 0);
+                         && !a.Account.IsIncome);
+            //&& a.Amount <= 0);
 
             var tax = Context.Transactions.Where(basicPredicate)
-                .Where(a => a.AccountId == 5
-                         && a.Amount <= 0);
+                .Where(a => a.AccountId == 5);
+                         //&& a.Amount <= 0);
 
             var netIncome = Context.Transactions.Where(basicPredicate);
 
@@ -173,7 +176,7 @@ namespace Nadlan.Repositories
                 {
                     AccountId = a.Key.AccountId,
                     Name = a.Key.Name,
-                    Total = Math.Abs(a.Sum(s => s.Amount))
+                    Total = a.Sum(s => s.Amount)
                 });
 
 
