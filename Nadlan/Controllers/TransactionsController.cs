@@ -59,15 +59,15 @@ namespace Nadlan.Controllers
         }
 
         // GET: api/Transactions/5
-        [HttpGet("{apartmentId}/{accountId}/{isPurchaseCost}")]
-        public async Task<IActionResult> GetTransaction([FromRoute] int apartmentId, int accountId, bool isPurchaseCost)
+        [HttpGet("{apartmentId}/{accountId}/{isPurchaseCost}/{year=0}")]
+        public async Task<IActionResult> GetTransaction([FromRoute] int apartmentId, int accountId, bool isPurchaseCost, int year)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var transaction = await _repositoryWraper.Transaction.GetByAcountAsync(apartmentId, accountId, isPurchaseCost);
+            var transaction = await _repositoryWraper.Transaction.GetByAcountAsync(apartmentId, accountId, isPurchaseCost, year);
             transaction.ForEach(a => a.Amount = Math.Abs(a.Amount));
             if (transaction == null)
             {
@@ -123,10 +123,18 @@ namespace Nadlan.Controllers
             }
 
             var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
-            await _repositoryWraper.Transaction.CreateTransactionAsync(transaction);
-            //await _repositoryWraper.Transaction.SaveAsync(transaction);
-            //_context.Transactions.Add(transaction);
-            //await _context.SaveChangesAsync();
+            //Normal transaction
+            if (transaction.AccountId != 100)
+            {
+                await _repositoryWraper.Transaction.CreateTransactionAsync(transaction);
+            }
+            //Distribution transaction
+            else
+            {
+                await _repositoryWraper.Transaction.DistributeBalanceAsync(transaction);
+
+            }
+
 
             return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
         }

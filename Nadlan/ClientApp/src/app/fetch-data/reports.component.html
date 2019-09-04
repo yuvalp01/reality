@@ -22,16 +22,22 @@
           <span style="width:260px">Initial Remainder</span>
           <span [ngClass]="'positive'">{{summaryReport.initialRemainder| currency:'EUR' : number:'1.0-0'}}</span>
         </mat-list-item>
+
+        <mat-list-item style="cursor:pointer; color:#2222c7" (click)="showTrans(100, 'Distributed', false)" matTooltip="Distributed = Distributed to personal account (available for withdrawal at any moment)">
+          <mat-icon mat-list-icon>business_center</mat-icon>
+          <span style="width:260px;">Distributed</span>
+          <span >{{summaryReport.distributed| currency:'EUR' : number:'1.0-0'}}</span>
+        </mat-list-item>
         <mat-divider></mat-divider>
 
-        <mat-list-item>
+        <mat-list-item matTooltip="Cash = Initial remainder + Net income - distributions">
           <mat-icon mat-list-icon>business_center</mat-icon>
-          <span matTooltip="Net income + Initial remainder" style="width:260px">Balance</span>
+          <span style="width:260px">Cash</span>
           <span style="font-weight:bold" [ngClass]="'positive'">{{summaryReport.balance| currency:'EUR' : number:'1.0-0'}}</span>
         </mat-list-item>
 
         <mat-divider></mat-divider>
-        <mat-list-item>
+        <mat-list-item matTooltip="Conservative: Take into consideration all expenses and taxes and assume 11 month a year">
           <mat-icon mat-list-icon>business_center</mat-icon>
           <span style="width:260px">Predicted Net ROI (rent)</span>
           <span>{{summaryReport.predictedROI|percent:'1.1'}} </span>
@@ -67,7 +73,7 @@
 
 
         <mat-accordion id="report" *ngIf="incomeReport">
-          <mat-expansion-panel disabled="true">
+          <mat-expansion-panel disabled="true" style="cursor:pointer" (click)="showTrans(1, 'Rent', false)">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <mat-icon mat-list-icon>business_center</mat-icon>
@@ -101,7 +107,7 @@
             </mat-list>
           </mat-expansion-panel>
 
-          <mat-expansion-panel disabled="true">
+          <!--<mat-expansion-panel disabled="true">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <mat-icon mat-list-icon>business_center</mat-icon>
@@ -111,7 +117,7 @@
                 <span [ngClass]="'negative'">{{incomeReport.tax | currency:'EUR' : number:'1.0-0'| minusSignToParens}}</span>
               </mat-panel-description>
             </mat-expansion-panel-header>
-          </mat-expansion-panel>
+          </mat-expansion-panel>-->
           <mat-divider></mat-divider>
           <mat-expansion-panel disabled="true">
             <mat-expansion-panel-header>
@@ -238,40 +244,3 @@
 
 
 
-<!--<mat-list *ngIf="incomeReport">
-  <mat-list-item>
-    <mat-icon mat-list-icon>business_center</mat-icon>
-    <span style="width:260px">Gross Income</span>
-    <span [ngClass]="'positive'">{{incomeReport.grossIncome | currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
-  </mat-list-item>
-  <mat-divider></mat-divider>
-  <mat-list-item>
-    <mat-icon mat-list-icon>business_center</mat-icon>
-    <span style="width:260px">Expenses</span>
-    <span [ngClass]="'negative'">{{incomeReport.expenses| currency:'EUR' : number:'1.0-0' | minusSignToParens }}</span>
-  </mat-list-item>
-  <mat-divider></mat-divider>
-  <mat-list-item>
-    <mat-icon mat-list-icon>business_center</mat-icon>
-    <span style="width:260px">Tax</span>
-    <span [ngClass]="'negative'">{{incomeReport.tax| currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
-  </mat-list-item>
-  <mat-divider></mat-divider>
-  <mat-list-item>
-    <mat-icon mat-list-icon>business_center</mat-icon>
-    <span style="width:260px">Net Income</span>
-    <span [ngClass]="{
-  positive: isPositive(incomeReport.forDistribution),
-  negative: !isPositive(incomeReport.forDistribution)
-}">{{incomeReport.netIncome| currency:'EUR' : number:'1.0-0'| minusSignToParens}}</span>
-  </mat-list-item>
-  <mat-divider></mat-divider>
-  <mat-list-item>
-    <mat-icon mat-list-icon>business_center</mat-icon>
-    <span style="width:260px">Available For Distribution</span>
-    <span [ngClass]="{
-  positive: isPositive(incomeReport.forDistribution),
-  negative: !isPositive(incomeReport.forDistribution)
-}">{{incomeReport.forDistribution| currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
-  </mat-list-item>
-</mat-list>-->

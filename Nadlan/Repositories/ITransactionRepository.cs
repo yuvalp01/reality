@@ -11,7 +11,7 @@ namespace Nadlan.Repositories
     {
         Task<List<Transaction>> GetAllAsync();
         Task<Transaction> GetByIdAsync(int id);
-        Task<List<Transaction>> GetByAcountAsync(int apartmentId, int accountId, bool isPurchaseCost);
+        Task<List<Transaction>> GetByAcountAsync(int apartmentId, int accountId, bool isPurchaseCost, int year);
         Task CreateTransactionAsync(Transaction transaction);
         Task UpdateTransactionAsync(Transaction dbTransaction, Transaction transaction);
         Task DeleteTransactionAsync(Transaction transaction);

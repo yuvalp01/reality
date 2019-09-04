@@ -15,6 +15,7 @@ namespace Nadlan.Models
         public decimal PredictedROI { get; set; }
         public decimal InitialRemainder { get; set; }
         public decimal Balance { get; set; }
+        public decimal Distributed { get; set; }
 
     }
 
@@ -34,7 +35,7 @@ namespace Nadlan.Models
         public decimal Expenses { get; set; }
         public decimal Tax { get; set; }
         public decimal NetIncome { get; set; }
-        public decimal ForDistribution { get; set; }
+        //public decimal ForDistribution { get; set; }
         public IEnumerable<AccountSummary> AccountsSum { get; set; }
     }
 

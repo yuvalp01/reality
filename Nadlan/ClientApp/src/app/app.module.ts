@@ -55,7 +55,7 @@ import { RenovationListComponent } from './renovation/renovation-list.component'
     MyOwnCustomMaterialModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: '', component: TransactionListComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-apartments', component: ApartmentListComponent },
       { path: 'add-apartment', component: AddApartmentForm },
