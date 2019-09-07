@@ -5,7 +5,7 @@ import { ActivatedRoute, RouterEvent, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { TransactionService } from '../services/transaction.service';
 import { MatDialog, MatTableDataSource } from '@angular/material';
-import { TransactionsDialogComponent } from './transactions-dialog.component';
+import { TransactionsDialogComponent } from '../transactions/transactions-dialog.component';
 
 @Component({
   templateUrl: './reports.component.html',

@@ -38,23 +38,12 @@ export class RenovationComponent implements OnInit {
   //exportAsXLSX(): void {
   //  this.excelService.exportAsExcelFile(this.allItems, 'sample');
   //}
+//  public isPositive(value: number): boolean {
+//  if (value >= 0) {
+//    return true;
+//  }
+//  return false;
+//}
+
 }
 
-
-
-
-
-
-
-
-    //this.dataSource.filterPredicate = function (data, filter: any): boolean {
-    //  return data.category == filter;//apartmentAddress.toLowerCase().includes(filter);
-    //};
-    //this.dataSource.filter =  "0";
-
-    //this.dataSource.filterPredicate = function (data, filter: string): boolean {
-    //  return data.apartmentAddress.toLowerCase().includes(filter);
-    //};
-
-
-    //this.dataSource.filter = 

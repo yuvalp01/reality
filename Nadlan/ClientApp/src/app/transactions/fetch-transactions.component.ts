@@ -2,7 +2,7 @@ import { Component, OnInit, Output, ViewChild } from '@angular/core';
 import { ITransaction } from '../models';
 import { TransactionService } from '../services/transaction.service';
 import { resource } from 'selenium-webdriver/http';
-import { AddTransactionComponent } from '../forms/add-transaction.component';
+import { AddTransactionComponent } from '../transactions/add-transaction.component';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { subscribeOn } from 'rxjs/operators';
 
@@ -45,6 +45,7 @@ openDialog()
   let dialogRef = this.dialog.open(AddTransactionComponent, {
     height: '600px',
     width: '500px',
+    data: {type:'full'}
   }).afterClosed().subscribe(item => {
 
     this.transactionService.getTransactions().subscribe(result => {

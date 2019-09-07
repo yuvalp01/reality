@@ -34,11 +34,13 @@
     <None Remove="ClientApp\src\app\fetch-data\transactions-dialog.component.ts" />
     <None Remove="ClientApp\src\app\services\excel.service.ts" />
     <None Remove="ClientApp\src\app\shared\minusSignToParens.ts" />
+    <None Remove="ClientApp\src\app\transactions\fetch-transactions - Copy.component.html" />
+    <None Remove="ClientApp\src\app\transactions\fetch-transactions - Copy.component.ts" />
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\fetch-data\transactions-dialog.component.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\fetch-data\transactions-dialog.component.html" />
+    <TypeScriptCompile Include="ClientApp\src\app\transactions\transactions-dialog.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\transactions\transactions-dialog.component.html" />
     <TypeScriptCompile Include="ClientApp\src\app\services\excel.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\shared\minusSignToParens.ts" />
   </ItemGroup>

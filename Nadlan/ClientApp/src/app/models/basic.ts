@@ -22,5 +22,6 @@ export interface ITransaction {
     id: number;
     name: string;
     isIncome: boolean;
+    accountTypeId: number;
 }
 

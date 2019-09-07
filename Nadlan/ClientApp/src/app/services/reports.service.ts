@@ -11,20 +11,25 @@ export class ReportService {
   }
 
   getSummaryReport(apartmentId: number): Observable<ISummaryReport> {
-    let url = this.baseUrl + 'api/reports/GetSummaryReport/' + apartmentId;
+    let url = this.baseUrl + `api/reports/GetSummaryReport/${apartmentId}`;
     return this.httpClient.get<ISummaryReport>(url);
   }
 
   getPurchaseReport(apartmentId: number): Observable<IPurchaseReport> {
-    let url = this.baseUrl + 'api/reports/GetPurchaseReport/' + apartmentId;
+    let url = this.baseUrl + `api/reports/GetPurchaseReport/${apartmentId}`;
     return this.httpClient.get<IPurchaseReport>(url);
   }
 
   getIncomeReport(apartmentId: number, year: number): Observable<IIncomeReport> {
 
     //let url = this.baseUrl + 'api/GetIncomeReports/' + apartmentId + '/' + year;
-    let url = this.baseUrl + 'api/reports/GetIncomeReport/' + apartmentId + '/' + year;
+    let url = this.baseUrl + `api/reports/GetIncomeReport/${apartmentId}/${year}`;
     return this.httpClient.get<IIncomeReport>(url);
   }
+  getAccountBalance(accountId: number): Observable<number> {
 
+    //let url = this.baseUrl + 'api/GetIncomeReports/' + apartmentId + '/' + year;
+    let url = this.baseUrl + `api/reports/GetBalance/${accountId}`;
+    return this.httpClient.get<number>(url);
+  }
 }

@@ -13,9 +13,9 @@ import { ApartmentService } from './services/apartment.service';
 import { AccountService } from './services/account.service';
 import { AccountListComponent } from './fetch-data/fetch-accounts.component';
 import { TransactionService } from './services/transaction.service';
-import { TransactionListComponent } from './fetch-data/fetch-transactions.component';
+import { TransactionListComponent } from './transactions/fetch-transactions.component';
 import { AddApartmentForm } from './forms/add-apartment.component';
-import { AddTransactionComponent} from './forms/add-transaction.component';
+import { AddTransactionComponent } from './transactions/add-transaction.component';
 import { AddAccoutComponent } from './forms/add-account.component';
 import { ReportService } from './services/reports.service';
 import { ReportsComponent } from './fetch-data/reports.component';
@@ -23,11 +23,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyOwnCustomMaterialModule } from './shared/cusotom-material';
 import { MAT_DATE_LOCALE } from '@angular/material';
 import { MinusSignToParens } from './shared/minusSignToParens';
-import { TransactionsDialogComponent } from './fetch-data/transactions-dialog.component';
+import { TransactionsDialogComponent } from './transactions/transactions-dialog.component';
 import { RenovationComponent } from './renovation/renovation.component';
 import { RenovationService } from './services/renovation.service';
 import { ExcelService } from './services/excel.service';
 import { RenovationListComponent } from './renovation/renovation-list.component';
+import { ExpensesComponent } from './transactions/expenses.component';
+import { TransactionsTableComponent } from './transactions/transactions-table.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,7 +46,9 @@ import { RenovationListComponent } from './renovation/renovation-list.component'
     MinusSignToParens,
     TransactionsDialogComponent,
     RenovationComponent,
-    RenovationListComponent
+    RenovationListComponent,
+    ExpensesComponent,
+    TransactionsTableComponent
     
   ],
   imports: [
@@ -61,12 +65,15 @@ import { RenovationListComponent } from './renovation/renovation-list.component'
       { path: 'add-apartment', component: AddApartmentForm },
       { path: 'fetch-accounts', component: AccountListComponent },
       { path: 'fetch-transactions', component: TransactionListComponent },
-      { path: 'add-transaction', component: AddTransactionComponent },
+      //{ path: 'add-transaction', component: AddTransactionComponent },
       { path: 'add-account', component: AddAccoutComponent },
       { path: 'reports', component: ReportsComponent },
       { path: 'reports/:apartmentId', component: ReportsComponent },
       { path: 'renovation', component: RenovationComponent },
       { path: 'renovation-list', component: RenovationListComponent },
+      { path: 'expenses', component: ExpensesComponent },
+
+      
       //{ path: 'reports/:apartmentId', component: TransactionsDialogComponent },
 
       //{
@@ -85,6 +92,6 @@ import { RenovationListComponent } from './renovation/renovation-list.component'
   ],
   providers: [ApartmentService, AccountService, TransactionService, ReportService, RenovationService, ExcelService,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent],
-  entryComponents: [TransactionsDialogComponent]
+  entryComponents: [TransactionsDialogComponent, AddTransactionComponent]
 })
 export class AppModule { }

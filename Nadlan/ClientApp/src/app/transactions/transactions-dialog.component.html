@@ -1,0 +1,32 @@
+<h1 mat-dialog-title style="font-weight:bold">{{data.accountName}}</h1>
+
+
+<table id="transactions-popup" mat-table [dataSource]="data.transactions">
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <td mat-cell *matCellDef="let transaction">{{transaction.id }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef>Date</th>
+    <td mat-cell *matCellDef="let transaction">{{transaction.date | date:'dd-MM-yyyy'}}</td>
+  </ng-container>
+  <ng-container matColumnDef="amount">
+    <th mat-header-cell *matHeaderCellDef>Amount</th>
+    <td mat-cell *matCellDef="let transaction"> {{transaction.amount| currency:'EUR' : number:'1.0-1'}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="isPurchaseCost">
+    <th mat-header-cell *matHeaderCellDef>IsPurchaseCost</th>
+    <td mat-cell *matCellDef="let transaction">{{transaction.isPurchaseCost}}</td>
+  </ng-container>
+  <ng-container matColumnDef="comments">
+    <th mat-header-cell *matHeaderCellDef>Comments</th>
+    <td mat-cell *matCellDef="let transaction">{{transaction.comments}}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="transactionColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: transactionColumns"></tr>
+
+</table>
+

@@ -1,14 +1,13 @@
-﻿using System;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Nadlan.Models;
+using Nadlan.Repositories;
+using Nadlan.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Nadlan.ViewModels;
-using Nadlan.Models;
-using Nadlan.Repositories;
-using AutoMapper;
 
 namespace Nadlan.Controllers
 {
@@ -77,6 +76,59 @@ namespace Nadlan.Controllers
             return Ok(transaction);
         }
 
+        // POST: api/Transactions
+        [HttpPost]
+        public async Task<IActionResult> PostTransaction([FromBody] TransactionDto transactionDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
+            //Not distribution transaction
+            if (transaction.AccountId != 100)
+            {
+                await _repositoryWraper.Transaction.CreateTransactionAsync(transaction);
+            }
+            //Distribution transaction
+            else
+            {
+                await _repositoryWraper.Transaction.DistributeBalanceAsync(transaction);
+
+            }
+            return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
+        }
+
+
+        // POST: api/Transactions
+        [HttpPost("PostExpenses/{isHours=false}")]
+        public async Task<IActionResult> PostAssistantExpenses([FromBody] TransactionDto transactionDto, bool isHours)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
+
+            await _repositoryWraper.Transaction.CreateDoubleTransactionAsync(transaction,true);
+
+
+            ////Not distribution transaction
+            //if (transaction.AccountId != 100)
+            //{
+            //    await _repositoryWraper.Transaction.CreateTransactionAsync(transaction);
+            //}
+            ////Distribution transaction
+            //else
+            //{
+            //    await _repositoryWraper.Transaction.DistributeBalanceAsync(transaction);
+
+            //}
+            return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
+        }
+
 
         // PUT: api/Transactions/5
         [HttpPut("{id}")]
@@ -113,31 +165,6 @@ namespace Nadlan.Controllers
             return NoContent();
         }
 
-        // POST: api/Transactions
-        [HttpPost]
-        public async Task<IActionResult> PostTransaction([FromBody] TransactionDto transactionDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
-            //Normal transaction
-            if (transaction.AccountId != 100)
-            {
-                await _repositoryWraper.Transaction.CreateTransactionAsync(transaction);
-            }
-            //Distribution transaction
-            else
-            {
-                await _repositoryWraper.Transaction.DistributeBalanceAsync(transaction);
-
-            }
-
-
-            return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
-        }
 
         // DELETE: api/Transactions/5
         [HttpDelete("{id}")]

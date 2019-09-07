@@ -1,0 +1,43 @@
+
+<table mat-table [dataSource]="dataSourceObj" matSort class="mat-elevation-z8">
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+    <td mat-cell *matCellDef="let transaction">{{transaction.id}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+    <td mat-cell *matCellDef="let transaction">{{transaction.date | date:'dd-MM-yyyy'}}</td>
+  </ng-container>
+  <ng-container matColumnDef="amount">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+    <td mat-cell
+        [ngClass]="{
+          positive: isPositive(transaction.amount),
+          negative: !isPositive(transaction.amount)
+        }"
+        *matCellDef="let transaction">
+      {{transaction.amount}}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="apartmentId">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Apartment</th>
+    <td mat-cell *matCellDef="let transaction">{{transaction.apartmentAddress}}</td>
+  </ng-container>
+  <ng-container matColumnDef="accountId">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Account</th>
+    <td mat-cell *matCellDef="let transaction">{{transaction.accountName}}</td>
+  </ng-container>
+  <ng-container matColumnDef="isPurchaseCost">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>IsPurchaseCost</th>
+    <td mat-cell *matCellDef="let transaction">{{transaction.isPurchaseCost}}</td>
+  </ng-container>
+  <ng-container matColumnDef="comments">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>
+    <td mat-cell *matCellDef="let transaction">{{transaction.comments}}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+</table>

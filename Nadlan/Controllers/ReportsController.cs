@@ -25,6 +25,19 @@ namespace Nadlan.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet("GetBalance/{accountId}")]
+        public async Task<IActionResult> GetDiagnosticReport([FromRoute]  int accountId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            decimal balance = await _repositoryWraper.Report.GetBalance(accountId);
+
+            return Ok(balance);
+        }
+
         [HttpPost("GetDiagnosticReport")]
         public async Task<IActionResult> GetDiagnosticReport([FromBody] DiagnosticRequest diagnosticRequest)
         {
