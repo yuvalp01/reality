@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nadlan.Repositories;
 
 namespace Nadlan.Migrations
 {
     [DbContext(typeof(NadlanConext))]
-    partial class NadlanConextModelSnapshot : ModelSnapshot
+    [Migration("20190910141050_predefinedtrans")]
+    partial class predefinedtrans
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,27 +78,6 @@ namespace Nadlan.Migrations
                     b.ToTable("Apartments");
                 });
 
-            modelBuilder.Entity("Nadlan.Models.ExpectedTransaction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AccountId");
-
-                    b.Property<decimal>("Amount");
-
-                    b.Property<int>("ApartmentId");
-
-                    b.Property<string>("Comment");
-
-                    b.Property<int>("PrequencyPerYear");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ExpectedTransactions");
-                });
-
             modelBuilder.Entity("Nadlan.Models.Portfolio", b =>
                 {
                     b.Property<int>("Id");
@@ -114,6 +95,25 @@ namespace Nadlan.Migrations
                     b.HasIndex("ApartmentId");
 
                     b.ToTable("Portfolios");
+                });
+
+            modelBuilder.Entity("Nadlan.Models.PredefinedTransaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AccountId");
+
+                    b.Property<decimal>("Amount");
+
+                    b.Property<int>("ApartmentId");
+
+                    b.Property<int>("PrequencyPerYear");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PredefinedTransactions");
                 });
 
             modelBuilder.Entity("Nadlan.Models.Renovation.Item", b =>

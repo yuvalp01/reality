@@ -22,6 +22,7 @@ namespace Nadlan.Repositories
         public DbSet<Item> Items { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Portfolio> Portfolios { get; set; }
+        public DbSet<ExpectedTransaction> ExpectedTransactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

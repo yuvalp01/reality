@@ -9,7 +9,8 @@ namespace Nadlan.Models
     {
         InResearch = 10,
         OfferSubmitted = 20,
-        Committed = 30,
+        CommittedToAgency = 30,
+        CommittedToSeller = 35,
         WaitingForRenovation =40,
         InRenovation = 50,
         SearchingForTenant = 60,
