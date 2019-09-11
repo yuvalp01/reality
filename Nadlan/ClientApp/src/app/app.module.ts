@@ -18,7 +18,8 @@ import { AddApartmentForm } from './forms/add-apartment.component';
 import { AddTransactionComponent } from './transactions/add-transaction.component';
 import { AddAccoutComponent } from './forms/add-account.component';
 import { ReportService } from './services/reports.service';
-import { ReportsComponent } from './fetch-data/reports.component';
+import { ApartmentReportsComponent } from './reports/apartment-reports.component';
+import { ReportsComponent } from './reports/reports.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyOwnCustomMaterialModule } from './shared/cusotom-material';
 import { MAT_DATE_LOCALE } from '@angular/material';
@@ -43,6 +44,7 @@ import { TransactionsTableComponent } from './transactions/transactions-table.co
     AddTransactionComponent,
     AddAccoutComponent,
     ReportsComponent,
+    ApartmentReportsComponent,
     MinusSignToParens,
     TransactionsDialogComponent,
     RenovationComponent,
@@ -69,6 +71,7 @@ import { TransactionsTableComponent } from './transactions/transactions-table.co
       { path: 'add-account', component: AddAccoutComponent },
       { path: 'reports', component: ReportsComponent },
       { path: 'reports/:apartmentId', component: ReportsComponent },
+      //{ path: 'reports/:apartmentId', component: ApartmentReportsComponent },
       { path: 'renovation', component: RenovationComponent },
       { path: 'renovation-list', component: RenovationListComponent },
       { path: 'expenses', component: ExpensesComponent },

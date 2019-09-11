@@ -46,6 +46,15 @@ namespace Nadlan.Models
         public decimal Total { get; set; }
     }
 
+    public class EvaluationReport
+    {
+        public decimal TotalInvestment { get; set; }
+        public decimal OriginalPrice { get; set; }
+        public decimal Evaluation { get; set; }
+        public decimal NetProfit { get; set; }
+        public decimal ROI { get; set; }
+    }
+
     public class DiagnosticRequest
     {
         public decimal Price { get; set; }
@@ -70,5 +79,10 @@ namespace Nadlan.Models
         public decimal TotalCost { get; set; }
         public decimal ROI { get; set; }
     }
+
+
+
+
+
 
 }
