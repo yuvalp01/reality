@@ -38,7 +38,6 @@ namespace Nadlan.Repositories
                 Status = apartmentStatus.ToString()
             };
             return apartmentDto;
-
         }
 
         public async Task<decimal> GetBalance(int accountId)

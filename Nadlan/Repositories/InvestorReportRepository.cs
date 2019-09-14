@@ -29,8 +29,8 @@ namespace Nadlan.Repositories
 
             var portfolioLines = Context.Portfolios.Include(a => a.Apartment).Where(a => a.AccountId == investorAcountId && a.ApartmentId != 20);
             Expression<Func<Transaction, bool>> predAll = t =>
-    t.IsPurchaseCost == false
-    && t.Account.AccountTypeId == 0;
+                t.IsPurchaseCost == false
+                && t.Account.AccountTypeId == 0;
 
             List<PortfolioReport> portfolioReportLines = new List<PortfolioReport>();
             foreach (var portfolioLine in portfolioLines)

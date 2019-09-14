@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { IIncomeReport, IPurchaseReport, ISummaryReport, ITransaction, IApartment } from '../models';
 import { ReportService } from '../services/reports.service';
 import { ActivatedRoute, RouterEvent, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { filter, debounce } from 'rxjs/operators';
 import { TransactionService } from '../services/transaction.service';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { TransactionsDialogComponent } from '../transactions/transactions-dialog.component';
@@ -21,11 +21,18 @@ export class ApartmentReportsComponent implements OnInit {
   transactions: ITransaction[];
   years: number[] = [2018, 2019];
   selectedYear: number = 0;
-  //apartmentId: number = 1;
   @Input() apartmentId: number = 0;
   dataSource = new MatTableDataSource<ITransaction>();
 
   @Output() myEvent = new EventEmitter();
+
+
+  //simulation params:
+  rentMonthsInYear: number = 11;
+  buyerExpectedRerutn: number = 0.05;
+  //buyerExpectedRerutn: number = this.buyerExpectedRerutnPercents/100;
+
+
 
   constructor(private reportsService: ReportService, private transactionService: TransactionService, private route: ActivatedRoute, private dialog: MatDialog) {
   }
@@ -73,6 +80,12 @@ export class ApartmentReportsComponent implements OnInit {
       , error => console.error(error));
 
   }
+
+
+  //ngOnChanges(changes: SimpleChanges) {
+  //  console.log(changes);
+  //  this.buyerExpectedRerutn = this.buyerExpectedRerutnPercents / 100;
+  //}
 
   onChange(e) {
     this.reportsService.getIncomeReport(this.apartmentId, this.selectedYear).subscribe(result => this.incomeReport = result, error => console.error(error));
