@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IIncomeReport, IPurchaseReport, ISummaryReport, IApartment } from '../models';
+import { IIncomeReport, IPurchaseReport, ISummaryReport, IApartment, IInvestorReportOverview } from '../models';
 import { strictEqual } from 'assert';
 
 @Injectable()
@@ -36,5 +36,10 @@ export class ReportService {
 
     let url = this.baseUrl + `api/reports/GetApartmentInfo/${apartmentId}`;
     return this.httpClient.get<IApartment>(url);
+  }
+  getInvestorReport(investorAcountId: number): Observable<IInvestorReportOverview> {
+
+    let url = this.baseUrl + `api/reports/GetInvestorReport/${investorAcountId}`;
+    return this.httpClient.get<IInvestorReportOverview>(url);
   }
 }

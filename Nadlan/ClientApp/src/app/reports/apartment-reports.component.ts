@@ -32,7 +32,16 @@ export class ApartmentReportsComponent implements OnInit {
   buyerExpectedRerutn: number = 0.05;
   //buyerExpectedRerutn: number = this.buyerExpectedRerutnPercents/100;
 
+  ngOnChanges(changes: SimpleChanges): void {
+    //console.log('changes :' + changes.apartmentId.previousValue);
+    //console.log('changes :' + changes.apartmentId.currentValue);
+    this.apartmentId = changes.apartmentId.currentValue;
+    this.reportsService.getPurchaseReport(this.apartmentId).subscribe(result => this.purchaseReport = result, error => console.error(error));
+    this.reportsService.getSummaryReport(this.apartmentId).subscribe(result => this.summaryReport = result, error => console.error(error));
+    this.reportsService.getIncomeReport(this.apartmentId, this.selectedYear).subscribe(result => this.incomeReport = result, error => console.error(error));
+    this.reportsService.getApartmentInfo(this.apartmentId).subscribe(result => this.apartmentInfo = result, error => console.error(error));
 
+  }
 
   constructor(private reportsService: ReportService, private transactionService: TransactionService, private route: ActivatedRoute, private dialog: MatDialog) {
   }
@@ -43,7 +52,6 @@ export class ApartmentReportsComponent implements OnInit {
       this.reportsService.getSummaryReport(this.apartmentId).subscribe(result => this.summaryReport = result, error => console.error(error));
       this.reportsService.getIncomeReport(this.apartmentId, this.selectedYear).subscribe(result => this.incomeReport = result, error => console.error(error));
       this.reportsService.getApartmentInfo(this.apartmentId).subscribe(result => this.apartmentInfo = result, error => console.error(error));
-
     }
 
 

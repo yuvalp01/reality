@@ -12,7 +12,7 @@ namespace Nadlan.Repositories
     public class InvestorReportRepository : Repository<Transaction>
     {
 
-        const decimal ANNUAL_COSTS = 100 + 350;
+        //const decimal ANNUAL_COSTS = 100 + 350;
         public InvestorReportRepository(NadlanConext context) : base(context)
         {
         }
@@ -85,13 +85,13 @@ namespace Nadlan.Repositories
         }
 
 
-        private decimal GetApartmentYearsInDecimal(DateTime purchaseDate)
-        {
-            DateTime zeroTime = new DateTime(1, 1, 1);
-            TimeSpan span = DateTime.Today - purchaseDate;
-            decimal yeardDecimal = ((zeroTime + span).Year - 1) + ((zeroTime + span).Month - 1) / 12m;
-            return yeardDecimal;
-        }
+        //private decimal GetApartmentYearsInDecimal(DateTime purchaseDate)
+        //{
+        //    DateTime zeroTime = new DateTime(1, 1, 1);
+        //    TimeSpan span = DateTime.Today - purchaseDate;
+        //    decimal yeardDecimal = ((zeroTime + span).Year - 1) + ((zeroTime + span).Month - 1) / 12m;
+        //    return yeardDecimal;
+        //}
 
 
     }

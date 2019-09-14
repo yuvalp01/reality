@@ -38,8 +38,8 @@ namespace Nadlan.Controllers
         }
 
 
-        [HttpGet("GetInvestorOverviewReport/{accountId}")]
-        public async Task<IActionResult> GetInvestorOverviewReport([FromRoute]  int accountId)
+        [HttpGet("GetInvestorReport/{accountId}")]
+        public async Task<IActionResult> GetInvestorReport([FromRoute]  int accountId)
         {
             if (!ModelState.IsValid)
             {

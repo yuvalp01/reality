@@ -1,0 +1,16 @@
+
+mat-card {
+  /*color: red;*/
+  height:650px ;
+}
+.selected {
+  font-weight: bold;
+  /*color: rebeccapurple !important;*/
+}
+.class2 {
+  font: bold;
+  color: rebeccapurple;
+}
+table {
+  width: 100%
+}
