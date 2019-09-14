@@ -31,6 +31,7 @@ import { ExcelService } from './services/excel.service';
 import { RenovationListComponent } from './renovation/renovation-list.component';
 import { ExpensesComponent } from './transactions/expenses.component';
 import { TransactionsTableComponent } from './transactions/transactions-table.component';
+import { InvestorReportComponent } from './reports/investor-reports.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -50,7 +51,8 @@ import { TransactionsTableComponent } from './transactions/transactions-table.co
     RenovationComponent,
     RenovationListComponent,
     ExpensesComponent,
-    TransactionsTableComponent
+    TransactionsTableComponent,
+    InvestorReportComponent
     
   ],
   imports: [
@@ -63,14 +65,18 @@ import { TransactionsTableComponent } from './transactions/transactions-table.co
     RouterModule.forRoot([
       { path: '', component: TransactionListComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
-      { path: 'fetch-apartments', component: ApartmentListComponent },
+      //{ path: 'fetch-apartments', component: ApartmentListComponent },
       { path: 'add-apartment', component: AddApartmentForm },
       { path: 'fetch-accounts', component: AccountListComponent },
       { path: 'fetch-transactions', component: TransactionListComponent },
       //{ path: 'add-transaction', component: AddTransactionComponent },
       { path: 'add-account', component: AddAccoutComponent },
-      { path: 'reports', component: ReportsComponent },
+      //{ path: 'reports', component: InvestorReportComponent },
       { path: 'reports/:apartmentId', component: ReportsComponent },
+      //{ path: 'reports/:apartmentId', component: ReportsComponent },
+      { path: 'investor-reports', component: InvestorReportComponent },
+
+      
       //{ path: 'reports/:apartmentId', component: ApartmentReportsComponent },
       { path: 'renovation', component: RenovationComponent },
       { path: 'renovation-list', component: RenovationListComponent },
