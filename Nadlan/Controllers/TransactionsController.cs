@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Nadlan.Models;
-using Nadlan.Repositories;
 using Nadlan.ViewModels;
+using Nadlan.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace Nadlan.Models
+namespace Nadlan.ViewModels.Reports
 {
 
     public class SummaryReport

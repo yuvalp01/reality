@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Nadlan.ViewModels.Renovation;
 using Nadlan.Models.Renovation;
-using Nadlan.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

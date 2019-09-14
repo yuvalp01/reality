@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Nadlan.ViewModels;
-using Nadlan.Models;
 using Nadlan.Repositories;
 using AutoMapper;
+using Nadlan.ViewModels.Reports;
 
 namespace Nadlan.Controllers
 {
@@ -25,18 +24,32 @@ namespace Nadlan.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("GetBalance/{accountId}")]
-        public async Task<IActionResult> GetDiagnosticReport([FromRoute]  int accountId)
+        [HttpGet("GetInvestorOverviewReport/{accountId}")]
+        public async Task<IActionResult> GetInvestorOverviewReport([FromRoute]  int accountId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            decimal balance = await _repositoryWraper.Report.GetBalance(accountId);
+            InvestorReportOverview investorReportOverview = await _repositoryWraper.InvestorReport.GetInvestorReport(accountId);
+
+            return Ok(investorReportOverview);
+        }
+        
+        [HttpGet("GetBalance/{accountId}")]
+        public async Task<IActionResult> GetBalance([FromRoute]  int accountId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            decimal balance = await _repositoryWraper.ApartmentReport.GetBalance(accountId);
 
             return Ok(balance);
         }
+
 
         [HttpPost("GetDiagnosticReport")]
         public async Task<IActionResult> GetDiagnosticReport([FromBody] DiagnosticRequest diagnosticRequest)
@@ -46,7 +59,7 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
 
-            DiagnosticReport diagnosticReport = await _repositoryWraper.Report.GetDiagnosticReport(diagnosticRequest);
+            DiagnosticReport diagnosticReport = await _repositoryWraper.ApartmentReport.GetDiagnosticReport(diagnosticRequest);
             if (diagnosticReport == null)
             {
                 return NotFound();
@@ -64,7 +77,7 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
 
-            SummaryReport purchaseReport = await _repositoryWraper.Report.GetSummaryReport(apartmentId);
+            SummaryReport purchaseReport = await _repositoryWraper.ApartmentReport.GetSummaryReport(apartmentId);
             if (purchaseReport == null)
             {
                 return NotFound();
@@ -82,7 +95,7 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
 
-            PurchaseReport purchaseReport = await _repositoryWraper.Report.GetPurchaseReport(apartmentId);
+            PurchaseReport purchaseReport = await _repositoryWraper.ApartmentReport.GetPurchaseReport(apartmentId);
             if (purchaseReport == null)
             {
                 return NotFound();
@@ -100,7 +113,7 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
 
-            IncomeReport summaryReport = await _repositoryWraper.Report.GetIncomeReport(apartmentId, year);
+            IncomeReport summaryReport = await _repositoryWraper.ApartmentReport.GetIncomeReport(apartmentId, year);
 
             if (summaryReport == null)
             {

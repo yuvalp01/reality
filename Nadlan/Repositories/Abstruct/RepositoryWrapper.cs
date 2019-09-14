@@ -10,7 +10,8 @@ namespace Nadlan.Repositories
         private NadlanConext _conext;
         private TransactionRepository _transaction;
         private AccountRepository _account;
-        private ReportRepository _report;
+        private ReportRepository _apartmentReport;
+        private InvestorReportRepository _investorReport;
         //private RenovationItemRepository _renovationItem;
 
         public RepositoryWrapper(NadlanConext conext)
@@ -41,18 +42,28 @@ namespace Nadlan.Repositories
             }
         }
 
-        public ReportRepository Report
+        public ReportRepository ApartmentReport
         {
             get
             {
-                if (_report == null)
+                if (_apartmentReport == null)
                 {
-                    _report = new ReportRepository(_conext);
+                    _apartmentReport = new ReportRepository(_conext);
                 }
-                return _report;
+                return _apartmentReport;
             }
         }
-
+        public InvestorReportRepository InvestorReport
+        {
+            get
+            {
+                if (_investorReport == null)
+                {
+                    _investorReport = new InvestorReportRepository(_conext);
+                }
+                return _investorReport;
+            }
+        }
 
         //public RenovationItemRepository RenovationItem
         //{

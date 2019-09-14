@@ -1,4 +1,5 @@
-﻿using Nadlan.Models;
+﻿using Nadlan.ViewModels.Reports;
+using Nadlan.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
