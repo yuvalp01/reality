@@ -1,10 +1,10 @@
-﻿using Nadlan.ViewModels.Reports;
+﻿using Microsoft.EntityFrameworkCore;
 using Nadlan.Models;
+using Nadlan.ViewModels;
+using Nadlan.ViewModels.Reports;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace Nadlan.Repositories
 {
@@ -16,9 +16,34 @@ namespace Nadlan.Repositories
         {
         }
 
+
+        public async Task<ApartmentDto> GetApartmentInfo(int apartmentId)
+        {
+            var lastRent = await Context.ExpectedTransactions.OrderByDescending(a => a.Id)
+                .FirstOrDefaultAsync(a => a.ApartmentId == apartmentId
+                && a.AccountId==1);
+            var apartment = await Context.Apartments.FirstAsync(a => a.Id == apartmentId);
+
+            ApartmentStatus apartmentStatus = (ApartmentStatus)apartment.Status;
+            //string status = string.Empty;
+            ApartmentDto apartmentDto = new ApartmentDto
+            {
+                Id = apartment.Id,
+                Address = apartment.Address,
+                Floor = apartment.Floor,
+                Door = apartment.Door,
+                Size = apartment.Size,
+                PurchaseDate = apartment.PurchaseDate,
+                CurrentRent = lastRent.Amount,
+                Status = apartmentStatus.ToString()
+            };
+            return apartmentDto;
+
+        }
+
         public async Task<decimal> GetBalance(int accountId)
         {
-            var balance =  Context.Transactions.Where(a => a.AccountId == accountId).SumAsync(a => a.Amount);
+            var balance = Context.Transactions.Where(a => a.AccountId == accountId).SumAsync(a => a.Amount);
             return await balance;
         }
 
@@ -51,6 +76,7 @@ namespace Nadlan.Repositories
             diagnosticReport.ROI = netRent * 11 / diagnosticReport.TotalCost;
             return diagnosticReport;
         }
+
 
 
         public async Task<SummaryReport> GetSummaryReport(int apartmentId)
@@ -156,9 +182,9 @@ namespace Nadlan.Repositories
 
         public async Task<IncomeReport> GetIncomeReport(int apartmentId, int year)
         {
-            Func<Transaction, bool> predAll = t => 
-            t.IsPurchaseCost == false 
-            && t.ApartmentId == apartmentId 
+            Func<Transaction, bool> predAll = t =>
+            t.IsPurchaseCost == false
+            && t.ApartmentId == apartmentId
             && t.Account.AccountTypeId == 0
             && t.AccountId != 100;
 

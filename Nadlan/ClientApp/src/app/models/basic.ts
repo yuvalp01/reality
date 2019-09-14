@@ -16,6 +16,11 @@ export interface ITransaction {
     id: number; 
     address: string;
     status: number;
+    size: number;
+    floor: number;
+    door: number;
+    currentRent: number;
+
   }
 
   export interface IAccount {
@@ -24,4 +29,3 @@ export interface ITransaction {
     isIncome: boolean;
     accountTypeId: number;
 }
-

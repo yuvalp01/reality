@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Nadlan.Repositories;
 using AutoMapper;
 using Nadlan.ViewModels.Reports;
+using Nadlan.Models;
+using Nadlan.ViewModels;
 
 namespace Nadlan.Controllers
 {
@@ -23,6 +25,18 @@ namespace Nadlan.Controllers
             _repositoryWraper = repositoryWrapper;
             _mapper = mapper;
         }
+
+        [HttpGet("GetApartmentInfo/{apartmentId}")]
+        public async Task<IActionResult> GetApartmentInfo([FromRoute]  int apartmentId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            ApartmentDto apartmentDto = await _repositoryWraper.ApartmentReport.GetApartmentInfo(apartmentId);
+            return Ok(apartmentDto);
+        }
+
 
         [HttpGet("GetInvestorOverviewReport/{accountId}")]
         public async Task<IActionResult> GetInvestorOverviewReport([FromRoute]  int accountId)

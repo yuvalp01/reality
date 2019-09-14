@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { IIncomeReport, IPurchaseReport, ISummaryReport, ITransaction } from '../models';
+import { IIncomeReport, IPurchaseReport, ISummaryReport, ITransaction, IApartment } from '../models';
 import { ReportService } from '../services/reports.service';
 import { ActivatedRoute, RouterEvent, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -17,6 +17,7 @@ export class ApartmentReportsComponent implements OnInit {
   incomeReport: IIncomeReport;
   purchaseReport: IPurchaseReport;
   summaryReport: ISummaryReport;
+  apartmentInfo: IApartment;
   transactions: ITransaction[];
   years: number[] = [2018, 2019];
   selectedYear: number = 0;
@@ -33,9 +34,9 @@ export class ApartmentReportsComponent implements OnInit {
     if (this.apartmentId) {
       this.reportsService.getPurchaseReport(this.apartmentId).subscribe(result => this.purchaseReport = result, error => console.error(error));
       this.reportsService.getSummaryReport(this.apartmentId).subscribe(result => this.summaryReport = result, error => console.error(error));
-      this.reportsService.getIncomeReport(this.apartmentId, this.selectedYear).subscribe(result => {
-        this.incomeReport = result;
-      }, error => console.error(error));
+      this.reportsService.getIncomeReport(this.apartmentId, this.selectedYear).subscribe(result => this.incomeReport = result, error => console.error(error));
+      this.reportsService.getApartmentInfo(this.apartmentId).subscribe(result => this.apartmentInfo = result, error => console.error(error));
+
     }
 
 
@@ -52,9 +53,8 @@ export class ApartmentReportsComponent implements OnInit {
     if (apartmentId) {
       this.reportsService.getPurchaseReport(apartmentId).subscribe(result => this.purchaseReport = result, error => console.error(error));
       this.reportsService.getSummaryReport(apartmentId).subscribe(result => this.summaryReport = result, error => console.error(error));
-      this.reportsService.getIncomeReport(apartmentId, this.selectedYear).subscribe(result => {
-        this.incomeReport = result;
-      }, error => console.error(error));
+      this.reportsService.getIncomeReport(apartmentId, this.selectedYear).subscribe(result => this.incomeReport = result, error => console.error(error));
+      this.reportsService.getApartmentInfo(apartmentId).subscribe(result => this.apartmentInfo = result, error => console.error(error));
     }
   }
 

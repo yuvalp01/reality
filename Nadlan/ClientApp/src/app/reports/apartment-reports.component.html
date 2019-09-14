@@ -238,7 +238,44 @@
   </mat-tab>
   <mat-tab label="General Info">
     <mat-card>
+      <mat-card>
+        <mat-card-title>General Info</mat-card-title>
+        <mat-list *ngIf="apartmentInfo">
+          <mat-list-item>
+            <mat-icon mat-list-icon>home</mat-icon>
+            <span style="width:260px">Investment</span>
+            <span>{{apartmentInfo.address}}</span>
+          </mat-list-item>
+          <!--<mat-divider></mat-divider>-->
 
+
+          <mat-list-item>
+            <mat-icon mat-list-icon>home</mat-icon>
+            <span style="width:260px">Floor</span>
+            <span>{{apartmentInfo.floor}}</span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon mat-list-icon>home</mat-icon>
+            <span style="width:260px">Size</span>
+            <span>{{apartmentInfo.size}}</span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon mat-list-icon>money</mat-icon>
+            <span style="width:260px;">Current Rent</span>
+            <span>{{apartmentInfo.currentRent| currency:'EUR' : number:'1.0-0'}}</span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon mat-list-icon>business_center</mat-icon>
+            <span style="width:260px;">Status</span>
+            <span>{{apartmentInfo.status}}</span>
+          </mat-list-item>
+
+          <!--<mat-divider></mat-divider>-->
+
+
+
+        </mat-list>
+      </mat-card>
     </mat-card>
   </mat-tab>
   <mat-tab label="Evaluation">

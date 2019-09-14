@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Repositories\ApartmentRepository.cs" />
     <Compile Remove="Repositories\RenovationRepository.cs" />
   </ItemGroup>
 
