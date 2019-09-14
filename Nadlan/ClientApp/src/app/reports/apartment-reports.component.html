@@ -278,7 +278,7 @@
       </mat-card>
     </mat-card>
   </mat-tab>
-  <mat-tab label="Evaluation">
+  <mat-tab label="Appraisal">
     <mat-card>
       <mat-list *ngIf="apartmentInfo">
         <mat-list-item>
@@ -292,7 +292,11 @@
           <span style="width:260px;">Current Rent</span>
           <span>{{apartmentInfo.currentRent| currency:'EUR' : number:'1.0-0'}}</span>
         </mat-list-item>
-
+        <mat-list-item>
+          <mat-icon mat-list-icon>money</mat-icon>
+          <span style="width:260px">Annual Raw Income</span>
+          <span>{{apartmentInfo.currentRent*rentMonthsInYear | currency:'EUR' : number:'1.0-0'}}</span>
+        </mat-list-item>
         <mat-divider></mat-divider>
         <h3 matSubheader>Assumptions</h3>
 
@@ -310,34 +314,30 @@
         <mat-list-item>
           <mat-icon mat-list-icon>settings_applications</mat-icon>
           <span style="width:260px">ROI expected by buyer</span>
-          <input type="number" min="0.03" max="0.06" step="0.01"  onkeydown="return false" style="width:50px; border:none" [(ngModel)]="buyerExpectedRerutn" />
+          <input type="number" min="0.03" max="0.06" step="0.01" onkeydown="return false" style="width:50px; border:none" [(ngModel)]="buyerExpectedRerutn" />
 
         </mat-list-item>
 
         <mat-divider></mat-divider>
         <h3 matSubheader>Prediction</h3>
 
-        <mat-list-item>
-          <mat-icon mat-list-icon>money</mat-icon>
-          <span style="width:260px">Annual Raw Income</span>
-          <span>{{apartmentInfo.currentRent*rentMonthsInYear | currency:'EUR' : number:'1.0-0'}}</span>
-        </mat-list-item>
+
         <!--<mat-list-item>
-          <mat-icon mat-list-icon>business_center</mat-icon>
-          <span style="width:260px">Raw ROI</span>
-          <span>{{apartmentInfo.currentRent*rentMonthsInYear/purchaseReport.investment | percent}}</span>
-        </mat-list-item>-->
+    <mat-icon mat-list-icon>business_center</mat-icon>
+    <span style="width:260px">Raw ROI</span>
+    <span>{{apartmentInfo.currentRent*rentMonthsInYear/purchaseReport.investment | percent}}</span>
+  </mat-list-item>-->
         <mat-list-item>
           <mat-icon mat-list-icon>business_center</mat-icon>
           <span style="width:260px;">Price for {{buyerExpectedRerutn | percent}}</span>
           <span>{{(apartmentInfo.currentRent*rentMonthsInYear/buyerExpectedRerutn)  | currency:'EUR' : number:'1.0-0'}}</span>
         </mat-list-item>
-        <mat-list-item matTooltip="Based on 10% sales cost">
+        <mat-list-item matTooltip="Based on 10% sale cost">
           <mat-icon mat-list-icon>trending_up</mat-icon>
           <span style="width:260px;">Estimated Profit on Sale</span>
           <span>{{((apartmentInfo.currentRent*rentMonthsInYear/buyerExpectedRerutn)*0.9)- purchaseReport.investment  | currency:'EUR' : number:'1.0-0'}}</span>
         </mat-list-item>
-        <mat-list-item matTooltip="Based on 10% sales cost">
+        <mat-list-item matTooltip="Based on 10% sale cost">
           <mat-icon mat-list-icon>trending_up</mat-icon>
           <span style="width:260px;">Estimated ROI on Sale</span>
           <span>{{((((apartmentInfo.currentRent*rentMonthsInYear/buyerExpectedRerutn)*0.9)/ purchaseReport.investment)-1) | percent:'1.1'}}</span>
