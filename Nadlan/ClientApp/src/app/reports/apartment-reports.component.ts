@@ -10,7 +10,7 @@ import { TransactionsDialogComponent } from '../transactions/transactions-dialog
 @Component({
   selector: 'apartment-reports',
   templateUrl: './apartment-reports.component.html',
-  styles: ['table{width:100%}']
+  styleUrls: ['./apartment-reports.component.css']
 })
 export class ApartmentReportsComponent implements OnInit {
   displayedColumns: string[] = ['date', 'amount', 'apartmentId', 'accountId', 'isPurchaseCost', 'comments'];
