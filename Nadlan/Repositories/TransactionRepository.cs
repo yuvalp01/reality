@@ -38,6 +38,10 @@ namespace Nadlan.Repositories
 
         public async Task CreateDoubleTransactionAsync(Transaction transaction, bool isHourCharge)
         {
+            if (isHourCharge)
+            {
+                transaction.Comments = $"Hours: {transaction.Comments}";
+            }
             Transaction assiatantTransaction = CreateCorrespondingTransaction(transaction, 107);
             Create(assiatantTransaction);
 
