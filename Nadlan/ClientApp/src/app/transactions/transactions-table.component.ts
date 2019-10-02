@@ -18,33 +18,13 @@ export class TransactionsTableComponent implements OnInit {
   @Input() displayedColumns: string[];
   @Input() dataSourceObj = new MatTableDataSource<ITransaction>();
   @Input() sort: MatSort;
-  //@Input() data: ITransaction[];
 
-  //@ViewChild(MatSort, { static: true }) sort: MatSort;
-  //selectedApartment: any;
   constructor() {
   }
   ngOnInit(): void {
-    //this.dataSourceObj = new MatTableDataSource<ITransaction>(this.dataList);
- 
-    //this.dataSourceObj.sort = this.sort;
-    //this.transactionService.getTransactions().subscribe(result => {
-    //debugger
-    //this.dataSourceObj.data = this.dataList;
-   // var xxx = dataSourceObj;
-    //  //this.dataSource.filter = this.selectedApartment;
-    //  this.dataSource.filterPredicate = function (data, filter: string): boolean {
-    //    return data.apartmentAddress.toLowerCase().includes(filter);
-    //  };
 
-
-    //  }, error => console.error(error));
 }
   ngAfterViewInit(): void {
-  //  debugger
-
-  //  var xxx = this.dataList;
-  //this.dataSourceObj.sort = this.sort;
 
 }
 

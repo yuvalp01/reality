@@ -66,7 +66,6 @@ export class ExpensesComponent implements OnInit {
     
 
   openAddExpensesDialog() {
-    //let xxx: MatDialogRef<AddTransactionComponent>;
     let dialogRef = this.dialog.open(AddTransactionComponent, {
       height: '600px',
       width: '500px',

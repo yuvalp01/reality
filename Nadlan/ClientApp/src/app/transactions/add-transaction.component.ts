@@ -9,8 +9,7 @@ import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { take } from 'rxjs/operators';
 import { EventEmitter } from "events";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
-import { element } from "protractor";
-import { Comment } from "@angular/compiler";
+
 
 
 
@@ -40,9 +39,10 @@ export class AddTransactionComponent implements OnInit {
   purchaseCostAccounts: number[] = [6, 7, 8, 11, 12, 13];
 
   ngOnInit(): void {
-    if (this.data) {
+    //debugger
+    //if (this.data) {
 
-    }
+    //}
     if (this.data.type == "hours") {
       this.isHourForm = true;
       this.doubleTransactionAction = true;

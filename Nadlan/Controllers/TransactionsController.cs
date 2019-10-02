@@ -112,7 +112,7 @@ namespace Nadlan.Controllers
 
             var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
 
-            await _repositoryWraper.Transaction.CreateDoubleTransactionAsync(transaction,true);
+            await _repositoryWraper.Transaction.CreateDoubleTransactionAsync(transaction, isHours);
 
 
             ////Not distribution transaction

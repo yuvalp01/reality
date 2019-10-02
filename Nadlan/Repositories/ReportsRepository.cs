@@ -19,9 +19,14 @@ namespace Nadlan.Repositories
 
         public async Task<ApartmentDto> GetApartmentInfo(int apartmentId)
         {
-            var lastRent = await Context.ExpectedTransactions.OrderByDescending(a => a.Id)
+            ExpectedTransaction expectedLastRent = await Context.ExpectedTransactions.OrderByDescending(a => a.Id)
                 .FirstOrDefaultAsync(a => a.ApartmentId == apartmentId
                 && a.AccountId==1);
+            decimal lastRent = 0;
+            if (expectedLastRent!=null)
+            {
+                lastRent = expectedLastRent.Amount;
+            }
             var apartment = await Context.Apartments.FirstAsync(a => a.Id == apartmentId);
 
             ApartmentStatus apartmentStatus = (ApartmentStatus)apartment.Status;
@@ -34,7 +39,7 @@ namespace Nadlan.Repositories
                 Door = apartment.Door,
                 Size = apartment.Size,
                 PurchaseDate = apartment.PurchaseDate,
-                CurrentRent = lastRent.Amount,
+                CurrentRent = lastRent,
                 Status = apartmentStatus.ToString()
             };
             return apartmentDto;
