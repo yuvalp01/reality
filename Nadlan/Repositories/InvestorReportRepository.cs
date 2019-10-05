@@ -37,6 +37,7 @@ namespace Nadlan.Repositories
             {
                 PortfolioReport portfolioLineReport = new PortfolioReport();
                 var apartment = portfolioLine.Apartment;
+                portfolioLineReport.ApartmentId = portfolioLine.ApartmentId;
                 portfolioLineReport.Apartment = apartment.Address;
                 portfolioLineReport.PurchaseDate = apartment.PurchaseDate;
                 portfolioLineReport.Ownership = portfolioLine.Percentage;

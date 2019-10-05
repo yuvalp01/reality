@@ -1,4 +1,4 @@
-<span>hello!</span>
+
 <mat-tab-group dynamicHeight="false">
 
   <mat-tab label="Overview">
@@ -6,34 +6,34 @@
       <mat-card-title>Overview</mat-card-title>
       <mat-card-content>
         <mat-list *ngIf="investorReportOverview">
-          <mat-list-item>
+          <mat-list-item >
             <mat-icon mat-list-icon>business_center</mat-icon>
-            <span style="width:260px">totalInvestment</span>
+            <span  matTooltip="The amount of money committed up-to-date">Total Investment</span>
             <span [ngClass]="'positive'">{{investorReportOverview.totalInvestment | currency:'EUR' : number:'1.0-0'}}</span>
           </mat-list-item>
           <!--<mat-divider></mat-divider>-->
           <mat-list-item>
             <mat-icon mat-list-icon>business_center</mat-icon>
-            <span style="width:260px">cashBalance</span>
+            <span   matTooltip="Money belongs to you and can be withdrawn at any moment">Cash Balance</span>
             <span [ngClass]="'positive'">{{investorReportOverview.cashBalance| currency:'EUR' : number:'1.0-0'}}</span>
           </mat-list-item>
 
           <mat-list-item>
             <mat-icon mat-list-icon>business_center</mat-icon>
-            <span style="width:260px">minimalProfitUpToDate</span>
+            <span   matTooltip="Minimal profit up-to-date (3% per year)"> MinimalProfit</span>
             <span [ngClass]="'positive'">{{investorReportOverview.minimalProfitUpToDate| currency:'EUR' : number:'1.0-0'}}</span>
           </mat-list-item>
 
           <mat-list-item style="cursor:pointer; color:#2222c7" (click)="showTrans(100, 'Distributed', false)" matTooltip="totalBalace">
             <mat-icon mat-list-icon>business_center</mat-icon>
-            <span style="width:260px;">totalBalace</span>
+            <span  >totalBalace</span>
             <span>{{investorReportOverview.totalBalace| currency:'EUR' : number:'1.0-0'}}</span>
           </mat-list-item>
           <mat-divider></mat-divider>
 
           <mat-list-item matTooltip="totalDistribution">
             <mat-icon mat-list-icon>business_center</mat-icon>
-            <span style="width:260px">totalDistribution</span>
+            <span  >totalDistribution</span>
             <span style="font-weight:bold" [ngClass]="'positive'">{{investorReportOverview.totalDistribution| currency:'EUR' : number:'1.0-0'}}</span>
           </mat-list-item>
 
@@ -41,130 +41,58 @@
 
         </mat-list>
         </mat-card-content>
-        <!--export interface IInvestorReportOverview {
-    totalInvestment: number,
-    cashBalance: number,
-    minimalProfitUpToDate: number,
-    totalBalace: number,
-    totalDistribution: number,
-    portfolioLines: IPortfolioReport[],
-
-    }-->
-        <!--<mat-card-content>
-
-          <mat-accordion *ngIf="investorReportOverview">
-            <mat-expansion-panel disabled="true">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <mat-icon mat-list-icon>business_center</mat-icon>
-                  <span>Total Investment</span>
-                </mat-panel-title>
-                <mat-panel-description>
-                  <span>{{investorReportOverview.totalInvestment | currency:'EUR' : number:'1.0-0'| minusSignToParens}}</span>
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-            </mat-expansion-panel>
-
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <mat-icon mat-list-icon>business_center</mat-icon>
-                  <span>Cash Balance</span>
-                </mat-panel-title>
-                <mat-panel-description>
-                  <mat-list-item>
-                    <span>{{investorReportOverview.cashBalance| currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
-                  </mat-list-item>
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-              <mat-list>
-                <mat-list-item (click)="showTrans(account.accountId, account.name, true)" style="color:#3764ad" *ngFor="let account of purchaseReport?.accountsSum" id="{{account.accountId}}">
-                  <mat-icon mat-list-icon>business_center</mat-icon>
-                  <span>{{account.name}}</span>
-                  <span>{{account.total | currency:'EUR' : number:'1.0-1'}}</span>
-                </mat-list-item>
-                <mat-divider></mat-divider>
-              </mat-list>
-            </mat-expansion-panel>
 
 
-
-            <mat-expansion-panel disabled="true">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <mat-icon mat-list-icon>business_center</mat-icon>
-                  <span>minimalProfitUpToDate</span>
-                </mat-panel-title>
-                <mat-panel-description>
-                  <span>{{investorReportOverview.minimalProfitUpToDate | currency:'EUR' : number:'1.0-0'| minusSignToParens}}</span>
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-            </mat-expansion-panel>
-
-            <mat-expansion-panel disabled="true">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <mat-icon mat-list-icon>business_center</mat-icon>
-                  <span>totalBalace</span>
-                </mat-panel-title>
-                <mat-panel-description>
-                  <span>{{investorReportOverview.totalBalace | currency:'EUR' : number:'1.0-0'| minusSignToParens}}</span>
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-            </mat-expansion-panel>
-
-            <mat-expansion-panel disabled="true">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <mat-icon mat-list-icon>business_center</mat-icon>
-                  <span>totalDistribution</span>
-                </mat-panel-title>
-                <mat-panel-description>
-                  <span>{{investorReportOverview.totalDistribution | currency:'EUR' : number:'1.0-0'| minusSignToParens}}</span>
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-            </mat-expansion-panel>
-
-            <mat-expansion-panel disabled="false">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <mat-icon mat-list-icon>business_center</mat-icon>
-                  <span>portfolioLines</span>
-                </mat-panel-title>
-                <mat-panel-description>
-                  <span>{{investorReportOverview.totalDistribution | currency:'EUR' : number:'1.0-0'| minusSignToParens}}</span>
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-
-              <mat-list>
-                <mat-list-item (click)="showTrans(account.accountId, account.name, false)" style="color:#3764ad" *ngFor="let account of incomeReport?.accountsSum" id="{{account.accountId}}">
-                  <mat-icon mat-list-icon>business_center</mat-icon>
-                  <span>{{account.name}}</span>
-                  <span>{{account.total | currency:'EUR' : number:'1.0-1'}}</span>
-                </mat-list-item>
-                <mat-divider></mat-divider>
-              </mat-list>
-
-
-            </mat-expansion-panel>
-
-            <mat-divider></mat-divider>
-
-          </mat-accordion>
-        </mat-card-content>-->
     </mat-card>
   </mat-tab>
   <mat-tab label="Portfolio">
     <mat-card>
       <mat-card>
-        <mat-card-title>General Info</mat-card-title>
+        <mat-card-title>Portfolio</mat-card-title>
+        <table id="portfolio" mat-table [dataSource]="investorReportOverview?.portfolioLines" class="mat-elevation-z8">
+
+          <ng-container matColumnDef="apartment">
+            <th mat-header-cell *matHeaderCellDef>Apartment</th>
+            <!--<td mat-cell *matCellDef="let line"><a class="nav-link text-dark" [routerLink]='["/reports/3"]'> {{line.apartment}} </a></td>-->
+            <td mat-cell *matCellDef="let line"><a class="nav-link text-dark" [routerLink]="['/reports',line.apartmentId]"> {{line.apartment}} </a></td>
+
+          </ng-container>
+
+          <ng-container matColumnDef="purchaseDate">
+            <th mat-header-cell *matHeaderCellDef> Purchase Date </th>
+            <td mat-cell *matCellDef="let line"> {{line.purchaseDate | date:'yyyy-MM-dd'}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="investment">
+            <th mat-header-cell matTooltip="Personal investment" *matHeaderCellDef> Investment </th>
+            <td mat-cell *matCellDef="let line"> {{line.investment | number:'1.0-0'}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="ownership">
+            <th mat-header-cell *matHeaderCellDef> Ownership </th>
+            <td mat-cell *matCellDef="let line"> {{line.ownership|percent}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="minimalProfitUpToDate">
+            <th mat-header-cell matTooltip="Minimal profit up-to-date (3% per year)" *matHeaderCellDef> Minimal Profit</th>
+            <td mat-cell *matCellDef="let line"> {{line.minimalProfitUpToDate | number:'1.0-0'}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="distributed">
+            <th mat-header-cell *matHeaderCellDef> Distributed </th>
+            <td mat-cell *matCellDef="let line"> {{line.distributed | number:'1.0-0'}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="['apartment', 'purchaseDate', 'investment', 'ownership','minimalProfitUpToDate', 'distributed']"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['apartment', 'purchaseDate', 'investment', 'ownership', 'minimalProfitUpToDate', 'distributed'];"></tr>
+        </table>
 
       </mat-card>
     </mat-card>
   </mat-tab>
-  <mat-tab label="Appraisal">
+  <!--<mat-tab label="Appraisal">
     <mat-card>
 
     </mat-card>
-  </mat-tab>
+  </mat-tab>-->
 </mat-tab-group>

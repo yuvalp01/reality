@@ -45,7 +45,7 @@
         <!--<mat-divider></mat-divider>-->
         <mat-list-item>
           <mat-icon mat-list-icon>business_center</mat-icon>
-          <span style="width:260px">ROI up-to-date (rent)</span>
+          <span style="width:260px">Annual ROI up-to-date (rent)</span>
           <span>{{summaryReport.roi|percent:'1.1'}} </span>
         </mat-list-item>
 
@@ -246,6 +246,13 @@
             <span style="width:260px">Investment</span>
             <span>{{apartmentInfo.address}}</span>
           </mat-list-item>
+
+          <mat-list-item>
+            <mat-icon mat-list-icon>date_range</mat-icon>
+            <span style="width:260px">Date Purchased</span>
+            <span>{{apartmentInfo.purchaseDate | date:'yyyy-MM-dd'}}</span>
+          </mat-list-item>
+
           <!--<mat-divider></mat-divider>-->
 
 
@@ -339,7 +346,7 @@
         </mat-list-item>
         <mat-list-item matTooltip="Based on 10% sale cost">
           <mat-icon mat-list-icon>trending_up</mat-icon>
-          <span style="width:260px;">Estimated ROI on Sale</span>
+          <span style="width:260px;">Estimated ROI on Sale [TODO: calc per year]</span>
           <span>{{((((apartmentInfo.currentRent*rentMonthsInYear/buyerExpectedRerutn)*0.9)/ purchaseReport.investment)-1) | percent:'1.1'}}</span>
         </mat-list-item>
 

@@ -14,6 +14,7 @@ namespace Nadlan.ViewModels.Reports
     }
     public class PortfolioReport
     {
+        public int ApartmentId { get; set; }      
         public string Apartment { get; set; }
         public DateTime PurchaseDate { get; set; }
         public decimal Investment { get; set; }
