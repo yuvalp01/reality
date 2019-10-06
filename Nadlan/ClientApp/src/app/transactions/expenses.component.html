@@ -13,54 +13,6 @@
 </p>
 <p *ngIf="!dataSourceExpenses.data"><em>Loading...</em></p>
 
-
-
-
-<!--<div style="width:45%; float:left; margin-right:3px" id="tbl">
-  <table mat-table [dataSource]="dataSourceExpenses" matSort class="mat-elevation-z8">
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-      <td mat-cell *matCellDef="let transaction">{{transaction.id}}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
-      <td mat-cell *matCellDef="let transaction">{{transaction.date | date:'dd-MM-yyyy'}}</td>
-    </ng-container>
-    <ng-container matColumnDef="amount">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
-      <td mat-cell
-          [ngClass]="{
-          positive: isPositive(transaction.amount),
-          negative: !isPositive(transaction.amount)
-        }"
-          *matCellDef="let transaction">
-        {{transaction.amount}}
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="apartmentId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Apartment</th>
-      <td mat-cell *matCellDef="let transaction">{{transaction.apartmentAddress}}</td>
-    </ng-container>
-    <ng-container matColumnDef="accountId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Account</th>
-      <td mat-cell *matCellDef="let transaction">{{transaction.accountName}}</td>
-    </ng-container>
-    <ng-container matColumnDef="comments">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>
-      <td matTooltip="{{transaction.comments}}" mat-cell *matCellDef="let transaction">
-        <mat-icon>info</mat-icon>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumnsExpenses"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumnsExpenses"></tr>
-
-  </table>
-
-</div>-->
-
-
 <div style="width:100%; float:left; margin-left:3px" id="tbl">
   <table mat-table [dataSource]="dataSourceAssistant" matSort class="mat-elevation-z8">
     <ng-container matColumnDef="id">
@@ -98,6 +50,11 @@
         {{transaction.comments}}
       </td>
 
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Action</th>
+      <td  mat-cell *matCellDef="let transaction"><button (click)="openEdit(transaction.id)" mat-flat-button color="primary" >Edit</button> </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumnsAssistant"></tr>

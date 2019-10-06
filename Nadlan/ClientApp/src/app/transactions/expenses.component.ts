@@ -13,7 +13,7 @@ import { RouteReuseStrategy } from '@angular/router';
 })
 export class ExpensesComponent implements OnInit {
   displayedColumnsExpenses: string[] = ['date', 'apartmentId', 'accountId', 'amount', 'comments'];
-  displayedColumnsAssistant: string[] = ['date', 'apartmentId', 'amount', 'comments'];
+  displayedColumnsAssistant: string[] = ['date', 'apartmentId', 'amount', 'comments','actions'];
   dataSourceExpenses = new MatTableDataSource<ITransaction>();
   dataSourceAssistant = new MatTableDataSource<ITransaction>();
   //expensesAccounts: IAccount[]
@@ -82,6 +82,12 @@ export class ExpensesComponent implements OnInit {
 
     //});
   }
+
+  openEdit(transactionId) {
+    console.log('transactionId: ' + transactionId)
+  }
+
+
 
   ngAfterViewInit(): void {
     this.dataSourceAssistant.sort = this.sort;
