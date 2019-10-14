@@ -29,9 +29,10 @@ import { RenovationComponent } from './renovation/renovation.component';
 import { RenovationService } from './services/renovation.service';
 import { ExcelService } from './services/excel.service';
 import { RenovationListComponent } from './renovation/renovation-list.component';
-import { ExpensesComponent } from './transactions/expenses.component';
+import { ExpensesComponent } from './expenses/expenses.component';
 import { TransactionsTableComponent } from './transactions/transactions-table.component';
 import { InvestorReportComponent } from './reports/investor-reports.component';
+import { AddExpenseComponent } from './expenses/expenses-form.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,7 +53,8 @@ import { InvestorReportComponent } from './reports/investor-reports.component';
     RenovationListComponent,
     ExpensesComponent,
     TransactionsTableComponent,
-    InvestorReportComponent
+    InvestorReportComponent,
+    AddExpenseComponent
     
   ],
   imports: [
@@ -101,6 +103,6 @@ import { InvestorReportComponent } from './reports/investor-reports.component';
   ],
   providers: [ApartmentService, AccountService, TransactionService, ReportService, RenovationService, ExcelService,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent],
-  entryComponents: [TransactionsDialogComponent, AddTransactionComponent]
+  entryComponents: [TransactionsDialogComponent, AddTransactionComponent, AddExpenseComponent]
 })
 export class AppModule { }

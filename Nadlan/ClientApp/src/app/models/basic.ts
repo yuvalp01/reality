@@ -9,6 +9,8 @@ export interface ITransaction {
   apartmentAddress: string;
   accountId: number;
   accountName: string;
+  isBusinessExpense: boolean;
+  hours: number;
 }
 
 

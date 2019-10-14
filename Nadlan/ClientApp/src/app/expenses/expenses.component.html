@@ -10,8 +10,9 @@
   </button>
   <br />
   Your personal account balance is <b>€{{assistantBalance}}</b>
+  <!--<expenses-form></expenses-form>-->
 </p>
-<p *ngIf="!dataSourceExpenses.data"><em>Loading...</em></p>
+<p *ngIf="!dataSourceAssistant.data"><em>Loading...</em></p>
 
 <div style="width:100%; float:left; margin-left:3px" id="tbl">
   <table mat-table [dataSource]="dataSourceAssistant" matSort class="mat-elevation-z8">
@@ -43,6 +44,10 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Account</th>
       <td mat-cell *matCellDef="let transaction">{{transaction.accountName}}</td>
     </ng-container>
+    <ng-container matColumnDef="hours">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Hours</th>
+      <td mat-cell *matCellDef="let transaction">{{transaction.hours}}</td>
+    </ng-container>
     <ng-container matColumnDef="comments">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>
       <td mat-cell *matCellDef="let transaction">
@@ -54,7 +59,7 @@
 
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Action</th>
-      <td  mat-cell *matCellDef="let transaction"><button (click)="openEdit(transaction.id)" mat-flat-button color="primary" >Edit</button> </td>
+      <td mat-cell *matCellDef="let transaction"><button (click)="openEdit(transaction.id)" mat-flat-button color="primary">Edit</button> </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumnsAssistant"></tr>

@@ -5,6 +5,8 @@ import { AddTransactionComponent } from '../transactions/add-transaction.compone
 import { MatDialog, MatSort, MatTableDataSource, MatDialogRef } from '@angular/material';
 import { ReportService } from '../services/reports.service';
 import { RouteReuseStrategy } from '@angular/router';
+import { AddExpenseComponent } from '../expenses/expenses-form.component';
+import { debounce } from 'rxjs/operators';
 
 
 @Component({
@@ -12,11 +14,9 @@ import { RouteReuseStrategy } from '@angular/router';
   styles: ['table{width:100%}']
 })
 export class ExpensesComponent implements OnInit {
-  displayedColumnsExpenses: string[] = ['date', 'apartmentId', 'accountId', 'amount', 'comments'];
-  displayedColumnsAssistant: string[] = ['date', 'apartmentId', 'amount', 'comments','actions'];
+  displayedColumnsAssistant: string[] = ['date', 'apartmentId', 'amount', 'comments','hours','actions'];
   dataSourceExpenses = new MatTableDataSource<ITransaction>();
   dataSourceAssistant = new MatTableDataSource<ITransaction>();
-  //expensesAccounts: IAccount[]
   selectedApartment: any;
   assistantBalance: number;
 
@@ -25,66 +25,69 @@ export class ExpensesComponent implements OnInit {
   }
   ngOnInit(): void {
     this.refreshData();
-    //this.expensesAccounts = accou
   }
-
-
   refreshData() {
     //refresh tables
-    this.transactionService.getTransactions().subscribe(result => {
-      let transactions = result as ITransaction[];
-
-      let assistantAccount = transactions.filter(a => a.accountId == 107);
+    this.transactionService.getExpenses().subscribe(result => {
+      let assistantAccount = result as ITransaction[];
       this.dataSourceAssistant.data = assistantAccount;
       this.dataSourceAssistant.sort = this.sort;
 
-      let expenses = transactions.filter(a => a => a.id == 4 || a.id == 6 || a.id == 11);
-      this.dataSourceExpenses.data = expenses;
-      this.dataSourceExpenses.sort = this.sort;
-
     }, error => console.error(error));
     //Refresh balance
-    this.reportsService.getAccountBalance(107).subscribe(result => this.assistantBalance = result, error => console.error(error));
+    //this.reportsService.getAccountBalance(107).subscribe(result => this.assistantBalance = result, error => console.error(error));
+    this.reportsService.getExpensesBalance().subscribe(result => this.assistantBalance = result, error => console.error(error));
   }
 
-  dialogRef: MatDialogRef<AddTransactionComponent>;
+  //dialogRef: MatDialogRef<AddTransactionComponent>;
   openAddHoursDialog() {
-    this.dialogRef = this.dialog.open(AddTransactionComponent, {
+    let dialogRef = this.dialog.open(AddExpenseComponent, {
       height: '600px',
       width: '500px',
-      //data: 'hours'
       data: { type: 'hours', visibleAccounts: [4, 6, 11] },
     });
-    this.dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       this.refreshData();
-      //this.reportsService.getAccountBalance(107).subscribe(result => this.assistantBalance = result, error => console.error(error));
     });
 
-
-    //const sub = this.dialogRef.componentInstance.balanceChanged.emit("ddd");
   }
     
 
   openAddExpensesDialog() {
-    let dialogRef = this.dialog.open(AddTransactionComponent, {
+   // let dialogRef = this.dialog.open(AddTransactionComponent, {
+    let dialogRef = this.dialog.open(AddExpenseComponent, {
       height: '600px',
       width: '500px',
-      //data: 'expenses'
       data: { type: 'expenses', visibleAccounts:[4,6,8,11] },
     });
     dialogRef.afterClosed().subscribe(result => {
-    //  console.log(`Dialog result: ${result}`); 
       this.refreshData();
-      //this.reportsService.getAccountBalance(107).subscribe(result => this.assistantBalance = result, error => console.error(error));
       });
-    //this.dialogRef.componentInstance.balanceChanged.emit((null) => {
-    //  this.refreshData();
 
-    //});
   }
 
   openEdit(transactionId) {
     console.log('transactionId: ' + transactionId)
+    
+    this.transactionService.getExpense(transactionId).subscribe(result => {
+      let _expense: ITransaction = result;
+      let _type: string = _expense.hours == 0 ?'expenses':'hours'
+
+      let dialogRef = this.dialog.open(AddExpenseComponent, {
+        height: '600px',
+        width: '500px',
+        data: {
+          type: _type,
+          expense: _expense,
+          visibleAccounts: [4, 6, 8, 11]
+        },
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        this.refreshData();
+      });
+
+    }, error => console.log(error));
+
   }
 
 
@@ -92,10 +95,6 @@ export class ExpensesComponent implements OnInit {
   ngAfterViewInit(): void {
     this.dataSourceAssistant.sort = this.sort;
     this.dataSourceExpenses.sort = this.sort;
-
-
-    // this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
-
   }
 
   doFilter(value: string) {

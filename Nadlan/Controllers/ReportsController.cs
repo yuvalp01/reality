@@ -50,7 +50,7 @@ namespace Nadlan.Controllers
 
             return Ok(investorReportOverview);
         }
-        
+        //TODO: check if in use
         [HttpGet("GetBalance/{accountId}")]
         public async Task<IActionResult> GetBalance([FromRoute]  int accountId)
         {
@@ -64,6 +64,18 @@ namespace Nadlan.Controllers
             return Ok(balance);
         }
 
+        [HttpGet("GetExpensesBalance")]
+        public async Task<IActionResult> GetExpensesBalance([FromRoute]  int accountId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            decimal balance = await _repositoryWraper.ApartmentReport.GetExpensesBalance();
+
+            return Ok(balance);
+        }
 
         [HttpPost("GetDiagnosticReport")]
         public async Task<IActionResult> GetDiagnosticReport([FromBody] DiagnosticRequest diagnosticRequest)

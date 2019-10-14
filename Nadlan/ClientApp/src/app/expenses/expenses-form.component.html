@@ -1,0 +1,75 @@
+<div class="container">
+  <form [formGroup]="transactionForm" (ngSubmit)="saveTransaction(transactionForm.value)">
+    <h3><mat-icon>{{iconType}}</mat-icon>Add new {{labelTitle}}</h3>
+    <fieldset>
+      <mat-form-field style="width: 100%" appearance="outline">
+        <mat-label>{{labelDate}}</mat-label>
+        <input formControlName="date" matInput [matDatepicker]="picker" placeholder="{{labelDate}}">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </fieldset>
+    <fieldset>
+      <mat-form-field hintLabel="€{{_hours.value*9}}" *ngIf="isHourForm" style="width: 100%" appearance="outline" class="example-full-width">
+        <mat-label>Hours</mat-label>
+        <input #_hours formControlName="hours" type="number" matInput placeholder="Hours">
+        <!--<mat-hint align="start">{{_hours.value}}</mat-hint>-->
+      </mat-form-field>
+      <mat-form-field *ngIf="!isHourForm" style="width: 100%" appearance="outline" class="example-full-width">
+        <mat-label>Amount (€)</mat-label>
+        <input matInput formControlName="amount" type="number" placeholder="Amount (€)">
+        <!-- <mat-icon matSuffix>euro_symbol</mat-icon> -->
+      </mat-form-field>
+    </fieldset>
+    <fieldset>
+      <mat-form-field style="width: 100%" appearance="outline">
+        <mat-label>Apartment</mat-label>
+        <mat-select formControlName="apartmentId">
+          <mat-option *ngFor="let apartment of apartments" [value]="apartment.id">
+            {{apartment.address}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </fieldset>
+    <fieldset>
+      <mat-form-field style="width: 50%" appearance="outline">
+        <mat-label>GL Acount</mat-label>
+        <mat-select formControlName="accountId">
+          <mat-option *ngFor="let acount of accounts" [value]="acount.id">
+            {{acount.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-checkbox [disabled]="doubleTransactionAction" style="width: 50%; padding-left: 25px" formControlName="isPurchaseCost">Purchase Cost?</mat-checkbox>
+    </fieldset>
+
+    <fieldset>
+      <mat-form-field  appearance="outline" style="width: 100%">
+        <mat-label>Comments</mat-label>
+        <textarea formControlName="comments"
+                  matInput
+                  cdkTextareaAutosize
+                  required
+                  #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="1"
+                  cdkAutosizeMaxRows="5"></textarea>
+      </mat-form-field>
+    </fieldset>
+
+    <div>
+      <!-- {{this.transactionForm.valid}}<br />
+  {{this.transactionForm.dirty}}<br />
+    {{this.transactionForm.touched}}<br />
+    {{this.transactionForm.errors}}<br />-->
+
+
+    </div>
+
+    <fieldset>
+      <button mat-flat-button color="primary" name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
+
+    </fieldset>
+
+  </form>
+</div>

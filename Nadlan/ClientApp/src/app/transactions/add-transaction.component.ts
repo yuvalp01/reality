@@ -9,6 +9,7 @@ import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { take } from 'rxjs/operators';
 import { EventEmitter } from "events";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
+import { debug } from "util";
 
 
 
@@ -149,7 +150,7 @@ export class AddTransactionComponent implements OnInit {
 
     //if (this.isHourForm) {
     if (this.doubleTransactionAction) {
-      this.transactionService.addExpense(transaction,this.isHourForm).subscribe(() => {
+      this.transactionService.addExpense(transaction).subscribe(() => {
         //console.log("success!");
         //this.dialogRef.close("added!");
         //this.router.navigate(['/expenses']);

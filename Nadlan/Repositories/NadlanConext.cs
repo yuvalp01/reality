@@ -23,9 +23,15 @@ namespace Nadlan.Repositories
         public DbSet<Product> Products { get; set; }
         public DbSet<Portfolio> Portfolios { get; set; }
         public DbSet<ExpectedTransaction> ExpectedTransactions { get; set; }
-
+        public DbSet<PersonalTransaction> PersonalTransactions { get; set; }
+        public DbSet<Stakeholder> Stakeholders { get; set; }
+        public DbSet<Expense> Expenses { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Expense>()
+                .Property(a => a.Hours)
+                .HasDefaultValue(0);
             modelBuilder.Entity<Product>()
                 .Property(a => a.Price)
                 .HasDefaultValue(0);

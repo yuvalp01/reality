@@ -31,7 +31,11 @@ export class ReportService {
     let url = this.baseUrl + `api/reports/GetBalance/${accountId}`;
     return this.httpClient.get<number>(url);
   }
+  getExpensesBalance(): Observable<number> {
 
+    let url = `${this.baseUrl}api/reports/GetExpensesBalance/`;
+    return this.httpClient.get<number>(url);
+  }
   getApartmentInfo(apartmentId: number): Observable<IApartment> {
 
     let url = this.baseUrl + `api/reports/GetApartmentInfo/${apartmentId}`;

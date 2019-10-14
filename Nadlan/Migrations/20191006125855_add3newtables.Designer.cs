@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nadlan.Repositories;
 
 namespace Nadlan.Migrations
 {
     [DbContext(typeof(NadlanConext))]
-    partial class NadlanConextModelSnapshot : ModelSnapshot
+    [Migration("20191006125855_add3newtables")]
+    partial class add3newtables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,15 +103,13 @@ namespace Nadlan.Migrations
                     b.ToTable("ExpectedTransactions");
                 });
 
-            modelBuilder.Entity("Nadlan.Models.Expense", b =>
+            modelBuilder.Entity("Nadlan.Models.Expenses", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Hours")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(0);
+                    b.Property<int>("Hours");
 
                     b.Property<int>("TransactionId");
 
@@ -294,7 +294,7 @@ namespace Nadlan.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Nadlan.Models.Expense", b =>
+            modelBuilder.Entity("Nadlan.Models.Expenses", b =>
                 {
                     b.HasOne("Nadlan.Models.Transaction", "Transaction")
                         .WithMany()

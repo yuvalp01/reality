@@ -51,6 +51,13 @@ namespace Nadlan.Repositories
             return await balance;
         }
 
+        public async Task<decimal> GetExpensesBalance()
+        {
+            var balance = Context.Expenses.SumAsync(a => a.Transaction.Amount);
+            return await balance;
+        }
+
+
         public async Task<DiagnosticReport> GetDiagnosticReport(DiagnosticRequest diagnosticRequest)
         {
             DiagnosticReport diagnosticReport = new DiagnosticReport()

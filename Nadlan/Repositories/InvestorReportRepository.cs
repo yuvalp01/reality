@@ -16,7 +16,7 @@ namespace Nadlan.Repositories
         public InvestorReportRepository(NadlanConext context) : base(context)
         {
         }
-
+        //still not in use, need to change
         public async Task<decimal> GetBalance(int accountId)
         {
             var balance = Context.Transactions.Where(a => a.AccountId == accountId).SumAsync(a => a.Amount);

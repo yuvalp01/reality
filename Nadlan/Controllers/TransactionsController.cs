@@ -76,6 +76,42 @@ namespace Nadlan.Controllers
             return Ok(transaction);
         }
 
+        // GET: api/Transactions/5
+        [HttpGet("GetExpenses")]
+        public async Task<IActionResult> GetExpenses()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var transaction = await _repositoryWraper.Transaction.GetAllExpensesAsync();
+            if (transaction == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(transaction);
+        }
+        // GET: api/Transactions/5
+        [HttpGet("GetExpenses/{transactionId}")]
+        public async Task<IActionResult> GetExpense([FromRoute] int transactionId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var transaction = await _repositoryWraper.Transaction.GetExpenseByIdAsync(transactionId);
+            if (transaction == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(transaction);
+        }
+
+
         // POST: api/Transactions
         [HttpPost]
         public async Task<IActionResult> PostTransaction([FromBody] TransactionDto transactionDto)
@@ -103,7 +139,7 @@ namespace Nadlan.Controllers
 
         // POST: api/Transactions
         [HttpPost("PostExpenses/{isHours=false}")]
-        public async Task<IActionResult> PostAssistantExpenses([FromBody] TransactionDto transactionDto, bool isHours)
+        public async Task<IActionResult> PostAssistantExpenses([FromBody] TransactionDto transactionDto)
         {
             if (!ModelState.IsValid)
             {
@@ -112,20 +148,11 @@ namespace Nadlan.Controllers
 
             var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
 
-            await _repositoryWraper.Transaction.CreateDoubleTransactionAsync(transaction, isHours);
+           // await _repositoryWraper.Transaction.CreateDoubleTransactionAsync(transaction, isHours);
+            await _repositoryWraper.Transaction.CreateExpenseAndTransactionAsync(transaction);
 
 
-            ////Not distribution transaction
-            //if (transaction.AccountId != 100)
-            //{
-            //    await _repositoryWraper.Transaction.CreateTransactionAsync(transaction);
-            //}
-            ////Distribution transaction
-            //else
-            //{
-            //    await _repositoryWraper.Transaction.DistributeBalanceAsync(transaction);
 
-            //}
             return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
         }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nadlan.Models;
+using Nadlan.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,75 +20,129 @@ namespace Nadlan.Repositories
         {
             return await Context.Transactions.OrderByDescending(a => a.Id).Include(a => a.Account).Include(a => a.Apartment).ToListAsync();
         }
-
-
-
-        private Transaction CreateCorrespondingTransaction(Transaction originalTransaction, int accountId)
+        public async Task<List<TransactionDto>> GetAllExpensesAsync()
         {
-            Transaction correspondingTransaction = new Transaction
-            {
-                ApartmentId = originalTransaction.ApartmentId,
-                AccountId = accountId,
-                Amount = originalTransaction.Amount,
-                Date = originalTransaction.Date,
-                Comments = $"{originalTransaction.Comments}"
-            };
-            return correspondingTransaction;
+            return await Context.Expenses.Join(
+                Context.Transactions,
+                expense => expense.TransactionId,
+                transaction => transaction.Id,
+                (expense, transaction) => new TransactionDto
+                {
+                    AccountId = transaction.AccountId,
+                    AccountName = transaction.Account.Name,
+                    Amount = transaction.Amount*-1,
+                    ApartmentId = transaction.ApartmentId,
+                    ApartmentAddress = transaction.Apartment.Address,
+                    Comments = transaction.Comments,
+                    Date = transaction.Date,
+                    Hours = expense.Hours,
+                    Id = transaction.Id,
+                    IsPurchaseCost = transaction.IsPurchaseCost
+                }
+                ).OrderByDescending(a=>a.Date).ThenByDescending(a=>a.Id).ToListAsync();
+            //return await Context.Expenses.OrderByDescending(a => a.Id).Include(a => a.Transaction).ToListAsync();
+        }
+
+        public async Task<TransactionDto> GetExpenseByIdAsync(int transactionId)
+        {
+            return await Context.Expenses.Join(
+                Context.Transactions.Where(a=>a.Id==transactionId),
+                expense => expense.TransactionId,
+                transaction => transaction.Id,
+                (expense, transaction) => new TransactionDto
+                {
+                    AccountId = transaction.AccountId,
+                    AccountName = transaction.Account.Name,
+                    Amount = transaction.Amount * -1,
+                    ApartmentId = transaction.ApartmentId,
+                    ApartmentAddress = transaction.Apartment.Address,
+                    Comments = transaction.Comments,
+                    Date = transaction.Date,
+                    Hours = expense.Hours,
+                    Id = transaction.Id,
+                    IsPurchaseCost = transaction.IsPurchaseCost
+                }
+                ).FirstOrDefaultAsync();
         }
 
 
-        public async Task CreateDoubleTransactionAsync(Transaction transaction, bool isHourCharge)
+
+
+        //private Transaction CreateCorrespondingTransaction_old(Transaction originalTransaction, int accountId)
+        //{
+        //    Transaction correspondingTransaction = new Transaction
+        //    {
+        //        ApartmentId = originalTransaction.ApartmentId,
+        //        AccountId = accountId,
+        //        Amount = originalTransaction.Amount,
+        //        Date = originalTransaction.Date,
+        //        Comments = $"{originalTransaction.Comments}"
+        //    };
+        //    return correspondingTransaction;
+        //}
+
+        private Expense CreateCorrespondingExpense(Transaction originalTransaction)
         {
-            if (isHourCharge)
+            Expense correspondingExpense = new Expense
+            {
+                Hours = originalTransaction.Hours,
+                TransactionId = originalTransaction.Id,
+            };
+            return correspondingExpense;
+        }
+
+
+
+        public async Task CreateExpenseAndTransactionAsync(Transaction transaction)
+        {
+            if (transaction.Hours>0)
             {
                 transaction.Comments = $"Hours: {transaction.Comments}";
             }
-            Transaction assiatantTransaction = CreateCorrespondingTransaction(transaction, 107);
-            Create(assiatantTransaction);
-
-            //hours for existing apartment maintances - the the expense of the business
-            if (isHourCharge && transaction.AccountId == 4)
-            {
-                transaction.AccountId = 200;
-            }
-
-            //Charge the original account
-            transaction.Amount = transaction.Amount * -1;
-            Create(transaction);
-            await SaveAsync();
-        }
-
-        public async Task CreateDoubleTransactionToForHoursAsync_old(Transaction transaction)
-        {
-            Transaction assiatantTransaction = CreateCorrespondingTransaction(transaction, 107);
-            //Transaction assiatantTransaction = new Transaction
+            //if (isHourCharge)
             //{
-            //    ApartmentId = transaction.ApartmentId,
-            //    AccountId = 107,
-            //    Amount = transaction.Amount,
-            //    Date = transaction.Date,
-            //    Comments = $"{transaction.Comments}"
-            //};
-            Create(assiatantTransaction);
-
-            if (transaction.AccountId == 4)
-            {
-                transaction.AccountId = 200;
-            }
-
-            //Charge the original account
-            transaction.Amount = transaction.Amount * -1;
-
-            Create(transaction);
-
-            //Account account = await Context.Accounts.FirstAsync(a => a.Id == transaction.AccountId);
-            //Only for normal accouts - depends on the account isIncome property
-            //if (account.AccountTypeId == 0)
-            //{
-            //    transaction.Amount = !account.IsIncome ? transaction.Amount * -1 : transaction.Amount;
+            //    transaction.Comments = $"Hours: {transaction.Comments}";
             //}
+            //Charge the original amount
+            transaction.Amount = transaction.Amount * -1;
+            Create(transaction);
+            Expense assiatantExpense = CreateCorrespondingExpense(transaction);
+            //Create(assiatantTransaction);
+            Context.Set<Expense>().Add(assiatantExpense);
+
+            ////hours for existing apartment maintances - the the expense of the business
+            //if (isHourCharge && transaction.AccountId == 4)
+            //{
+            //    transaction.AccountId = 200;
+            //}
+
             await SaveAsync();
         }
+
+        //public async Task CreateDoubleTransactionAsync_old(Transaction transaction, bool isHourCharge)
+        //{
+        //    if (isHourCharge)
+        //    {
+        //        transaction.Comments = $"Hours: {transaction.Comments}";
+        //    }
+        //    Transaction assiatantTransaction = CreateCorrespondingTransaction(transaction, 107);
+        //    Create(assiatantTransaction);
+
+        //    //hours for existing apartment maintances - the the expense of the business
+        //    if (isHourCharge && transaction.AccountId == 4)
+        //    {
+        //        transaction.AccountId = 200;
+        //    }
+
+        //    //Charge the original account
+        //    transaction.Amount = transaction.Amount * -1;
+        //    Create(transaction);
+        //    await SaveAsync();
+        //}
+
+
+
+
 
 
 
@@ -154,7 +209,7 @@ namespace Nadlan.Repositories
         {
             return Context.Transactions.FindAsync(id);
         }
-       
+
 
         public Task<List<Transaction>> GetByAcountAsync(int apartmentId, int accountId, bool isPurchaseCost, int year)
         {
@@ -187,4 +242,34 @@ namespace Nadlan.Repositories
 
 
 
+//public async Task CreateDoubleTransactionToForHoursAsync_old(Transaction transaction)
+//{
+//    Transaction assiatantTransaction = CreateCorrespondingTransaction(transaction, 107);
+//    //Transaction assiatantTransaction = new Transaction
+//    //{
+//    //    ApartmentId = transaction.ApartmentId,
+//    //    AccountId = 107,
+//    //    Amount = transaction.Amount,
+//    //    Date = transaction.Date,
+//    //    Comments = $"{transaction.Comments}"
+//    //};
+//    Create(assiatantTransaction);
 
+//    if (transaction.AccountId == 4)
+//    {
+//        transaction.AccountId = 200;
+//    }
+
+//    //Charge the original account
+//    transaction.Amount = transaction.Amount * -1;
+
+//    Create(transaction);
+
+//    //Account account = await Context.Accounts.FirstAsync(a => a.Id == transaction.AccountId);
+//    //Only for normal accouts - depends on the account isIncome property
+//    //if (account.AccountTypeId == 0)
+//    //{
+//    //    transaction.Amount = !account.IsIncome ? transaction.Amount * -1 : transaction.Amount;
+//    //}
+//    await SaveAsync();
+//}
