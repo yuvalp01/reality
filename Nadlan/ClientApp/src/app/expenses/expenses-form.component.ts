@@ -177,11 +177,12 @@ export class AddExpenseComponent implements OnInit {
     //if (this.transactionForm) {
     //  this.transactionForm.reset();
     //}
+    //debugger
     if (this.data.expense) {
       let expense: ITransaction = this.data.expense;
       this.transactionForm.setValue({
-        apartment: expense.apartmentId,
-        account: expense.accountId,
+        apartmentId: expense.apartmentId,
+        accountId: expense.accountId,
         amount: expense.amount,
         date: expense.date,
         hours: expense.hours,
