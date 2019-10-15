@@ -37,7 +37,8 @@ namespace Nadlan.Repositories
                     Date = transaction.Date,
                     Hours = expense.Hours,
                     Id = transaction.Id,
-                    IsPurchaseCost = transaction.IsPurchaseCost
+                    IsPurchaseCost = transaction.IsPurchaseCost,
+                    IsConfirmed = transaction.IsConfirmed
                 }
                 ).OrderByDescending(a=>a.Date).ThenByDescending(a=>a.Id).ToListAsync();
             //return await Context.Expenses.OrderByDescending(a => a.Id).Include(a => a.Transaction).ToListAsync();
@@ -60,7 +61,8 @@ namespace Nadlan.Repositories
                     Date = transaction.Date,
                     Hours = expense.Hours,
                     Id = transaction.Id,
-                    IsPurchaseCost = transaction.IsPurchaseCost
+                    IsPurchaseCost = transaction.IsPurchaseCost,
+                    IsConfirmed = transaction.IsConfirmed
                 }
                 ).FirstOrDefaultAsync();
         }
@@ -115,7 +117,12 @@ namespace Nadlan.Repositories
 
             await SaveAsync();
         }
-
+        internal async Task Confirm(int transactionId)
+        {
+            var originalTransaction = Context.Transactions.FindAsync(transactionId);
+            originalTransaction.Result.IsConfirmed = true;
+            await SaveAsync();
+        }
         public async Task CreateExpenseAndTransactionAsync(Transaction transaction)
         {
             if (transaction.Hours>0)
@@ -141,6 +148,8 @@ namespace Nadlan.Repositories
 
             await SaveAsync();
         }
+
+
 
         //public async Task CreateDoubleTransactionAsync_old(Transaction transaction, bool isHourCharge)
         //{

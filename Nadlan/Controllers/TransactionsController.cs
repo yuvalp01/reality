@@ -169,6 +169,18 @@ namespace Nadlan.Controllers
             return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
         }
 
+        [HttpPut("confirm")]
+        public async Task<IActionResult> Confirm([FromBody] int transactionId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // await _repositoryWraper.Transaction.CreateDoubleTransactionAsync(transaction, isHours);
+            await _repositoryWraper.Transaction.Confirm(transactionId);
+            return CreatedAtAction("Confirm", new { id = transactionId });
+        }
 
         // PUT: api/Transactions/5
         [HttpPut("{id}")]

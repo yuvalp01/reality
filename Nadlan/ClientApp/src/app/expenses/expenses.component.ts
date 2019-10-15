@@ -16,14 +16,14 @@ import { error } from 'util';
   styles: ['table{width:100%}']
 })
 export class ExpensesComponent implements OnInit {
-  displayedColumnsAssistant: string[] = ['date', 'apartmentId', 'amount', 'comments','hours','actions'];
+  displayedColumnsAssistant: string[] = ['date', 'apartmentId', 'amount', 'comments', 'hours', 'actions'];
   dataSourceExpenses = new MatTableDataSource<ITransaction>();
   dataSourceAssistant = new MatTableDataSource<ITransaction>();
   selectedApartment: any;
   assistantBalance: number;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  constructor(private transactionService: TransactionService, private reportsService:ReportService, private dialog: MatDialog) {
+  constructor(private transactionService: TransactionService, private reportsService: ReportService, private dialog: MatDialog) {
   }
   ngOnInit(): void {
     this.refreshData();
@@ -53,27 +53,27 @@ export class ExpensesComponent implements OnInit {
     });
 
   }
-   
+
 
   openAddExpensesDialog() {
-   // let dialogRef = this.dialog.open(AddTransactionComponent, {
+    // let dialogRef = this.dialog.open(AddTransactionComponent, {
     let dialogRef = this.dialog.open(AddExpenseComponent, {
       height: '600px',
       width: '500px',
-      data: { type: 'expenses', visibleAccounts:[4,6,8,11] },
+      data: { type: 'expenses', visibleAccounts: [4, 6, 8, 11] },
     });
     dialogRef.afterClosed().subscribe(result => {
       this.refreshData();
-      });
+    });
 
   }
 
   openEdit(transactionId) {
     console.log('transactionId: ' + transactionId)
-    
+
     this.transactionService.getExpense(transactionId).subscribe(result => {
       let _expense: ITransaction = result;
-      let _type: string = _expense.hours == 0 ?'expenses':'hours'
+      let _type: string = _expense.hours == 0 ? 'expenses' : 'hours'
 
       let dialogRef = this.dialog.open(AddExpenseComponent, {
         height: '600px',
@@ -125,10 +125,13 @@ export class ExpensesComponent implements OnInit {
           next: () => this.refreshData(),
           error: err => console.error(err)
         });
-
     }
-
   }
 
+  confirm(transactionId) {
+    this.transactionService.confirmExpense(transactionId).subscribe(() => {
+      this.refreshData();
+    });
+  }
 
 }

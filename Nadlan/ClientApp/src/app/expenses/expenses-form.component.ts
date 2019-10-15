@@ -218,36 +218,3 @@ export class AddExpenseComponent implements OnInit {
 
 
 
-    //let apartment = new FormControl(0);
-    //let account = new FormControl(0);
-    //let amount = new FormControl();
-    //let date = new FormControl();
-    //let hours = new FormControl();
-    //let comments = new FormControl();
-    //let isPurchaseCost = new FormControl(false);
-
-    //if (this.data.expense) {
-    //  let expense: ITransaction = this.data.expense;
-    //  this.transactionForm.setValue({
-    //    apartment:
-    //  });
-    //  apartment.setValue(expense.apartmentId);
-    //  account.setValue(expense.accountId);
-    //  amount.setValue(expense.amount);
-    //  date.setValue(expense.date);
-    //  hours.setValue(expense.hours);
-    //  comments.setValue(expense.comments);
-    //  isPurchaseCost.setValue(expense.isPurchaseCost);
-    //}
-
-    //this.transactionForm = new FormGroup(
-    //  {
-    //    date: date,
-    //    hours: hours,
-    //    apartmentId: apartment,
-    //    amount: amount,
-    //    comments: comments,
-    //    isPurchaseCost: isPurchaseCost,
-    //    accountId: account
-
-    //  });

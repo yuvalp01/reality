@@ -10,6 +10,7 @@ export interface ITransaction {
   accountId: number;
   accountName: string;
   isBusinessExpense: boolean;
+  isConfirmed: boolean;
   hours: number;
 }
 
