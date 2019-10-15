@@ -91,7 +91,30 @@ namespace Nadlan.Repositories
             return correspondingExpense;
         }
 
+        public async Task UpdateExpenseAndTransactionAsync(Transaction transaction)
+        {
+            //Charge the original amount
+            transaction.Amount = transaction.Amount * -1;
+            var originalTransaction = Context.Transactions.Find(transaction.Id);
+            
+            Context.Entry(originalTransaction).CurrentValues.SetValues(transaction);
 
+            //Expense updatedExpense = new Expense { TransactionId = transaction.Id, Hours = transaction.Hours };
+            var originalExpense = Context.Expenses.Single(a=>a.TransactionId ==transaction.Id);
+            originalExpense.Hours = transaction.Hours;
+            //Context.Entry(originalExpense).CurrentValues.SetValues(updatedExpense);
+            //if (transaction.Hours > 0)
+            //{
+            //    transaction.Comments = $"Hours: {transaction.Comments}";
+            //}
+
+
+            //Expense assiatantExpense = CreateCorrespondingExpense(transaction);
+            ////Create(assiatantTransaction);
+            //Context.Set<Expense>().Add(assiatantExpense);
+
+            await SaveAsync();
+        }
 
         public async Task CreateExpenseAndTransactionAsync(Transaction transaction)
         {

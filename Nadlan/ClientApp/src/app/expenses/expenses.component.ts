@@ -7,6 +7,8 @@ import { ReportService } from '../services/reports.service';
 import { RouteReuseStrategy } from '@angular/router';
 import { AddExpenseComponent } from '../expenses/expenses-form.component';
 import { debounce } from 'rxjs/operators';
+import { config } from 'rxjs';
+import { error } from 'util';
 
 
 @Component({
@@ -51,7 +53,7 @@ export class ExpensesComponent implements OnInit {
     });
 
   }
-    
+   
 
   openAddExpensesDialog() {
    // let dialogRef = this.dialog.open(AddTransactionComponent, {
@@ -115,7 +117,18 @@ export class ExpensesComponent implements OnInit {
     return false;
   }
 
+  delete(transactionId) {
+    console.log(transactionId);
+    if (confirm("Are you sure you want to delete?")) {
+      this.transactionService.deleteExpense(transactionId).subscribe(
+        {
+          next: () => this.refreshData(),
+          error: err => console.error(err)
+        });
 
+    }
+
+  }
 
 
 }

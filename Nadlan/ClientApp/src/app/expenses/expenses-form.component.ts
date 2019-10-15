@@ -32,6 +32,7 @@ export class AddExpenseComponent implements OnInit {
 
   apartments: IApartment[];
   accounts: IAccount[];
+  transactionId: number = 0;
   transactionForm: FormGroup;
   @Input() isHourForm: boolean = false;
   //doubleTransactionAction: boolean = false;
@@ -45,30 +46,42 @@ export class AddExpenseComponent implements OnInit {
 
   saveTransaction(formValues: any): void {
     if (this.transactionForm.valid) {
-      var transaction: ITransaction = Object.assign({}, formValues);
-      //transaction.amount = +transaction.amount;
-      if (this.isHourForm) {
-        transaction.amount = formValues.hours * 9;
-        ////avoid null
-        //transaction.comments = transaction.comments ? transaction.comments : '';
-        //Better comment out:
-        //transaction.comments = transaction.comments + `(${formValues.hours}h*9€)`;
-      }
-      else {
-        transaction.hours = 0;
-      }
-      ///fix UTC issue:
-      let date = transaction.date;
-      transaction.date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + 12);
-      ///
+      if (this.transactionForm.dirty) {
 
-      this.transactionService.addExpense(transaction).subscribe(() => {
-        //console.log("success!");
-        //this.dialogRef.close("added!");
-        //this.router.navigate(['/expenses']);
-      });
+        var transaction: ITransaction = Object.assign({}, formValues);
+
+        //transaction.amount = +transaction.amount;
+        if (this.isHourForm) {
+          transaction.amount = formValues.hours * 9;
+        }
+        else {
+          transaction.hours = 0;
+        }
+        ///fix UTC issue:
+        //let date = transaction.date;
+        let date = new Date(transaction.date);
+        transaction.date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + 12);
+        ///
+
+        if (this.transactionId > 0) {
+          transaction.id = this.transactionId;
+          this.transactionService.updateExpense(transaction).subscribe(() => {
+            //console.log("success!");
+            //this.dialogRef.close("added!");
+            //this.router.navigate(['/expenses']);
+          });
+
+        }
+        else {
+          this.transactionService.addExpense(transaction).subscribe(() => {
+            //console.log("success!");
+            //this.dialogRef.close("added!");
+            //this.router.navigate(['/expenses']);
+          });
+        }
+      }
+
     }
-
   }
 
 
@@ -180,6 +193,7 @@ export class AddExpenseComponent implements OnInit {
     //debugger
     if (this.data.expense) {
       let expense: ITransaction = this.data.expense;
+      this.transactionId = expense.id;
       this.transactionForm.setValue({
         apartmentId: expense.apartmentId,
         accountId: expense.accountId,

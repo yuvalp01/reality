@@ -138,7 +138,8 @@ namespace Nadlan.Controllers
 
 
         // POST: api/Transactions
-        [HttpPost("PostExpenses/{isHours=false}")]
+        //[HttpPost("PostExpenses/{isHours=false}")]
+        [HttpPost("PostExpenses")]
         public async Task<IActionResult> PostAssistantExpenses([FromBody] TransactionDto transactionDto)
         {
             if (!ModelState.IsValid)
@@ -150,9 +151,21 @@ namespace Nadlan.Controllers
 
            // await _repositoryWraper.Transaction.CreateDoubleTransactionAsync(transaction, isHours);
             await _repositoryWraper.Transaction.CreateExpenseAndTransactionAsync(transaction);
+            return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
+        }
 
+        [HttpPut("PutExpenses")]
+        public async Task<IActionResult> PutAssistantExpenses([FromBody] TransactionDto transactionDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
 
+            // await _repositoryWraper.Transaction.CreateDoubleTransactionAsync(transaction, isHours);
+            await _repositoryWraper.Transaction.UpdateExpenseAndTransactionAsync(transaction);
             return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
         }
 

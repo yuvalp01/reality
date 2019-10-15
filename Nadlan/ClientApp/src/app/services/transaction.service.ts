@@ -41,4 +41,14 @@ export class TransactionService {
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.httpClient.post<ITransaction>(`${this.baseUrl}api/transactions/PostExpenses`, transaction, options);
   }
+
+  updateExpense(transaction: ITransaction): Observable<ITransaction> {
+    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    return this.httpClient.put<ITransaction>(`${this.baseUrl}api/transactions/PutExpenses`, transaction, options);
+  }
+
+  deleteExpense(transactionId: number): Observable<{}> {
+    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    return this.httpClient.delete<ITransaction>(`${this.baseUrl}api/transactions/${transactionId}`, options);
+  }
 }

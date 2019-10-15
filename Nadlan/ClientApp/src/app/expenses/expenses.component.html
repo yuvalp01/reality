@@ -59,7 +59,10 @@
 
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Action</th>
-      <td mat-cell *matCellDef="let transaction"><button (click)="openEdit(transaction.id)" mat-flat-button color="primary">Edit</button> </td>
+      <td mat-cell *matCellDef="let transaction">
+      <button (click)="openEdit(transaction.id)" mat-flat-button color="primary">Edit</button>
+      <button (click)="delete(transaction.id)" mat-flat-button color="accent">Delete</button>
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumnsAssistant"></tr>
