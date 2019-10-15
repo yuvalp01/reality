@@ -11,6 +11,7 @@ namespace Nadlan.Models
         public bool IsPurchaseCost { get; set; }
         public string Comments { get; set; }
         public bool IsBusinessExpense { get; set; }
+        public bool IsConfirmed { get; set; }
         public int ApartmentId { get; set; }
         public Apartment Apartment { get; set; }
 
