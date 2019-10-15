@@ -6,9 +6,7 @@ import { MatDialog, MatSort, MatTableDataSource, MatDialogRef } from '@angular/m
 import { ReportService } from '../services/reports.service';
 import { RouteReuseStrategy } from '@angular/router';
 import { AddExpenseComponent } from '../expenses/expenses-form.component';
-import { debounce } from 'rxjs/operators';
-import { config } from 'rxjs';
-import { error } from 'util';
+
 
 
 @Component({
@@ -23,7 +21,11 @@ export class ExpensesComponent implements OnInit {
   assistantBalance: number;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  constructor(private transactionService: TransactionService, private reportsService: ReportService, private dialog: MatDialog) {
+  constructor(
+    private transactionService: TransactionService,
+    private reportsService: ReportService,
+    private dialog: MatDialog,
+  /*  private dialogRef: MatDialogRef<AddExpenseComponent>*/ ) {
   }
   ngOnInit(): void {
     this.refreshData();
@@ -48,6 +50,7 @@ export class ExpensesComponent implements OnInit {
       width: '500px',
       data: { type: 'hours', visibleAccounts: [4, 6, 11] },
     });
+    dialogRef.componentInstance.refreshEmitter.subscribe(() => this.refreshData());
     dialogRef.afterClosed().subscribe(result => {
       this.refreshData();
     });
@@ -57,12 +60,14 @@ export class ExpensesComponent implements OnInit {
 
   openAddExpensesDialog() {
     // let dialogRef = this.dialog.open(AddTransactionComponent, {
+
     let dialogRef = this.dialog.open(AddExpenseComponent, {
       height: '600px',
       width: '500px',
       data: { type: 'expenses', visibleAccounts: [4, 6, 8, 11] },
     });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.componentInstance.refreshEmitter.subscribe(() => this.refreshData());
+    dialogRef.afterClosed().subscribe(() => {
       this.refreshData();
     });
 
@@ -84,6 +89,7 @@ export class ExpensesComponent implements OnInit {
           visibleAccounts: [4, 6, 8, 11]
         },
       });
+      dialogRef.componentInstance.refreshEmitter.subscribe(() => this.refreshData());
       dialogRef.afterClosed().subscribe(result => {
         this.refreshData();
       });

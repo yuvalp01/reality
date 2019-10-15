@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, ViewChild, Output, Inject, Input } from "@angular/core";
+import { Component, OnInit, NgZone, ViewChild, Output, Inject, Input, EventEmitter } from "@angular/core";
 import { ApartmentService } from "../services/apartment.service";
 import { IApartment, ITransaction, IAccount } from "../models";
 import { FormControl, FormGroup, FormBuilder, Validators } from "@angular/forms";
@@ -7,11 +7,8 @@ import { TransactionService } from "../services/transaction.service";
 import { Router } from "@angular/router";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { take } from 'rxjs/operators';
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
-import { debug } from "util";
-import { element } from "protractor";
-import { PassThrough } from "stream";
-import { ValueConverter } from "@angular/compiler/src/render3/view/template";
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from "@angular/material";
+
 
 
 @Component(
@@ -35,22 +32,29 @@ export class AddExpenseComponent implements OnInit {
   transactionId: number = 0;
   transactionForm: FormGroup;
   @Input() isHourForm: boolean = false;
-  //doubleTransactionAction: boolean = false;
   labelDate: string;
   labelTitle: string;
   iconType: string;
 
   purchaseCostAccounts: number[] = [6, 7, 8, 11, 12, 13];
 
+  @Output() refreshEmitter = new EventEmitter();
+  //  valueChange = new EventEmitter();
+  //counter: any = 0;
 
+  //valueChanged() { // You can give any function name
+  //  //this.counter = this.counter + 1;
+  //  this.someEvent.emit('test');
+  //  return '';
+  //}
 
   saveTransaction(formValues: any): void {
+
+
     if (this.transactionForm.valid) {
       if (this.transactionForm.dirty) {
 
         var transaction: ITransaction = Object.assign({}, formValues);
-
-        //transaction.amount = +transaction.amount;
         if (this.isHourForm) {
           transaction.amount = formValues.hours * 9;
         }
@@ -66,6 +70,7 @@ export class AddExpenseComponent implements OnInit {
         if (this.transactionId > 0) {
           transaction.id = this.transactionId;
           this.transactionService.updateExpense(transaction).subscribe(() => {
+            this.refreshEmitter.emit();
             //console.log("success!");
             //this.dialogRef.close("added!");
             //this.router.navigate(['/expenses']);
@@ -74,11 +79,13 @@ export class AddExpenseComponent implements OnInit {
         }
         else {
           this.transactionService.addExpense(transaction).subscribe(() => {
+            this.refreshEmitter.emit();
             //console.log("success!");
             //this.dialogRef.close("added!");
             //this.router.navigate(['/expenses']);
           });
         }
+       
       }
 
     }
@@ -139,15 +146,7 @@ export class AddExpenseComponent implements OnInit {
       .subscribe(() => this.autosize.resizeToFitContent(true));
   }
 
-  //@Output() balanceChanged = new EventEmitter();
-  //  valueChange = new EventEmitter();
-  //counter: any = 0;
 
-  //valueChanged() { // You can give any function name
-  //  //this.counter = this.counter + 1;
-  //  this.balanceChanged.emit('test');
-  //  return '';
-  //}
   private getAllLists() {
     this.apartmentService.getApartments().subscribe(result => {
       this.apartments = result;
