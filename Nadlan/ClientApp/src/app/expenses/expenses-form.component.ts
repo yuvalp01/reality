@@ -7,7 +7,7 @@ import { TransactionService } from "../services/transaction.service";
 import { Router } from "@angular/router";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { take } from 'rxjs/operators';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from "@angular/material";
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialog, MatSnackBar } from "@angular/material";
 
 
 
@@ -23,6 +23,7 @@ export class AddExpenseComponent implements OnInit {
     private transactionService: TransactionService,
     private router: Router,
     private _ngZone: NgZone,
+    private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<AddExpenseComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
@@ -70,6 +71,7 @@ export class AddExpenseComponent implements OnInit {
         if (this.transactionId > 0) {
           transaction.id = this.transactionId;
           this.transactionService.updateExpense(transaction).subscribe(() => {
+            let snackBarRef = this.snackBar.open(`Expense`, 'Updated', { duration: 2000 });
             this.refreshEmitter.emit();
             //console.log("success!");
             //this.dialogRef.close("added!");
@@ -79,6 +81,8 @@ export class AddExpenseComponent implements OnInit {
         }
         else {
           this.transactionService.addExpense(transaction).subscribe(() => {
+            let snackBarRef = this.snackBar.open(`Expense`, 'Added', { duration: 2000 });
+            //this.transactionForm.reset();
             this.refreshEmitter.emit();
             //console.log("success!");
             //this.dialogRef.close("added!");
