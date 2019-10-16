@@ -9,6 +9,7 @@ namespace Nadlan.Repositories
     {
         private NadlanConext _conext;
         private TransactionRepository _transaction;
+        private PersonalTransactionRepository _personalTransaction;
         private AccountRepository _account;
         private ReportRepository _apartmentReport;
         private InvestorReportRepository _investorReport;
@@ -30,6 +31,20 @@ namespace Nadlan.Repositories
                 return _transaction;
             }
         }
+
+        public PersonalTransactionRepository PersonalTransaction
+        {
+            get
+            {
+                if (_personalTransaction == null)
+                {
+                    _personalTransaction = new PersonalTransactionRepository(_conext);
+                }
+                return _personalTransaction;
+            }
+        }
+
+
         public AccountRepository Account
         {
             get

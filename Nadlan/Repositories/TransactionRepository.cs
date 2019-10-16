@@ -70,18 +70,7 @@ namespace Nadlan.Repositories
 
 
 
-        //private Transaction CreateCorrespondingTransaction_old(Transaction originalTransaction, int accountId)
-        //{
-        //    Transaction correspondingTransaction = new Transaction
-        //    {
-        //        ApartmentId = originalTransaction.ApartmentId,
-        //        AccountId = accountId,
-        //        Amount = originalTransaction.Amount,
-        //        Date = originalTransaction.Date,
-        //        Comments = $"{originalTransaction.Comments}"
-        //    };
-        //    return correspondingTransaction;
-        //}
+
 
         private Expense CreateCorrespondingExpense(Transaction originalTransaction)
         {
@@ -148,31 +137,6 @@ namespace Nadlan.Repositories
 
             await SaveAsync();
         }
-
-
-
-        //public async Task CreateDoubleTransactionAsync_old(Transaction transaction, bool isHourCharge)
-        //{
-        //    if (isHourCharge)
-        //    {
-        //        transaction.Comments = $"Hours: {transaction.Comments}";
-        //    }
-        //    Transaction assiatantTransaction = CreateCorrespondingTransaction(transaction, 107);
-        //    Create(assiatantTransaction);
-
-        //    //hours for existing apartment maintances - the the expense of the business
-        //    if (isHourCharge && transaction.AccountId == 4)
-        //    {
-        //        transaction.AccountId = 200;
-        //    }
-
-        //    //Charge the original account
-        //    transaction.Amount = transaction.Amount * -1;
-        //    Create(transaction);
-        //    await SaveAsync();
-        //}
-
-
 
 
 
@@ -274,34 +238,40 @@ namespace Nadlan.Repositories
 
 
 
-//public async Task CreateDoubleTransactionToForHoursAsync_old(Transaction transaction)
+//private Transaction CreateCorrespondingTransaction_old(Transaction originalTransaction, int accountId)
 //{
+//    Transaction correspondingTransaction = new Transaction
+//    {
+//        ApartmentId = originalTransaction.ApartmentId,
+//        AccountId = accountId,
+//        Amount = originalTransaction.Amount,
+//        Date = originalTransaction.Date,
+//        Comments = $"{originalTransaction.Comments}"
+//    };
+//    return correspondingTransaction;
+//}
+
+//public async Task CreateDoubleTransactionAsync_old(Transaction transaction, bool isHourCharge)
+//{
+//    if (isHourCharge)
+//    {
+//        transaction.Comments = $"Hours: {transaction.Comments}";
+//    }
 //    Transaction assiatantTransaction = CreateCorrespondingTransaction(transaction, 107);
-//    //Transaction assiatantTransaction = new Transaction
-//    //{
-//    //    ApartmentId = transaction.ApartmentId,
-//    //    AccountId = 107,
-//    //    Amount = transaction.Amount,
-//    //    Date = transaction.Date,
-//    //    Comments = $"{transaction.Comments}"
-//    //};
 //    Create(assiatantTransaction);
 
-//    if (transaction.AccountId == 4)
+//    //hours for existing apartment maintances - the the expense of the business
+//    if (isHourCharge && transaction.AccountId == 4)
 //    {
 //        transaction.AccountId = 200;
 //    }
 
 //    //Charge the original account
 //    transaction.Amount = transaction.Amount * -1;
-
 //    Create(transaction);
-
-//    //Account account = await Context.Accounts.FirstAsync(a => a.Id == transaction.AccountId);
-//    //Only for normal accouts - depends on the account isIncome property
-//    //if (account.AccountTypeId == 0)
-//    //{
-//    //    transaction.Amount = !account.IsIncome ? transaction.Amount * -1 : transaction.Amount;
-//    //}
 //    await SaveAsync();
 //}
+
+
+
+

@@ -33,3 +33,11 @@ export interface IAccount {
   isIncome: boolean;
   accountTypeId: number;
 }
+export interface IPersonalTransaction {
+  id: number; 
+  Amount: number;
+  date: Date;
+  Comments: string;
+  StakeholderId: number;
+
+}

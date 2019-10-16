@@ -76,7 +76,18 @@ namespace Nadlan.Controllers
 
             return Ok(balance);
         }
+        [HttpGet("GetPersonalBalance")]
+        public async Task<IActionResult> GetPersonalBalance([FromRoute]  int stakeholderId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            decimal balance = await _repositoryWraper.ApartmentReport.GetPersonalBalance(stakeholderId);
+
+            return Ok(balance);
+        }
         [HttpPost("GetDiagnosticReport")]
         public async Task<IActionResult> GetDiagnosticReport([FromBody] DiagnosticRequest diagnosticRequest)
         {
