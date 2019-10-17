@@ -2,9 +2,8 @@ import { Component, OnInit, ViewChild, NgZone, Inject, Output, EventEmitter } fr
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
-import { IStakeholder, IPersonalTransaction } from '../models';
-import { PersonalTransComponent } from './personal-trans.component';
-import { PersonalTransService } from '../services/personal-trans.service';
+import { IStakeholder, IPersonalTransaction } from '../../models';
+import { PersonalTransService } from '../../services/personal-trans.service';
 import { MAT_DIALOG_DATA } from '@angular/material';
 
 

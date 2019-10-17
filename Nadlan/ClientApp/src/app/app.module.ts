@@ -33,8 +33,8 @@ import { ExpensesComponent } from './expenses/expenses.component';
 import { TransactionsTableComponent } from './transactions/transactions-table.component';
 import { InvestorReportComponent } from './reports/investor-reports.component';
 import { AddExpenseComponent } from './expenses/expenses-form.component';
-import { PersonalTransComponent } from './personal-trans/personal-trans.component';
-import { PersonalTransFormComponent } from './personal-trans/personal-trans-form.component';
+import { PersonalTransComponent } from './investors/personal-trans/personal-trans.component';
+import { PersonalTransFormComponent } from './investors/personal-trans-form/personal-trans-form.component';
 @NgModule({
   declarations: [
     AppComponent,

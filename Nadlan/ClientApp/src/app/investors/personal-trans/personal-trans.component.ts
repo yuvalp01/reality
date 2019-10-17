@@ -1,11 +1,9 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { ReportService } from '../services/reports.service';
-import { IPersonalTransaction } from '../models';
-import { PersonalTransService } from '../services/personal-trans.service';
+import { ReportService } from '../../services/reports.service';
+import { IPersonalTransaction } from '../../models';
+import { PersonalTransService } from '../../services/personal-trans.service';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
-import { debounce } from 'rxjs/operators';
-import { element } from 'protractor';
-import { PersonalTransFormComponent } from './personal-trans-form.component';
+import { PersonalTransFormComponent } from '.././personal-trans-form/personal-trans-form.component';
 
 @Component({
   selector: 'app-personal-trans',
