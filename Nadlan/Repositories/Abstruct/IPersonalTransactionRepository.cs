@@ -13,7 +13,8 @@ namespace Nadlan.Repositories
         Task<PersonalTransaction> GetByIdAsync(int id);
         Task<List<PersonalTransaction>> GetByStakeholderAsync(int stakeholderId);
         Task CreateTransactionAsync(PersonalTransaction transaction);
-        Task UpdateTransactionAsync(PersonalTransaction dbTransaction, PersonalTransaction transaction);
+        //Task UpdateTransactionAsync(PersonalTransaction dbTransaction, PersonalTransaction transaction);
+        Task UpdateTransactionAsync(PersonalTransaction transaction);
         Task DeleteTransactionAsync(PersonalTransaction transaction);
     }
 }

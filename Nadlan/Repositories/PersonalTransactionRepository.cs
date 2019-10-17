@@ -29,18 +29,31 @@ namespace Nadlan.Repositories
                 .Include(a=>a.Stakeholder)
                 .ToListAsync();
         }
+        public async Task<List<Stakeholder>> GetStakeholdersAsync()
+        {
+            return await Context.Stakeholders.ToListAsync();
+                //.Where(a => a.StakeholderId == stakeholderId)
+                //.OrderByDescending(a => a.Date)
+                //.Include(a => a.Stakeholder)
+                //.ToListAsync();
+        }
+
 
         public async Task CreateTransactionAsync(PersonalTransaction transaction)
         {
             Create(transaction);
             await SaveAsync();
         }
-
-        public async Task UpdateTransactionAsync(PersonalTransaction dbTransaction, PersonalTransaction transaction)
+        public async Task UpdateTransactionAsync(PersonalTransaction transaction)
         {
             Update(transaction);
             await SaveAsync();
         }
+        //public async Task UpdateTransactionAsync(PersonalTransaction dbTransaction, PersonalTransaction transaction)
+        //{
+        //    Update(transaction);
+        //    await SaveAsync();
+        //}
         public async Task DeleteTransactionAsync(PersonalTransaction transaction)
         {
             Delete(transaction);

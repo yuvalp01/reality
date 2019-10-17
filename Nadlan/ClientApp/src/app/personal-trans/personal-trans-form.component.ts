@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, NgZone, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, NgZone, Inject, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
@@ -6,7 +6,8 @@ import { IStakeholder, IPersonalTransaction } from '../models';
 import { PersonalTransComponent } from './personal-trans.component';
 import { PersonalTransService } from '../services/personal-trans.service';
 import { MAT_DIALOG_DATA } from '@angular/material';
-import { element } from 'protractor';
+
+
 
 @Component({
   selector: 'app-personal-trans-form',
@@ -24,6 +25,8 @@ export class PersonalTransFormComponent implements OnInit {
   title: string;
   personalTransForm: FormGroup;
   stakeholders: IStakeholder[];
+  personalTrans: IPersonalTransaction;
+  @Output() refreshEmitter = new EventEmitter();
 
   ngOnInit() {
     this.loadData();
@@ -36,11 +39,45 @@ export class PersonalTransFormComponent implements OnInit {
   }
 
   saveTransaction() {
-    console.log(this.data.transactionId);
+
+    if (this.personalTransForm.valid) {
+      if (this.personalTransForm.dirty) {
+        const t: IPersonalTransaction = { ...this.personalTrans, ...this.personalTransForm.value }
+        t.date = this.fixUtcDate(t.date);
+
+        if (t.id == 0) {
+          this.personalTransService.addPersonalTrans(t)
+            .subscribe({
+              next: result => this.onSaveComplete(result),
+              error: err => console.error(err)
+            });
+        }
+        else {
+          this.personalTransService.editPersonalTrans(t)
+            .subscribe({
+              next: result => this.onSaveComplete(result),
+              error: err => console.error(err)
+            })
+        }
+      }
+      else {
+        //no change
+        return;
+      }
+    }
+    else {
+      //Not valid
+      return;
+    }
   }
 
 
-
+  onSaveComplete(result: IPersonalTransaction) {
+    if (result) {
+      this.personalTrans.id = result.id;
+    }
+    this.refreshEmitter.emit();
+  }
 
 
 
@@ -55,9 +92,42 @@ export class PersonalTransFormComponent implements OnInit {
     }
     else {
       this.title = "Edit";
+      //this.loadTrans(this.data.transactionId);
+      this.personalTransService.getPesonalTransById(this.data.transactionId)
+        .subscribe({
+          next: result => this.loadTrans(result),
+          error: err => console.error(err)
+        });
     }
-
   }
+
+  loadTrans(result: IPersonalTransaction) {
+    this.personalTrans = result;
+    this.personalTransForm.patchValue(this.personalTrans);
+  }
+
+
+
+
+  //initializeNewTransaction(): IPersonalTransaction {
+
+  //  return {
+  //    id: 0,
+  //    Amount: null,
+  //    Comments: '',
+  //    date: null,
+  //    StakeholderId: null
+  //  }
+
+  //}
+
+  public fixUtcDate(dateIn) {
+    ///fix UTC issue:
+    let date = new Date(dateIn);
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + 12);
+    ///
+  }
+
 
 
   @ViewChild('autosize', { static: false }) autosize: CdkTextareaAutosize;

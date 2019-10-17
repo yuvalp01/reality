@@ -14,13 +14,15 @@ export class PersonalTransService {
   getPesonalTrans(): Observable<IPersonalTransaction[]> {
     return this.httpClient.get<IPersonalTransaction[]>(this.baseUrl + 'api/personalTransactions');
   }
-
+  getPesonalTransById(transId): Observable<IPersonalTransaction> {
+    return this.httpClient.get<IPersonalTransaction>(`${this.baseUrl}api/personalTransactions/${transId}`);
+  }
   getStakeholders(): Observable<IStakeholder[]> {
     return this.httpClient.get<IStakeholder[]>(this.baseUrl + 'api/personalTransactions/getStakeholders');
   }
 
   getPesonalTransByStakeholder(stakeholderId: number): Observable<IPersonalTransaction[]> {
-    return this.httpClient.get<IPersonalTransaction[]>(`${this.baseUrl}api/personalTransactions/GetPersonalTransactionByStakeholderId/${stakeholderId}`);
+    return this.httpClient.get<IPersonalTransaction[]>(`${this.baseUrl}api/personalTransactions/GetByStakeholderId/${stakeholderId}`);
   }
 
   addPersonalTrans(transaction: IPersonalTransaction): Observable<IPersonalTransaction> {
@@ -29,7 +31,7 @@ export class PersonalTransService {
   }
   editPersonalTrans(transaction: IPersonalTransaction): Observable<IPersonalTransaction> {
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return this.httpClient.post<IPersonalTransaction>(this.baseUrl + 'api/personalTransactions', transaction, options);
+    return this.httpClient.put<IPersonalTransaction>(this.baseUrl + 'api/personalTransactions', transaction, options);
   }
   detelePersonalTrans(transactionId: number): Observable<{}> {
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };

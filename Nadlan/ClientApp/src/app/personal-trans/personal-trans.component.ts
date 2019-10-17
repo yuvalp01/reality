@@ -33,7 +33,7 @@ export class PersonalTransComponent implements OnInit {
 
   refreshData() {
     //refresh tables
-    this.personalTransService.getPesonalTransByStakeholder(1).subscribe(result => {
+    this.personalTransService.getPesonalTransByStakeholder(2).subscribe(result => {
       let personalTrans = result as IPersonalTransaction[];
       this.dataSourceTrans.data = personalTrans;
       this.dataSourceTrans.sort = this.sort;
@@ -54,38 +54,29 @@ export class PersonalTransComponent implements OnInit {
 
 
     let dialogRef = this.dialog.open(PersonalTransFormComponent, {
-      height: '400px',
+      height: '500px',
       width: '500px',
       data: { transactionId: _transactionId}
       //data: { type: 'hours', visibleAccounts: [4, 6, 11] },
     });
-    //dialogRef.componentInstance.refreshEmitter.subscribe(() => this.refreshData());
+    dialogRef.componentInstance.refreshEmitter.subscribe(() => this.refreshData());
     dialogRef.afterClosed().subscribe(result => {
       this.refreshData();
     });
 
-
-
-
-    //if (transactionId==0) {
-    //  //add mode
-    //}
-    //else {
-    //  //edit mode
-    //}
   }
   delete(transactionId) {
     if (confirm("Are you sure you want to delete?")) {
       this.personalTransService.detelePersonalTrans(transactionId)
         .subscribe({
-          next: () => this.onSaveComplete(),
+          next: () => this.onDeleteComplete(),
           error: err => console.error(err)
         });
     }
   }
 
-  onSaveComplete() {
-
+  onDeleteComplete() {
+    this.refreshData();
   }
 
 
@@ -96,4 +87,6 @@ export class PersonalTransComponent implements OnInit {
     }
     return false;
   }
+
+
 }

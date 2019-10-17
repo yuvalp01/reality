@@ -11,6 +11,7 @@ namespace Nadlan.Repositories
         AccountRepository Account { get; }
         ReportRepository ApartmentReport { get; }
         InvestorReportRepository InvestorReport{ get; }
+        PersonalTransactionRepository PersonalTransaction { get; }
         void Save();
 
     }
