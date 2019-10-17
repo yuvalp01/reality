@@ -41,3 +41,10 @@ export interface IPersonalTransaction {
   StakeholderId: number;
 
 }
+
+export interface IStakeholder {
+  id: number;
+  name: string;
+  type: number;
+}
+

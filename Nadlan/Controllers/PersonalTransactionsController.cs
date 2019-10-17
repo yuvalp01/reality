@@ -28,11 +28,30 @@ namespace Nadlan.Controllers
             return await _context.PersonalTransactions.ToListAsync();
         }
 
+        [HttpGet("GetStakeholders")]
+        public async Task<ActionResult<IEnumerable<Stakeholder>>> GetStakeholders()
+        {
+            return await _context.Stakeholders.ToListAsync();
+        }
+
         // GET: api/PersonalTransactions/5
         [HttpGet("{id}")]
         public async Task<ActionResult<PersonalTransaction>> GetPersonalTransaction(int id)
         {
             var personalTransaction = await _context.PersonalTransactions.FindAsync(id);
+
+            if (personalTransaction == null)
+            {
+                return NotFound();
+            }
+
+            return personalTransaction;
+        }
+        // GET: api/PersonalTransactions/5
+        [HttpGet("GetPersonalTransactionByStakeholderId/{stakeholderId}")]
+        public async Task<ActionResult<IEnumerable<PersonalTransaction>>> GetPersonalTransactionByStakeholderId(int stakeholderId)
+        {
+            var personalTransaction = await _context.PersonalTransactions.Where(a=>a.StakeholderId== stakeholderId).ToListAsync();
 
             if (personalTransaction == null)
             {

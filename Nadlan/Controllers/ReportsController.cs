@@ -76,7 +76,7 @@ namespace Nadlan.Controllers
 
             return Ok(balance);
         }
-        [HttpGet("GetPersonalBalance")]
+        [HttpGet("GetPersonalBalance/{stakeholderId}")]
         public async Task<IActionResult> GetPersonalBalance([FromRoute]  int stakeholderId)
         {
             if (!ModelState.IsValid)

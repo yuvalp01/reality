@@ -1,13 +1,61 @@
-
-<p>
+<p *ngIf="editable">
   Here you can log in any personal transaction.
-  <button mat-mini-fab (click)="openAddExpensesDialog()" title="Log personal transaction">
+  <button mat-mini-fab (click)="openForm(0)" title="Add personal transaction">
     <mat-icon>attach_money</mat-icon>
   </button>
 
   <br />
-  Your personal account balance is <b>€ {{balance}}</b>
 
- 
 </p>
+  <!--Your personal account balance is <b>€ {{balance}}</b>-->
+<p *ngIf="!dataSourceTrans.data"><em>Loading...</em></p>
+<div style="width:100%; float:left; margin-left:3px" id="tbl">
+  <table mat-table [dataSource]="dataSourceTrans" matSort class="mat-elevation-z8">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+      <td mat-cell *matCellDef="let transaction">{{transaction.id}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+      <td mat-cell *matCellDef="let transaction">{{transaction.date | date:'dd-MM-yyyy'}}</td>
+    </ng-container>
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+      <td mat-cell
+          [ngClass]="{
+          positive: isPositive(transaction.amount),
+          negative: !isPositive(transaction.amount)
+        }"
+          *matCellDef="let transaction">
+        {{transaction.amount}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="stakeholderId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Stakeholder</th>
+      <td mat-cell *matCellDef="let transaction">{{transaction.stakeholderId}}</td>
+    </ng-container>
+    <ng-container matColumnDef="comments">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>
+      <td mat-cell *matCellDef="let transaction">
+        {{transaction.comments}}
+      </td>
+
+    </ng-container>
+
+
+    <ng-container  matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let transaction">
+        <button (click)="openForm(transaction.id)" mat-button color="primary">Edit</button>
+        <button (click)="delete(transaction.id)" mat-button color="warn">Delete</button>
+      </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+  </table>
+</div>
 

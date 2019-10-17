@@ -110,6 +110,6 @@ import { PersonalTransFormComponent } from './personal-trans/personal-trans-form
   ],
   providers: [ApartmentService, AccountService, TransactionService, ReportService, RenovationService, ExcelService,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent],
-  entryComponents: [TransactionsDialogComponent, AddTransactionComponent, AddExpenseComponent]
+  entryComponents: [TransactionsDialogComponent, AddTransactionComponent, AddExpenseComponent, PersonalTransFormComponent]
 })
 export class AppModule { }

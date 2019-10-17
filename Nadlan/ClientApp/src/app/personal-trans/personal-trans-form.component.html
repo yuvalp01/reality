@@ -1,1 +1,41 @@
-<p>personal-trans-form works!</p>
+<div class="container">
+
+  <form [formGroup]="personalTransForm" (ngSubmit)="saveTransaction()">
+    <h3><mat-icon>attach_money</mat-icon>{{title}} personal transaction</h3>
+    <fieldset>
+      <mat-form-field style="width: 100%" appearance="outline">
+        <mat-label>{{labelDate}}</mat-label>
+        <input formControlName="date" matInput [matDatepicker]="picker" placeholder="{{labelDate}}">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </fieldset>
+
+
+    <fieldset>
+      <mat-form-field appearance="outline" style="width: 100%">
+        <mat-label>Comments</mat-label>
+        <textarea formControlName="comments"
+                  matInput
+                  cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="1"
+                  cdkAutosizeMaxRows="5"></textarea>
+      </mat-form-field>
+    </fieldset>
+
+    <fieldset>
+    <mat-form-field style="width: 50%" appearance="outline">
+      <mat-label>Stakeholder</mat-label>
+      <mat-select formControlName="stakeholderId">
+        <mat-option *ngFor="let stakeholder of stakeholders" [value]="stakeholder.id">
+          {{stakeholder.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </fieldset>
+    <fieldset>
+      <button mat-flat-button color="primary" type="submit" name="submit">Save</button>
+      </fieldset>
+  </form>
+</div>
