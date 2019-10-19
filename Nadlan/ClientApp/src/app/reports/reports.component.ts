@@ -14,11 +14,9 @@ export class ReportsComponent implements OnInit {
   selectedApartmentId: number;
   ngOnInit(): void {
     this.selectedApartmentId = this.route.snapshot.params['apartmentId'];
-    //this.selectedApartmentId = 1;
 
   }
   showReport(apartmentId: number) {
-    //this.selectedApartmentId = apartmentId;
     this.selectedApartmentId = apartmentId;
     //this.route.snapshot.params['apartmentId'] = this.selectedApartmentId;
 

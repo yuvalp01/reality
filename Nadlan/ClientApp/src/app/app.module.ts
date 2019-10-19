@@ -35,6 +35,7 @@ import { InvestorReportComponent } from './reports/investor-reports.component';
 import { AddExpenseComponent } from './expenses/expenses-form.component';
 import { PersonalTransComponent } from './investors/personal-trans/personal-trans.component';
 import { PersonalTransFormComponent } from './investors/personal-trans-form/personal-trans-form.component';
+import { PersonalAdminComponent } from './investors/personal-admin/personal-admin.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -58,7 +59,8 @@ import { PersonalTransFormComponent } from './investors/personal-trans-form/pers
     InvestorReportComponent,
     AddExpenseComponent,
     PersonalTransComponent,
-    PersonalTransFormComponent
+    PersonalTransFormComponent,
+    PersonalAdminComponent
     
   ],
   imports: [
@@ -88,6 +90,8 @@ import { PersonalTransFormComponent } from './investors/personal-trans-form/pers
       { path: 'renovation-list', component: RenovationListComponent },
       { path: 'expenses', component: ExpensesComponent },
       { path: 'personal-trans', component: PersonalTransComponent },
+      { path: 'personal-admin', component: PersonalAdminComponent },
+      { path: 'personal-admin/:stakeholderId', component: PersonalAdminComponent },
 
 
       

@@ -1,0 +1,27 @@
+
+
+<mat-drawer-container>
+  <mat-drawer mode="side" opened>
+
+    <mat-nav-list style="width:150px">
+      <!--<a mat-list-item [ngClass]="selectedApartmentId==1?'selected':''" (click)="showReport(1)"> Ohad</a>
+      <a mat-list-item [ngClass]="selectedApartmentId==2?'selected':''" (click)="showReport(2)"> Avi</a>-->
+      <a mat-list-item routerLink="/personal-admin/1"> Ohad</a>
+      <a mat-list-item routerLink="/personal-admin/2"> test</a>
+      <!--<a mat-list-item [ngClass]="selectedApartmentId==3?'selected':''" (click)="showReport(3)"> Ippokratous 121</a>
+      <a mat-list-item [ngClass]="selectedApartmentId==4?'selected':''" (click)="showReport(4)"> Oreon 5 </a>
+      <a mat-list-item [ngClass]="selectedApartmentId==5?'selected':''" (click)="showReport(5)"> Bouboulinas 35</a>
+      <a mat-list-item [ngClass]="selectedApartmentId==6?'selected':''" (click)="showReport(6)"> Leoforos Ionias 26 </a>
+      <a mat-list-item [ngClass]="selectedApartmentId==7?'selected':''" (click)="showReport(7)"> Chansen 36 </a>
+      <a mat-list-item [ngClass]="selectedApartmentId==-1?'selected':''" (click)="showReport(-1)"> test </a>-->
+
+    </mat-nav-list>
+
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <!--Personal account balance is <b>€ {{balance}}</b>-->
+    <app-personal-trans [stakeholderId]="stakeholderId"></app-personal-trans>
+  </mat-drawer-content>
+</mat-drawer-container>
+

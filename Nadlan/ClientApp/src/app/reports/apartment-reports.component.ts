@@ -39,13 +39,6 @@ export class ApartmentReportsComponent implements OnInit {
   ngOnInit(): void {
     this.loadApartmentReports(this.apartmentId);
     //this.apartmentId = this.route.snapshot.params['apartmentId'];
-    //if (this.apartmentId) {
-    //  this.reportsService.getPurchaseReport(this.apartmentId).subscribe(result => this.purchaseReport = result, error => console.error(error));
-    //  this.reportsService.getSummaryReport(this.apartmentId).subscribe(result => this.summaryReport = result, error => console.error(error));
-    //  this.reportsService.getIncomeReport(this.apartmentId, this.selectedYear).subscribe(result => this.incomeReport = result, error => console.error(error));
-    //  this.reportsService.getApartmentInfo(this.apartmentId).subscribe(result => this.apartmentInfo = result, error => console.error(error));
-    //}
-
 
     //this.route.events.pipe(
     //  filter((event: RouterEvent) => event instanceof NavigationEnd)
@@ -61,13 +54,7 @@ export class ApartmentReportsComponent implements OnInit {
     //console.log('changes :' + changes.apartmentId.previousValue);
     //console.log('changes :' + changes.apartmentId.currentValue);
     this.apartmentId = changes.apartmentId.currentValue;
-
     this.loadApartmentReports(this.apartmentId);
-
-    //this.reportsService.getPurchaseReport(this.apartmentId).subscribe(result => this.purchaseReport = result, error => console.error(error));
-    //this.reportsService.getSummaryReport(this.apartmentId).subscribe(result => this.summaryReport = result, error => console.error(error));
-    //this.reportsService.getIncomeReport(this.apartmentId, this.selectedYear).subscribe(result => this.incomeReport = result, error => console.error(error));
-    //this.reportsService.getApartmentInfo(this.apartmentId).subscribe(result => this.apartmentInfo = result, error => console.error(error));
 
   }
 
