@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, NgZone, Inject, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, NgZone, Inject, Output, EventEmitter, ɵChangeDetectorStatus } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
@@ -26,6 +26,7 @@ export class PersonalTransFormComponent implements OnInit {
   stakeholders: IStakeholder[];
   personalTrans: IPersonalTransaction;
   @Output() refreshEmitter = new EventEmitter();
+  @Output() chageStakeholderEmitter = new EventEmitter();
 
   ngOnInit() {
     this.loadData();
@@ -34,6 +35,10 @@ export class PersonalTransFormComponent implements OnInit {
       amount: [null, Validators.required],
       date: [null, Validators.required],
       comments: ['', Validators.required],
+    });
+    this.personalTransForm.get('stakeholderId').valueChanges.subscribe(val => {
+      let currentStakeholder = this.personalTransForm.controls['stakeholderId'].value;
+      this.chageStakeholderEmitter.emit(currentStakeholder)
     });
   }
 
@@ -103,6 +108,9 @@ export class PersonalTransFormComponent implements OnInit {
   loadTrans(result: IPersonalTransaction) {
     this.personalTrans = result;
     this.personalTransForm.patchValue(this.personalTrans);
+    this.personalTransForm.get('stakeholderId').disable();;
+    //let stakeholderIdControl =
+    //stakeholderIdControl.disable();
   }
 
 

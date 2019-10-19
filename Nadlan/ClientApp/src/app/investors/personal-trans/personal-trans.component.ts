@@ -4,6 +4,7 @@ import { IPersonalTransaction } from '../../models';
 import { PersonalTransService } from '../../services/personal-trans.service';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { PersonalTransFormComponent } from '.././personal-trans-form/personal-trans-form.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-personal-trans',
@@ -16,6 +17,7 @@ export class PersonalTransComponent implements OnInit, OnChanges  {
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   constructor(
+    private route: Router,
     private reportService: ReportService,
     private personalTransService: PersonalTransService,
     private dialog: MatDialog) { }
@@ -62,12 +64,15 @@ export class PersonalTransComponent implements OnInit, OnChanges  {
       height: '500px',
       width: '500px',
       data: { transactionId: _transactionId }
-      //data: { type: 'hours', visibleAccounts: [4, 6, 11] },
     });
     dialogRef.componentInstance.refreshEmitter.subscribe(() => this.refreshData(this.stakeholderId));
-    //dialogRef.afterClosed().subscribe(result => {
-    //  this.refreshData();
-    //});
+    dialogRef.componentInstance.chageStakeholderEmitter.subscribe(id =>
+    {
+      this.route.navigate(['personal-admin', id]);
+      //this.stakeholderId = id;
+      //this.refreshData(id)
+    });
+
 
   }
   delete(transactionId) {
