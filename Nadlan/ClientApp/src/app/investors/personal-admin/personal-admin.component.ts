@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PersonalTransService } from 'src/app/services/personal-trans.service';
 import { ReportService } from 'src/app/services/reports.service';
 import { ActivatedRoute } from '@angular/router';
+import { IStakeholder } from 'src/app/models';
 
 @Component({
   selector: 'app-personal-admin',
@@ -11,14 +12,23 @@ import { ActivatedRoute } from '@angular/router';
 export class PersonalAdminComponent implements OnInit {
 
   constructor(
-    private reportService: ReportService,
+    private repsonalTransService: PersonalTransService,
     private route: ActivatedRoute) { }
   balance: number = 0;
   stakeholderId: number;
+  stakeholders: IStakeholder[];
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       this.stakeholderId = +params.get("stakeholderId");
       //this.reportService.getPersonalBalance(this.stakeholderId).subscribe(result => this.balance = result, error => console.error(error));
     });
+    this.loadAllStakeholders();
+  }
+
+  loadAllStakeholders() {
+    this.repsonalTransService.getStakeholders().subscribe({
+      next: (result) => this.stakeholders = result,
+      error: (error)=> console.error(error)
+    })
   }
 }
