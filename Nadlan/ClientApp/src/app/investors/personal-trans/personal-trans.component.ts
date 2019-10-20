@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { ReportService } from '../../services/reports.service';
 import { IPersonalTransaction } from '../../models';
-import { PersonalTransService } from '../../services/personal-trans.service';
+import { PersonalTransService } from '../personal-trans.service';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { PersonalTransFormComponent } from '.././personal-trans-form/personal-trans-form.component';
 import { Router } from '@angular/router';
@@ -18,7 +18,7 @@ export class PersonalTransComponent implements OnInit, OnChanges  {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   constructor(
     private route: Router,
-    private reportService: ReportService,
+    //private reportService: ReportService,
     private personalTransService: PersonalTransService,
     private dialog: MatDialog) { }
   displayedColumns: string[] = ['date', 'stakeholderId', 'amount', 'comments'];
@@ -49,7 +49,7 @@ export class PersonalTransComponent implements OnInit, OnChanges  {
 
     }, error => console.error(error));
     //Refresh balance
-    this.reportService.getPersonalBalance(stakeholderId).subscribe(result => this.balance = result, error => console.error(error));
+    this.personalTransService.getPersonalBalance(stakeholderId).subscribe(result => this.balance = result, error => console.error(error));
   }
 
 

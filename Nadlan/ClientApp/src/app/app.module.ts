@@ -31,11 +31,8 @@ import { ExcelService } from './services/excel.service';
 import { RenovationListComponent } from './renovation/renovation-list.component';
 import { ExpensesComponent } from './expenses/expenses.component';
 import { TransactionsTableComponent } from './transactions/transactions-table.component';
-import { InvestorReportComponent } from './reports/investor-reports.component';
 import { AddExpenseComponent } from './expenses/expenses-form.component';
-import { PersonalTransComponent } from './investors/personal-trans/personal-trans.component';
-import { PersonalTransFormComponent } from './investors/personal-trans-form/personal-trans-form.component';
-import { PersonalAdminComponent } from './investors/personal-admin/personal-admin.component';
+import { InvestrorsModule } from './investors/investrors.module';
 @NgModule({
   declarations: [
     AppComponent,
@@ -56,11 +53,7 @@ import { PersonalAdminComponent } from './investors/personal-admin/personal-admi
     RenovationListComponent,
     ExpensesComponent,
     TransactionsTableComponent,
-    InvestorReportComponent,
     AddExpenseComponent,
-    PersonalTransComponent,
-    PersonalTransFormComponent,
-    PersonalAdminComponent
     
   ],
   imports: [
@@ -73,47 +66,23 @@ import { PersonalAdminComponent } from './investors/personal-admin/personal-admi
     RouterModule.forRoot([
       { path: '', component: TransactionListComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
-      //{ path: 'fetch-apartments', component: ApartmentListComponent },
       { path: 'add-apartment', component: AddApartmentForm },
       { path: 'fetch-accounts', component: AccountListComponent },
       { path: 'fetch-transactions', component: TransactionListComponent },
-      //{ path: 'add-transaction', component: AddTransactionComponent },
       { path: 'add-account', component: AddAccoutComponent },
-      //{ path: 'reports', component: InvestorReportComponent },
       { path: 'reports/:apartmentId', component: ReportsComponent },
-      //{ path: 'reports/:apartmentId', component: ReportsComponent },
-      { path: 'investor-reports', component: InvestorReportComponent },
 
       
       //{ path: 'reports/:apartmentId', component: ApartmentReportsComponent },
       { path: 'renovation', component: RenovationComponent },
       { path: 'renovation-list', component: RenovationListComponent },
       { path: 'expenses', component: ExpensesComponent },
-      { path: 'personal-trans', component: PersonalTransComponent },
-      { path: 'personal-admin', component: PersonalAdminComponent },
-      { path: 'personal-admin/:stakeholderId', component: PersonalAdminComponent },
 
-
-      
-      
-      //{ path: 'reports/:apartmentId', component: TransactionsDialogComponent },
-
-      //{
-      //  path: 'reports', component: ReportsComponent, children[
-      //    {
-      //      path: '',
-      //      component:
-      //    }
-      //              {
-      //      path: '',
-      //      component:
-      //    }
-      //  ]
-      //}
-    ])
+    ]),
+    InvestrorsModule
   ],
   providers: [ApartmentService, AccountService, TransactionService, ReportService, RenovationService, ExcelService,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent],
-  entryComponents: [TransactionsDialogComponent, AddTransactionComponent, AddExpenseComponent, PersonalTransFormComponent]
+  entryComponents: [TransactionsDialogComponent, AddTransactionComponent, AddExpenseComponent]
 })
 export class AppModule { }

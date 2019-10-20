@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IPersonalTransaction, IStakeholder } from '../models';
+import { IPersonalTransaction, IStakeholder, IInvestorReportOverview } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -36,5 +36,15 @@ export class PersonalTransService {
   detelePersonalTrans(transactionId: number): Observable<{}> {
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.httpClient.delete<IPersonalTransaction>(this.baseUrl + `api/personalTransactions/${transactionId}`, options);
+  }
+  getPersonalBalance(stakeholderId): Observable<number> {
+
+    let url = `${this.baseUrl}api/reports/GetPersonalBalance/${stakeholderId}`;
+    return this.httpClient.get<number>(url);
+  }
+  getInvestorReport(investorAcountId: number): Observable<IInvestorReportOverview> {
+
+    let url = this.baseUrl + `api/reports/GetInvestorReport/${investorAcountId}`;
+    return this.httpClient.get<IInvestorReportOverview>(url);
   }
 }

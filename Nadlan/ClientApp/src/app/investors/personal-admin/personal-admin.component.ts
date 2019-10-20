@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PersonalTransService } from 'src/app/services/personal-trans.service';
-import { ReportService } from 'src/app/services/reports.service';
+import { PersonalTransService } from '../personal-trans.service';
 import { ActivatedRoute } from '@angular/router';
 import { IStakeholder } from 'src/app/models';
 

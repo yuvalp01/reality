@@ -43,7 +43,7 @@ namespace Nadlan.Repositories
                 portfolioLineReport.Ownership = portfolioLine.Percentage;
                 var totalInvestment = await Context.Transactions.Where(a => a.ApartmentId == portfolioLine.Apartment.Id && a.AccountId == 13).Select(a => a.Amount).FirstAsync();
                 portfolioLineReport.Investment = totalInvestment * portfolioLine.Percentage;
-                var yeardDecimal = apartment.PurchaseDate.GetApartmentYearsInDecimal();// GetApartmentYearsInDecimal(apartment.PurchaseDate);
+                var yeardDecimal = apartment.PurchaseDate.GetApartmentYearsInDecimal();
                 portfolioLineReport.MinimalProfitUpToDate = portfolioLineReport.Investment * 0.03m * yeardDecimal;
                 var distributed = Context.Transactions.Include(a => a.Account).Where(predAll).Where(a => a.ApartmentId == portfolioLine.ApartmentId && a.AccountId == 100);
                 portfolioLineReport.Distributed = await distributed.SumAsync(a => a.Amount)*portfolioLine.Percentage * -1;
@@ -85,14 +85,6 @@ namespace Nadlan.Repositories
 
         }
 
-
-        //private decimal GetApartmentYearsInDecimal(DateTime purchaseDate)
-        //{
-        //    DateTime zeroTime = new DateTime(1, 1, 1);
-        //    TimeSpan span = DateTime.Today - purchaseDate;
-        //    decimal yeardDecimal = ((zeroTime + span).Year - 1) + ((zeroTime + span).Month - 1) / 12m;
-        //    return yeardDecimal;
-        //}
 
 
     }

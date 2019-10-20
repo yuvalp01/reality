@@ -37,20 +37,20 @@ export class ReportService {
     return this.httpClient.get<number>(url);
   }
 
-  getPersonalBalance(stakeholderId): Observable<number> {
+  //getPersonalBalance(stakeholderId): Observable<number> {
 
-    let url = `${this.baseUrl}api/reports/GetPersonalBalance/${stakeholderId}`;
-    return this.httpClient.get<number>(url);
-  }
+  //  let url = `${this.baseUrl}api/reports/GetPersonalBalance/${stakeholderId}`;
+  //  return this.httpClient.get<number>(url);
+  //}
 
   getApartmentInfo(apartmentId: number): Observable<IApartment> {
 
     let url = this.baseUrl + `api/reports/GetApartmentInfo/${apartmentId}`;
     return this.httpClient.get<IApartment>(url);
   }
-  getInvestorReport(investorAcountId: number): Observable<IInvestorReportOverview> {
+  //getInvestorReport(investorAcountId: number): Observable<IInvestorReportOverview> {
 
-    let url = this.baseUrl + `api/reports/GetInvestorReport/${investorAcountId}`;
-    return this.httpClient.get<IInvestorReportOverview>(url);
-  }
+  //  let url = this.baseUrl + `api/reports/GetInvestorReport/${investorAcountId}`;
+  //  return this.httpClient.get<IInvestorReportOverview>(url);
+  //}
 }
