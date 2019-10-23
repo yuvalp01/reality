@@ -1,7 +1,9 @@
 import { Component, OnInit, SimpleChanges } from "@angular/core";
-import { IInvestorReportOverview, IStakeholder } from "../../models";
+import { IInvestorReportOverview, IStakeholder, IPersonalTransaction } from "../../models";
 import { PersonalTransService } from "../personal-trans.service";
 import { ActivatedRoute } from "@angular/router";
+import { MatTableDataSource, MatDialog } from "@angular/material";
+import { PersonalTransDialogComponent } from "../personal-trans-dialog/personal-trans-dialog.component";
 
 @Component({
   templateUrl: './investor-reports.component.html',
@@ -11,7 +13,8 @@ export class InvestorReportComponent implements OnInit {
 
   constructor(
     private personalTransService: PersonalTransService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private dialog: MatDialog) { }
   investorReportOverview: IInvestorReportOverview;
   stakeholders: IStakeholder[];
   stakeholderId: number;
@@ -43,6 +46,21 @@ export class InvestorReportComponent implements OnInit {
     })
   }
 
+  dataSource = new MatTableDataSource<IPersonalTransaction>();
+  showTrans(transactionType) {
+    this.personalTransService.getPesonalTransByType(this.stakeholderId, transactionType).subscribe(
+      result => {
+        //this.transactions = result;
+        this.dataSource.data = result as IPersonalTransaction[];
+        const dialogRef = this.dialog.open(PersonalTransDialogComponent, {
+          height: 'auto',
+          width: 'auto',
+          data: { transactions: this.dataSource.data, columns: ['date', 'amount', 'comments', 'apartment'] }
+        });
+      }
+      , error => console.error(error));
+
+  }
 
 
 }

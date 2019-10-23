@@ -18,12 +18,12 @@ namespace Nadlan.Repositories
 
         public override async Task<List<Transaction>> GetAllAsync()
         {
-            return await Context.Transactions.OrderByDescending(a => a.Id).Include(a => a.Account).Include(a => a.Apartment).ToListAsync();
+            return await Context.Transactions.OrderByDescending(a => a.Id).Include(a => a.Account).Include(a => a.Apartment).Where(a => !a.IsDeleted).ToListAsync();
         }
         public async Task<List<TransactionDto>> GetAllExpensesAsync()
         {
             return await Context.Expenses.Join(
-                Context.Transactions,
+                Context.Transactions.Where(a=>!a.IsDeleted),
                 expense => expense.TransactionId,
                 transaction => transaction.Id,
                 (expense, transaction) => new TransactionDto
@@ -47,7 +47,7 @@ namespace Nadlan.Repositories
         public async Task<TransactionDto> GetExpenseByIdAsync(int transactionId)
         {
             return await Context.Expenses.Join(
-                Context.Transactions.Where(a => a.Id == transactionId),
+                Context.Transactions.Where(a => a.Id == transactionId && !a.IsDeleted),
                 expense => expense.TransactionId,
                 transaction => transaction.Id,
                 (expense, transaction) => new TransactionDto

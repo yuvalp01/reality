@@ -20,8 +20,7 @@ namespace Nadlan.Models
     public enum TransactionType
     {
         Commitment = 10,
-        Transaction = 20,
-        Distribution = 30,
-        Moneyback = 40
+        Distribution = 20,
+        Moneyback = 30
     }
 }

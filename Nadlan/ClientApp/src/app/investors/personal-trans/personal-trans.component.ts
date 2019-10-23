@@ -18,7 +18,6 @@ export class PersonalTransComponent implements OnInit, OnChanges  {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   constructor(
     private route: Router,
-    //private reportService: ReportService,
     private personalTransService: PersonalTransService,
     private dialog: MatDialog) { }
   displayedColumns: string[] = ['date', 'stakeholderId', 'amount', 'comments'];

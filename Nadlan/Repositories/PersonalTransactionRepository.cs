@@ -29,6 +29,18 @@ namespace Nadlan.Repositories
                 .Include(a=>a.Stakeholder)
                 .ToListAsync();
         }
+
+        public async Task<List<PersonalTransaction>> GetByStakeholderAsync(int stakeholderId, int transactionTypeId)
+        {
+            return await Context.PersonalTransactions
+                .Where(a => a.StakeholderId == stakeholderId)
+                .Where(a => a.TransactionType ==  (TransactionType)transactionTypeId)
+                .OrderByDescending(a => a.Date)
+                .Include(a => a.Stakeholder)
+                .Include(a => a.Apartment)
+                .ToListAsync();
+        }
+
         public async Task<List<Stakeholder>> GetStakeholdersAsync()
         {
             return await Context.Stakeholders.ToListAsync();

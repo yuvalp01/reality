@@ -25,6 +25,11 @@ export class PersonalTransService {
     return this.httpClient.get<IPersonalTransaction[]>(`${this.baseUrl}api/personalTransactions/GetByStakeholderId/${stakeholderId}`);
   }
 
+  getPesonalTransByType(stakeholderId: number, transactionTypeId): Observable<IPersonalTransaction[]> {
+    return this.httpClient.get<IPersonalTransaction[]>(`${this.baseUrl}api/personalTransactions/GetByType/${stakeholderId}/${transactionTypeId}`);
+  }
+
+
   addPersonalTrans(transaction: IPersonalTransaction): Observable<IPersonalTransaction> {
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.httpClient.post<IPersonalTransaction>(this.baseUrl + 'api/personalTransactions', transaction, options);
@@ -47,4 +52,5 @@ export class PersonalTransService {
     let url = this.baseUrl + `api/reports/GetInvestorReport/${investorAcountId}`;
     return this.httpClient.get<IInvestorReportOverview>(url);
   }
+
 }

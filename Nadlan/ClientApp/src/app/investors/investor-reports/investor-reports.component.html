@@ -23,7 +23,7 @@
           <mat-card-title>Overview</mat-card-title>
           <mat-card-content>
             <mat-list *ngIf="investorReportOverview">
-              <mat-list-item>
+              <mat-list-item (click)="showTrans(10)" style="cursor:pointer;">
                 <mat-icon mat-list-icon>business_center</mat-icon>
                 <span matTooltip="The amount of money committed up-to-date">Total Investment</span>
                 <span [ngClass]="'positive'">{{investorReportOverview.totalInvestment | currency:'EUR' : number:'1.0-0'}}</span>
@@ -41,16 +41,16 @@
                 <span [ngClass]="'positive'">{{investorReportOverview.minimalProfitUpToDate| currency:'EUR' : number:'1.0-0'}}</span>
               </mat-list-item>
 
-              <mat-list-item style="cursor:pointer; color:#2222c7" (click)="showTrans(100, 'Distributed', false)" matTooltip="totalBalace">
+              <mat-list-item style="color:#2222c7" >
                 <mat-icon mat-list-icon>business_center</mat-icon>
-                <span>totalBalace</span>
+                <span>Total Balace</span>
                 <span>{{investorReportOverview.totalBalace| currency:'EUR' : number:'1.0-0'}}</span>
               </mat-list-item>
               <mat-divider></mat-divider>
 
-              <mat-list-item matTooltip="totalDistribution">
+              <mat-list-item (click)="showTrans(20)" style="cursor:pointer;" matTooltip="Total amount distributed from all apartments so far">
                 <mat-icon mat-list-icon>business_center</mat-icon>
-                <span>totalDistribution</span>
+                <span>Total Distribution</span>
                 <span style="font-weight:bold" [ngClass]="'positive'">{{investorReportOverview.totalDistribution| currency:'EUR' : number:'1.0-0'}}</span>
               </mat-list-item>
 
@@ -109,7 +109,7 @@
       </mat-tab>
       <mat-tab label="Transactions">
         <mat-card>
-          <app-personal-trans [stakeholderId]="1" [editable]="false"></app-personal-trans>
+          <app-personal-trans [stakeholderId]="stakeholderId" [editable]="true"></app-personal-trans>
         </mat-card>
       </mat-tab>
     </mat-tab-group>

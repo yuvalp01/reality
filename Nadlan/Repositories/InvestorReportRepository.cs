@@ -57,6 +57,7 @@ namespace Nadlan.Repositories
                     portfolioLineReport.Distributed = await distributed.SumAsync(a => a.Amount) * portfolioLine.Percentage * -1;
 
                     ValidateWithPersonalTransactions(portfolioLineReport, portfolioLine);
+                    portfolioReportLines.Add(portfolioLineReport);
 
 
 
@@ -83,6 +84,7 @@ namespace Nadlan.Repositories
                     var distributed = Context.Transactions.Include(a => a.Account).Where(predAll).Where(a => a.ApartmentId == 20 && a.AccountId == 100);
                     portfolioLeipzigReport.MinimalProfitUpToDate = await netIncome.SumAsync(a => a.Amount) * leipzigPortfolioLine.Percentage;
                     portfolioLeipzigReport.Distributed = await distributed.SumAsync(a => a.Amount) * leipzigPortfolioLine.Percentage * -1;
+                    ValidateWithPersonalTransactions(portfolioLeipzigReport, leipzigPortfolioLine);
                     portfolioReportLines.Add(portfolioLeipzigReport);
                 }
 
@@ -102,7 +104,7 @@ namespace Nadlan.Repositories
             }
             catch (Exception)
             {
-                return new InvestorReportOverview();
+                return new InvestorReportOverview { CashBalance=0, MinimalProfitUpToDate=0, PortfolioLines = new List<PortfolioReport>(), TotalBalace=0, TotalDistribution=0, TotalInvestment=0 };
             }
 
 

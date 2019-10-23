@@ -49,7 +49,7 @@ namespace Nadlan.Controllers
 
             return personalTransaction;
         }
-        // GET: api/PersonalTransactions/5
+
         [HttpGet("GetByStakeholderId/{stakeholderId}")]
         public async Task<ActionResult<IEnumerable<PersonalTransaction>>> GetPersonalTransactionByStakeholderId(int stakeholderId)
         {
@@ -63,6 +63,23 @@ namespace Nadlan.Controllers
 
             return await personalTransactions;
         }
+
+        [HttpGet("GetByType/{stakeholderId}/{transactionTypeId}")]
+        public async Task<ActionResult<IEnumerable<PersonalTransaction>>> GetPersonalTransactionByType(int stakeholderId, int transactionTypeId)
+        {
+            //var personalTransaction = await _context.PersonalTransactions.Where(a => a.StakeholderId == stakeholderId).ToListAsync();
+            var personalTransactions = _repositoryWrapper.PersonalTransaction.GetByStakeholderAsync(stakeholderId, transactionTypeId);
+
+            if (personalTransactions == null)
+            {
+                return NotFound();
+            }
+
+            return await personalTransactions;
+        }
+
+        
+
 
         // PUT: api/PersonalTransactions/5
         [HttpPut()]

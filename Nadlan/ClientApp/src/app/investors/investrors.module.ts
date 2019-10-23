@@ -7,6 +7,7 @@ import { PersonalTransFormComponent } from './personal-trans-form/personal-trans
 import { MyOwnCustomMaterialModule } from '.././shared/cusotom-material';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InvestorReportComponent } from './investor-reports/investor-reports.component';
+import { PersonalTransDialogComponent } from './personal-trans-dialog/personal-trans-dialog.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { InvestorReportComponent } from './investor-reports/investor-reports.com
     PersonalAdminComponent,
     PersonalTransComponent,
     PersonalTransFormComponent,
-    InvestorReportComponent],
+    InvestorReportComponent,
+    PersonalTransDialogComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -26,6 +28,6 @@ import { InvestorReportComponent } from './investor-reports/investor-reports.com
 
     ])
   ],
-  entryComponents: [PersonalTransFormComponent]
+  entryComponents: [PersonalTransFormComponent, PersonalTransDialogComponent]
 })
 export class InvestrorsModule { }

@@ -38,9 +38,13 @@
     <None Remove="ClientApp\src\app\shared\minusSignToParens.ts" />
     <None Remove="ClientApp\src\app\transactions\fetch-transactions - Copy.component.html" />
     <None Remove="ClientApp\src\app\transactions\fetch-transactions - Copy.component.ts" />
+    <None Remove="ClientApp\src\app\transactions\transactions-dialog - Copy.component.html" />
+    <None Remove="ClientApp\src\app\transactions\transactions-dialog - Copy.component.ts" />
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\investors\personal-trans-dialog\personal-trans-dialog.component.html" />
+    <TypeScriptCompile Include="ClientApp\src\app\investors\personal-trans-dialog\personal-trans-dialog.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\transactions\transactions-dialog.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\transactions\transactions-dialog.component.html" />
     <TypeScriptCompile Include="ClientApp\src\app\services\excel.service.ts" />
