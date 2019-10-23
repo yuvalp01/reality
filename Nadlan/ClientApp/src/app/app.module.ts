@@ -33,6 +33,7 @@ import { ExpensesComponent } from './expenses/expenses.component';
 import { TransactionsTableComponent } from './transactions/transactions-table.component';
 import { AddExpenseComponent } from './expenses/expenses-form.component';
 import { InvestrorsModule } from './investors/investrors.module';
+import { ExpensesService } from './services/expenses.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -81,7 +82,7 @@ import { InvestrorsModule } from './investors/investrors.module';
     ]),
     InvestrorsModule
   ],
-  providers: [ApartmentService, AccountService, TransactionService, ReportService, RenovationService, ExcelService,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
+  providers: [ApartmentService, AccountService, TransactionService, ExpensesService, ReportService, RenovationService, ExcelService,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent],
   entryComponents: [TransactionsDialogComponent, AddTransactionComponent, AddExpenseComponent]
 })

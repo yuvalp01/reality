@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Nadlan.Models;
-using Nadlan.ViewModels;
 using Nadlan.Repositories;
+using Nadlan.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -137,6 +137,10 @@ namespace Nadlan.Controllers
         }
 
 
+
+
+
+
         // POST: api/Transactions
         //[HttpPost("PostExpenses/{isHours=false}")]
         [HttpPost("PostExpenses")]
@@ -149,7 +153,7 @@ namespace Nadlan.Controllers
 
             var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
 
-           // await _repositoryWraper.Transaction.CreateDoubleTransactionAsync(transaction, isHours);
+            // await _repositoryWraper.Transaction.CreateDoubleTransactionAsync(transaction, isHours);
             await _repositoryWraper.Transaction.CreateExpenseAndTransactionAsync(transaction);
             return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
         }

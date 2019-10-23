@@ -1,13 +1,13 @@
 
 
-<mat-drawer-container>
+<mat-drawer-container >
   <mat-drawer mode="side" opened>
 
     <mat-nav-list style="width:150px">
+      <i>Stakeholders</i>
 
-
-      stakeholders
-      <a mat-list-item *ngFor="let stakeholder of stakeholders" [routerLink]="['/personal-admin',stakeholder.id]" routerLinkActive="router-link-active"> {{stakeholder.name}}</a>
+      
+      <a mat-list-item *ngFor="let stakeholder of stakeholders" [routerLink]="['/personal-admin',stakeholder.id]" routerLinkActive="link-active"> {{stakeholder.name}}</a>
       <!--<a mat-list-item routerLink="/personal-admin/1" routerLinkActive="router-link-active"> Ohad</a>
       <a mat-list-item routerLink="/personal-admin/2" routerLinkActive="router-link-active"> test</a>-->
 

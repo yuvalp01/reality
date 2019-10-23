@@ -15,5 +15,7 @@ namespace Nadlan.Models
         public TransactionType TransactionType { get; set; }
         public int StakeholderId { get; set; }
         public Stakeholder Stakeholder { get; set; }
+        public int ApartmentId { get; set; }
+        public Apartment Apartment { get; set; }
     }
 }

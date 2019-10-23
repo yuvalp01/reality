@@ -16,22 +16,132 @@ namespace Nadlan.Repositories
         public InvestorReportRepository(NadlanConext context) : base(context)
         {
         }
-        //still not in use, need to change
-        public async Task<decimal> GetBalance(int accountId)
+
+        public async Task<decimal> GetPersonalBalance(int stakeholderId)
         {
-            var balance = Context.Transactions.Where(a => a.AccountId == accountId).SumAsync(a => a.Amount);
+            var balance = Context.PersonalTransactions.Where(a => a.StakeholderId == stakeholderId).SumAsync(a => a.Amount);
             return await balance;
         }
 
-
         public async Task<InvestorReportOverview> GetInvestorReport(int investorAcountId)
         {
+            try
+            {
 
-            var portfolioLines = Context.Portfolios.Include(a => a.Apartment).Where(a => a.AccountId == investorAcountId && a.ApartmentId != 20);
+                // var portfolioLines = Context.Portfolios.Include(a => a.Apartment).Where(a => a.AccountId == investorAcountId && a.ApartmentId != 20);
+                var portfolioLines = Context.Portfolios.Include(a => a.Apartment).Where(a => a.StakeholderId == investorAcountId && a.ApartmentId != 20);
+                Expression<Func<Transaction, bool>> predAll = t =>
+                    t.IsPurchaseCost == false
+                    && t.Account.AccountTypeId == 0;
+
+                List<PortfolioReport> portfolioReportLines = new List<PortfolioReport>();
+                foreach (var portfolioLine in portfolioLines)
+                {
+                    PortfolioReport portfolioLineReport = new PortfolioReport();
+                    var apartment = portfolioLine.Apartment;
+                    portfolioLineReport.ApartmentId = portfolioLine.ApartmentId;
+                    portfolioLineReport.Apartment = apartment.Address;
+                    portfolioLineReport.PurchaseDate = apartment.PurchaseDate;
+                    portfolioLineReport.Ownership = portfolioLine.Percentage;
+                    //var totalInvestment = await Context.Transactions.Where(a => a.ApartmentId == portfolioLine.Apartment.Id && a.AccountId == 13).Select(a => a.Amount).FirstAsync();
+
+
+                    //var totalInvestment_ = Context.Transactions.Where(a => a.ApartmentId == portfolioLine.Apartment.Id && a.AccountId == 13).Select(a => a.Amount);
+                    var totalInvestment = await Context.Transactions.Where(a => a.ApartmentId == portfolioLine.Apartment.Id && a.AccountId == 13).Select(a => a.Amount).FirstOrDefaultAsync();
+
+                    portfolioLineReport.Investment = totalInvestment * portfolioLine.Percentage;
+                    var yeardDecimal = apartment.PurchaseDate.GetApartmentYearsInDecimal();
+                    portfolioLineReport.MinimalProfitUpToDate = portfolioLineReport.Investment * 0.03m * yeardDecimal;
+                    //var distributed = Context.Transactions.Include(a => a.Account).Where(predAll).Where(a => a.ApartmentId == portfolioLine.ApartmentId && a.AccountId == 100);
+                    var distributed = Context.Transactions.Include(a => a.Account).Where(predAll).Where(a => a.ApartmentId == portfolioLine.ApartmentId && a.AccountId == 100);
+                    portfolioLineReport.Distributed = await distributed.SumAsync(a => a.Amount) * portfolioLine.Percentage * -1;
+
+                    ValidateWithPersonalTransactions(portfolioLineReport, portfolioLine);
+
+
+
+
+                }
+                // var cashBalance_old = Context.Transactions.Where(a => a.AccountId == investorAcountId);
+                var cashBalance = Context.PersonalTransactions.Where(a => a.StakeholderId == investorAcountId);
+
+                //var leipzigPortfolioLine = Context.Portfolios.Include(a => a.Apartment).Where(a => a.AccountId == investorAcountId && a.ApartmentId == 20).FirstOrDefault();
+                var leipzigPortfolioLine = Context.Portfolios.Include(a => a.Apartment).Where(a => a.StakeholderId == investorAcountId && a.ApartmentId == 20).FirstOrDefault();
+                if (leipzigPortfolioLine != null)
+                {
+                    PortfolioReport portfolioLeipzigReport = new PortfolioReport();
+                    var apartment = leipzigPortfolioLine.Apartment;
+                    portfolioLeipzigReport.Apartment = apartment.Address;
+                    portfolioLeipzigReport.PurchaseDate = apartment.PurchaseDate;
+                    portfolioLeipzigReport.Ownership = leipzigPortfolioLine.Percentage;
+                    //var totalInvestment = await Context.Transactions.Where(a => a.ApartmentId == leipzigPortfolioLine.Apartment.Id && a.AccountId == 13).Select(a => a.Amount).FirstAsync();
+                    var totalInvestment = await Context.Transactions.Where(a => a.ApartmentId == leipzigPortfolioLine.Apartment.Id && a.AccountId == 13).Select(a => a.Amount).FirstAsync();
+                    portfolioLeipzigReport.Investment = totalInvestment * leipzigPortfolioLine.Percentage;
+
+
+                    var netIncome = Context.Transactions.Include(a => a.Account).Where(predAll).Where(a => a.ApartmentId == 20 && a.AccountId != 100);
+                    var distributed = Context.Transactions.Include(a => a.Account).Where(predAll).Where(a => a.ApartmentId == 20 && a.AccountId == 100);
+                    portfolioLeipzigReport.MinimalProfitUpToDate = await netIncome.SumAsync(a => a.Amount) * leipzigPortfolioLine.Percentage;
+                    portfolioLeipzigReport.Distributed = await distributed.SumAsync(a => a.Amount) * leipzigPortfolioLine.Percentage * -1;
+                    portfolioReportLines.Add(portfolioLeipzigReport);
+                }
+
+
+                InvestorReportOverview investorReportOverview = new InvestorReportOverview
+                {
+                    CashBalance = await cashBalance.SumAsync(a => a.Amount),
+                    TotalInvestment = portfolioReportLines.Sum(a => a.Investment),
+                    MinimalProfitUpToDate = portfolioReportLines.Sum(a => a.MinimalProfitUpToDate),
+                    PortfolioLines = portfolioReportLines,
+                    TotalDistribution = portfolioReportLines.Sum(a => a.Distributed),
+
+                };
+                investorReportOverview.TotalBalace = investorReportOverview.CashBalance + investorReportOverview.MinimalProfitUpToDate;
+                return investorReportOverview;
+
+            }
+            catch (Exception)
+            {
+                return new InvestorReportOverview();
+            }
+
+
+        }
+
+
+        private void ValidateWithPersonalTransactions(PortfolioReport portfolioLineReport, Portfolio portfolioLine)
+        {
+
+            var personalInvestment = Context.PersonalTransactions
+                .Where(a =>
+                a.ApartmentId == portfolioLine.ApartmentId &&
+                a.StakeholderId == portfolioLine.StakeholderId &&
+                a.TransactionType == TransactionType.Commitment).Sum(a => a.Amount);
+            if (portfolioLineReport.Investment != Math.Abs( personalInvestment))
+            {
+                throw new Exception("Personal investment does not equal to general investment.");
+                //portfolioLineReport.Investment = 0;
+
+            }
+            var personalDistribution = Context.PersonalTransactions
+                .Where(a =>
+                a.ApartmentId == portfolioLine.ApartmentId &&
+                a.StakeholderId == portfolioLine.StakeholderId &&
+                a.TransactionType == TransactionType.Distribution).Sum(a => a.Amount);
+            if (Math.Round(portfolioLineReport.Distributed) != Math.Round( personalDistribution))
+            {
+                //portfolioLineReport.Distributed = 0;
+                throw new Exception("Personal distribution does not equal to general distribution.");
+
+            }
+        }
+
+
+        private List<PortfolioReport> CreatePortfolioReports(IQueryable<Portfolio> portfolioLines)
+        {
             Expression<Func<Transaction, bool>> predAll = t =>
-                t.IsPurchaseCost == false
-                && t.Account.AccountTypeId == 0;
-
+                                                t.IsPurchaseCost == false
+                                                && t.Account.AccountTypeId == 0;
             List<PortfolioReport> portfolioReportLines = new List<PortfolioReport>();
             foreach (var portfolioLine in portfolioLines)
             {
@@ -41,50 +151,18 @@ namespace Nadlan.Repositories
                 portfolioLineReport.Apartment = apartment.Address;
                 portfolioLineReport.PurchaseDate = apartment.PurchaseDate;
                 portfolioLineReport.Ownership = portfolioLine.Percentage;
-                var totalInvestment = await Context.Transactions.Where(a => a.ApartmentId == portfolioLine.Apartment.Id && a.AccountId == 13).Select(a => a.Amount).FirstAsync();
+                //var totalInvestment = await Context.Transactions.Where(a => a.ApartmentId == portfolioLine.Apartment.Id && a.AccountId == 13).Select(a => a.Amount).FirstAsync();
+                var totalInvestment = Context.Transactions.Where(a => a.ApartmentId == portfolioLine.Apartment.Id && a.AccountId == 13).Select(a => a.Amount).FirstOrDefault();
                 portfolioLineReport.Investment = totalInvestment * portfolioLine.Percentage;
                 var yeardDecimal = apartment.PurchaseDate.GetApartmentYearsInDecimal();
                 portfolioLineReport.MinimalProfitUpToDate = portfolioLineReport.Investment * 0.03m * yeardDecimal;
+                //var distributed = Context.Transactions.Include(a => a.Account).Where(predAll).Where(a => a.ApartmentId == portfolioLine.ApartmentId && a.AccountId == 100);
                 var distributed = Context.Transactions.Include(a => a.Account).Where(predAll).Where(a => a.ApartmentId == portfolioLine.ApartmentId && a.AccountId == 100);
-                portfolioLineReport.Distributed = await distributed.SumAsync(a => a.Amount)*portfolioLine.Percentage * -1;
+                portfolioLineReport.Distributed = distributed.Sum(a => a.Amount) * portfolioLine.Percentage * -1;
                 portfolioReportLines.Add(portfolioLineReport);
             }
-            var cashBalance = Context.Transactions.Where(a => a.AccountId == investorAcountId);
-
-            var leipzigPortfolioLine = Context.Portfolios.Include(a => a.Apartment).Where(a => a.AccountId == investorAcountId && a.ApartmentId == 20).FirstOrDefault();
-            if (leipzigPortfolioLine != null)
-            {
-                PortfolioReport portfolioLeipzigReport = new PortfolioReport();
-                var apartment = leipzigPortfolioLine.Apartment;
-                portfolioLeipzigReport.Apartment = apartment.Address;
-                portfolioLeipzigReport.PurchaseDate = apartment.PurchaseDate;
-                portfolioLeipzigReport.Ownership = leipzigPortfolioLine.Percentage;
-                var totalInvestment = await Context.Transactions.Where(a => a.ApartmentId == leipzigPortfolioLine.Apartment.Id && a.AccountId == 13).Select(a => a.Amount).FirstAsync();
-                portfolioLeipzigReport.Investment = totalInvestment * leipzigPortfolioLine.Percentage;
-
-
-                var netIncome = Context.Transactions.Include(a => a.Account).Where(predAll).Where(a => a.ApartmentId == 20 && a.AccountId != 100);
-                var distributed = Context.Transactions.Include(a => a.Account).Where(predAll).Where(a => a.ApartmentId == 20 && a.AccountId == 100);
-                portfolioLeipzigReport.MinimalProfitUpToDate = await netIncome.SumAsync(a => a.Amount) * leipzigPortfolioLine.Percentage;
-                portfolioLeipzigReport.Distributed = await distributed.SumAsync(a => a.Amount) * leipzigPortfolioLine.Percentage *-1;
-                portfolioReportLines.Add(portfolioLeipzigReport);
-            }
-
-
-            InvestorReportOverview investorReportOverview = new InvestorReportOverview
-            {
-                CashBalance = await cashBalance.SumAsync(a => a.Amount),
-                TotalInvestment = portfolioReportLines.Sum(a => a.Investment),
-                MinimalProfitUpToDate = portfolioReportLines.Sum(a => a.MinimalProfitUpToDate),
-                PortfolioLines = portfolioReportLines,
-                TotalDistribution = portfolioReportLines.Sum(a => a.Distributed),
-
-            };
-            investorReportOverview.TotalBalace = investorReportOverview.CashBalance + investorReportOverview.MinimalProfitUpToDate;
-            return investorReportOverview;
-
+            return portfolioReportLines;
         }
-
 
 
     }

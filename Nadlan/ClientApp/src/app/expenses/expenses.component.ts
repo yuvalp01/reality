@@ -1,10 +1,8 @@
 import { Component, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
 import { ITransaction, IAccount } from '../models';
-import { TransactionService } from '../services/transaction.service';
-import { AddTransactionComponent } from '../transactions/add-transaction.component';
+import { ExpensesService } from '../services/expenses.service';
 import { MatDialog, MatSort, MatTableDataSource, MatDialogRef } from '@angular/material';
 import { ReportService } from '../services/reports.service';
-import { RouteReuseStrategy } from '@angular/router';
 import { AddExpenseComponent } from '../expenses/expenses-form.component';
 
 
@@ -22,7 +20,7 @@ export class ExpensesComponent implements OnInit {
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   constructor(
-    private transactionService: TransactionService,
+    private expensesService: ExpensesService,
     private reportsService: ReportService,
     private dialog: MatDialog,
   /*  private dialogRef: MatDialogRef<AddExpenseComponent>*/ ) {
@@ -32,7 +30,7 @@ export class ExpensesComponent implements OnInit {
   }
   refreshData() {
     //refresh tables
-    this.transactionService.getExpenses().subscribe(result => {
+    this.expensesService.getExpenses().subscribe(result => {
       let assistantAccount = result as ITransaction[];
       this.dataSourceAssistant.data = assistantAccount;
       this.dataSourceAssistant.sort = this.sort;
@@ -76,7 +74,7 @@ export class ExpensesComponent implements OnInit {
   openEdit(transactionId) {
     console.log('transactionId: ' + transactionId)
 
-    this.transactionService.getExpense(transactionId).subscribe(result => {
+    this.expensesService.getExpense(transactionId).subscribe(result => {
       let _expense: ITransaction = result;
       let _type: string = _expense.hours == 0 ? 'expenses' : 'hours'
 
@@ -126,7 +124,7 @@ export class ExpensesComponent implements OnInit {
   delete(transactionId) {
     console.log(transactionId);
     if (confirm("Are you sure you want to delete?")) {
-      this.transactionService.deleteExpense(transactionId).subscribe(
+      this.expensesService.deleteExpense(transactionId).subscribe(
         {
           next: () => this.refreshData(),
           error: err => console.error(err)
@@ -135,7 +133,7 @@ export class ExpensesComponent implements OnInit {
   }
 
   confirm(transactionId) {
-    this.transactionService.confirmExpense(transactionId).subscribe(() => {
+    this.expensesService.confirmExpense(transactionId).subscribe(() => {
       this.refreshData();
     });
   }

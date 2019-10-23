@@ -84,7 +84,7 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
 
-            decimal balance = await _repositoryWraper.ApartmentReport.GetPersonalBalance(stakeholderId);
+            decimal balance = await _repositoryWraper.InvestorReport.GetPersonalBalance(stakeholderId);
 
             return Ok(balance);
         }

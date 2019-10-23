@@ -11,7 +11,7 @@ import { IStakeholder } from 'src/app/models';
 export class PersonalAdminComponent implements OnInit {
 
   constructor(
-    private repsonalTransService: PersonalTransService,
+    private personalTransService: PersonalTransService,
     private route: ActivatedRoute) { }
   balance: number = 0;
   stakeholderId: number;
@@ -25,7 +25,7 @@ export class PersonalAdminComponent implements OnInit {
   }
 
   loadAllStakeholders() {
-    this.repsonalTransService.getStakeholders().subscribe({
+    this.personalTransService.getStakeholders().subscribe({
       next: (result) => this.stakeholders = result,
       error: (error)=> console.error(error)
     })

@@ -21,6 +21,7 @@ namespace Nadlan.Models
     {
         Commitment = 10,
         Transaction = 20,
-        Distribution = 30
+        Distribution = 30,
+        Moneyback = 40
     }
 }

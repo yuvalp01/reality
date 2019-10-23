@@ -72,7 +72,7 @@ td.mat-column-amount {
   /*background-color: #c5c9da;*/
   background-color: #376cad4a;
 }
-.router-link-active {
+.link-active {
   font-weight: bold;
   /*color: rebeccapurple !important;*/
 }

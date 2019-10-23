@@ -8,9 +8,7 @@
       </button>
       <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" [ngClass]='{"show": isExpanded}'>
         <ul class="navbar-nav flex-grow">
-          <li class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-dark" [routerLink]='["/investor-reports",1]'>Investor Reports</a>
-          </li>
+
           <!--<li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
     <a class="nav-link text-dark" [routerLink]='["/reports"]'>Reports</a>
   </li>-->
@@ -30,9 +28,9 @@
           <li class="nav-item" [routerLinkActive]='["link-active"]'>
             <a class="nav-link text-dark" [routerLink]='["/renovation-list"]'>Renovation</a>
           </li>
-          <!--<li class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-dark" [routerLink]='["/personal-trans"]'>Personal Transactions</a>
-          </li>-->
+          <li class="nav-item" [routerLinkActive]='["link-active"]'>
+            <a class="nav-link text-dark" [routerLink]='["/investor-reports",1]'>Investor Reports</a>
+          </li>
           <li class="nav-item" [routerLinkActive]='["link-active"]'>
             <a class="nav-link text-dark" [routerLink]='["/personal-admin","1"]'>Personal Administration</a>
           </li>

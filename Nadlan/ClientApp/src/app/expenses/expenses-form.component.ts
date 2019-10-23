@@ -3,7 +3,7 @@ import { ApartmentService } from "../services/apartment.service";
 import { IApartment, ITransaction, IAccount } from "../models";
 import { FormControl, FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { AccountService } from "../services/account.service";
-import { TransactionService } from "../services/transaction.service";
+import { ExpensesService } from "../services/expenses.service";
 import { Router } from "@angular/router";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { take } from 'rxjs/operators';
@@ -20,7 +20,7 @@ export class AddExpenseComponent implements OnInit {
 
   constructor(private apartmentService: ApartmentService,
     private accountService: AccountService,
-    private transactionService: TransactionService,
+    private expensesService: ExpensesService,
     private router: Router,
     private _ngZone: NgZone,
     private snackBar: MatSnackBar,
@@ -70,7 +70,7 @@ export class AddExpenseComponent implements OnInit {
 
         if (this.transactionId > 0) {
           transaction.id = this.transactionId;
-          this.transactionService.updateExpense(transaction).subscribe(() => {
+          this.expensesService.updateExpense(transaction).subscribe(() => {
             let snackBarRef = this.snackBar.open(`Expense`, 'Updated', { duration: 2000 });
             this.refreshEmitter.emit();
             //console.log("success!");
@@ -80,7 +80,7 @@ export class AddExpenseComponent implements OnInit {
 
         }
         else {
-          this.transactionService.addExpense(transaction).subscribe(() => {
+          this.expensesService.addExpense(transaction).subscribe(() => {
             let snackBarRef = this.snackBar.open(`Expense`, 'Added', { duration: 2000 });
             //this.transactionForm.reset();
             this.refreshEmitter.emit();

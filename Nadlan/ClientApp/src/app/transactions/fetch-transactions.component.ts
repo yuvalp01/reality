@@ -1,10 +1,8 @@
-import { Component, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ITransaction } from '../models';
 import { TransactionService } from '../services/transaction.service';
-import { resource } from 'selenium-webdriver/http';
 import { AddTransactionComponent } from '../transactions/add-transaction.component';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
-import { subscribeOn } from 'rxjs/operators';
 
 @Component({
   templateUrl: './fetch-transactions.component.html',
@@ -12,7 +10,6 @@ import { subscribeOn } from 'rxjs/operators';
 })
 export class TransactionListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'date', 'apartmentId','accountId' , 'amount', 'isPurchaseCost', 'comments'];
-  //transactions: ITransaction[];
   dataSource = new MatTableDataSource<ITransaction>();
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -23,14 +20,7 @@ export class TransactionListComponent implements OnInit {
     this.transactionService.getTransactions().subscribe(result => {
 
       this.dataSource.data = result as ITransaction[];
-      //this.transactions = result;
-      //this.dataSource = new MatTableDataSource(result);
       this.dataSource.sort = this.sort;
-      //this.dataSource.filter = this.selectedApartment;
-
-
-
-
       this.dataSource.filterPredicate = function (data, filter: string): boolean {
         return data.apartmentAddress.toLowerCase().includes(filter);
       };
@@ -38,7 +28,7 @@ export class TransactionListComponent implements OnInit {
 
       }, error => console.error(error));
 }
-//dialogRef:any;
+
 openDialog()
 {
 
@@ -51,13 +41,11 @@ openDialog()
     this.transactionService.getTransactions().subscribe(result => {
 
       this.dataSource.data = result as ITransaction[];
-      //this.transactions = result;
       this.dataSource = new MatTableDataSource(result);
       this.dataSource.sort = this.sort
       //this.filter();
     }, error => console.error(error));
 
-    //this.transactionService.getTransactions().subscribe(result=>this.transactions=result, error=>console.error(error));
   });
 }
 

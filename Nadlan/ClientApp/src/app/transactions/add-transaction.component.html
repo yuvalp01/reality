@@ -10,12 +10,11 @@
       </mat-form-field>
     </fieldset>
     <fieldset>
-      <mat-form-field hintLabel="€{{_hours.value*9}}" *ngIf="isHourForm" style="width: 100%" appearance="outline" class="example-full-width">
+      <!--<mat-form-field hintLabel="€{{_hours.value*9}}" *ngIf="isHourForm" style="width: 100%" appearance="outline" class="example-full-width">
         <mat-label>Hours</mat-label>
         <input #_hours formControlName="hours" type="number" matInput required placeholder="Hours">
-        <!--<mat-hint align="start">{{_hours.value}}</mat-hint>-->
-      </mat-form-field>
-      <mat-form-field *ngIf="!isHourForm" style="width: 100%" appearance="outline" class="example-full-width">
+      </mat-form-field>-->
+      <mat-form-field  style="width: 100%" appearance="outline" class="example-full-width">
         <mat-label>Amount (€)</mat-label>
         <input matInput formControlName="amount" type="text" required placeholder="Amount (€)">
         <!-- <mat-icon matSuffix>euro_symbol</mat-icon> -->

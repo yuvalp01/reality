@@ -17,14 +17,14 @@ export class TransactionService {
     return this.httpClient.get<ITransaction[]>(`${this.baseUrl}api/transactions/${apartmentId}/${accountId}/${isPurchaseCost}/${year}`);
   }
 
-  getExpenses(): Observable<ITransaction[]> {
-    return this.httpClient.get<ITransaction[]>(`${this.baseUrl}api/transactions/GetExpenses`);
-  }
+  //getExpenses(): Observable<ITransaction[]> {
+  //  return this.httpClient.get<ITransaction[]>(`${this.baseUrl}api/transactions/GetExpenses`);
+  //}
 
 
-  getExpense(transactionId: number): Observable<ITransaction> {
-    return this.httpClient.get<ITransaction>(`${this.baseUrl}api/transactions/GetExpenses/${transactionId}`);
-  }
+  //getExpense(transactionId: number): Observable<ITransaction> {
+  //  return this.httpClient.get<ITransaction>(`${this.baseUrl}api/transactions/GetExpenses/${transactionId}`);
+  //}
 
   addTransaction(transaction: ITransaction): Observable<ITransaction> {
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
@@ -32,28 +32,25 @@ export class TransactionService {
     // .pipe(catchError(this.had))
   }
 
-  //addHours(transaction: ITransaction): Observable<ITransaction> {
+
+
+  //addExpense(transaction: ITransaction): Observable<ITransaction> {
   //  const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-  //  return this.httpClient.post<ITransaction>(this.baseUrl + 'api/transactions/PostExpenses/true', transaction, options);
-  //  // .pipe(catchError(this.had))
+  //  return this.httpClient.post<ITransaction>(`${this.baseUrl}api/transactions/PostExpenses`, transaction, options);
   //}
-  addExpense(transaction: ITransaction): Observable<ITransaction> {
-    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return this.httpClient.post<ITransaction>(`${this.baseUrl}api/transactions/PostExpenses`, transaction, options);
-  }
 
-  updateExpense(transaction: ITransaction): Observable<ITransaction> {
-    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return this.httpClient.put<ITransaction>(`${this.baseUrl}api/transactions/PutExpenses`, transaction, options);
-  }
+  //updateExpense(transaction: ITransaction): Observable<ITransaction> {
+  //  const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+  //  return this.httpClient.put<ITransaction>(`${this.baseUrl}api/transactions/PutExpenses`, transaction, options);
+  //}
 
-  deleteExpense(transactionId: number): Observable<{}> {
-    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return this.httpClient.delete<ITransaction>(`${this.baseUrl}api/transactions/${transactionId}`, options);
-  }
+  //deleteExpense(transactionId: number): Observable<{}> {
+  //  const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+  //  return this.httpClient.delete<ITransaction>(`${this.baseUrl}api/transactions/${transactionId}`, options);
+  //}
 
-  confirmExpense(transactionId: ITransaction): Observable<ITransaction> {
-    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return this.httpClient.put<ITransaction>(`${this.baseUrl}api/transactions/confirm`, transactionId, options);
-  }
+  //confirmExpense(transactionId: ITransaction): Observable<ITransaction> {
+  //  const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+  //  return this.httpClient.put<ITransaction>(`${this.baseUrl}api/transactions/confirm`, transactionId, options);
+  //}
 }

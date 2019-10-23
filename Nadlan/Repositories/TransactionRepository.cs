@@ -30,7 +30,7 @@ namespace Nadlan.Repositories
                 {
                     AccountId = transaction.AccountId,
                     AccountName = transaction.Account.Name,
-                    Amount = transaction.Amount*-1,
+                    Amount = transaction.Amount * -1,
                     ApartmentId = transaction.ApartmentId,
                     ApartmentAddress = transaction.Apartment.Address,
                     Comments = transaction.Comments,
@@ -40,14 +40,14 @@ namespace Nadlan.Repositories
                     IsPurchaseCost = transaction.IsPurchaseCost,
                     IsConfirmed = transaction.IsConfirmed
                 }
-                ).OrderByDescending(a=>a.Date).ThenByDescending(a=>a.Id).ToListAsync();
+                ).OrderByDescending(a => a.Date).ThenByDescending(a => a.Id).ToListAsync();
             //return await Context.Expenses.OrderByDescending(a => a.Id).Include(a => a.Transaction).ToListAsync();
         }
 
         public async Task<TransactionDto> GetExpenseByIdAsync(int transactionId)
         {
             return await Context.Expenses.Join(
-                Context.Transactions.Where(a=>a.Id==transactionId),
+                Context.Transactions.Where(a => a.Id == transactionId),
                 expense => expense.TransactionId,
                 transaction => transaction.Id,
                 (expense, transaction) => new TransactionDto
@@ -87,11 +87,11 @@ namespace Nadlan.Repositories
             //Charge the original amount
             transaction.Amount = transaction.Amount * -1;
             var originalTransaction = Context.Transactions.Find(transaction.Id);
-            
+
             Context.Entry(originalTransaction).CurrentValues.SetValues(transaction);
 
             //Expense updatedExpense = new Expense { TransactionId = transaction.Id, Hours = transaction.Hours };
-            var originalExpense = Context.Expenses.Single(a=>a.TransactionId ==transaction.Id);
+            var originalExpense = Context.Expenses.Single(a => a.TransactionId == transaction.Id);
             originalExpense.Hours = transaction.Hours;
             //Context.Entry(originalExpense).CurrentValues.SetValues(updatedExpense);
             //if (transaction.Hours > 0)
@@ -114,7 +114,7 @@ namespace Nadlan.Repositories
         }
         public async Task CreateExpenseAndTransactionAsync(Transaction transaction)
         {
-            if (transaction.Hours>0)
+            if (transaction.Hours > 0)
             {
                 transaction.Comments = $"Hours: {transaction.Comments}";
             }
@@ -161,7 +161,6 @@ namespace Nadlan.Repositories
             {
                 throw new ArgumentException("It is only possible to distribute from account 100");
             }
-
             List<Portfolio> portfolioLines = await Context.Portfolios.Where(a => a.ApartmentId == transaction.ApartmentId).ToListAsync();
             if (portfolioLines.Sum(a => a.Percentage) != 1)
             {
@@ -174,15 +173,29 @@ namespace Nadlan.Repositories
             Create(transaction);
             foreach (var portfolioLine in portfolioLines)
             {
-                Transaction distribution = new Transaction
+                //Transaction distribution = new Transaction
+                //{
+                //    //ApartmentId = transaction.ApartmentId,
+                //    AccountId = portfolioLine.StakeholderId,
+                //    Amount = absoluteAmount * portfolioLine.Percentage,
+                //    Date = transaction.Date,
+                //    Comments = $"{transaction.Comments} (Distribution of {absoluteAmount} based on {portfolioLine.Percentage * 100}% ownership)"
+                //};
+                //Create(distribution);
+
+                PersonalTransaction distribution = new PersonalTransaction
                 {
+                    TransactionType = TransactionType.Distribution,
                     ApartmentId = transaction.ApartmentId,
-                    AccountId = portfolioLine.AccountId,
+                    StakeholderId = portfolioLine.StakeholderId,
                     Amount = absoluteAmount * portfolioLine.Percentage,
                     Date = transaction.Date,
                     Comments = $"{transaction.Comments} (Distribution of {absoluteAmount} based on {portfolioLine.Percentage * 100}% ownership)"
                 };
-                Create(distribution);
+
+
+
+                Context.PersonalTransactions.Add(distribution);
             }
 
             await SaveAsync();

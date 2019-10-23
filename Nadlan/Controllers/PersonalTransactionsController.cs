@@ -105,6 +105,8 @@ namespace Nadlan.Controllers
             return CreatedAtAction("GetPersonalTransaction", new { id = personalTransaction.Id }, personalTransaction);
         }
 
+
+
         // DELETE: api/PersonalTransactions/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<PersonalTransaction>> DeletePersonalTransaction(int id)
