@@ -11,8 +11,8 @@ namespace Nadlan.Models
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
         public string Comments { get; set; }
-  
 
+        public TransactionType TransactionType { get; set; }
         public int StakeholderId { get; set; }
         public Stakeholder Stakeholder { get; set; }
     }

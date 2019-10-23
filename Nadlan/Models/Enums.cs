@@ -16,6 +16,11 @@ namespace Nadlan.Models
         SearchingForTenant = 60,
         Occupied = 70,
         Rented = 100
-
+    }
+    public enum TransactionType
+    {
+        Commitment = 10,
+        Transaction = 20,
+        Distribution = 30
     }
 }
