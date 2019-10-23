@@ -17,6 +17,9 @@ namespace Nadlan.Models
 
         public int AccountId { get; set; }
         public Account Account { get; set; }
+
+        public bool IsDeleted { get; set; }
+
         [NotMapped]
         public decimal Hours { get; set; }
     }
