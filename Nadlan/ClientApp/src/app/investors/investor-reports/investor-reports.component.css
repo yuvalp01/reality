@@ -4,11 +4,13 @@
 }
 
 table#portfolio {
-width:100%;
+  width: 100%;
 }
 
-.mat-column-apartment {
-  /*padding-left: 10px;*/
-  /*text-align: center;*/
-  /*width: 200px;*/
+.mat-footer-row {
+  font-weight: bold;
+}
+
+.nav-link {
+  padding: 0;
 }

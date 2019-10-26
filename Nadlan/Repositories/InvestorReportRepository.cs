@@ -89,13 +89,18 @@ namespace Nadlan.Repositories
                 }
 
 
+                var _cashBalance = await cashBalance.SumAsync(a => a.Amount);
+                var _totalInvestment = portfolioReportLines.Sum(a => a.Investment);
+                var _minimalProfitUpToDate = portfolioReportLines.Sum(a => a.MinimalProfitUpToDate);
+                var _totalDistribution = portfolioReportLines.Sum(a => a.Distributed);
+
                 InvestorReportOverview investorReportOverview = new InvestorReportOverview
                 {
-                    CashBalance = await cashBalance.SumAsync(a => a.Amount),
-                    TotalInvestment = portfolioReportLines.Sum(a => a.Investment),
-                    MinimalProfitUpToDate = portfolioReportLines.Sum(a => a.MinimalProfitUpToDate),
+                    CashBalance = _cashBalance,
+                    TotalInvestment = _totalInvestment,
+                    MinimalProfitUpToDate = _minimalProfitUpToDate,
                     PortfolioLines = portfolioReportLines,
-                    TotalDistribution = portfolioReportLines.Sum(a => a.Distributed),
+                    TotalDistribution = _totalDistribution,
 
                 };
                 investorReportOverview.TotalBalace = investorReportOverview.CashBalance + investorReportOverview.MinimalProfitUpToDate;

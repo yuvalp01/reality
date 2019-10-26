@@ -37,7 +37,7 @@
 
               <mat-list-item>
                 <mat-icon mat-list-icon>business_center</mat-icon>
-                <span matTooltip="Minimal profit up-to-date (3% per year)"> MinimalProfit</span>
+                <span matTooltip="Minimal profit up-to-date (3% per year). For details see 'Portfolio' tab"> MinimalProfit</span>
                 <span [ngClass]="'positive'">{{investorReportOverview.minimalProfitUpToDate| currency:'EUR' : number:'1.0-0'}}</span>
               </mat-list-item>
 
@@ -71,37 +71,46 @@
               <ng-container matColumnDef="apartment">
                 <th mat-header-cell *matHeaderCellDef>Apartment</th>
                 <!--<td mat-cell *matCellDef="let line"><a class="nav-link text-dark" [routerLink]='["/reports/3"]'> {{line.apartment}} </a></td>-->
-                <td mat-cell *matCellDef="let line"><a class="nav-link text-dark" [routerLink]="['/reports',line.apartmentId]"> {{line.apartment}} /t</a></td>
+                <td mat-cell *matCellDef="let line"><a class="nav-link text-dark" target="_blank" [routerLink]="['/reports',line.apartmentId]"> {{line.apartment}}</a></td>
+                <td mat-footer-cell *matFooterCellDef> Total</td>
 
               </ng-container>
 
               <ng-container matColumnDef="purchaseDate">
                 <th mat-header-cell *matHeaderCellDef> Purchase Date </th>
                 <td mat-cell *matCellDef="let line"> {{line.purchaseDate | date:'yyyy-MM-dd'}} </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+
               </ng-container>
 
               <ng-container matColumnDef="investment">
                 <th mat-header-cell matTooltip="Personal investment" *matHeaderCellDef> Investment </th>
-                <td mat-cell *matCellDef="let line"> {{line.investment | number:'1.0-0'}} </td>
+                <td mat-cell *matCellDef="let line"> {{line.investment | currency:'EUR' : number:'1.0-0'}} </td>
+                <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalInvestment|currency:'EUR' : number:'1.0-0'}}</td>
+
               </ng-container>
 
               <ng-container matColumnDef="ownership">
                 <th mat-header-cell *matHeaderCellDef> Ownership </th>
                 <td mat-cell *matCellDef="let line"> {{line.ownership|percent}} </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
               </ng-container>
 
               <ng-container matColumnDef="minimalProfitUpToDate">
                 <th mat-header-cell matTooltip="Minimal profit up-to-date (3% per year)" *matHeaderCellDef> Minimal Profit</th>
-                <td mat-cell *matCellDef="let line"> {{line.minimalProfitUpToDate | number:'1.0-0'}} </td>
+                <td mat-cell *matCellDef="let line"> {{line.minimalProfitUpToDate | currency:'EUR' : number:'1.0-0'}} </td>
+                <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.minimalProfitUpToDate| currency:'EUR' : number:'1.0-0'}}</td>
               </ng-container>
 
               <ng-container matColumnDef="distributed">
                 <th mat-header-cell *matHeaderCellDef> Distributed </th>
-                <td mat-cell *matCellDef="let line"> {{line.distributed | number:'1.0-0'}} </td>
+                <td mat-cell *matCellDef="let line"> {{line.distributed | currency:'EUR' : number:'1.0-0'}} </td>
+                <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalDistribution| currency:'EUR' : number:'1.0-0'}}</td>
               </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="['apartment', 'purchaseDate', 'investment', 'ownership','minimalProfitUpToDate', 'distributed']"></tr>
               <tr mat-row *matRowDef="let row; columns: ['apartment', 'purchaseDate', 'investment', 'ownership', 'minimalProfitUpToDate', 'distributed'];"></tr>
+              <tr mat-footer-row *matFooterRowDef="['apartment', 'purchaseDate', 'investment', 'ownership','minimalProfitUpToDate', 'distributed']"></tr>
             </table>
 
           </mat-card>
