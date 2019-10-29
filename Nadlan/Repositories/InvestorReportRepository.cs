@@ -72,6 +72,7 @@ namespace Nadlan.Repositories
                 {
                     PortfolioReport portfolioLeipzigReport = new PortfolioReport();
                     var apartment = leipzigPortfolioLine.Apartment;
+                    portfolioLeipzigReport.ApartmentId = apartment.Id;
                     portfolioLeipzigReport.Apartment = apartment.Address;
                     portfolioLeipzigReport.PurchaseDate = apartment.PurchaseDate;
                     portfolioLeipzigReport.Ownership = leipzigPortfolioLine.Percentage;
@@ -94,8 +95,10 @@ namespace Nadlan.Repositories
                 var _minimalProfitUpToDate = portfolioReportLines.Sum(a => a.MinimalProfitUpToDate);
                 var _totalDistribution = portfolioReportLines.Sum(a => a.Distributed);
 
+                string investorName = Context.Stakeholders.Find(investorAcountId).Name;
                 InvestorReportOverview investorReportOverview = new InvestorReportOverview
                 {
+                    Name = investorName,
                     CashBalance = _cashBalance,
                     TotalInvestment = _totalInvestment,
                     MinimalProfitUpToDate = _minimalProfitUpToDate,
@@ -109,7 +112,7 @@ namespace Nadlan.Repositories
             }
             catch (Exception)
             {
-                return new InvestorReportOverview { CashBalance=0, MinimalProfitUpToDate=0, PortfolioLines = new List<PortfolioReport>(), TotalBalace=0, TotalDistribution=0, TotalInvestment=0 };
+                return new InvestorReportOverview { CashBalance = 0, MinimalProfitUpToDate = 0, PortfolioLines = new List<PortfolioReport>(), TotalBalace = 0, TotalDistribution = 0, TotalInvestment = 0 };
             }
 
 
@@ -118,29 +121,32 @@ namespace Nadlan.Repositories
 
         private void ValidateWithPersonalTransactions(PortfolioReport portfolioLineReport, Portfolio portfolioLine)
         {
-
-            var personalInvestment = Context.PersonalTransactions
-                .Where(a =>
-                a.ApartmentId == portfolioLine.ApartmentId &&
-                a.StakeholderId == portfolioLine.StakeholderId &&
-                a.TransactionType == TransactionType.Commitment).Sum(a => a.Amount);
-            if (portfolioLineReport.Investment != Math.Abs( personalInvestment))
+            if (portfolioLine.Percentage < 1)
             {
-                throw new Exception("Personal investment does not equal to general investment.");
-                //portfolioLineReport.Investment = 0;
+                var personalInvestment = Context.PersonalTransactions
+                    .Where(a =>
+                    a.ApartmentId == portfolioLine.ApartmentId &&
+                    a.StakeholderId == portfolioLine.StakeholderId &&
+                    a.TransactionType == TransactionType.Commitment).Sum(a => a.Amount);
+                if (portfolioLineReport.Investment != Math.Abs(personalInvestment))
+                {
+                    throw new Exception("Personal investment does not equal to general investment.");
+                    //portfolioLineReport.Investment = 0;
 
-            }
-            var personalDistribution = Context.PersonalTransactions
-                .Where(a =>
-                a.ApartmentId == portfolioLine.ApartmentId &&
-                a.StakeholderId == portfolioLine.StakeholderId &&
-                a.TransactionType == TransactionType.Distribution).Sum(a => a.Amount);
-            if (Math.Round(portfolioLineReport.Distributed) != Math.Round( personalDistribution))
-            {
-                //portfolioLineReport.Distributed = 0;
-                throw new Exception("Personal distribution does not equal to general distribution.");
+                }
+                var personalDistribution = Context.PersonalTransactions
+                    .Where(a =>
+                    a.ApartmentId == portfolioLine.ApartmentId &&
+                    a.StakeholderId == portfolioLine.StakeholderId &&
+                    a.TransactionType == TransactionType.Distribution).Sum(a => a.Amount);
+                if (Math.Round(portfolioLineReport.Distributed) != Math.Round(personalDistribution))
+                {
+                    //portfolioLineReport.Distributed = 0;
+                    throw new Exception("Personal distribution does not equal to general distribution.");
 
+                }
             }
+
         }
 
 

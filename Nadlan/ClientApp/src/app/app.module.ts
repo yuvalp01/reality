@@ -34,6 +34,7 @@ import { TransactionsTableComponent } from './transactions/transactions-table.co
 import { AddExpenseComponent } from './expenses/expenses-form.component';
 import { InvestrorsModule } from './investors/investrors.module';
 import { ExpensesService } from './services/expenses.service';
+import { SharedModule } from './shared/shared.module';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,8 +48,8 @@ import { ExpensesService } from './services/expenses.service';
     AddTransactionComponent,
     AddAccoutComponent,
     ReportsComponent,
-    ApartmentReportsComponent,
-    MinusSignToParens,
+    //ApartmentReportsComponent,
+    //MinusSignToParens,
     TransactionsDialogComponent,
     RenovationComponent,
     RenovationListComponent,
@@ -80,8 +81,11 @@ import { ExpensesService } from './services/expenses.service';
       { path: 'expenses', component: ExpensesComponent },
 
     ]),
-    InvestrorsModule
+    SharedModule,
+    InvestrorsModule,
+    //ApartmentReportsComponent
   ],
+
   providers: [ApartmentService, AccountService, TransactionService, ExpensesService, ReportService, RenovationService, ExcelService,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent],
   entryComponents: [TransactionsDialogComponent, AddTransactionComponent, AddExpenseComponent]

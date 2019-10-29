@@ -5,6 +5,7 @@ namespace Nadlan.ViewModels.Reports
 {
     public class InvestorReportOverview
     {
+        public string Name { get; set; }
         public decimal TotalInvestment { get; set; }
         public decimal CashBalance { get; set; }
         public decimal MinimalProfitUpToDate { get; set; }

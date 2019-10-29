@@ -36,6 +36,7 @@ export interface IAccountsSum {
 }
 
 export interface IInvestorReportOverview {
+  name: string,
   totalInvestment: number,
   cashBalance: number,
   minimalProfitUpToDate: number,

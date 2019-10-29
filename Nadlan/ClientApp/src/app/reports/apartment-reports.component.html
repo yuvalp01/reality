@@ -1,8 +1,9 @@
 <p *ngFor="let trans of transactions">{{trans.amount}}</p>
 <mat-tab-group dynamicHeight="false">
   <mat-tab label="Summary">
-    <mat-card>
-      <mat-card-title>Investment Summary</mat-card-title>
+
+    <mat-card *ngIf="apartmentInfo">
+      <mat-card-title>Investment Summary - {{apartmentInfo.address}}</mat-card-title>
       <mat-list *ngIf="summaryReport">
         <mat-list-item>
           <mat-icon mat-list-icon>business_center</mat-icon>
@@ -238,7 +239,7 @@
   </mat-tab>
   <mat-tab label="General Info">
     <mat-card>
-      <mat-card>
+
         <mat-card-title>General Info</mat-card-title>
         <mat-list *ngIf="apartmentInfo">
           <mat-list-item>
@@ -277,12 +278,7 @@
             <span>{{apartmentInfo.status}}</span>
           </mat-list-item>
 
-          <!--<mat-divider></mat-divider>-->
-
-
-
         </mat-list>
-      </mat-card>
     </mat-card>
   </mat-tab>
   <mat-tab label="Appraisal">

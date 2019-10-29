@@ -27,6 +27,7 @@ namespace Nadlan.Repositories
                 .Where(a => a.StakeholderId == stakeholderId)
                 .OrderByDescending(a => a.Date)
                 .Include(a=>a.Stakeholder)
+                .Include(a=>a.Apartment)
                 .ToListAsync();
         }
 

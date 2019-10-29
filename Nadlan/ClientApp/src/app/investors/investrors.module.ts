@@ -8,6 +8,10 @@ import { MyOwnCustomMaterialModule } from '.././shared/cusotom-material';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InvestorReportComponent } from './investor-reports/investor-reports.component';
 import { PersonalTransDialogComponent } from './personal-trans-dialog/personal-trans-dialog.component';
+import { SharedModule } from '../shared/shared.module';
+import { ApartmentReportsComponent } from '../reports/apartment-reports.component';
+import { InvestorsOverviewComponent } from './investors-overview.component';
+//import { ApartmentReportsComponent } from '../reports/apartment-reports.component';
 
 
 @NgModule({
@@ -16,18 +20,38 @@ import { PersonalTransDialogComponent } from './personal-trans-dialog/personal-t
     PersonalTransComponent,
     PersonalTransFormComponent,
     InvestorReportComponent,
-    PersonalTransDialogComponent],
+    PersonalTransDialogComponent,
+    InvestorsOverviewComponent,
+    //ApartmentReportsComponent
+    ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     MyOwnCustomMaterialModule,
+    SharedModule,
     RouterModule.forChild([
       { path: 'personal-trans', component: PersonalAdminComponent, pathMatch: 'full' },
       { path: 'personal-admin/:stakeholderId', component: PersonalAdminComponent },
-      { path: 'investor-reports/:stakeholderId', component: InvestorReportComponent}
+      {
+        path: 'investor-reports/:stakeholderId',
+        component: InvestorReportComponent,
+        children: [
+          {
+            //path: '', redirectTo: '', pathMatch: 'full',
+            //path: 'investor-reports/:stakeholderId/:apartmentId', component: ApartmentReportsComponent,
+            path: 'investor-reports/info', component: ApartmentReportsComponent,
+
+          },
+          {
+            path: ':apartmentId', component: ApartmentReportsComponent,
+
+          }
+        ]
+      }
 
     ])
   ],
+  //exports: [ApartmentReportsComponent],
   entryComponents: [PersonalTransFormComponent, PersonalTransDialogComponent]
 })
 export class InvestrorsModule { }

@@ -4,7 +4,7 @@
 </button>
 
 
-<span *ngIf="editable"> Personal account balance is <b>€ {{balance}}</b></span>
+<span> Personal account balance is <b>€ {{balance}}</b></span>
 <p *ngIf="!dataSourceTrans.data"><em>Loading...</em></p>
 <div id="tbl">
   <table style="width: 100%;" mat-table [dataSource]="dataSourceTrans" matSort class="mat-elevation-z8">
@@ -25,12 +25,16 @@
           negative: !isPositive(transaction.amount)
         }"
           *matCellDef="let transaction">
-        {{transaction.amount}}
+        {{transaction.amount | currency:'EUR' : number:'1.0-1'}}
       </td>
+    </ng-container>
+    <ng-container matColumnDef="apartment">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Apartment</th>
+      <td mat-cell *matCellDef="let transaction">{{transaction.apartmentAddress}}</td>
     </ng-container>
     <ng-container matColumnDef="stakeholderId">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Stakeholder</th>
-      <td mat-cell *matCellDef="let transaction">{{transaction.stakeholder.name}}</td>
+      <td mat-cell *matCellDef="let transaction">{{transaction.stakeholderName}}</td>
     </ng-container>
     <ng-container matColumnDef="comments">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>

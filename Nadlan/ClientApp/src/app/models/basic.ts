@@ -35,10 +35,11 @@ export interface IAccount {
 }
 export interface IPersonalTransaction {
   id: number; 
-  Amount: number;
+  amount: number;
   date: Date;
-  Comments: string;
-  StakeholderId: number;
+  comments: string;
+  stakeholderId: number;
+  apartment: IApartment;
 
 }
 

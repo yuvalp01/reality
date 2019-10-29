@@ -9,18 +9,31 @@
       <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" [ngClass]='{"show": isExpanded}'>
         <ul class="navbar-nav flex-grow">
 
+        
+
+          <li class="nav-item" [routerLinkActive]='["link-active"]'>
+
+            <a mat-button class="nav-link text-dark" [matMenuTriggerFor]="menu">Investors Reports</a>
+            <mat-menu #menu="matMenu">
+
+              <button [routerLink]='["/investor-reports",101]' class="nav-link text-dark" mat-menu-item>Ohad</button>
+              <button [routerLink]='["/investor-reports",102]' class="nav-link text-dark" mat-menu-item>Avi</button>
+              <button [routerLink]='["/investor-reports",103]' class="nav-link text-dark" mat-menu-item>Etai</button>
+              <button [routerLink]='["/investor-reports",104]' class="nav-link text-dark" mat-menu-item>Naphtali</button>
+              <button [routerLink]='["/investor-reports",105]' class="nav-link text-dark" mat-menu-item>Shosh</button>
+
+            </mat-menu>
+          </li>
           <!--<li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
     <a class="nav-link text-dark" [routerLink]='["/reports"]'>Reports</a>
   </li>-->
           <li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-            <a class="nav-link text-dark" [routerLink]='["/reports/1"]'>Reports</a>
+            <a class="nav-link text-dark" [routerLink]='["/reports/1"]'>Apartments Reports</a>
           </li>
+
           <!--<li class="nav-item" [routerLinkActive]='["link-active"]'>
-    <a class="nav-link text-dark" [routerLink]='["/fetch-apartments"]'>Apartments</a>
-  </li>-->
-          <li class="nav-item" [routerLinkActive]='["link-active"]'>
             <a class="nav-link text-dark" [routerLink]='["/fetch-accounts"]'>Accounts</a>
-          </li>
+          </li>-->
           <li class="nav-item" [routerLinkActive]='["link-active"]'>
             <a class="nav-link text-dark" [routerLink]='["/fetch-transactions"]'>Transactions</a>
           </li>
@@ -28,9 +41,9 @@
           <li class="nav-item" [routerLinkActive]='["link-active"]'>
             <a class="nav-link text-dark" [routerLink]='["/renovation-list"]'>Renovation</a>
           </li>
-          <li class="nav-item" [routerLinkActive]='["link-active"]'>
+          <!--<li class="nav-item" [routerLinkActive]='["link-active"]'>
             <a class="nav-link text-dark" [routerLink]='["/investor-reports",1]'>Investor Reports</a>
-          </li>
+          </li>-->
           <li class="nav-item" [routerLinkActive]='["link-active"]'>
             <a class="nav-link text-dark" [routerLink]='["/personal-admin","1"]'>Personal Administration</a>
           </li>

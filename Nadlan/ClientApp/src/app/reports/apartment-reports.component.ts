@@ -1,16 +1,19 @@
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges, ViewEncapsulation, Inject } from '@angular/core';
 import { IIncomeReport, IPurchaseReport, ISummaryReport, ITransaction, IApartment } from '../models';
 import { ReportService } from '../services/reports.service';
 import { ActivatedRoute, RouterEvent, NavigationEnd } from '@angular/router';
 import { filter, debounce } from 'rxjs/operators';
 import { TransactionService } from '../services/transaction.service';
-import { MatDialog, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { TransactionsDialogComponent } from '../transactions/transactions-dialog.component';
+import { ProviderAst } from '@angular/compiler';
+import { debug } from 'util';
 
 @Component({
   selector: 'apartment-reports',
   templateUrl: './apartment-reports.component.html',
-  styleUrls: ['./apartment-reports.component.css']
+  styleUrls: ['./apartment-reports.component.css'],
+  //encapsulation: ViewEncapsulation.ShadowDom
 })
 export class ApartmentReportsComponent implements OnInit {
   displayedColumns: string[] = ['date', 'amount', 'apartmentId', 'accountId', 'isPurchaseCost', 'comments'];
@@ -30,22 +33,26 @@ export class ApartmentReportsComponent implements OnInit {
   //simulation params:
   rentMonthsInYear: number = 11;
   buyerExpectedRerutn: number = 0.05;
-  //buyerExpectedRerutn: number = this.buyerExpectedRerutnPercents/100;
 
-
-
-  constructor(private reportsService: ReportService, private transactionService: TransactionService, private route: ActivatedRoute, private dialog: MatDialog) {
+  constructor(private reportsService: ReportService,
+    private transactionService: TransactionService,
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: any) {
   }
   ngOnInit(): void {
-    this.loadApartmentReports(this.apartmentId);
-    //this.apartmentId = this.route.snapshot.params['apartmentId'];
+    debugger
+    if (this.data.apartmentId) {
+      this.apartmentId = +this.data.apartmentId;
+      this.loadApartmentReports(this.apartmentId);
+    }
 
-    //this.route.events.pipe(
-    //  filter((event: RouterEvent) => event instanceof NavigationEnd)
-    //).subscribe(() => {
-    //this.reportsService.getPurchaseReport(apartmentId).subscribe(result => this.purchaseReport=result, error=>console.error(error));
-    //this.reportsService.getIncomeReports(apartmentId, 2018).subscribe(result => this.incomeReport = result, error => console.error(error));
-    //});
+    this.route.paramMap.subscribe(params => {
+      this.apartmentId = +params.get('apartmentId');
+      this.loadApartmentReports(this.apartmentId);
+    });
+
+
 
   }
 
@@ -84,11 +91,6 @@ export class ApartmentReportsComponent implements OnInit {
 
   }
 
-
-  //ngOnChanges(changes: SimpleChanges) {
-  //  console.log(changes);
-  //  this.buyerExpectedRerutn = this.buyerExpectedRerutnPercents / 100;
-  //}
 
   onChange(e) {
     this.reportsService.getIncomeReport(this.apartmentId, this.selectedYear).subscribe(result => this.incomeReport = result, error => console.error(error));

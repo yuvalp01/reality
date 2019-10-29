@@ -11,6 +11,7 @@ namespace Nadlan.ViewModels
         {
             CreateMap<Transaction, TransactionDto>();
             CreateMap<TransactionDto, Transaction>();
+            CreateMap<PersonalTransaction, PersonalTransactionDto>();
 
         }
     }

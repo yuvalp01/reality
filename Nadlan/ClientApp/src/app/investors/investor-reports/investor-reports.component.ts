@@ -1,13 +1,18 @@
-import { Component, OnInit, SimpleChanges } from "@angular/core";
+import { Component, OnInit, SimpleChanges, ViewEncapsulation, Output } from "@angular/core";
 import { IInvestorReportOverview, IStakeholder, IPersonalTransaction } from "../../models";
 import { PersonalTransService } from "../personal-trans.service";
 import { ActivatedRoute } from "@angular/router";
 import { MatTableDataSource, MatDialog } from "@angular/material";
 import { PersonalTransDialogComponent } from "../personal-trans-dialog/personal-trans-dialog.component";
+import { ApartmentReportsComponent } from "src/app/reports/apartment-reports.component";
 
 @Component({
+  selector: 'investor-reports',
   templateUrl: './investor-reports.component.html',
-  styleUrls: ['./investor-reports.component.css']
+  styleUrls: ['./investor-reports.component.css'],
+  //styles: [`.mat-tab-header {
+  //background - color: red!important;
+  //}`]
 })
 export class InvestorReportComponent implements OnInit {
 
@@ -15,10 +20,10 @@ export class InvestorReportComponent implements OnInit {
     private personalTransService: PersonalTransService,
     private route: ActivatedRoute,
     private dialog: MatDialog) { }
+  @Output() stakeholderId: number;
   investorReportOverview: IInvestorReportOverview;
   stakeholders: IStakeholder[];
-  stakeholderId: number;
-
+  portfolioColumns = ['apartment', 'purchaseDate', 'investment', 'ownership'];//'minimalProfitUpToDate', 'distributed'
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.stakeholderId = +params.get("stakeholderId");
@@ -61,6 +66,13 @@ export class InvestorReportComponent implements OnInit {
       , error => console.error(error));
 
   }
+  showApartmentReport(apartmentId) {
 
+    const dialogRef = this.dialog.open(ApartmentReportsComponent, {
+      height: 'auto',
+      width: 'auto',
+      data: { apartmentId: apartmentId }
+    });
+  }
 
 }

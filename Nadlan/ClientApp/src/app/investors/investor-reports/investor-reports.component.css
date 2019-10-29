@@ -9,8 +9,15 @@ table#portfolio {
 
 .mat-footer-row {
   font-weight: bold;
+ 
+}
+.mat-footer-cell {
+  color: maroon;
 }
 
 .nav-link {
   padding: 0;
+}
+ .mat-tab-header {
+  background-color: red !important;
 }

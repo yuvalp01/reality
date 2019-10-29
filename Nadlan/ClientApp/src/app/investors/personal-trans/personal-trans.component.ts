@@ -20,7 +20,7 @@ export class PersonalTransComponent implements OnInit, OnChanges  {
     private route: Router,
     private personalTransService: PersonalTransService,
     private dialog: MatDialog) { }
-  displayedColumns: string[] = ['date', 'stakeholderId', 'amount', 'comments'];
+  displayedColumns: string[] = ['date', 'amount','apartment', 'comments'];
   balance: number = 0;
 
   dataSourceTrans = new MatTableDataSource<IPersonalTransaction>();
@@ -28,7 +28,8 @@ export class PersonalTransComponent implements OnInit, OnChanges  {
   @Input() stakeholderId: number;
   ngOnInit() {
     if (this.editable) {
-      this.displayedColumns.push('actions');
+//      this.displayedColumns.push('actions');
+      this.displayedColumns = ['date', 'stakeholderId', 'amount','apartment', 'comments', 'actions'];
     }
     this.refreshData(this.stakeholderId);
   }

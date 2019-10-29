@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Nadlan.Models;
 using Nadlan.Repositories;
+using Nadlan.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,10 +16,10 @@ namespace Nadlan.Controllers
     {
         //private readonly NadlanConext _context;
         private readonly IRepositoryWrapper _repositoryWrapper;
-
-        public PersonalTransactionsController(NadlanConext context, IRepositoryWrapper repositoryWrapper)
+        private readonly IMapper _mapper;
+        public PersonalTransactionsController(NadlanConext context, IRepositoryWrapper repositoryWrapper, IMapper mapper)
         {
-            //_context = context;
+            _mapper = mapper;
             _repositoryWrapper = repositoryWrapper;
         }
 
@@ -51,17 +53,18 @@ namespace Nadlan.Controllers
         }
 
         [HttpGet("GetByStakeholderId/{stakeholderId}")]
-        public async Task<ActionResult<IEnumerable<PersonalTransaction>>> GetPersonalTransactionByStakeholderId(int stakeholderId)
+        public async Task<IEnumerable<PersonalTransactionDto>> GetPersonalTransactionByStakeholderId(int stakeholderId)
         {
             //var personalTransaction = await _context.PersonalTransactions.Where(a => a.StakeholderId == stakeholderId).ToListAsync();
-            var personalTransactions = _repositoryWrapper.PersonalTransaction.GetByStakeholderAsync(stakeholderId);
+            var personalTransactions = await _repositoryWrapper.PersonalTransaction.GetByStakeholderAsync(stakeholderId);
+            var personalTransactionsDto = _mapper.Map<List<PersonalTransaction>, IEnumerable<PersonalTransactionDto>>(personalTransactions);
 
-            if (personalTransactions == null)
-            {
-                return NotFound();
-            }
+            //if (personalTransactions == null)
+            //{
+            //    return NotFound();
+            //}
 
-            return await personalTransactions;
+            return  personalTransactionsDto;
         }
 
         [HttpGet("GetByType/{stakeholderId}/{transactionTypeId}")]
