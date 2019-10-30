@@ -61,9 +61,11 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let transaction">
-        <button *ngIf="!transaction.isConfirmed" (click)="openEdit(transaction.id)" mat-button color="primary">Edit</button>
-        <button *ngIf="!transaction.isConfirmed" (click)="delete(transaction.id)" mat-button color="warn">Delete</button>
-        <button *ngIf="!transaction.isConfirmed" (click)="confirm(transaction.id)" mat-button color="green">Confirm</button>
+        <div *ngIf="userType==1">
+          <button *ngIf="!transaction.isConfirmed" (click)="openEdit(transaction.id)" mat-button color="primary">Edit</button>
+          <button *ngIf="!transaction.isConfirmed" (click)="delete(transaction.id)" mat-button color="warn">Delete</button>
+          <button *ngIf="!transaction.isConfirmed" (click)="confirm(transaction.id)" mat-button color="green">Confirm</button>
+        </div>
         <!--<span *ngIf="transaction.isConfirmed" matBadge="Confirmed" matBadgeOverlap="false"> </span>-->
         <mat-icon *ngIf="transaction.isConfirmed" matTooltip="Confirmed" >check_circle</mat-icon>
 

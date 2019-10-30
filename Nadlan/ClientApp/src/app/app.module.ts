@@ -22,7 +22,7 @@ import { ApartmentReportsComponent } from './reports/apartment-reports.component
 import { ReportsComponent } from './reports/reports.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyOwnCustomMaterialModule } from './shared/cusotom-material';
-import { MAT_DATE_LOCALE } from '@angular/material';
+import { MAT_DATE_LOCALE, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { MinusSignToParens } from './shared/minusSignToParens';
 import { TransactionsDialogComponent } from './transactions/transactions-dialog.component';
 import { RenovationComponent } from './renovation/renovation.component';
@@ -35,6 +35,7 @@ import { AddExpenseComponent } from './expenses/expenses-form.component';
 import { InvestrorsModule } from './investors/investrors.module';
 import { ExpensesService } from './services/expenses.service';
 import { SharedModule } from './shared/shared.module';
+import { WelcomepageComponent } from './welcomepage/welcomepage.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -56,7 +57,8 @@ import { SharedModule } from './shared/shared.module';
     ExpensesComponent,
     TransactionsTableComponent,
     AddExpenseComponent,
-    
+    WelcomepageComponent,
+
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -66,7 +68,7 @@ import { SharedModule } from './shared/shared.module';
     MyOwnCustomMaterialModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([
-      { path: '', component: TransactionListComponent, pathMatch: 'full' },
+      { path: '', component: WelcomepageComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'add-apartment', component: AddApartmentForm },
       { path: 'fetch-accounts', component: AccountListComponent },
@@ -74,7 +76,7 @@ import { SharedModule } from './shared/shared.module';
       { path: 'add-account', component: AddAccoutComponent },
       { path: 'reports/:apartmentId', component: ReportsComponent },
 
-      
+
       //{ path: 'reports/:apartmentId', component: ApartmentReportsComponent },
       { path: 'renovation', component: RenovationComponent },
       { path: 'renovation-list', component: RenovationListComponent },
@@ -86,7 +88,16 @@ import { SharedModule } from './shared/shared.module';
     //ApartmentReportsComponent
   ],
 
-  providers: [ApartmentService, AccountService, TransactionService, ExpensesService, ReportService, RenovationService, ExcelService,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
+  providers: [ApartmentService,
+    AccountService,
+    TransactionService,
+    ExpensesService,
+    ReportService,
+    RenovationService,
+    ExcelService,
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MatDialogRef, useValue: {} }],
   bootstrap: [AppComponent],
   entryComponents: [TransactionsDialogComponent, AddTransactionComponent, AddExpenseComponent]
 })

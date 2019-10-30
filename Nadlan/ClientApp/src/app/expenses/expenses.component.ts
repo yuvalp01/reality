@@ -17,7 +17,7 @@ export class ExpensesComponent implements OnInit {
   dataSourceAssistant = new MatTableDataSource<ITransaction>();
   selectedApartment: any;
   assistantBalance: number;
-
+  userType: number;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   constructor(
     private expensesService: ExpensesService,
@@ -26,6 +26,8 @@ export class ExpensesComponent implements OnInit {
   /*  private dialogRef: MatDialogRef<AddExpenseComponent>*/ ) {
   }
   ngOnInit(): void {
+    this.userType = window.sessionStorage.getItem("userType");
+
     this.refreshData();
   }
   refreshData() {

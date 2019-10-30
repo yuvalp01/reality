@@ -60,9 +60,7 @@ export class ApartmentReportsComponent implements OnInit {
 
 
   ngOnChanges(changes: SimpleChanges): void {
-
     //console.log('changes :' + changes.apartmentId.previousValue);
-    //console.log('changes :' + changes.apartmentId.currentValue);
     this.apartmentId = changes.apartmentId.currentValue;
     this.loadApartmentReports(this.apartmentId);
 

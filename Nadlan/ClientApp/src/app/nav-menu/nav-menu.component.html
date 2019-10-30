@@ -1,17 +1,19 @@
 <header>
   <nav class='navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3'>
     <div class="container">
-      <a class="navbar-brand" [routerLink]='["/"]'>NadlanNew</a>
+      <!--<a class="navbar-brand" [routerLink]='["/"]'>Nadlan</a>-->
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-label="Toggle navigation"
-        [attr.aria-expanded]="isExpanded" (click)="toggle()">
+              [attr.aria-expanded]="isExpanded" (click)="toggle()">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" [ngClass]='{"show": isExpanded}'>
         <ul class="navbar-nav flex-grow">
 
-        
+          <li *ngIf="userType==3" class="nav-item" [routerLinkActive]='["link-active"]'>
+            <a class="nav-link text-dark" [routerLink]='["/investor-reports",userId]'>Investment Reports</a>
+          </li>
 
-          <li class="nav-item" [routerLinkActive]='["link-active"]'>
+          <li *ngIf="userType==1" class="nav-item" [routerLinkActive]='["link-active"]'>
 
             <a mat-button class="nav-link text-dark" [matMenuTriggerFor]="menu">Investors Reports</a>
             <mat-menu #menu="matMenu">
@@ -27,32 +29,44 @@
           <!--<li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
     <a class="nav-link text-dark" [routerLink]='["/reports"]'>Reports</a>
   </li>-->
-          <li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+          <li *ngIf="userType==1" class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
             <a class="nav-link text-dark" [routerLink]='["/reports/1"]'>Apartments Reports</a>
           </li>
 
           <!--<li class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-dark" [routerLink]='["/fetch-accounts"]'>Accounts</a>
-          </li>-->
-          <li class="nav-item" [routerLinkActive]='["link-active"]'>
+    <a class="nav-link text-dark" [routerLink]='["/fetch-accounts"]'>Accounts</a>
+  </li>-->
+          <li *ngIf="userType==1" class="nav-item" [routerLinkActive]='["link-active"]'>
             <a class="nav-link text-dark" [routerLink]='["/fetch-transactions"]'>Transactions</a>
           </li>
 
-          <li class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-dark" [routerLink]='["/renovation-list"]'>Renovation</a>
-          </li>
+
           <!--<li class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-dark" [routerLink]='["/investor-reports",1]'>Investor Reports</a>
-          </li>-->
-          <li class="nav-item" [routerLinkActive]='["link-active"]'>
+    <a class="nav-link text-dark" [routerLink]='["/investor-reports",1]'>Investor Reports</a>
+  </li>-->
+          <li *ngIf="userType==1" class="nav-item" [routerLinkActive]='["link-active"]'>
             <a class="nav-link text-dark" [routerLink]='["/personal-admin","1"]'>Personal Administration</a>
           </li>
-          <li class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-dark" [routerLink]='["/expenses"]'>Expenses</a>
+
+          <li *ngIf="userType==1" class="nav-item" [routerLinkActive]='["link-active"]'>
+            <a class="nav-link text-dark" [routerLink]='["/renovation-list"]'>Renovation</a>
           </li>
 
+          <li *ngIf="userType==1||userType==2" class="nav-item" [routerLinkActive]='["link-active"]'>
+            <a class="nav-link text-dark" [routerLink]='["/expenses"]'>Expenses & Hours</a>
+          </li>
+
+          <!--<li style="position:relative; left:100px; " class="nav-item" [routerLinkActive]='["link-active"]'>
+    <a style="color:lightgray !important" class="nav-link text-dark" (click)="toggleAdmin()">.</a>
+  </li>-->
         </ul>
       </div>
     </div>
   </nav>
+  <form *ngIf="showAdmin" #admin="ngForm" style="position:absolute">
+    <!--<button (click)="test">test</button>-->
+    <input style="width:20px" [(ngModel)]="userType" name="userType" type="number" />
+    <!--{{userType}}-->
+  </form>
+
 </header>

@@ -10,7 +10,7 @@ import { InvestorReportComponent } from './investor-reports/investor-reports.com
 import { PersonalTransDialogComponent } from './personal-trans-dialog/personal-trans-dialog.component';
 import { SharedModule } from '../shared/shared.module';
 import { ApartmentReportsComponent } from '../reports/apartment-reports.component';
-import { InvestorsOverviewComponent } from './investors-overview.component';
+
 //import { ApartmentReportsComponent } from '../reports/apartment-reports.component';
 
 
@@ -21,7 +21,6 @@ import { InvestorsOverviewComponent } from './investors-overview.component';
     PersonalTransFormComponent,
     InvestorReportComponent,
     PersonalTransDialogComponent,
-    InvestorsOverviewComponent,
     //ApartmentReportsComponent
     ],
   imports: [
