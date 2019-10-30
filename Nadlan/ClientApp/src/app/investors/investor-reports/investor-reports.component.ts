@@ -5,6 +5,7 @@ import { ActivatedRoute } from "@angular/router";
 import { MatTableDataSource, MatDialog } from "@angular/material";
 import { PersonalTransDialogComponent } from "../personal-trans-dialog/personal-trans-dialog.component";
 import { ApartmentReportsComponent } from "src/app/reports/apartment-reports.component";
+import { debug } from "util";
 
 @Component({
   selector: 'investor-reports',
@@ -23,7 +24,8 @@ export class InvestorReportComponent implements OnInit {
   @Output() stakeholderId: number;
   investorReportOverview: IInvestorReportOverview;
   stakeholders: IStakeholder[];
-  portfolioColumns = ['apartment', 'purchaseDate', 'investment', 'ownership'];//'minimalProfitUpToDate', 'distributed'
+  portfolioColumns = ['apartment', 'purchaseDate', 'investment', 'minimalProfitUpToDate','distributed', 'ownership'];//'minimalProfitUpToDate', 'distributed'
+  selectedTab: number;
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.stakeholderId = +params.get("stakeholderId");
@@ -74,5 +76,17 @@ export class InvestorReportComponent implements OnInit {
       data: { apartmentId: apartmentId }
     });
   }
+
+  public isPositive(value: number): boolean {
+    if (value >= 0) {
+      return true;
+    }
+    return false;
+  }
+
+  //changeTab(tabIndex) {
+  //  debugger
+  //  this.selectedTab = tabIndex;
+  //}
 
 }

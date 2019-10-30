@@ -1,7 +1,7 @@
 
 <div *ngIf="investorReportOverview">
   <h2 style="text-align: center;    font-style: italic;">{{investorReportOverview.name}}</h2>
-  <mat-tab-group dynamicHeight="false">
+  <mat-tab-group dynamicHeight="false" [selectedIndex]="selectedTab">
 
     <mat-tab label="Overview">
       <mat-card>
@@ -12,32 +12,44 @@
             <mat-list-item>
               <mat-icon mat-list-icon>business_center</mat-icon>
               <span matTooltip="The amount of money committed up-to-date">Total Investment</span>
-              <span [ngClass]="'positive'">{{investorReportOverview.totalInvestment | currency:'EUR' : number:'1.0-0'}}</span>
+              <span [ngClass]="{
+          positive: isPositive(investorReportOverview.totalInvestment),
+          negative: !isPositive(investorReportOverview.totalInvestment)
+        }">{{investorReportOverview.totalInvestment | currency:'EUR' : number:'1.0-0'}}</span>
             </mat-list-item>
             <!--<mat-divider></mat-divider>-->
             <mat-list-item>
               <mat-icon mat-list-icon>business_center</mat-icon>
               <span matTooltip="Money belongs to you and can be withdrawn at any moment. For details see 'Transactions' tab">Cash Balance</span>
-              <span [ngClass]="'positive'">{{investorReportOverview.cashBalance| currency:'EUR' : number:'1.0-0'}}</span>
+              <span  [ngClass]="{
+          positive: isPositive(investorReportOverview.cashBalance),
+          negative: !isPositive(investorReportOverview.cashBalance)
+        }">{{investorReportOverview.cashBalance| currency:'EUR' : number:'1.0-0'}}</span>
             </mat-list-item>
 
             <mat-list-item>
               <mat-icon mat-list-icon>business_center</mat-icon>
-              <span matTooltip="Minimal profit up-to-date (3% per year). For details see 'Portfolio' tab"> MinimalProfit</span>
-              <span [ngClass]="'positive'">{{investorReportOverview.minimalProfitUpToDate| currency:'EUR' : number:'1.0-0'}}</span>
+              <span matTooltip="Minimal profit up-to-date (3% per year). For details see 'Portfolio' tab"> Minimal Profit</span>
+              <span [ngClass]="{
+          positive: isPositive(investorReportOverview.minimalProfitUpToDate),
+          negative: !isPositive(investorReportOverview.minimalProfitUpToDate)
+        }">{{investorReportOverview.minimalProfitUpToDate| currency:'EUR' : number:'1.0-0'}}</span>
             </mat-list-item>
-
+            <mat-divider></mat-divider>
             <mat-list-item style="color:#2222c7">
               <mat-icon mat-list-icon>business_center</mat-icon>
-              <span>Total Balace</span>
+              <span matTooltip="Cash Balance + Minimal Profit">Total Balace</span>
               <span>{{investorReportOverview.totalBalace| currency:'EUR' : number:'1.0-0'}}</span>
             </mat-list-item>
             <mat-divider></mat-divider>
 
-            <mat-list-item (click)="showTrans(20)" style="cursor:pointer;" matTooltip="Total amount distributed from all apartments so far">
+            <mat-list-item (click)="showTrans(20)" style="cursor:pointer;" >
               <mat-icon mat-list-icon>business_center</mat-icon>
-              <span>Total Distribution</span>
-              <span style="font-weight:bold" [ngClass]="'positive'">{{investorReportOverview.totalDistribution| currency:'EUR' : number:'1.0-0'}}</span>
+              <span matTooltip="Total amount distributed from all apartments so far">Distributed so far</span>
+              <span style="font-weight:bold" [ngClass]="{
+          positive: isPositive(investorReportOverview.totalDistribution),
+          negative: !isPositive(investorReportOverview.totalDistribution)
+        }">{{investorReportOverview.totalDistribution| currency:'EUR' : number:'1.0-0'}}</span>
             </mat-list-item>
 
 

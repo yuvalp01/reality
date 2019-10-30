@@ -21,4 +21,15 @@ mat-card {
   background-color: antiquewhite !important;
 }
 
+#renovation .mat-expansion-panel-header-title, #renovation .mat-expansion-panel-header-description,
+#expenses-no-renovation .mat-expansion-panel-header-title, #expenses-no-renovation .mat-expansion-panel-header-description {
+  color: gray;
+}
 
+/*#renovation .mat-content {
+  color: rebeccapurple !important
+}*/
+
+.test {
+background-color:aqua !important
+}

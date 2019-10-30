@@ -41,15 +41,17 @@ export class ApartmentReportsComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any) {
   }
   ngOnInit(): void {
-    debugger
     if (this.data.apartmentId) {
       this.apartmentId = +this.data.apartmentId;
       this.loadApartmentReports(this.apartmentId);
     }
 
     this.route.paramMap.subscribe(params => {
-      this.apartmentId = +params.get('apartmentId');
-      this.loadApartmentReports(this.apartmentId);
+      let _apartmentId = +params.get('apartmentId');
+      if (_apartmentId > 0) {
+        this.apartmentId = _apartmentId;
+        this.loadApartmentReports(this.apartmentId);
+      }
     });
 
 
@@ -58,6 +60,7 @@ export class ApartmentReportsComponent implements OnInit {
 
 
   ngOnChanges(changes: SimpleChanges): void {
+
     //console.log('changes :' + changes.apartmentId.previousValue);
     //console.log('changes :' + changes.apartmentId.currentValue);
     this.apartmentId = changes.apartmentId.currentValue;
