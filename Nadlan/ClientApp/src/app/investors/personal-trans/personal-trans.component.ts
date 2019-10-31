@@ -61,7 +61,7 @@ export class PersonalTransComponent implements OnInit, OnChanges  {
 
 
     let dialogRef = this.dialog.open(PersonalTransFormComponent, {
-      height: '500px',
+      height: '600px',
       width: '500px',
       data: { transactionId: _transactionId }
     });

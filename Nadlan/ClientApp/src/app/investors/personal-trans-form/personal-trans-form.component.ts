@@ -2,9 +2,10 @@ import { Component, OnInit, ViewChild, NgZone, Inject, Output, EventEmitter, ɵC
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
-import { IStakeholder, IPersonalTransaction } from '../../models';
+import { IStakeholder, IPersonalTransaction, IApartment } from '../../models';
 import { PersonalTransService } from '../personal-trans.service';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+import { ApartmentService } from 'src/app/services/apartment.service';
 
 
 
@@ -18,12 +19,15 @@ export class PersonalTransFormComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private _ngZone: NgZone,
+    private snackBar: MatSnackBar,
     private personalTransService: PersonalTransService,
+    private apartmentService: ApartmentService,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   title: string;
   personalTransForm: FormGroup;
   stakeholders: IStakeholder[];
+  apartments: IApartment[];
   personalTrans: IPersonalTransaction;
   @Output() refreshEmitter = new EventEmitter();
   @Output() chageStakeholderEmitter = new EventEmitter();
@@ -32,6 +36,7 @@ export class PersonalTransFormComponent implements OnInit {
     this.loadData();
     this.personalTransForm = this.formBuilder.group({
       stakeholderId: [0, Validators.min(-2)],
+      apartmentId: [0, Validators.min(-2)],
       amount: [null, Validators.required],
       date: [null, Validators.required],
       comments: ['', Validators.required],
@@ -49,19 +54,19 @@ export class PersonalTransFormComponent implements OnInit {
         const t: IPersonalTransaction = { ...this.personalTrans, ...this.personalTransForm.value }
         t.date = this.fixUtcDate(t.date);
 
-        if (t.id == 0) {
-          this.personalTransService.addPersonalTrans(t)
-            .subscribe({
-              next: result => this.onSaveComplete(result),
-              error: err => console.error(err)
-            });
-        }
-        else {
+        if (t.id) {
           this.personalTransService.editPersonalTrans(t)
             .subscribe({
               next: result => this.onSaveComplete(result),
               error: err => console.error(err)
             })
+        }
+        else {
+          this.personalTransService.addPersonalTrans(t)
+            .subscribe({
+              next: result => this.onSaveComplete(result),
+              error: err => console.error(err)
+            });
         }
       }
       else {
@@ -77,9 +82,12 @@ export class PersonalTransFormComponent implements OnInit {
 
 
   onSaveComplete(result: IPersonalTransaction) {
+    let action = 'Updated'; 
     if (result) {
-      this.personalTrans.id = result.id;
+      this.personalTrans = result;
+      action = 'Added';
     }
+    let snackBarRef = this.snackBar.open(`Personal transaction`, action, { duration: 2000 });
     this.refreshEmitter.emit();
   }
 
@@ -99,10 +107,19 @@ export class PersonalTransFormComponent implements OnInit {
       //this.loadTrans(this.data.transactionId);
       this.personalTransService.getPesonalTransById(this.data.transactionId)
         .subscribe({
-          next: result => this.loadTrans(result),
+          next: result => {
+            this.loadTrans(result)
+          },
           error: err => console.error(err)
         });
     }
+
+    this.apartmentService.getApartments()
+      .subscribe({
+        next: result => this.apartments = result,
+        error: err => console.error(err)
+      });
+
   }
 
   loadTrans(result: IPersonalTransaction) {

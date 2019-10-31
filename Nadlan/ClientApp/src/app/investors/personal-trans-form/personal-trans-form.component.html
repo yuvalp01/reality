@@ -20,11 +20,21 @@
         </mat-select>
       </mat-form-field>
     </fieldset>
+    <fieldset>
+      <mat-form-field style="width: 100%" appearance="outline">
+        <mat-label>Apartment</mat-label>
+        <mat-select formControlName="apartmentId">
+          <mat-option *ngFor="let apartment of apartments" [value]="apartment.id">
+            {{apartment.address}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
+    </fieldset>
     <fieldset>
       <mat-form-field style="width: 100%" appearance="outline">
         <mat-label>Amount</mat-label>
-         <input formControlName="amount" matInput />
+        <input formControlName="amount" matInput />
       </mat-form-field>
     </fieldset>
     <fieldset>

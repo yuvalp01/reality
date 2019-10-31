@@ -88,29 +88,8 @@ namespace Nadlan.Controllers
         [HttpPut()]
         public async Task<IActionResult> PutPersonalTransaction(PersonalTransaction personalTransaction)
         {
-            //if (id != personalTransaction.Id)
-            //{
-            //    return BadRequest();
-            //}
+
             await _repositoryWrapper.PersonalTransaction.UpdateTransactionAsync(personalTransaction);
-            //_context.Entry(personalTransaction).State = EntityState.Modified;
-
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException)
-            //{
-            //    if (!PersonalTransactionExists(id))
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
-
             return NoContent();
         }
 
