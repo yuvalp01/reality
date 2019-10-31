@@ -1,16 +1,30 @@
 
-mat-card {
-  /*color: red;*/
+/*mat-card {
   height:650px ;
 }
 .selected {
   font-weight: bold;
-  /*color: rebeccapurple !important;*/
 }
-.class2 {
-  font: bold;
-  color: rebeccapurple;
-}
+*/
 table {
   width: 100%
 }
+.mat-drawer {
+  float: left !important;
+  position: relative !important;
+}
+
+/*.example-container {
+  width: 400px;
+  height: 200px;
+  margin: 12px;
+  border: 1px solid #555;
+}
+
+mat-drawer-content {
+  margin-left: 245px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}*/

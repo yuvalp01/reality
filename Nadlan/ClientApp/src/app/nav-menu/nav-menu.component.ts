@@ -22,7 +22,7 @@ export class NavMenuComponent implements OnInit{
     ////  this.userType =  +params.get('usertype');
     ////})
     //this.userType = 1;
-    this.userId = 107;
+    this.userId = 199;
     this.configurePage(this.userId);
     window.sessionStorage.setItem("userType", this.userType.toString());
     //if (this.userType==1) {

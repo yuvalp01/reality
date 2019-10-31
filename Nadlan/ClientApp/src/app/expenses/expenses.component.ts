@@ -26,8 +26,7 @@ export class ExpensesComponent implements OnInit {
   /*  private dialogRef: MatDialogRef<AddExpenseComponent>*/ ) {
   }
   ngOnInit(): void {
-    this.userType = window.sessionStorage.getItem("userType");
-
+    this.userType = +window.sessionStorage.getItem("userType");
     this.refreshData();
   }
   refreshData() {

@@ -1,22 +1,8 @@
 
 mat-card {
-  /*color: red;*/
   height:650px ;
 }
 
-
-
-
-.class1 {
-  font: bold;
-}
-.class2 {
-  color:rebeccapurple;
-}
-
-/*::ng-deep .mat-tab-header {
-  background-color: red;
-}*/
 .mat-tab-header {
   background-color: antiquewhite !important;
 }
@@ -26,10 +12,8 @@ mat-card {
   color: gray;
 }
 
-/*#renovation .mat-content {
-  color: rebeccapurple !important
-}*/
 
-.test {
-background-color:aqua !important
-}
+
+/*::ng-deep .mat-tab-header {
+  background-color: red;
+}*/
