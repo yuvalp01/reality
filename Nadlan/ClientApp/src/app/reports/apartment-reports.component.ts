@@ -26,7 +26,7 @@ export class ApartmentReportsComponent implements OnInit {
   selectedYear: number = 0;
   @Input() apartmentId: number = 0;
   dataSource = new MatTableDataSource<ITransaction>();
-
+  isIgnoreChanges: boolean = true;
   @Output() myEvent = new EventEmitter();
 
 
@@ -41,18 +41,26 @@ export class ApartmentReportsComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any) {
   }
   ngOnInit(): void {
+    //when open as a dialog
     if (this.data.apartmentId) {
-      this.apartmentId = +this.data.apartmentId;
-      this.loadApartmentReports(this.apartmentId);
+      this.loadApartmentReports(+this.data.apartmentId);
+      this.isIgnoreChanges = false;
+      //this.apartmentId = +this.data.apartmentId;
+      //this.loadApartmentReports(this.apartmentId);
+
+    }
+    else {
+      //this.isIgnoreChanges = true;
+      this.route.paramMap.subscribe(params => {
+        let _apartmentId = +params.get('apartmentId');
+        if (_apartmentId > 0) {
+          //this.apartmentId = _apartmentId;
+          this.loadApartmentReports(_apartmentId);
+        }
+      });
     }
 
-    this.route.paramMap.subscribe(params => {
-      let _apartmentId = +params.get('apartmentId');
-      if (_apartmentId > 0) {
-        this.apartmentId = _apartmentId;
-        this.loadApartmentReports(this.apartmentId);
-      }
-    });
+
 
 
 
@@ -60,9 +68,12 @@ export class ApartmentReportsComponent implements OnInit {
 
 
   ngOnChanges(changes: SimpleChanges): void {
-    //console.log('changes :' + changes.apartmentId.previousValue);
-    this.apartmentId = changes.apartmentId.currentValue;
-    this.loadApartmentReports(this.apartmentId);
+    //this.apartmentId = changes.apartmentId.currentValue;
+    if (!this.isIgnoreChanges) {
+      let _apartmentId = changes.apartmentId.currentValue;
+      this.loadApartmentReports(_apartmentId);
+    }
+
 
   }
 

@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   templateUrl: './personal-trans.component.html',
   styleUrls: ['./personal-trans.component.css']
 })
-export class PersonalTransComponent implements OnInit, OnChanges  {
+export class PersonalTransComponent implements OnChanges, OnInit  {
 
 
 
@@ -31,7 +31,7 @@ export class PersonalTransComponent implements OnInit, OnChanges  {
 //      this.displayedColumns.push('actions');
       this.displayedColumns = ['date', 'stakeholderId', 'amount','apartment', 'comments', 'actions'];
     }
-    this.refreshData(this.stakeholderId);
+    //this.refreshData(this.stakeholderId);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
