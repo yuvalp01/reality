@@ -10,7 +10,7 @@ import { ITransaction } from "../models";
 
 })
 export class TransactionsDialogComponent {
-  transactionColumns: string[] = ['date', 'amount', 'isPurchaseCost', 'comments']; /*'id',*/
+  transactionColumns: string[] = ['date', 'amount', 'comments']; /*'id', 'isPurchaseCost'*/
   //transactionColumns: string[] = [ 'date', 'amount',  'comments'];
 
   constructor(private dialogRef: MatDialogRef<TransactionsDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: ITransaction) {

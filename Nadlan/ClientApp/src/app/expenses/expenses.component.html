@@ -52,7 +52,6 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>
       <td mat-cell *matCellDef="let transaction">
         <!--<mat-icon>info</mat-icon>-->
-
         {{transaction.comments}}
       </td>
 
@@ -61,13 +60,13 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let transaction">
-        <div *ngIf="userType==1">
+        <div>
           <button *ngIf="!transaction.isConfirmed" (click)="openEdit(transaction.id)" mat-button color="primary">Edit</button>
           <button *ngIf="!transaction.isConfirmed" (click)="delete(transaction.id)" mat-button color="warn">Delete</button>
-          <button *ngIf="!transaction.isConfirmed" (click)="confirm(transaction.id)" mat-button color="green">Confirm</button>
+          <button *ngIf="!transaction.isConfirmed && userType==1" (click)="confirm(transaction.id)" mat-button color="green">Confirm</button>
         </div>
         <!--<span *ngIf="transaction.isConfirmed" matBadge="Confirmed" matBadgeOverlap="false"> </span>-->
-        <mat-icon *ngIf="transaction.isConfirmed" matTooltip="Confirmed" >check_circle</mat-icon>
+        <mat-icon *ngIf="transaction.isConfirmed" matTooltip="Confirmed">check_circle</mat-icon>
 
       </td>
     </ng-container>

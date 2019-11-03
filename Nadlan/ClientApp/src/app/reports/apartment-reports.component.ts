@@ -43,9 +43,9 @@ export class ApartmentReportsComponent implements OnInit {
   ngOnInit(): void {
     //when open as a dialog
     if (this.data.apartmentId) {
-      this.loadApartmentReports(+this.data.apartmentId);
+      this.apartmentId = +this.data.apartmentId;
+      this.loadApartmentReports(this.apartmentId);
       this.isIgnoreChanges = false;
-      //this.apartmentId = +this.data.apartmentId;
       //this.loadApartmentReports(this.apartmentId);
 
     }
@@ -54,8 +54,8 @@ export class ApartmentReportsComponent implements OnInit {
       this.route.paramMap.subscribe(params => {
         let _apartmentId = +params.get('apartmentId');
         if (_apartmentId > 0) {
-          //this.apartmentId = _apartmentId;
-          this.loadApartmentReports(_apartmentId);
+          this.apartmentId = _apartmentId;
+          this.loadApartmentReports(this.apartmentId);
         }
       });
     }
@@ -70,8 +70,8 @@ export class ApartmentReportsComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     //this.apartmentId = changes.apartmentId.currentValue;
     if (!this.isIgnoreChanges) {
-      let _apartmentId = changes.apartmentId.currentValue;
-      this.loadApartmentReports(_apartmentId);
+      this.apartmentId = changes.apartmentId.currentValue;
+      this.loadApartmentReports(this.apartmentId);
     }
 
 
@@ -89,7 +89,12 @@ export class ApartmentReportsComponent implements OnInit {
 
 
   showTrans(accountId, accountName, isPurchaseCost) {
-    this.transactionService.getTransactionsByAccount(this.apartmentId, accountId, isPurchaseCost, this.selectedYear).subscribe(
+    let year = this.selectedYear;
+    //Purchase costs are not year dependant
+    if (isPurchaseCost) {
+      year = 0;
+    }
+    this.transactionService.getTransactionsByAccount(this.apartmentId, accountId, isPurchaseCost, year).subscribe(
       result => {
         //this.transactions = result;
         this.dataSource.data = result as ITransaction[];

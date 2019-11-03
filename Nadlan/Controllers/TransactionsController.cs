@@ -61,6 +61,12 @@ namespace Nadlan.Controllers
         [HttpGet("{apartmentId}/{accountId}/{isPurchaseCost}/{year=0}")]
         public async Task<IActionResult> GetTransaction([FromRoute] int apartmentId, int accountId, bool isPurchaseCost, int year)
         {
+            //Purchase costs are not year dependant
+            if (isPurchaseCost)
+            {
+                year = 0;
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
