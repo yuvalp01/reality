@@ -8,6 +8,7 @@ import { Router } from "@angular/router";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { take } from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog, MatSnackBar } from "@angular/material";
+import { element } from "protractor";
 
 
 
@@ -35,6 +36,7 @@ export class AddExpenseComponent implements OnInit {
   @Input() isHourForm: boolean = false;
   labelDate: string;
   labelTitle: string;
+  actionName: string;
   iconType: string;
 
   purchaseCostAccounts: number[] = [6, 7, 8, 11, 12, 13];
@@ -195,6 +197,7 @@ export class AddExpenseComponent implements OnInit {
     //}
     //debugger
     if (this.data.expense) {
+      this.actionName = "Edit";
       let expense: ITransaction = this.data.expense;
       this.transactionId = expense.id;
       this.transactionForm.setValue({
@@ -213,6 +216,9 @@ export class AddExpenseComponent implements OnInit {
       //hours.setValue(expense.hours);
       //comments.setValue(expense.comments);
       //isPurchaseCost.setValue(expense.isPurchaseCost);
+    }
+    else {
+      this.actionName = "Add new";
     }
   }
 }

@@ -9,23 +9,23 @@ import { FormsModule } from '@angular/forms';
 })
 export class NavMenuComponent implements OnInit{
   isExpanded = false;
-  userType: number = 0;
+  role: number = 0;
   userId: number = 0;
   //showAdmin: boolean = false;
   constructor(private route:ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
-    //let xxx = this.route.snapshot.queryParams['usertype'];
+    //let xxx = this.route.snapshot.queryParams['role'];
     //const queryParams = this.route.snapshot.queryParams;
-    //let yyy = queryParams.usertype;
+    //let yyy = queryParams.role;
     ////this.route.queryParamMap.subscribe(params => {
-    ////  this.userType =  +params.get('usertype');
+    ////  this.role =  +params.get('role');
     ////})
-    //this.userType = 1;
+    //this.role = 1;
     this.userId = 199;
     this.configurePage(this.userId);
-    window.sessionStorage.setItem("userType", this.userType.toString());
-    //if (this.userType==1) {
+    window.sessionStorage.setItem("role", this.role.toString());
+    //if (this.role==1) {
     //  console.log('xxxxx');
     //}
   }
@@ -33,15 +33,15 @@ export class NavMenuComponent implements OnInit{
   configurePage(userId:number) {
     switch (userId) {
       case 199:
-        this.userType = 1;
+        this.role = 1;
         this.router.navigateByUrl(`/fetch-transactions`);
         break;
       case 107:
-        this.userType = 2;
+        this.role = 2;
         this.router.navigateByUrl(`/expenses`);
         break;
       default:
-        this.userType = 3;
+        this.role = 3;
         this.router.navigateByUrl(`/investor-reports/${this.userId}`);
         break;
     }
@@ -58,3 +58,5 @@ export class NavMenuComponent implements OnInit{
   //  this.showAdmin = !this.showAdmin;  
   //}
 }
+
+

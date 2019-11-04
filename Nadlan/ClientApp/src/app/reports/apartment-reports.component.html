@@ -13,13 +13,13 @@
         <!--<mat-divider></mat-divider>-->
         <mat-list-item>
           <mat-icon mat-list-icon>business_center</mat-icon>
-          <span style="width:260px">Net Income up-to-date</span>
+          <span matTooltip="For details see 'Income Report' tab" style="width:260px">Net Income up-to-date</span>
           <span [ngClass]="'positive'">{{summaryReport.netIncome| currency:'EUR' : number:'1.0-0'}}</span>
         </mat-list-item>
 
         <mat-list-item>
           <mat-icon mat-list-icon>business_center</mat-icon>
-          <span style="width:260px">Initial Remainder</span>
+          <span matTooltip="For details see 'Purchase Report' tab" style="width:260px">Initial Remainder</span>
           <span [ngClass]="'positive'">{{summaryReport.initialRemainder| currency:'EUR' : number:'1.0-0'}}</span>
         </mat-list-item>
 
@@ -35,21 +35,21 @@
           <span style="width:260px">Cash</span>
           <span style="font-weight:bold" [ngClass]="'positive'">{{summaryReport.balance| currency:'EUR' : number:'1.0-0'}}</span>
         </mat-list-item>
+        <div *ngIf="apartmentId!=20">
+          <mat-divider></mat-divider>
+          <mat-list-item matTooltip="Conservative: Take into consideration all expenses and taxes and assume 11 month a year">
+            <mat-icon mat-list-icon>business_center</mat-icon>
+            <span style="width:260px">Predicted Net ROI (rent)</span>
+            <span>{{summaryReport.predictedROI|percent:'1.1'}} </span>
+          </mat-list-item>
 
-        <mat-divider></mat-divider>
-        <mat-list-item matTooltip="Conservative: Take into consideration all expenses and taxes and assume 11 month a year">
-          <mat-icon mat-list-icon>business_center</mat-icon>
-          <span style="width:260px">Predicted Net ROI (rent)</span>
-          <span>{{summaryReport.predictedROI|percent:'1.1'}} </span>
-        </mat-list-item>
-
-        <!--<mat-divider></mat-divider>-->
-        <mat-list-item>
-          <mat-icon mat-list-icon>business_center</mat-icon>
-          <span style="width:260px">Annual ROI up-to-date (rent)</span>
-          <span>{{summaryReport.roi|percent:'1.1'}} </span>
-        </mat-list-item>
-
+          <!--<mat-divider></mat-divider>-->
+          <mat-list-item>
+            <mat-icon mat-list-icon>business_center</mat-icon>
+            <span style="width:260px">Annual ROI up-to-date (rent)</span>
+            <span>{{summaryReport.roi|percent:'1.1'}} </span>
+          </mat-list-item>
+        </div>
       </mat-list>
     </mat-card>
   </mat-tab>
@@ -248,10 +248,7 @@
             <span>{{apartmentInfo.purchaseDate | date:'yyyy-MM-dd'}}</span>
           </mat-list-item>
 
-          <!--<mat-divider></mat-divider>-->
-
-
-          <mat-list-item>
+          <mat-list-item *ngIf="apartmentId!=20">
             <mat-icon mat-list-icon>home</mat-icon>
             <span style="width:260px">Floor</span>
             <span>{{apartmentInfo.floor}}</span>
@@ -261,7 +258,7 @@
             <span style="width:260px">Size</span>
             <span>{{apartmentInfo.size}}</span>
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item *ngIf="apartmentId!=20">
             <mat-icon mat-list-icon>money</mat-icon>
             <span style="width:260px;">Current Rent</span>
             <span>{{apartmentInfo.currentRent| currency:'EUR' : number:'1.0-0'}}</span>
@@ -275,7 +272,7 @@
         </mat-list>
     </mat-card>
   </mat-tab>
-  <mat-tab label="Appraisal">
+  <mat-tab *ngIf="role==1" label="Appraisal">
     <mat-card>
       <mat-list *ngIf="apartmentInfo && purchaseReport">
         <mat-list-item>

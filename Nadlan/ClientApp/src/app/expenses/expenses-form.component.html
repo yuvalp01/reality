@@ -1,6 +1,6 @@
 <div class="container">
   <form [formGroup]="transactionForm" (ngSubmit)="saveTransaction(transactionForm.value)">
-    <h3><mat-icon>{{iconType}}</mat-icon>Add new {{labelTitle}}</h3>
+    <h3><mat-icon>{{iconType}}</mat-icon>{{actionName}} {{labelTitle}}</h3>
     <fieldset>
       <mat-form-field style="width: 100%" appearance="outline">
         <mat-label>{{labelDate}}</mat-label>
@@ -10,7 +10,7 @@
       </mat-form-field>
     </fieldset>
     <fieldset>
-      <mat-form-field  *ngIf="isHourForm" style="width: 100%" appearance="outline" class="example-full-width">
+      <mat-form-field *ngIf="isHourForm" style="width: 100%" appearance="outline" class="example-full-width">
         <mat-label>Hours</mat-label>
         <input #_hours formControlName="hours" type="number" matInput placeholder="Hours">
         <mat-hint align="start">{{_hours.value*9}}</mat-hint>
@@ -46,7 +46,7 @@
     </fieldset>
 
     <fieldset>
-      <mat-form-field  appearance="outline" style="width: 100%">
+      <mat-form-field appearance="outline" style="width: 100%">
         <mat-label>Comments</mat-label>
         <textarea formControlName="comments"
                   matInput
@@ -59,6 +59,7 @@
     </fieldset>
 
     <div>
+
       <!-- {{this.transactionForm.valid}}<br />
   {{this.transactionForm.dirty}}<br />
     {{this.transactionForm.touched}}<br />

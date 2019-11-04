@@ -35,6 +35,7 @@
     <None Remove="ClientApp\src\app\fetch-data\transactions-dialog.component.html" />
     <None Remove="ClientApp\src\app\fetch-data\transactions-dialog.component.ts" />
     <None Remove="ClientApp\src\app\services\excel.service.ts" />
+    <None Remove="ClientApp\src\app\shared\globalVars.ts" />
     <None Remove="ClientApp\src\app\shared\minusSignToParens.ts" />
     <None Remove="ClientApp\src\app\transactions\fetch-transactions - Copy.component.html" />
     <None Remove="ClientApp\src\app\transactions\fetch-transactions - Copy.component.ts" />
@@ -45,6 +46,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\investors\personal-trans-dialog\personal-trans-dialog.component.html" />
     <TypeScriptCompile Include="ClientApp\src\app\investors\personal-trans-dialog\personal-trans-dialog.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\globalVars.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\transactions\transactions-dialog.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\transactions\transactions-dialog.component.html" />
     <TypeScriptCompile Include="ClientApp\src\app\services\excel.service.ts" />

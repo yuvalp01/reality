@@ -28,7 +28,7 @@ export class ApartmentReportsComponent implements OnInit {
   dataSource = new MatTableDataSource<ITransaction>();
   isIgnoreChanges: boolean = true;
   @Output() myEvent = new EventEmitter();
-
+  role: number;
 
   //simulation params:
   rentMonthsInYear: number = 11;
@@ -41,6 +41,11 @@ export class ApartmentReportsComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any) {
   }
   ngOnInit(): void {
+
+    this.role = +window.sessionStorage.getItem("role");
+    ////window.sessionStorage.setItem("role", this.role.toString());
+    //Global.getrole(this.role);
+
     //when open as a dialog
     if (this.data.apartmentId) {
       this.apartmentId = +this.data.apartmentId;

@@ -6,6 +6,7 @@ import { MatTableDataSource, MatDialog } from "@angular/material";
 import { PersonalTransDialogComponent } from "../personal-trans-dialog/personal-trans-dialog.component";
 import { ApartmentReportsComponent } from "src/app/reports/apartment-reports.component";
 import { debug } from "util";
+import  * as Global  from "src/app/shared/globalVars";
 
 @Component({
   selector: 'investor-reports',
