@@ -35,8 +35,8 @@ export class ExpensesService {
     return this.httpClient.delete<ITransaction>(`${this.baseUrl}api/transactions/${transactionId}`, options);
   }
 
-  confirmExpense(transactionId: ITransaction): Observable<ITransaction> {
-    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return this.httpClient.put<ITransaction>(`${this.baseUrl}api/transactions/confirm`, transactionId, options);
-  }
+  //confirmExpense(transactionId: ITransaction): Observable<ITransaction> {
+  //  const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+  //  return this.httpClient.put<ITransaction>(`${this.baseUrl}api/transactions/confirm`, transactionId, options);
+  //}
 }

@@ -3,10 +3,12 @@ import { ITransaction } from '../models';
 import { TransactionService } from '../services/transaction.service';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { TransactionFormComponent } from './transaction-form/transaction-form.component';
+import { ExpensesService } from '../services/expenses.service';
 
 @Component({
   templateUrl: './fetch-transactions.component.html',
-  styles: ['table{width:100%}']
+  //styles: ['table{width:100%}']
+  styleUrls: ['./fetch-transactions.component.css']
 })
 export class TransactionListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'date', 'apartmentId', 'accountId', 'amount', 'isPurchaseCost', 'comments', 'actions'];
@@ -14,7 +16,9 @@ export class TransactionListComponent implements OnInit {
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   selectedApartment: any;
-  constructor(private transactionService: TransactionService, private dialog: MatDialog) {
+  constructor(
+    private transactionService: TransactionService,
+    private dialog: MatDialog) {
   }
   ngOnInit(): void {
     this.transactionService.getTransactions().subscribe(result => {
@@ -57,6 +61,12 @@ export class TransactionListComponent implements OnInit {
   }
   onDeleteComplete() {
     this.refreshData();
+  }
+
+  confirm(transactionId) {
+    this.transactionService.confirmTransaction(transactionId).subscribe(() => {
+      this.refreshData();
+    });
   }
 
 

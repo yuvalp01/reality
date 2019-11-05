@@ -1,9 +1,10 @@
-import { Component, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
-import { ITransaction, IAccount } from '../models';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ITransaction } from '../models';
 import { ExpensesService } from '../services/expenses.service';
 import { MatDialog, MatSort, MatTableDataSource, MatDialogRef } from '@angular/material';
 import { ReportService } from '../services/reports.service';
 import { AddExpenseComponent } from '../expenses/expenses-form.component';
+import { TransactionService } from '../services/transaction.service';
 
 
 
@@ -21,9 +22,10 @@ export class ExpensesComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   constructor(
     private expensesService: ExpensesService,
+    private transactionService: TransactionService,
     private reportsService: ReportService,
     private dialog: MatDialog,
-  /*  private dialogRef: MatDialogRef<AddExpenseComponent>*/ ) {
+  /*  private dialogRef: MatDialogRef<AddExpenseComponent>*/) {
   }
   ngOnInit(): void {
     this.role = +window.sessionStorage.getItem("role");
@@ -134,7 +136,7 @@ export class ExpensesComponent implements OnInit {
   }
 
   confirm(transactionId) {
-    this.expensesService.confirmExpense(transactionId).subscribe(() => {
+    this.transactionService.confirmTransaction(transactionId).subscribe(() => {
       this.refreshData();
     });
   }

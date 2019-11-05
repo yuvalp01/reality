@@ -49,8 +49,11 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let transaction">
-      <button (click)="openForm(transaction.id)" mat-button color="primary">Edit</button>
-      <button (click)="delete(transaction.id)" mat-button color="warn">Delete</button>
+      <button *ngIf="!transaction.isConfirmed" (click)="openForm(transaction.id)" mat-button color="primary">Edit</button>
+      <button *ngIf="!transaction.isConfirmed" (click)="delete(transaction.id)" mat-button color="warn">Delete</button>
+      <button *ngIf="!transaction.isConfirmed" (click)="confirm(transaction.id)" mat-button color="green">Confirm</button>
+      <mat-icon *ngIf="transaction.isConfirmed" matTooltip="Confirmed">check_circle</mat-icon>
+
     </td>
   </ng-container>
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

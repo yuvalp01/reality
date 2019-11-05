@@ -1,0 +1,9 @@
+table {
+  width: 100%
+}
+.mat-column-date {
+  width: 80px;
+}
+.mat-column-actions {
+  width: 245px;
+}
