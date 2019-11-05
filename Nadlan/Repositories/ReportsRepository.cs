@@ -21,9 +21,9 @@ namespace Nadlan.Repositories
         {
             ExpectedTransaction expectedLastRent = await Context.ExpectedTransactions.OrderByDescending(a => a.Id)
                 .FirstOrDefaultAsync(a => a.ApartmentId == apartmentId
-                && a.AccountId==1);
+                && a.AccountId == 1);
             decimal lastRent = 0;
-            if (expectedLastRent!=null)
+            if (expectedLastRent != null)
             {
                 lastRent = expectedLastRent.Amount;
             }
@@ -47,7 +47,7 @@ namespace Nadlan.Repositories
 
         public async Task<decimal> GetBalance(int accountId)
         {
-            var balance = Context.Transactions.Where(a => a.AccountId == accountId).SumAsync(a => a.Amount);
+            var balance = Context.Transactions.Where(a => a.AccountId == accountId && !a.IsDeleted).SumAsync(a => a.Amount);
             return await balance;
         }
 
@@ -99,8 +99,18 @@ namespace Nadlan.Repositories
         public async Task<SummaryReport> GetSummaryReport(int apartmentId)
         {
 
-            Func<Transaction, bool> basicPredicatePurchase = t => t.IsPurchaseCost && t.ApartmentId == apartmentId && t.Account.AccountTypeId == 0;
-            Func<Transaction, bool> basicPredicateIncome = t => !t.IsPurchaseCost && t.ApartmentId == apartmentId && t.Account.AccountTypeId == 0;
+            Func<Transaction, bool> basicPredicatePurchase = t =>
+            !t.IsDeleted
+            && t.IsPurchaseCost
+            && t.ApartmentId == apartmentId
+            && t.Account.AccountTypeId == 0;
+
+            Func<Transaction, bool> basicPredicateIncome = t =>
+            !t.IsDeleted
+            && !t.IsPurchaseCost
+            && t.ApartmentId == apartmentId
+            && t.Account.AccountTypeId == 0;
+
             var investment = Context.Transactions.Include(a => a.Account).Where(basicPredicatePurchase).Where(a => a.AccountId == 13);
             var netIncome = Context.Transactions.Include(a => a.Account).Where(basicPredicateIncome).Where(a => a.AccountId != 100);
             var totalCost = Context.Transactions.Include(a => a.Account).Where(basicPredicatePurchase).Where(a => !a.Account.IsIncome);//.Where(a => a.Amount <= 0);
@@ -119,7 +129,6 @@ namespace Nadlan.Repositories
             //summaryReport.Balance = summaryReport.InitialRemainder + summaryReport.NetIncome;
 
             Apartment apartment = Context.Apartments.Where(a => a.Id == apartmentId).First();
-            // Apartment apartment = new Apartment { CurrentRent = 500, FixedMaintanance = 55, PurchaseDate = new DateTime(2017, 12, 20) };
 
             summaryReport.ROI = CalcROI(apartment, summaryReport);
             summaryReport.PredictedROI = CalcPredictedROI(apartment, summaryReport.Investment);
@@ -167,9 +176,9 @@ namespace Nadlan.Repositories
                 .Where(a => !a.Account.IsIncome);
             //.Where(a => a.Amount <= 0);
             var renovationCost = Context.Transactions.Include(a => a.Account).Where(basicPredicate)
-                .Where(a => a.AccountId == 6);
+                .Where(a => !a.IsDeleted && a.AccountId == 6);
             var expensesNoRenovation = Context.Transactions.Include(a => a.Account).Where(basicPredicate)
-                .Where(a => !a.Account.IsIncome && a.AccountId != 6 && a.AccountId != 12);
+                .Where(a => !a.IsDeleted && !a.Account.IsIncome && a.AccountId != 6 && a.AccountId != 12);
             // .Where(a => a.Amount <= 0 && a.AccountId != 6 && a.AccountId != 12);
             var accountSummary = Context.Transactions.Include(a => a.Account)
                 .Where(basicPredicate)
@@ -200,15 +209,17 @@ namespace Nadlan.Repositories
         public async Task<IncomeReport> GetIncomeReport(int apartmentId, int year)
         {
             Func<Transaction, bool> predAll = t =>
-            t.IsPurchaseCost == false
+               !t.IsDeleted 
+            && !t.IsPurchaseCost
             && t.ApartmentId == apartmentId
             && t.Account.AccountTypeId == 0
             && t.AccountId != 100;
 
             Func<Transaction, bool> predWithYear = t =>
-               t.Account.AccountTypeId == 0
-            && t.IsPurchaseCost == false
+               !t.IsDeleted
+            && !t.IsPurchaseCost
             && t.ApartmentId == apartmentId
+            && t.Account.AccountTypeId == 0
             && t.AccountId != 100
             && t.Date.Year == year;
 

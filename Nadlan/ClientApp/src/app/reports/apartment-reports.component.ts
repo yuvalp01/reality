@@ -58,10 +58,10 @@ export class ApartmentReportsComponent implements OnInit {
       //this.isIgnoreChanges = true;
       this.route.paramMap.subscribe(params => {
         let _apartmentId = +params.get('apartmentId');
-        if (_apartmentId > 0) {
+        //if (_apartmentId > 0) {
           this.apartmentId = _apartmentId;
           this.loadApartmentReports(this.apartmentId);
-        }
+        //}
       });
     }
 
