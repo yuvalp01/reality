@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, Input, SimpleChanges, OnChanges } from '@angular/core';
-import { ReportService } from '../../services/reports.service';
 import { IPersonalTransaction } from '../../models';
 import { PersonalTransService } from '../personal-trans.service';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
@@ -58,8 +57,6 @@ export class PersonalTransComponent implements OnChanges, OnInit  {
   }
 
   openForm(_transactionId: number) {
-
-
     let dialogRef = this.dialog.open(PersonalTransFormComponent, {
       height: '600px',
       width: '500px',
@@ -72,8 +69,6 @@ export class PersonalTransComponent implements OnChanges, OnInit  {
       //this.stakeholderId = id;
       //this.refreshData(id)
     });
-
-
   }
   delete(transactionId) {
     if (confirm("Are you sure you want to delete?")) {

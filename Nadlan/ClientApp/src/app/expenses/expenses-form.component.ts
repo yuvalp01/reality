@@ -42,14 +42,7 @@ export class AddExpenseComponent implements OnInit {
   purchaseCostAccounts: number[] = [6, 7, 8, 11, 12, 13];
 
   @Output() refreshEmitter = new EventEmitter();
-  //  valueChange = new EventEmitter();
-  //counter: any = 0;
 
-  //valueChanged() { // You can give any function name
-  //  //this.counter = this.counter + 1;
-  //  this.someEvent.emit('test');
-  //  return '';
-  //}
 
   saveTransaction(formValues: any): void {
 
@@ -90,8 +83,10 @@ export class AddExpenseComponent implements OnInit {
             //this.dialogRef.close("added!");
             //this.router.navigate(['/expenses']);
           });
+          this.transactionForm.reset();
         }
-       
+
+
       }
 
     }
@@ -192,10 +187,7 @@ export class AddExpenseComponent implements OnInit {
   }
 
   displayTransaction() {
-    //if (this.transactionForm) {
-    //  this.transactionForm.reset();
-    //}
-    //debugger
+
     if (this.data.expense) {
       this.actionName = "Edit";
       let expense: ITransaction = this.data.expense;
