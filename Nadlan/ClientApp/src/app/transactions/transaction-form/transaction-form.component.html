@@ -1,6 +1,6 @@
 <div class="container">
-  <form [formGroup]="personalTransForm" (ngSubmit)="saveTransaction()">
-    <h3><mat-icon>attach_money</mat-icon>{{title}} personal transaction</h3>
+  <form [formGroup]="transactionFormGroup" (ngSubmit)="saveTransaction()">
+    <h3><mat-icon>cached</mat-icon>{{title}} transaction</h3>
     <fieldset>
       <mat-form-field style="width: 100%" appearance="outline">
         <mat-label>{{labelDate}}</mat-label>
@@ -10,13 +10,9 @@
       </mat-form-field>
     </fieldset>
     <fieldset>
-      <mat-form-field style="width: 100%" appearance="outline">
-        <mat-label>Stakeholder</mat-label>
-        <mat-select formControlName="stakeholderId">
-          <mat-option *ngFor="let stakeholder of stakeholders" [value]="stakeholder.id">
-            {{stakeholder.name}}
-          </mat-option>
-        </mat-select>
+      <mat-form-field style="width: 100%" appearance="outline" class="example-full-width">
+        <mat-label>Amount (€)</mat-label>
+        <input matInput formControlName="amount" type="text" required placeholder="Amount (€)">
       </mat-form-field>
     </fieldset>
     <fieldset>
@@ -31,11 +27,17 @@
 
     </fieldset>
     <fieldset>
-      <mat-form-field style="width: 100%" appearance="outline">
-        <mat-label>Amount</mat-label>
-        <input formControlName="amount" matInput />
+      <mat-form-field style="width: 50%" appearance="outline">
+        <mat-label>GL Acount</mat-label>
+        <mat-select formControlName="accountId">
+          <mat-option *ngFor="let acount of accounts" [value]="acount.id">
+            {{acount.name}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
+      <mat-checkbox [disabled]="doubleTransactionAction" style="width: 50%; padding-left: 25px" formControlName="isPurchaseCost">Purchase Cost?</mat-checkbox>
     </fieldset>
+
     <fieldset>
       <mat-form-field appearance="outline" style="width: 100%">
         <mat-label>Comments</mat-label>
@@ -52,5 +54,6 @@
     <fieldset>
       <button mat-flat-button color="primary" type="submit" name="submit">Save</button>
     </fieldset>
+
   </form>
 </div>

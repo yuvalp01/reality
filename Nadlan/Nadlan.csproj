@@ -37,6 +37,8 @@
     <None Remove="ClientApp\src\app\services\excel.service.ts" />
     <None Remove="ClientApp\src\app\shared\globalVars.ts" />
     <None Remove="ClientApp\src\app\shared\minusSignToParens.ts" />
+    <None Remove="ClientApp\src\app\transactions\add-transaction.component.html" />
+    <None Remove="ClientApp\src\app\transactions\add-transaction.component.ts" />
     <None Remove="ClientApp\src\app\transactions\fetch-transactions - Copy.component.html" />
     <None Remove="ClientApp\src\app\transactions\fetch-transactions - Copy.component.ts" />
     <None Remove="ClientApp\src\app\transactions\transactions-dialog - Copy.component.html" />

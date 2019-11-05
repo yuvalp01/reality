@@ -36,6 +36,7 @@ import { InvestrorsModule } from './investors/investrors.module';
 import { ExpensesService } from './services/expenses.service';
 import { SharedModule } from './shared/shared.module';
 import { WelcomepageComponent } from './welcomepage/welcomepage.component';
+import { TransactionFormComponent } from './transactions/transaction-form/transaction-form.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,7 +47,7 @@ import { WelcomepageComponent } from './welcomepage/welcomepage.component';
     AddApartmentForm,
     AccountListComponent,
     TransactionListComponent,
-    AddTransactionComponent,
+    //AddTransactionComponent,
     AddAccoutComponent,
     ReportsComponent,
     //ApartmentReportsComponent,
@@ -58,6 +59,7 @@ import { WelcomepageComponent } from './welcomepage/welcomepage.component';
     TransactionsTableComponent,
     AddExpenseComponent,
     WelcomepageComponent,
+    TransactionFormComponent,
 
   ],
   imports: [
@@ -99,6 +101,6 @@ import { WelcomepageComponent } from './welcomepage/welcomepage.component';
     { provide: MAT_DIALOG_DATA, useValue: {} },
     { provide: MatDialogRef, useValue: {} }],
   bootstrap: [AppComponent],
-  entryComponents: [TransactionsDialogComponent, AddTransactionComponent, AddExpenseComponent]
+  entryComponents: [TransactionsDialogComponent, TransactionFormComponent, AddExpenseComponent]
 })
 export class AppModule { }

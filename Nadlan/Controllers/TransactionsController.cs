@@ -194,35 +194,35 @@ namespace Nadlan.Controllers
 
         // PUT: api/Transactions/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTransaction([FromRoute] int id, [FromBody] Apartment transaction)
+        public async Task<IActionResult> PutTransaction([FromRoute] int id, [FromBody] Transaction transaction)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != transaction.Id)
+            if (!TransactionExists(id))
             {
                 return BadRequest();
             }
 
             _context.Entry(transaction).State = EntityState.Modified;
 
-            try
-            {
+            //try
+            //{
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TransactionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //    if (!TransactionExists(id))
+            //    {
+            //        return NotFound();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
 
             return NoContent();
         }

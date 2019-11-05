@@ -1,15 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ITransaction } from '../models';
 import { TransactionService } from '../services/transaction.service';
-import { AddTransactionComponent } from '../transactions/add-transaction.component';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
+import { TransactionFormComponent } from './transaction-form/transaction-form.component';
 
 @Component({
   templateUrl: './fetch-transactions.component.html',
   styles: ['table{width:100%}']
 })
 export class TransactionListComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'date', 'apartmentId','accountId' , 'amount', 'isPurchaseCost', 'comments'];
+  displayedColumns: string[] = ['id', 'date', 'apartmentId', 'accountId', 'amount', 'isPurchaseCost', 'comments', 'actions'];
   dataSource = new MatTableDataSource<ITransaction>();
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -24,36 +24,47 @@ export class TransactionListComponent implements OnInit {
       this.dataSource.filterPredicate = function (data, filter: string): boolean {
         return data.apartmentAddress.toLowerCase().includes(filter);
       };
-
-
-      }, error => console.error(error));
-}
-
-openDialog()
-{
-
-  let dialogRef = this.dialog.open(AddTransactionComponent, {
-    height: '600px',
-    width: '500px',
-    data: {type:'full'}
-  }).afterClosed().subscribe(item => {
-
-    this.transactionService.getTransactions().subscribe(result => {
-
-      this.dataSource.data = result as ITransaction[];
-      this.dataSource = new MatTableDataSource(result);
-      this.dataSource.sort = this.sort
-      //this.filter();
     }, error => console.error(error));
+  }
 
-  });
-}
+  refreshData() {
+    //refresh tables
+    this.transactionService.getTransactions().subscribe(result => {
+      this.dataSource.data = result as ITransaction[];
+      this.dataSource.sort = this.sort;
+      this.dataSource.filterPredicate = function (data, filter: string): boolean {
+        return data.apartmentAddress.toLowerCase().includes(filter);
+      };
+    }, error => console.error(error));
+  }
 
-ngAfterViewInit(): void {
-  this.dataSource.sort = this.sort;
- // this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
+  openForm(_transactionId: number) {
+    let dialogRef = this.dialog.open(TransactionFormComponent, {
+      height: '600px',
+      width: '500px',
+      data: { transactionId: _transactionId }
+    });
+    dialogRef.componentInstance.refreshEmitter.subscribe(() => this.refreshData());
+  }
+  delete(transactionId) {
+    if (confirm("Are you sure you want to delete?")) {
+      this.transactionService.deteleTransaction(transactionId)
+        .subscribe({
+          next: () => this.onDeleteComplete(),
+          error: err => console.error(err)
+        });
+    }
+  }
+  onDeleteComplete() {
+    this.refreshData();
+  }
 
-}
+
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+    // this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
+
+  }
 
   doFilter(value: string) {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
@@ -71,3 +82,22 @@ ngAfterViewInit(): void {
   }
 
 }
+  //openDialog()
+  //{
+
+  //  let dialogRef = this.dialog.open(AddTransactionComponent, {
+  //    height: '600px',
+  //    width: '500px',
+  //    data: {type:'full'}
+  //  }).afterClosed().subscribe(item => {
+
+  //    this.transactionService.getTransactions().subscribe(result => {
+
+  //      this.dataSource.data = result as ITransaction[];
+  //      this.dataSource = new MatTableDataSource(result);
+  //      this.dataSource.sort = this.sort
+  //      //this.filter();
+  //    }, error => console.error(error));
+
+  //  });
+  //}
