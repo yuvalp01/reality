@@ -116,6 +116,7 @@ export class TransactionFormComponent implements OnInit {
     let action = 'Updated';
     if (result) {
       this.transaction = result;
+      this.transaction.id = 0;
       action = 'Added';
     }
     let snackBarRef = this.snackBar.open(`Transaction`, action, { duration: 2000 });
