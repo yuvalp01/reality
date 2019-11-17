@@ -166,7 +166,6 @@ export class AddExpenseComponent implements OnInit {
   configureFormType() {
     if (this.data.type == "hours") {
       this.isHourForm = true;
-      //this.doubleTransactionAction = true;
       this.labelTitle = "activity";
       this.labelDate = "Activity Date";
       this.iconType = "timer"
@@ -178,7 +177,6 @@ export class AddExpenseComponent implements OnInit {
       this.iconType = "attach_money"
       this.transactionForm.controls['hours'].clearValidators();
 
-      //this.doubleTransactionAction = true;
     }
     else {
       throw "form type not implemented yet"

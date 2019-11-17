@@ -33,9 +33,6 @@
             <a class="nav-link text-dark" [routerLink]='["/reports/1"]'>Apartments Reports</a>
           </li>
 
-          <!--<li class="nav-item" [routerLinkActive]='["link-active"]'>
-    <a class="nav-link text-dark" [routerLink]='["/fetch-accounts"]'>Accounts</a>
-  </li>-->
           <li *ngIf="role==1" class="nav-item" [routerLinkActive]='["link-active"]'>
             <a class="nav-link text-dark" [routerLink]='["/fetch-transactions"]'>Transactions</a>
           </li>
@@ -63,10 +60,8 @@
       </div>
     </div>
   </nav>
-  <form *ngIf="showAdmin" #admin="ngForm" style="position:absolute">
-    <!--<button (click)="test">test</button>-->
+  <!--<form #admin="ngForm" style="position:absolute">
     <input style="width:20px" [(ngModel)]="role" name="role" type="number" />
-    <!--{{role}}-->
-  </form>
+  </form>-->
 
 </header>

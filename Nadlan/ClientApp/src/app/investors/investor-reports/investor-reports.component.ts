@@ -1,4 +1,4 @@
-import { Component, OnInit, SimpleChanges, ViewEncapsulation, Output } from "@angular/core";
+import { Component, OnInit, SimpleChanges, Output } from "@angular/core";
 import { IInvestorReportOverview, IStakeholder, IPersonalTransaction } from "../../models";
 import { PersonalTransService } from "../personal-trans.service";
 import { ActivatedRoute } from "@angular/router";

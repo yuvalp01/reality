@@ -159,7 +159,7 @@ namespace Nadlan.Repositories
             TimeSpan span = DateTime.Today - apartment.PurchaseDate;
             decimal years_dec = ((zeroTime + span).Year - 1) + ((zeroTime + span).Month - 1) / 12m;
             decimal roi = 0;
-            if (summaryReport.Investment > 0)
+            if (summaryReport.Investment > 0 && years_dec>0)
             {
                 roi = (summaryReport.NetIncome / summaryReport.Investment) / years_dec;
             }

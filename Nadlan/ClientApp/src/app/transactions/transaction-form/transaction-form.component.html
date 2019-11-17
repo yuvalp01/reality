@@ -3,8 +3,8 @@
     <h3><mat-icon>cached</mat-icon>{{title}} transaction</h3>
     <fieldset>
       <mat-form-field style="width: 100%" appearance="outline">
-        <mat-label>{{labelDate}}</mat-label>
-        <input formControlName="date" matInput [matDatepicker]="picker" placeholder="{{labelDate}}">
+        <mat-label>Date</mat-label>
+        <input formControlName="date" matInput [matDatepicker]="picker" placeholder="Date">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
@@ -35,7 +35,7 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-checkbox [disabled]="doubleTransactionAction" style="width: 50%; padding-left: 25px" formControlName="isPurchaseCost">Purchase Cost?</mat-checkbox>
+      <mat-checkbox  style="width: 50%; padding-left: 25px" formControlName="isPurchaseCost">Purchase Cost?</mat-checkbox>
     </fieldset>
 
     <fieldset>

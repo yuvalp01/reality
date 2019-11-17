@@ -7,7 +7,7 @@
 <span > Personal account balance is <b [ngClass]="{
           positive: isPositive(balance),
           negative: !isPositive(balance)
-        }">{{balance | currency:'EUR' : number:'1.0-1'}}</b></span>
+        }">{{balance | currency:'EUR' : 'symbol':'1.0-1'}}</b></span>
 <p *ngIf="!dataSourceTrans.data"><em>Loading...</em></p>
 <div id="tbl">
   <table style="width: 100%;" mat-table [dataSource]="dataSourceTrans" matSort class="mat-elevation-z8">
@@ -28,7 +28,7 @@
           negative: !isPositive(transaction.amount)
         }"
           *matCellDef="let transaction">
-        {{transaction.amount | currency:'EUR' : number:'1.0-1'}}
+        {{transaction.amount | currency:'EUR' : 'symbol':'1.0-1'}}
       </td>
     </ng-container>
     <ng-container matColumnDef="apartment">

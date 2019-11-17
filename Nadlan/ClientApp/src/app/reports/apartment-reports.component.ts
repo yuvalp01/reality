@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges, ViewEncapsulation, Inject } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges, Inject } from '@angular/core';
 import { IIncomeReport, IPurchaseReport, ISummaryReport, ITransaction, IApartment } from '../models';
 import { ReportService } from '../services/reports.service';
 import { ActivatedRoute, RouterEvent, NavigationEnd } from '@angular/router';
@@ -13,7 +13,6 @@ import { debug } from 'util';
   selector: 'apartment-reports',
   templateUrl: './apartment-reports.component.html',
   styleUrls: ['./apartment-reports.component.css'],
-  //encapsulation: ViewEncapsulation.ShadowDom
 })
 export class ApartmentReportsComponent implements OnInit {
   displayedColumns: string[] = ['date', 'amount', 'apartmentId', 'accountId', 'isPurchaseCost', 'comments'];

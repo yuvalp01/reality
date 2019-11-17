@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, ViewChild, Input } from '@angular/core';
 import { ITransaction } from '../models';
-import { TransactionService } from '../services/transaction.service';
-import { AddTransactionComponent } from '../transactions/add-transaction.component';
+//import { TransactionService } from '../services/transaction.service';
+//import { AddTransactionComponent } from '../transactions/add-transaction.component';
 import { MatDialog, MatSort, MatTableDataSource, MatDialogRef } from '@angular/material';
 import { debounce } from 'rxjs/operators';
 

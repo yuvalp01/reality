@@ -15,8 +15,6 @@ import { AccountListComponent } from './fetch-data/fetch-accounts.component';
 import { TransactionService } from './services/transaction.service';
 import { TransactionListComponent } from './transactions/fetch-transactions.component';
 import { AddApartmentForm } from './forms/add-apartment.component';
-import { AddTransactionComponent } from './transactions/add-transaction.component';
-import { AddAccoutComponent } from './forms/add-account.component';
 import { ReportService } from './services/reports.service';
 import { ApartmentReportsComponent } from './reports/apartment-reports.component';
 import { ReportsComponent } from './reports/reports.component';
@@ -47,8 +45,6 @@ import { TransactionFormComponent } from './transactions/transaction-form/transa
     AddApartmentForm,
     AccountListComponent,
     TransactionListComponent,
-    //AddTransactionComponent,
-    AddAccoutComponent,
     ReportsComponent,
     //ApartmentReportsComponent,
     //MinusSignToParens,
@@ -75,7 +71,6 @@ import { TransactionFormComponent } from './transactions/transaction-form/transa
       { path: 'add-apartment', component: AddApartmentForm },
       { path: 'fetch-accounts', component: AccountListComponent },
       { path: 'fetch-transactions', component: TransactionListComponent },
-      { path: 'add-account', component: AddAccoutComponent },
       { path: 'reports/:apartmentId', component: ReportsComponent },
 
 
