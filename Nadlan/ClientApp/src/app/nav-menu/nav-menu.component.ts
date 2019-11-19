@@ -22,7 +22,7 @@ export class NavMenuComponent implements OnInit{
     ////  this.role =  +params.get('role');
     ////})
     //this.role = 1;
-    this.userId = 199;
+    this.userId = 107;
     this.configurePage(this.userId);
     window.sessionStorage.setItem("role", this.role.toString());
     //if (this.role==1) {
