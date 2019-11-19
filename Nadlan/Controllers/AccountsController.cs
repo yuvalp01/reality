@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -49,6 +50,7 @@ namespace Nadlan.Controllers
         }
 
         // PUT: api/Accounts/5
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAccount([FromRoute] int id, [FromBody] Apartment account)
         {
@@ -84,6 +86,7 @@ namespace Nadlan.Controllers
         }
 
         // POST: api/Accounts
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> PostAccount([FromBody] Account account)
         {
@@ -113,6 +116,7 @@ namespace Nadlan.Controllers
         }
 
         // DELETE: api/Accounts/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccount([FromRoute] int id)
         {

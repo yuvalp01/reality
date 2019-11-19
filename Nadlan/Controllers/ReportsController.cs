@@ -10,9 +10,11 @@ using AutoMapper;
 using Nadlan.ViewModels.Reports;
 using Nadlan.Models;
 using Nadlan.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Nadlan.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ReportsController : ControllerBase

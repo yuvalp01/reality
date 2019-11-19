@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Nadlan.Models;
@@ -16,14 +17,11 @@ namespace Nadlan.Controllers
     public class TransactionsController : ControllerBase
     {
         private readonly NadlanConext _context;
-        //private readonly IRepository<Account> _repository;
         private readonly IRepositoryWrapper _repositoryWraper;
         private readonly IMapper _mapper;
 
-        //public TransactionsController(IRepository<Account> repository, NadlanConext context, IMapper mapper)
         public TransactionsController(IRepositoryWrapper repositoryWrapper, NadlanConext context, IMapper mapper)
         {
-            //_repository = repository;
             _repositoryWraper = repositoryWrapper;
             _context = context;
             _mapper = mapper;
@@ -119,6 +117,7 @@ namespace Nadlan.Controllers
 
 
         // POST: api/Transactions
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> PostTransaction([FromBody] TransactionDto transactionDto)
         {
@@ -143,14 +142,9 @@ namespace Nadlan.Controllers
         }
 
 
-
-
-
-
         // POST: api/Transactions
-        //[HttpPost("PostExpenses/{isHours=false}")]
         [HttpPost("PostExpenses")]
-        public async Task<IActionResult> PostAssistantExpenses([FromBody] TransactionDto transactionDto)
+        public async Task<IActionResult> PostExpenses([FromBody] TransactionDto transactionDto)
         {
             if (!ModelState.IsValid)
             {
@@ -159,13 +153,12 @@ namespace Nadlan.Controllers
 
             var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
 
-            // await _repositoryWraper.Transaction.CreateDoubleTransactionAsync(transaction, isHours);
             await _repositoryWraper.Transaction.CreateExpenseAndTransactionAsync(transaction);
             return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
         }
 
         [HttpPut("PutExpenses")]
-        public async Task<IActionResult> PutAssistantExpenses([FromBody] TransactionDto transactionDto)
+        public async Task<IActionResult> PutExpenses([FromBody] TransactionDto transactionDto)
         {
             if (!ModelState.IsValid)
             {
@@ -178,7 +171,7 @@ namespace Nadlan.Controllers
             await _repositoryWraper.Transaction.UpdateExpenseAndTransactionAsync(transaction);
             return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
         }
-
+        [Authorize]
         [HttpPut("confirm")]
         public async Task<IActionResult> Confirm([FromBody] int transactionId)
         {
@@ -193,6 +186,7 @@ namespace Nadlan.Controllers
         }
 
         // PUT: api/Transactions/5
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTransaction([FromRoute] int id, [FromBody] Transaction transaction)
         {
@@ -207,28 +201,13 @@ namespace Nadlan.Controllers
             }
 
             _context.Entry(transaction).State = EntityState.Modified;
-
-            //try
-            //{
-                await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException)
-            //{
-            //    if (!TransactionExists(id))
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
-
+            await _context.SaveChangesAsync();
             return NoContent();
         }
 
 
         // DELETE: api/Transactions/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTransaction([FromRoute] int id)
         {

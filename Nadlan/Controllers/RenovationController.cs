@@ -9,9 +9,11 @@ using Nadlan.ViewModels.Renovation;
 using Nadlan.Models.Renovation;
 using Nadlan.Repositories;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Nadlan.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class RenovationController : ControllerBase
