@@ -8,7 +8,6 @@ import { Router } from "@angular/router";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { take } from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog, MatSnackBar } from "@angular/material";
-import { element } from "protractor";
 
 
 
@@ -22,7 +21,7 @@ export class AddExpenseComponent implements OnInit {
   constructor(private apartmentService: ApartmentService,
     private accountService: AccountService,
     private expensesService: ExpensesService,
-    private router: Router,
+    //private router: Router,
     private _ngZone: NgZone,
     private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
@@ -50,7 +49,9 @@ export class AddExpenseComponent implements OnInit {
     if (this.transactionForm.valid) {
       if (this.transactionForm.dirty) {
 
-        var transaction: ITransaction = Object.assign({}, formValues);
+        var transaction: ITransaction = Object.assign({}, this.transactionForm.value);
+        let isPurchaseCost = this.transactionForm.controls['isPurchaseCost'].value;
+        transaction.isPurchaseCost = isPurchaseCost;
         if (this.isHourForm) {
           transaction.amount = formValues.hours * 9;
         }
@@ -58,7 +59,6 @@ export class AddExpenseComponent implements OnInit {
           transaction.hours = 0;
         }
         ///fix UTC issue:
-        //let date = transaction.date;
         let date = new Date(transaction.date);
         transaction.date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + 12);
         ///
@@ -68,20 +68,13 @@ export class AddExpenseComponent implements OnInit {
           this.expensesService.updateExpense(transaction).subscribe(() => {
             let snackBarRef = this.snackBar.open(`Expense`, 'Updated', { duration: 2000 });
             this.refreshEmitter.emit();
-            //console.log("success!");
-            //this.dialogRef.close("added!");
-            //this.router.navigate(['/expenses']);
           });
 
         }
         else {
           this.expensesService.addExpense(transaction).subscribe(() => {
             let snackBarRef = this.snackBar.open(`Expense`, 'Added', { duration: 2000 });
-            //this.transactionForm.reset();
             this.refreshEmitter.emit();
-            //console.log("success!");
-            //this.dialogRef.close("added!");
-            //this.router.navigate(['/expenses']);
           });
           this.transactionForm.reset();
         }
@@ -104,7 +97,7 @@ export class AddExpenseComponent implements OnInit {
       date: [null, Validators.required],
       hours: null,
       comments: ['', Validators.required],
-      isPurchaseCost: false,
+      isPurchaseCost: {value: false,disabled: true},
     })
 
     this.configureFormType();
@@ -199,13 +192,7 @@ export class AddExpenseComponent implements OnInit {
         comments: expense.comments,
         isPurchaseCost: expense.isPurchaseCost,
       });
-      //apartment.setValue(expense.apartmentId);
-      //account.setValue(expense.accountId);
-      //amount.setValue(expense.amount);
-      //date.setValue(expense.date);
-      //hours.setValue(expense.hours);
-      //comments.setValue(expense.comments);
-      //isPurchaseCost.setValue(expense.isPurchaseCost);
+
     }
     else {
       this.actionName = "Add new";

@@ -31,11 +31,11 @@ export class ReportService {
     let url = this.baseUrl + `api/reports/GetBalance/${accountId}`;
     return this.httpClient.get<number>(url);
   }
-  getExpensesBalance(): Observable<number> {
+  //getExpensesBalance(): Observable<number> {
 
-    let url = `${this.baseUrl}api/reports/GetExpensesBalance/`;
-    return this.httpClient.get<number>(url);
-  }
+  //  let url = `${this.baseUrl}api/reports/GetExpensesBalance/`;
+  //  return this.httpClient.get<number>(url);
+  //}
 
   //getPersonalBalance(stakeholderId): Observable<number> {
 

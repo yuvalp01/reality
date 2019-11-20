@@ -23,7 +23,7 @@ namespace Nadlan.Repositories
         public async Task<List<TransactionDto>> GetAllExpensesAsync()
         {
             return await Context.Expenses.Join(
-                Context.Transactions.Where(a=>!a.IsDeleted),
+                Context.Transactions.Where(a => !a.IsDeleted),
                 expense => expense.TransactionId,
                 transaction => transaction.Id,
                 (expense, transaction) => new TransactionDto
@@ -87,22 +87,11 @@ namespace Nadlan.Repositories
             //Charge the original amount
             transaction.Amount = transaction.Amount * -1;
             var originalTransaction = Context.Transactions.Find(transaction.Id);
-
+            //Update original transaction:
             Context.Entry(originalTransaction).CurrentValues.SetValues(transaction);
-
-            //Expense updatedExpense = new Expense { TransactionId = transaction.Id, Hours = transaction.Hours };
+            //Update origial expense with hours:
             var originalExpense = Context.Expenses.Single(a => a.TransactionId == transaction.Id);
             originalExpense.Hours = transaction.Hours;
-            //Context.Entry(originalExpense).CurrentValues.SetValues(updatedExpense);
-            //if (transaction.Hours > 0)
-            //{
-            //    transaction.Comments = $"Hours: {transaction.Comments}";
-            //}
-
-
-            //Expense assiatantExpense = CreateCorrespondingExpense(transaction);
-            ////Create(assiatantTransaction);
-            //Context.Set<Expense>().Add(assiatantExpense);
 
             await SaveAsync();
         }
@@ -112,6 +101,14 @@ namespace Nadlan.Repositories
             originalTransaction.Result.IsConfirmed = true;
             await SaveAsync();
         }
+
+        internal async Task SoftDelete(int transactionId)
+        {
+            var originalTransaction = Context.Transactions.FindAsync(transactionId);
+            originalTransaction.Result.IsDeleted = true;
+            await SaveAsync();
+        }
+
         public async Task CreateExpenseAndTransactionAsync(Transaction transaction)
         {
             if (transaction.Hours > 0)

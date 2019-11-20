@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Nadlan.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TransactionsController : ControllerBase
@@ -117,7 +118,6 @@ namespace Nadlan.Controllers
 
 
         // POST: api/Transactions
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> PostTransaction([FromBody] TransactionDto transactionDto)
         {
@@ -171,7 +171,6 @@ namespace Nadlan.Controllers
             await _repositoryWraper.Transaction.UpdateExpenseAndTransactionAsync(transaction);
             return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
         }
-        [Authorize]
         [HttpPut("confirm")]
         public async Task<IActionResult> Confirm([FromBody] int transactionId)
         {
@@ -186,7 +185,6 @@ namespace Nadlan.Controllers
         }
 
         // PUT: api/Transactions/5
-        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTransaction([FromRoute] int id, [FromBody] Transaction transaction)
         {
@@ -207,7 +205,6 @@ namespace Nadlan.Controllers
 
 
         // DELETE: api/Transactions/5
-        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTransaction([FromRoute] int id)
         {

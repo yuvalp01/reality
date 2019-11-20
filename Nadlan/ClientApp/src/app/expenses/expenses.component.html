@@ -23,8 +23,16 @@
 
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
-      <td mat-cell *matCellDef="let transaction">{{transaction.date | date:'dd-MM-yyyy'}}</td>
+      <td  data-id="{{transaction.id}}" mat-cell *matCellDef="let transaction">{{transaction.date | date:'dd-MM-yyyy'}}</td>
     </ng-container>
+
+    <ng-container matColumnDef="isPurchaseCost">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+      <td mat-cell *matCellDef="let transaction">
+        <mat-icon matTooltip="Purchase cost" *ngIf="transaction.isPurchaseCost">home_work</mat-icon>
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="amount">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
       <td mat-cell
@@ -51,8 +59,20 @@
     <ng-container matColumnDef="comments">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>
       <td mat-cell *matCellDef="let transaction">
-        <!--<mat-icon>info</mat-icon>-->
+        <!--shopping_basket-->
+        <!--<mat-icon matTooltip="Maintenance cost" *ngIf="!transaction.isPurchaseCost">format_paint</mat-icon>-->
+        <mat-icon matTooltip="Maintenance" *ngIf="transaction.accountId==4">build</mat-icon>
+        <mat-icon matTooltip="Renovation" *ngIf="transaction.accountId==6">format_paint</mat-icon>
+        <!--receipt vpn_key<mat-icon *ngIf="transaction.accountId==4">description</mat-icon*ngIf="transaction.accountId==4">-->
+        <mat-icon matTooltip="Registration" *ngIf="transaction.accountId==8">assignment</mat-icon>
+        <mat-icon matTooltip="Purcahse Miscellaneous" *ngIf="transaction.accountId==11">star</mat-icon>
+
+
+
+
         {{transaction.comments}}
+
+
       </td>
 
     </ng-container>

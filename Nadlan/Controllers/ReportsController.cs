@@ -66,18 +66,7 @@ namespace Nadlan.Controllers
             return Ok(balance);
         }
 
-        [HttpGet("GetExpensesBalance")]
-        public async Task<IActionResult> GetExpensesBalance([FromRoute]  int accountId)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
-            decimal balance = await _repositoryWraper.ApartmentReport.GetExpensesBalance();
-
-            return Ok(balance);
-        }
         [HttpGet("GetPersonalBalance/{stakeholderId}")]
         public async Task<IActionResult> GetPersonalBalance([FromRoute]  int stakeholderId)
         {

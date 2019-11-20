@@ -5,6 +5,7 @@ import { MatDialog, MatSort, MatTableDataSource, MatDialogRef } from '@angular/m
 import { ReportService } from '../services/reports.service';
 import { AddExpenseComponent } from '../expenses/expenses-form.component';
 import { TransactionService } from '../services/transaction.service';
+import { debug } from 'util';
 
 
 
@@ -13,11 +14,11 @@ import { TransactionService } from '../services/transaction.service';
   styles: ['table{width:100%}']
 })
 export class ExpensesComponent implements OnInit {
-  displayedColumnsAssistant: string[] = ['date', 'apartmentId', 'amount', 'comments', 'hours', 'actions'];
+  displayedColumnsAssistant: string[] = ['date','isPurchaseCost' ,'apartmentId', 'amount', 'comments', 'hours', 'actions'];
   dataSourceExpenses = new MatTableDataSource<ITransaction>();
   dataSourceAssistant = new MatTableDataSource<ITransaction>();
   selectedApartment: any;
-  assistantBalance: number;
+  assistantBalance: number = 0;
   role: number;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   constructor(
@@ -40,8 +41,13 @@ export class ExpensesComponent implements OnInit {
 
     }, error => console.error(error));
     //Refresh balance
-    //this.reportsService.getAccountBalance(107).subscribe(result => this.assistantBalance = result, error => console.error(error));
-    this.reportsService.getExpensesBalance().subscribe(result => this.assistantBalance = result, error => console.error(error));
+    this.expensesService.getExpensesBalance().subscribe(
+      result => {
+        this.assistantBalance = result
+      },
+      error => {
+        console.error(error)
+      });
   }
 
   //dialogRef: MatDialogRef<AddTransactionComponent>;
@@ -75,7 +81,7 @@ export class ExpensesComponent implements OnInit {
   }
 
   openEdit(transactionId) {
-    console.log('transactionId: ' + transactionId)
+    //console.log('transactionId: ' + transactionId)
 
     this.expensesService.getExpense(transactionId).subscribe(result => {
       let _expense: ITransaction = result;
