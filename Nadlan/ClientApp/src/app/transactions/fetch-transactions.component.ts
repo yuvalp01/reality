@@ -11,7 +11,7 @@ import { ExpensesService } from '../services/expenses.service';
   styleUrls: ['./fetch-transactions.component.css']
 })
 export class TransactionListComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'date', 'apartmentId', 'accountId', 'amount', 'isPurchaseCost', 'comments', 'actions'];
+  displayedColumns: string[] = ['id', 'date', 'apartmentId','isPurchaseCost', 'accountId', 'amount',  'comments', 'actions'];
   dataSource = new MatTableDataSource<ITransaction>();
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
