@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Nadlan.Models
 {
+    [Table("portfolios")]
     public class Portfolio
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

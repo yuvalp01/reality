@@ -1,5 +1,8 @@
-﻿namespace Nadlan.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Nadlan.Models
 {
+    [Table("stakeholders")]
     public class Stakeholder
     {
         public int Id { get; set; }

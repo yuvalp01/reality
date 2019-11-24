@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nadlan.Repositories;
 
 namespace Nadlan.Migrations
 {
     [DbContext(typeof(NadlanConext))]
-    partial class NadlanConextModelSnapshot : ModelSnapshot
+    [Migration("20191122163824_nadlanScheme")]
+    partial class nadlanScheme
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,7 +37,7 @@ namespace Nadlan.Migrations
 
                     b.HasIndex("AccountTypeId");
 
-                    b.ToTable("accounts");
+                    b.ToTable("accounts","nadlan");
                 });
 
             modelBuilder.Entity("Nadlan.Models.AccountType", b =>
@@ -73,7 +75,7 @@ namespace Nadlan.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("apartments");
+                    b.ToTable("apartments","nadlan");
                 });
 
             modelBuilder.Entity("Nadlan.Models.ExpectedTransaction", b =>
@@ -98,7 +100,7 @@ namespace Nadlan.Migrations
 
                     b.HasIndex("ApartmentId");
 
-                    b.ToTable("expectedTransactions");
+                    b.ToTable("expectedTransactions","nadlan");
                 });
 
             modelBuilder.Entity("Nadlan.Models.Expense", b =>
@@ -117,7 +119,7 @@ namespace Nadlan.Migrations
 
                     b.HasIndex("TransactionId");
 
-                    b.ToTable("expenses");
+                    b.ToTable("expenses","nadlan");
                 });
 
             modelBuilder.Entity("Nadlan.Models.PersonalTransaction", b =>
@@ -144,7 +146,7 @@ namespace Nadlan.Migrations
 
                     b.HasIndex("StakeholderId");
 
-                    b.ToTable("personalTransactions");
+                    b.ToTable("personalTransactions","nadlan");
                 });
 
             modelBuilder.Entity("Nadlan.Models.Portfolio", b =>
@@ -163,7 +165,7 @@ namespace Nadlan.Migrations
 
                     b.HasIndex("StakeholderId");
 
-                    b.ToTable("portfolios");
+                    b.ToTable("portfolios","nadlan");
                 });
 
             modelBuilder.Entity("Nadlan.Models.Renovation.Item", b =>
@@ -247,7 +249,7 @@ namespace Nadlan.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("stakeholders");
+                    b.ToTable("stakeholders","nadlan");
                 });
 
             modelBuilder.Entity("Nadlan.Models.Transaction", b =>
@@ -280,7 +282,7 @@ namespace Nadlan.Migrations
 
                     b.HasIndex("ApartmentId");
 
-                    b.ToTable("transactions");
+                    b.ToTable("transactions","nadlan");
                 });
 
             modelBuilder.Entity("Nadlan.Models.Account", b =>

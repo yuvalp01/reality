@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Nadlan.Models
 {
+    [Table("accounts")]
     public class Account
     {
         public int Id { get; set; }
@@ -15,6 +12,7 @@ namespace Nadlan.Models
         public AccountType AccountType { get; set; }
 
     }
+    [Table("accountTypes", Schema = "nadlan")]
     public class AccountType
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

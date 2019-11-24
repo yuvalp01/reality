@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Nadlan.Models
 {
+    [Table("transactions")]
     public class Transaction
     {
         public int Id { get; set; }
