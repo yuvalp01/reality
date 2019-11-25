@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ITransaction } from '../models';
 import { ExpensesService } from '../services/expenses.service';
-import { MatDialog, MatSort, MatTableDataSource, MatDialogRef } from '@angular/material';
-import { ReportService } from '../services/reports.service';
+import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { AddExpenseComponent } from '../expenses/expenses-form.component';
 import { TransactionService } from '../services/transaction.service';
-import { debug } from 'util';
+
 
 
 
@@ -14,19 +13,21 @@ import { debug } from 'util';
   styles: ['table{width:100%}']
 })
 export class ExpensesComponent implements OnInit {
-  displayedColumnsAssistant: string[] = ['date','isPurchaseCost' ,'apartmentId', 'amount', 'comments', 'hours', 'actions'];
+  displayedColumnsAssistant: string[] = ['date', 'isPurchaseCost', 'apartmentId', 'amount', 'comments', 'hours', 'actions'];
   dataSourceExpenses = new MatTableDataSource<ITransaction>();
   dataSourceAssistant = new MatTableDataSource<ITransaction>();
   selectedApartment: any;
   assistantBalance: number = 0;
+  visibleAccountsHours: number[] = [4, 6, 11, 16];
+  visibleAccountsExpenses: number[] = [4, 6, 11, 8];
+
   role: number;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   constructor(
     private expensesService: ExpensesService,
     private transactionService: TransactionService,
-    private reportsService: ReportService,
-    private dialog: MatDialog,
-  /*  private dialogRef: MatDialogRef<AddExpenseComponent>*/) {
+    //private reportsService: ReportService,
+    private dialog: MatDialog) {
   }
   ngOnInit(): void {
     this.role = +window.sessionStorage.getItem("role");
@@ -50,28 +51,20 @@ export class ExpensesComponent implements OnInit {
       });
   }
 
-  //dialogRef: MatDialogRef<AddTransactionComponent>;
-  openAddHoursDialog() {
-    let dialogRef = this.dialog.open(AddExpenseComponent, {
-      height: '600px',
-      width: '500px',
-      data: { type: 'hours', visibleAccounts: [4, 6, 11] },
-    });
-    dialogRef.componentInstance.refreshEmitter.subscribe(() => this.refreshData());
-    dialogRef.afterClosed().subscribe(result => {
-      this.refreshData();
-    });
 
-  }
-
-
-  openAddExpensesDialog() {
-    // let dialogRef = this.dialog.open(AddTransactionComponent, {
+  openAddMode(actionType: string) {
+    let _visibleAccounts;
+    if (actionType == 'expenses') {
+      _visibleAccounts = this.visibleAccountsExpenses;
+    }
+    else {
+      _visibleAccounts = this.visibleAccountsHours;
+    }
 
     let dialogRef = this.dialog.open(AddExpenseComponent, {
       height: '600px',
       width: '500px',
-      data: { type: 'expenses', visibleAccounts: [4, 6, 8, 11] },
+      data: { type: actionType, visibleAccounts: _visibleAccounts },
     });
     dialogRef.componentInstance.refreshEmitter.subscribe(() => this.refreshData());
     dialogRef.afterClosed().subscribe(() => {
@@ -80,12 +73,22 @@ export class ExpensesComponent implements OnInit {
 
   }
 
-  openEdit(transactionId) {
-    //console.log('transactionId: ' + transactionId)
 
+  openEdit(transactionId) {
     this.expensesService.getExpense(transactionId).subscribe(result => {
       let _expense: ITransaction = result;
-      let _type: string = _expense.hours == 0 ? 'expenses' : 'hours'
+      let _type;
+      let _visibleAccounts
+      if (_expense.hours == 0) {
+        _type = 'expenses';
+        _visibleAccounts = this.visibleAccountsExpenses;
+      }
+      else {
+        _type = 'hours';
+        _visibleAccounts = this.visibleAccountsHours;
+      }
+
+      //let _type: string = _expense.hours == 0 ? 'expenses' : 'hours'
 
       let dialogRef = this.dialog.open(AddExpenseComponent, {
         height: '600px',
@@ -93,7 +96,7 @@ export class ExpensesComponent implements OnInit {
         data: {
           type: _type,
           expense: _expense,
-          visibleAccounts: [4, 6, 8, 11]
+          visibleAccounts: _visibleAccounts
         },
       });
       dialogRef.componentInstance.refreshEmitter.subscribe(() => this.refreshData());
@@ -148,3 +151,31 @@ export class ExpensesComponent implements OnInit {
   }
 
 }
+
+
+
+  //openAddHoursDialog() {
+  //  let dialogRef = this.dialog.open(AddExpenseComponent, {
+  //    height: '600px',
+  //    width: '500px',
+  //    data: { type: 'hours', visibleAccounts: this.visibleAccountsHours },
+  //  });
+  //  dialogRef.componentInstance.refreshEmitter.subscribe(() => this.refreshData());
+  //  dialogRef.afterClosed().subscribe(result => {
+  //    this.refreshData();
+  //  });
+
+  //}
+
+  //openAddExpensesDialog() {
+  //  let dialogRef = this.dialog.open(AddExpenseComponent, {
+  //    height: '600px',
+  //    width: '500px',
+  //    data: { type: 'expenses', visibleAccounts: this.visibleAccountsExpenses },
+  //  });
+  //  dialogRef.componentInstance.refreshEmitter.subscribe(() => this.refreshData());
+  //  dialogRef.afterClosed().subscribe(() => {
+  //    this.refreshData();
+  //  });
+
+  //}

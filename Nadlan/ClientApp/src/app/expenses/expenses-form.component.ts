@@ -38,7 +38,7 @@ export class AddExpenseComponent implements OnInit {
   actionName: string;
   iconType: string;
 
-  purchaseCostAccounts: number[] = [6, 7, 8, 11, 12, 13];
+  purchaseCostAccounts: number[] = [6, 7, 8, 11, 12, 13,16];
 
   @Output() refreshEmitter = new EventEmitter();
 
