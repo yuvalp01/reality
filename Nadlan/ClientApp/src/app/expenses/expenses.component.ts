@@ -18,8 +18,8 @@ export class ExpensesComponent implements OnInit {
   dataSourceAssistant = new MatTableDataSource<ITransaction>();
   selectedApartment: any;
   assistantBalance: number = 0;
-  visibleAccountsHours: number[] = [4, 6, 11, 16];
-  visibleAccountsExpenses: number[] = [4, 6, 11, 8];
+  visibleAccountsHours: number[] = [4, 6, 11, 16, 200];
+  visibleAccountsExpenses: number[] = [1, 4, 6, 11, 8, 198, 200, 201];
 
   role: number;
   @ViewChild(MatSort, { static: true }) sort: MatSort;

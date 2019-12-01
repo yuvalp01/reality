@@ -34,7 +34,8 @@ export class NavMenuComponent implements OnInit{
     switch (userId) {
       case 199:
         this.role = 1;
-        this.router.navigateByUrl(`/fetch-transactions`);
+        //this.router.navigateByUrl(`/fetch-transactions`);
+        this.router.navigateByUrl(`/expenses`);
         break;
       case 107:
         this.role = 2;

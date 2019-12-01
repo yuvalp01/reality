@@ -47,7 +47,6 @@ export class ExpensesService {
   deleteExpense(transactionId: number): Observable<{}> {
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     let url = `${this.baseUrl + this.controller}/${transactionId}`;
-    debugger
     return this.httpClient.delete<ITransaction>(url, options);
     //return this.httpClient.delete<ITransaction>(`${this.baseUrl}api/transactions/${transactionId}`, options);
   }

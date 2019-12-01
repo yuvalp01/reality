@@ -44,6 +44,16 @@ td.mat-column-amount {
   color: red;
 }
 
+.disabled {
+  color: lightgray;
+  cursor: default;
+}
+.enabled {
+  color: black;
+  cursor: pointer;
+}
+
+
 .mat-accordion#report .mat-expansion-panel-header-title {
   color: black;
 }

@@ -6,8 +6,10 @@ import { AccountService } from "../services/account.service";
 import { ExpensesService } from "../services/expenses.service";
 import { Router } from "@angular/router";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
-import { take } from 'rxjs/operators';
+import { take, expand } from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog, MatSnackBar } from "@angular/material";
+import { win32 } from "path";
+import { element } from "protractor";
 
 
 
@@ -37,8 +39,12 @@ export class AddExpenseComponent implements OnInit {
   labelTitle: string;
   actionName: string;
   iconType: string;
+  sign: number = 1;
+  signIcone: string = 'add';
+  tooltipSign: string = 'Increase your account';
+  enableSwitch: boolean = false;
 
-  purchaseCostAccounts: number[] = [6, 7, 8, 11, 12, 13,16];
+  purchaseCostAccounts: number[] = [6, 7, 8, 11, 12, 13, 16];
 
   @Output() refreshEmitter = new EventEmitter();
 
@@ -57,7 +63,11 @@ export class AddExpenseComponent implements OnInit {
         }
         else {
           transaction.hours = 0;
+          //if (transaction.accountId>200) {
+          //  transaction.accountId = 200;
+          //}
         }
+        transaction.amount = this.sign * transaction.amount;
         ///fix UTC issue:
         let date = new Date(transaction.date);
         transaction.date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + 12);
@@ -77,6 +87,7 @@ export class AddExpenseComponent implements OnInit {
             this.refreshEmitter.emit();
           });
           this.transactionForm.reset();
+          this.setSign(0);
         }
 
 
@@ -93,11 +104,11 @@ export class AddExpenseComponent implements OnInit {
     this.transactionForm = this.formBuilder.group({
       apartmentId: 0,
       accountId: [0, Validators.min(1)],
-      amount: [null, Validators.required],
+      amount: [null, [Validators.required, Validators.min(0)]],
       date: [null, Validators.required],
       hours: null,
       comments: ['', Validators.required],
-      isPurchaseCost: {value: false,disabled: true},
+      isPurchaseCost: { value: false, disabled: true },
     })
 
     this.configureFormType();
@@ -125,6 +136,7 @@ export class AddExpenseComponent implements OnInit {
           this.transactionForm.controls['isPurchaseCost'].setValue(false);
 
         }
+        this.setSign(accountId);
       }
       else {
         this.transactionForm.controls['amount'].setValue(0);
@@ -132,6 +144,42 @@ export class AddExpenseComponent implements OnInit {
     });
 
   }
+
+  switchSign() {
+    //this.opositSign = this.opositSign * -1;
+    this.sign = this.sign * -1;
+    this.displySign();
+  }
+
+
+  displySign() {
+    if (this.sign == -1) {
+
+      this.signIcone = 'remove';
+      this.tooltipSign = 'Decrease your account';
+    }
+    else {
+      this.signIcone = 'add';
+      this.tooltipSign = 'Increase your account';
+    }
+  }
+
+
+  setSign(accountId: number) {
+    if (accountId == 1 || accountId==198 || accountId == 201) {
+      this.sign = -1;      
+    }
+    if (accountId== 201|| accountId==198) {
+      this.enableSwitch = true;
+    }
+    else {
+      this.enableSwitch = false;
+    }
+    this.displySign();
+  }
+
+
+
 
   @ViewChild('autosize', { static: false }) autosize: CdkTextareaAutosize;
   triggerResize() {
@@ -148,6 +196,7 @@ export class AddExpenseComponent implements OnInit {
     this.accountService.getAccounts().subscribe(result => {
       if (this.data.visibleAccounts) {
         this.accounts = result.filter(a => this.data.visibleAccounts.includes(a.id));
+
       }
       else {
         this.accounts = result;
@@ -162,7 +211,7 @@ export class AddExpenseComponent implements OnInit {
       this.labelTitle = "activity";
       this.labelDate = "Activity Date";
       this.iconType = "timer"
-      this.transactionForm.controls['hours'].setValidators(Validators.required);
+      this.transactionForm.controls['hours'].setValidators([Validators.required, Validators.min(0.1)]);
     }
     else if (this.data.type == "expenses") {
       this.labelTitle = "axpense";
@@ -183,21 +232,25 @@ export class AddExpenseComponent implements OnInit {
       this.actionName = "Edit";
       let expense: ITransaction = this.data.expense;
       this.transactionId = expense.id;
+
       this.transactionForm.setValue({
         apartmentId: expense.apartmentId,
         accountId: expense.accountId,
-        amount: expense.amount,
+        amount: Math.abs(expense.amount),
         date: expense.date,
         hours: expense.hours,
         comments: expense.comments,
         isPurchaseCost: expense.isPurchaseCost,
       });
 
+      this.setSign(expense.accountId);
     }
     else {
       this.actionName = "Add new";
     }
   }
+
+
 }
 
 

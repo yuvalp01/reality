@@ -5,7 +5,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { NgModule } from '@angular/core';
 import {TextFieldModule} from '@angular/cdk/text-field';
 import {MatTableModule} from '@angular/material/table';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatTreeModule,
     MatBadgeModule,
     MatSnackBarModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSlideToggleModule
 
     ],
   exports: [
@@ -59,7 +61,8 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatTreeModule,
     MatBadgeModule,
     MatSnackBarModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSlideToggleModule
       ],
 })
 export class MyOwnCustomMaterialModule { }
