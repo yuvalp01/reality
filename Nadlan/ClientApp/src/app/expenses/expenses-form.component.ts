@@ -63,9 +63,6 @@ export class AddExpenseComponent implements OnInit {
         }
         else {
           transaction.hours = 0;
-          //if (transaction.accountId>200) {
-          //  transaction.accountId = 200;
-          //}
         }
         transaction.amount = this.sign * transaction.amount;
         ///fix UTC issue:
@@ -243,7 +240,9 @@ export class AddExpenseComponent implements OnInit {
         isPurchaseCost: expense.isPurchaseCost,
       });
 
-      this.setSign(expense.accountId);
+      //this.setSign(expense.accountId);
+      this.sign = expense.amount < 0 ? -1 : 1;
+      this.displySign();
     }
     else {
       this.actionName = "Add new";

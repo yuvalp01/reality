@@ -19,7 +19,7 @@ export class ExpensesComponent implements OnInit {
   selectedApartment: any;
   assistantBalance: number = 0;
   visibleAccountsHours: number[] = [4, 6, 11, 16, 200];
-  visibleAccountsExpenses: number[] = [1, 4, 6, 11, 8, 198, 200, 201];
+  visibleAccountsExpenses: number[] = [1, 4, 6, 11, 8,16, 198, 200, 201];
 
   role: number;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -152,30 +152,3 @@ export class ExpensesComponent implements OnInit {
 
 }
 
-
-
-  //openAddHoursDialog() {
-  //  let dialogRef = this.dialog.open(AddExpenseComponent, {
-  //    height: '600px',
-  //    width: '500px',
-  //    data: { type: 'hours', visibleAccounts: this.visibleAccountsHours },
-  //  });
-  //  dialogRef.componentInstance.refreshEmitter.subscribe(() => this.refreshData());
-  //  dialogRef.afterClosed().subscribe(result => {
-  //    this.refreshData();
-  //  });
-
-  //}
-
-  //openAddExpensesDialog() {
-  //  let dialogRef = this.dialog.open(AddExpenseComponent, {
-  //    height: '600px',
-  //    width: '500px',
-  //    data: { type: 'expenses', visibleAccounts: this.visibleAccountsExpenses },
-  //  });
-  //  dialogRef.componentInstance.refreshEmitter.subscribe(() => this.refreshData());
-  //  dialogRef.afterClosed().subscribe(() => {
-  //    this.refreshData();
-  //  });
-
-  //}
