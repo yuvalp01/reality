@@ -4,6 +4,7 @@ import { PersonalTransService } from '../personal-trans.service';
 import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { PersonalTransFormComponent } from '.././personal-trans-form/personal-trans-form.component';
 import { Router } from '@angular/router';
+import { ExcelService } from '../../services/excel.service';
 
 @Component({
   selector: 'app-personal-trans',
@@ -17,6 +18,7 @@ export class PersonalTransComponent implements OnChanges, OnInit  {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   constructor(
     private route: Router,
+    private excelService: ExcelService,
     private personalTransService: PersonalTransService,
     private dialog: MatDialog) { }
   displayedColumns: string[] = ['date', 'amount','apartment', 'comments'];
@@ -93,5 +95,7 @@ export class PersonalTransComponent implements OnChanges, OnInit  {
     return false;
   }
 
-
+  exportAsXLSX(): void {
+    this.excelService.exportAsExcelFile(this.dataSourceTrans.data, 'sample');
+  }
 }

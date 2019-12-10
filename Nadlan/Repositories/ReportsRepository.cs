@@ -54,7 +54,7 @@ namespace Nadlan.Repositories
         public async Task<decimal> GetExpensesBalance()
         {
             var balance = Context.Expenses.SumAsync(a => a.Transaction.Amount);
-            return await balance;
+            return await balance*-1;
         }
 
         //public async Task<decimal> GetPersonalBalance(int stakeholderId)

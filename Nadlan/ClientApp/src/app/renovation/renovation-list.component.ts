@@ -8,7 +8,9 @@ import { RenovationService } from '../services/renovation.service';
   templateUrl: './renovation-list.component.html',
 })
 export class RenovationListComponent implements OnInit {
-  constructor(private renovationService: RenovationService, private excelService:ExcelService) { }
+  constructor(
+    private renovationService: RenovationService,
+    private excelService: ExcelService) { }
   generalLines: ILine[];
   kitchenLines: ILine[];
   bathLines: ILine[];
