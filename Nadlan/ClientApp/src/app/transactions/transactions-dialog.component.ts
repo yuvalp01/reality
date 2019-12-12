@@ -7,10 +7,11 @@ import { ITransaction } from "../models";
 @Component({
   selector: 'transactions-dialog.component',
   templateUrl: './transactions-dialog.component.html',
+  styleUrls:['./transactions-dialog.component.css']
 
 })
 export class TransactionsDialogComponent {
-  transactionColumns: string[] = ['date', 'amount', 'comments']; /*'id', 'isPurchaseCost'*/
+  transactionColumns: string[] = ['date', 'amount', 'comments']; /*'id', 'isPurchaseCost' isBusinessExpense*/
   //transactionColumns: string[] = [ 'date', 'amount',  'comments'];
 
   constructor(

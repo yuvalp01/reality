@@ -21,8 +21,9 @@ export class NavMenuComponent implements OnInit{
     ////this.route.queryParamMap.subscribe(params => {
     ////  this.role =  +params.get('role');
     ////})
-    //this.role = 1;
+    this.role = 1;
     this.userId = 107;
+    //this.userId = 199;
     this.configurePage(this.userId);
     window.sessionStorage.setItem("role", this.role.toString());
     //if (this.role==1) {
@@ -35,7 +36,7 @@ export class NavMenuComponent implements OnInit{
       case 199:
         this.role = 1;
         //this.router.navigateByUrl(`/fetch-transactions`);
-        this.router.navigateByUrl(`/expenses`);
+        this.router.navigateByUrl(`/reports/1`);
         break;
       case 107:
         this.role = 2;

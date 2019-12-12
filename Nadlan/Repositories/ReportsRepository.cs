@@ -211,6 +211,7 @@ namespace Nadlan.Repositories
             Func<Transaction, bool> predAll = t =>
                !t.IsDeleted 
             && !t.IsPurchaseCost
+            && !t.IsBusinessExpense
             && t.ApartmentId == apartmentId
             && t.Account.AccountTypeId == 0
             && t.AccountId != 100;
@@ -218,6 +219,7 @@ namespace Nadlan.Repositories
             Func<Transaction, bool> predWithYear = t =>
                !t.IsDeleted
             && !t.IsPurchaseCost
+            && !t.IsBusinessExpense
             && t.ApartmentId == apartmentId
             && t.Account.AccountTypeId == 0
             && t.AccountId != 100
@@ -232,13 +234,9 @@ namespace Nadlan.Repositories
             var expenses = Context.Transactions.Include(a => a.Account).Where(basicPredicate)
                 .Where(a => !a.Account.IsIncome);
 
-            //&& a.AccountId != 5);
-            //&& a.Amount <= 0);
-
             var tax = Context.Transactions.Include(a => a.Account).Where(basicPredicate)
                 .Where(a => a.AccountId == 5);
-            //&& a.Amount <= 0);
-
+ 
             //Net income (distribution is not an expence)
             var netIncome = Context.Transactions.Include(a => a.Account).Where(basicPredicate).Where(a => a.AccountId != 100);
 

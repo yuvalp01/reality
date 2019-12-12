@@ -12,6 +12,7 @@ namespace Nadlan.ViewModels
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
         public bool IsPurchaseCost { get; set; }
+        public bool IsBusinessExpense { get; set; }
         public bool IsConfirmed { get; set; }
         public string Comments { get; set; }
         public int ApartmentId { get; set; }

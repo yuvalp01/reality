@@ -133,6 +133,14 @@ export class AddExpenseComponent implements OnInit {
           this.transactionForm.controls['isPurchaseCost'].setValue(false);
 
         }
+        if (accountId==201) {
+          this.transactionForm.controls['apartmentId'].setValue(0);
+          this.transactionForm.controls['apartmentId'].disable();
+        }
+        else {
+          this.transactionForm.controls['apartmentId'].enable();
+
+        }
         this.setSign(accountId);
       }
       else {
