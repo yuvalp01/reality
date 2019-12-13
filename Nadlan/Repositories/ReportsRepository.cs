@@ -53,15 +53,9 @@ namespace Nadlan.Repositories
 
         public async Task<decimal> GetExpensesBalance()
         {
-            var balance = Context.Expenses.SumAsync(a => a.Transaction.Amount);
+            var balance = Context.Expenses.Where(a=>!a.Transaction.IsDeleted).SumAsync(a => a.Transaction.Amount);
             return await balance*-1;
         }
-
-        //public async Task<decimal> GetPersonalBalance(int stakeholderId)
-        //{
-        //    var balance = Context.PersonalTransactions.Where(a => a.StakeholderId == stakeholderId).SumAsync(a => a.Amount);
-        //    return await balance;
-        //}
 
 
         public async Task<DiagnosticReport> GetDiagnosticReport(DiagnosticRequest diagnosticRequest)

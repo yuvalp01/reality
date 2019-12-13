@@ -35,7 +35,8 @@
           <span style="width:260px">Cash</span>
           <span style="font-weight:bold" [ngClass]="'positive'">{{summaryReport.balance| currency:'EUR' : number:'1.0-0'}}</span>
         </mat-list-item>
-        <div *ngIf="apartmentId!=20">
+        <!--*ngIf="apartmentId!=20"-->
+        <div>
           <mat-divider></mat-divider>
           <mat-list-item matTooltip="Conservative: Take into consideration all expenses and taxes and assume 11 month a year">
             <mat-icon mat-list-icon>business_center</mat-icon>

@@ -5,6 +5,7 @@ import { MatTableDataSource, MatSort, MatDialog } from '@angular/material';
 import { PersonalTransFormComponent } from '.././personal-trans-form/personal-trans-form.component';
 import { Router } from '@angular/router';
 import { ExcelService } from '../../services/excel.service';
+import { debug } from 'util';
 
 @Component({
   selector: 'app-personal-trans',
@@ -96,6 +97,24 @@ export class PersonalTransComponent implements OnChanges, OnInit  {
   }
 
   exportAsXLSX(): void {
+    this.dataSourceTrans.data.forEach(a => delete a.id);
+    this.dataSourceTrans.data.forEach(a => delete a.apartmentId);
+    this.dataSourceTrans.data.forEach(a => delete a.stakeholderId);
+
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    var today = new Date();
+
+    console.log(today.toLocaleDateString()); // 9/17/2016
+
+    //this.dataSourceTrans.data.forEach(a => a.date = a.date.toDateString())
+    //this.dataSourceTrans.data.forEach(a => a.date2 = new Date(a.date).toLocaleDateString());
+    //this.dataSourceTrans.data.forEach(a => a.date3 = new Date(a.date).toDateString('yyyy-MM-dd'));
+    this.dataSourceTrans.data.forEach(a => {
+      let d = new Date(a.date);
+      a.date = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`; 
+    });
+    //debugger;
+
     this.excelService.exportAsExcelFile(this.dataSourceTrans.data, 'sample');
   }
 }
