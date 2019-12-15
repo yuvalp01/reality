@@ -12,7 +12,7 @@ import { debug } from 'util';
   templateUrl: './personal-trans.component.html',
   styleUrls: ['./personal-trans.component.css']
 })
-export class PersonalTransComponent implements OnChanges, OnInit  {
+export class PersonalTransComponent implements OnChanges, OnInit {
 
 
 
@@ -22,7 +22,7 @@ export class PersonalTransComponent implements OnChanges, OnInit  {
     private excelService: ExcelService,
     private personalTransService: PersonalTransService,
     private dialog: MatDialog) { }
-  displayedColumns: string[] = ['date', 'amount','apartment', 'comments'];
+  displayedColumns: string[] = ['date', 'amount', 'apartment', 'comments'];
   balance: number = 0;
 
   dataSourceTrans = new MatTableDataSource<IPersonalTransaction>();
@@ -30,8 +30,8 @@ export class PersonalTransComponent implements OnChanges, OnInit  {
   @Input() stakeholderId: number;
   ngOnInit() {
     if (this.editable) {
-//      this.displayedColumns.push('actions');
-      this.displayedColumns = ['date', 'stakeholderId', 'amount','apartment', 'comments', 'actions'];
+      //      this.displayedColumns.push('actions');
+      this.displayedColumns = ['date', 'stakeholderId', 'amount', 'apartment', 'comments', 'actions'];
     }
     //this.refreshData(this.stakeholderId);
   }
@@ -42,7 +42,7 @@ export class PersonalTransComponent implements OnChanges, OnInit  {
   }
 
 
-  refreshData(stakeholderId:number) {
+  refreshData(stakeholderId: number) {
     //refresh tables
     this.personalTransService.getPesonalTransByStakeholder(stakeholderId).subscribe(result => {
       let personalTrans = result as IPersonalTransaction[];
@@ -66,8 +66,7 @@ export class PersonalTransComponent implements OnChanges, OnInit  {
       data: { transactionId: _transactionId }
     });
     dialogRef.componentInstance.refreshEmitter.subscribe(() => this.refreshData(this.stakeholderId));
-    dialogRef.componentInstance.chageStakeholderEmitter.subscribe(id =>
-    {
+    dialogRef.componentInstance.chageStakeholderEmitter.subscribe(id => {
       this.route.navigate(['personal-admin', id]);
       //this.stakeholderId = id;
       //this.refreshData(id)
@@ -97,24 +96,21 @@ export class PersonalTransComponent implements OnChanges, OnInit  {
   }
 
   exportAsXLSX(): void {
+
     this.dataSourceTrans.data.forEach(a => delete a.id);
-    this.dataSourceTrans.data.forEach(a => delete a.apartmentId);
     this.dataSourceTrans.data.forEach(a => delete a.stakeholderId);
 
-    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    var today = new Date();
-
-    console.log(today.toLocaleDateString()); // 9/17/2016
-
     //this.dataSourceTrans.data.forEach(a => a.date = a.date.toDateString())
-    //this.dataSourceTrans.data.forEach(a => a.date2 = new Date(a.date).toLocaleDateString());
+    //this.dataSourceTrans.data.forEach(a => a.date = new Date(a.date).toLocaleDateString('en-GB')) as const;
     //this.dataSourceTrans.data.forEach(a => a.date3 = new Date(a.date).toDateString('yyyy-MM-dd'));
-    this.dataSourceTrans.data.forEach(a => {
-      let d = new Date(a.date);
-      a.date = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`; 
-    });
+    //this.dataSourceTrans.data.forEach(a => {
+    //  let d = new Date(a.date);
+    //  //let ds = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+    //  a['Date'] = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+    //  delete a.date;
+    //});
     //debugger;
 
-    this.excelService.exportAsExcelFile(this.dataSourceTrans.data, 'sample');
+    this.excelService.exportAsExcelFile(this.dataSourceTrans.data, 'Transactions');
   }
 }
