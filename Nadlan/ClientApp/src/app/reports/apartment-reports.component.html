@@ -17,11 +17,11 @@
           <span [ngClass]="'positive'">{{summaryReport.netIncome| currency:'EUR' : number:'1.0-0'}}</span>
         </mat-list-item>
 
-        <mat-list-item>
+        <!--<mat-list-item>
           <mat-icon mat-list-icon>business_center</mat-icon>
           <span matTooltip="For details see 'Purchase Report' tab" style="width:260px">Initial Remainder</span>
           <span [ngClass]="'positive'">{{summaryReport.initialRemainder| currency:'EUR' : number:'1.0-0'}}</span>
-        </mat-list-item>
+        </mat-list-item>-->
 
         <mat-list-item style="cursor:pointer; color:#2222c7" (click)="showTrans(100, 'Distributed', false)" matTooltip="Distributed = Distributed to personal account (available for withdrawal at any moment)">
           <mat-icon mat-list-icon>business_center</mat-icon>
@@ -30,10 +30,10 @@
         </mat-list-item>
         <mat-divider></mat-divider>
 
-        <mat-list-item matTooltip="Cash = Initial remainder + Net income - distributions">
+        <mat-list-item matTooltip="Cash available for distribution that still hasn't beed distributed">
           <mat-icon mat-list-icon>business_center</mat-icon>
           <span style="width:260px">Cash</span>
-          <span style="font-weight:bold" [ngClass]="'positive'">{{summaryReport.balance| currency:'EUR' : number:'1.0-0'}}</span>
+          <span attr.data-amount="{{summaryReport.balance}}" style="font-weight:bold" [ngClass]="'positive'">{{summaryReport.balance| currency:'EUR' : number:'1.0-0'}}</span>
         </mat-list-item>
         <!--*ngIf="apartmentId!=20"-->
         <div>

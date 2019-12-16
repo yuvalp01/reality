@@ -94,8 +94,8 @@ export class ApartmentReportsComponent implements OnInit {
 
   showTrans(accountId, accountName, isPurchaseCost) {
     let year = this.selectedYear;
-    //Purchase costs are not year dependant
-    if (isPurchaseCost) {
+    //Purchase costs and distribution are not year dependant
+    if (isPurchaseCost || accountId==100) {
       year = 0;
     }
     this.transactionService.getTransactionsByAccount(this.apartmentId, accountId, isPurchaseCost, year).subscribe(

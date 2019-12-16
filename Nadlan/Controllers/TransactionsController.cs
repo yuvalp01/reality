@@ -72,7 +72,7 @@ namespace Nadlan.Controllers
             }
 
             var transaction = await _repositoryWraper.Transaction.GetByAcountAsync(apartmentId, accountId, isPurchaseCost, year);
-            transaction.ForEach(a => a.Amount = Math.Abs(a.Amount));
+            //transaction.ForEach(a => a.Amount = Math.Abs(a.Amount));
             if (transaction == null)
             {
                 return NotFound();

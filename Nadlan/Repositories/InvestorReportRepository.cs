@@ -138,7 +138,7 @@ namespace Nadlan.Repositories
                     .Where(a =>
                     a.ApartmentId == portfolioLine.ApartmentId &&
                     a.StakeholderId == portfolioLine.StakeholderId &&
-                    a.TransactionType == TransactionType.Distribution).Sum(a => a.Amount);
+                    (a.TransactionType == TransactionType.Distribution|| a.TransactionType== TransactionType.ReminderDistribution)).Sum(a => a.Amount);
                 if (Math.Round(portfolioLineReport.Distributed) != Math.Round(personalDistribution))
                 {
                     //portfolioLineReport.Distributed = 0;
