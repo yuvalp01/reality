@@ -55,8 +55,8 @@ export class InvestorReportComponent implements OnInit {
   }
 
   dataSource = new MatTableDataSource<IPersonalTransaction>();
-  showTrans(transactionType) {
-    this.personalTransService.getPesonalTransByType(this.stakeholderId, transactionType).subscribe(
+  showDistributions() {
+    this.personalTransService.getAllDistributions(this.stakeholderId).subscribe(
       result => {
         //this.transactions = result;
         this.dataSource.data = result as IPersonalTransaction[];

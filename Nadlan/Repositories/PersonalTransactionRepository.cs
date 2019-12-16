@@ -42,6 +42,18 @@ namespace Nadlan.Repositories
                 .ToListAsync();
         }
 
+
+        internal async Task<List<PersonalTransaction>>  GetAllDistributions(int stakeholderId)
+        {
+            return await Context.PersonalTransactions
+                .Where(a => a.StakeholderId == stakeholderId)
+                .Where(a => a.TransactionType == TransactionType.Distribution || a.TransactionType == TransactionType.ReminderDistribution)
+                .OrderByDescending(a => a.Date)
+                .Include(a => a.Stakeholder)
+                .Include(a => a.Apartment)
+                .ToListAsync();
+        }
+
         public async Task<List<Stakeholder>> GetStakeholdersAsync()
         {
             return await Context.Stakeholders.ToListAsync();
@@ -78,8 +90,6 @@ namespace Nadlan.Repositories
             return Context.PersonalTransactions.FindAsync(id);
         }
 
-
- 
     }
 
 
