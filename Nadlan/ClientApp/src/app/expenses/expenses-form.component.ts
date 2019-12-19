@@ -219,7 +219,7 @@ export class AddExpenseComponent implements OnInit {
       this.transactionForm.controls['hours'].setValidators([Validators.required, Validators.min(0.1)]);
     }
     else if (this.data.type == "expenses") {
-      this.labelTitle = "axpense";
+      this.labelTitle = "expense";
       this.labelDate = "Payment Date";
       this.iconType = "attach_money"
       this.transactionForm.controls['hours'].clearValidators();
