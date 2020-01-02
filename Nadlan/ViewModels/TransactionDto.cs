@@ -20,6 +20,8 @@ namespace Nadlan.ViewModels
         public int AccountId { get; set; }
         public string AccountName { get; set; }
         public decimal Hours { get; set; }
+        public bool IsCoveredByInvestor { get; set; }
+
 
     }
 }

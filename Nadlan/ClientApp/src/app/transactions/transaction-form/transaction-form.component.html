@@ -10,10 +10,13 @@
       </mat-form-field>
     </fieldset>
     <fieldset>
-      <mat-form-field style="width: 100%" appearance="outline" class="example-full-width">
+      <mat-form-field style="width: 50%" appearance="outline" class="example-full-width">
         <mat-label>Amount (€)</mat-label>
         <input matInput formControlName="amount" type="text" required placeholder="Amount (€)">
+
       </mat-form-field>
+      <mat-checkbox style="width: 50%; padding-left: 25px" formControlName="isCoveredByInvestor">Covered by Investor?</mat-checkbox>
+
     </fieldset>
     <fieldset>
       <mat-form-field style="width: 100%" appearance="outline">
@@ -35,7 +38,7 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-checkbox  style="width: 50%; padding-left: 25px" formControlName="isPurchaseCost">Purchase Cost?</mat-checkbox>
+      <mat-checkbox style="width: 50%; padding-left: 25px" formControlName="isPurchaseCost">Purchase Cost?</mat-checkbox>
     </fieldset>
 
     <fieldset>

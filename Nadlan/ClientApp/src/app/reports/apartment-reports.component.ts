@@ -21,7 +21,7 @@ export class ApartmentReportsComponent implements OnInit {
   summaryReport: ISummaryReport;
   apartmentInfo: IApartment;
   transactions: ITransaction[];
-  years: number[] = [2018, 2019];
+  years: number[] = [2018, 2019, 2020];
   selectedYear: number = 0;
   @Input() apartmentId: number = 0;
   dataSource = new MatTableDataSource<ITransaction>();

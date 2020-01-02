@@ -19,6 +19,12 @@ namespace Nadlan.Models
         public int AccountId { get; set; }
         public Account Account { get; set; }
 
+        public bool IsCoveredByInvestor { get; set; }
+
+
+        //public int PaidById { get; set; }
+        //public Stakeholder PaidBy { get; set; }
+
         public bool IsDeleted { get; set; }
 
         [NotMapped]
