@@ -148,7 +148,10 @@ namespace Nadlan.Repositories
 
         private decimal CalcROI(Apartment apartment, SummaryReport summaryReport)
         {
-
+            if (apartment.PurchaseDate>DateTime.Now)
+            {
+                return 0;
+            }
             DateTime zeroTime = new DateTime(1, 1, 1);
             TimeSpan span = DateTime.Today - apartment.PurchaseDate;
             decimal years_dec = ((zeroTime + span).Year - 1) + ((zeroTime + span).Month - 1) / 12m;
@@ -205,7 +208,7 @@ namespace Nadlan.Repositories
             Func<Transaction, bool> predAll = t =>
                !t.IsDeleted 
             && !t.IsPurchaseCost
-            && !t.IsBusinessExpense
+            //&& !t.IsBusinessExpense
             && t.ApartmentId == apartmentId
             && t.Account.AccountTypeId == 0
             && t.AccountId != 100;
@@ -213,7 +216,7 @@ namespace Nadlan.Repositories
             Func<Transaction, bool> predWithYear = t =>
                !t.IsDeleted
             && !t.IsPurchaseCost
-            && !t.IsBusinessExpense
+            //&& !t.IsBusinessExpense
             && t.ApartmentId == apartmentId
             && t.Account.AccountTypeId == 0
             && t.AccountId != 100
@@ -226,7 +229,7 @@ namespace Nadlan.Repositories
 
 
             var expenses = Context.Transactions.Include(a => a.Account).Where(basicPredicate)
-                .Where(a => !a.Account.IsIncome);
+                .Where(a => !a.Account.IsIncome && !a.IsBusinessExpense);
 
             var tax = Context.Transactions.Include(a => a.Account).Where(basicPredicate)
                 .Where(a => a.AccountId == 5);
@@ -243,7 +246,7 @@ namespace Nadlan.Repositories
                 {
                     AccountId = a.Key.AccountId,
                     Name = a.Key.Name,
-                    Total = a.Sum(s => s.Amount)
+                    Total = a.Where(x=>!x.IsBusinessExpense).Sum(s => s.Amount)
                 });
 
 

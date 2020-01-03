@@ -87,6 +87,8 @@ namespace Nadlan.Repositories
             //Charge the original amount
             transaction.Amount = transaction.Amount * -1;
             var originalTransaction = Context.Transactions.Find(transaction.Id);
+            SwitchIsBusinessExpense(transaction);
+
             //Update original transaction:
             Context.Entry(originalTransaction).CurrentValues.SetValues(transaction);
             //Update origial expense with hours:
@@ -109,28 +111,35 @@ namespace Nadlan.Repositories
             await SaveAsync();
         }
 
+        private void SwitchIsBusinessExpense(Transaction transaction)
+        {
+            ////hours for existing apartment maintances - the the expense of the business
+            if (transaction.AccountId==4)
+            {
+                transaction.IsBusinessExpense = true;
+            }
+            else
+            {
+                transaction.IsBusinessExpense = false;
+            }
+        }
+
         public async Task CreateExpenseAndTransactionAsync(Transaction transaction)
         {
             if (transaction.Hours > 0)
             {
                 transaction.Comments = $"Hours: {transaction.Comments}";
+
             }
-            //if (isHourCharge)
-            //{
-            //    transaction.Comments = $"Hours: {transaction.Comments}";
-            //}
+
             //Charge the original amount
             transaction.Amount = transaction.Amount * -1;
+            SwitchIsBusinessExpense(transaction);
             Create(transaction);
             Expense assiatantExpense = CreateCorrespondingExpense(transaction);
             //Create(assiatantTransaction);
             Context.Set<Expense>().Add(assiatantExpense);
 
-            ////hours for existing apartment maintances - the the expense of the business
-            //if (isHourCharge && transaction.AccountId == 4)
-            //{
-            //    transaction.AccountId = 200;
-            //}
 
             await SaveAsync();
         }
