@@ -11,7 +11,7 @@ namespace Nadlan.Models
         public int AccountId { get; set; }
         public Account Account { get; set; }
         public decimal Amount { get; set; }
-        public int PrequencyPerYear { get; set; }
+        public int FrequencyPerYear { get; set; }
         public string Comment { get; set; }
 
     }

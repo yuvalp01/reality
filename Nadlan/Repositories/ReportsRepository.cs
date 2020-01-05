@@ -53,8 +53,8 @@ namespace Nadlan.Repositories
 
         public async Task<decimal> GetExpensesBalance()
         {
-            var balance = Context.Expenses.Where(a=>!a.Transaction.IsDeleted).SumAsync(a => a.Transaction.Amount);
-            return await balance*-1;
+            var balance = Context.Expenses.Where(a => !a.Transaction.IsDeleted).SumAsync(a => a.Transaction.Amount);
+            return await balance * -1;
         }
 
 
@@ -125,30 +125,61 @@ namespace Nadlan.Repositories
             Apartment apartment = Context.Apartments.Where(a => a.Id == apartmentId).First();
 
             summaryReport.ROI = CalcROI(apartment, summaryReport);
-            summaryReport.PredictedROI = CalcPredictedROI(apartment, summaryReport.Investment);
+            summaryReport.PredictedROI = CalcPredictedROI(apartmentId, summaryReport.Investment);
 
 
             return summaryReport;
         }
 
 
-        private decimal CalcPredictedROI(Apartment apartment, decimal investment)
+        private decimal CalcPredictedROI(int apartmentId, decimal investment)
         {
-            // decimal yearlyCosts = 100 + 350;
-            //TODO - find formula for enfia
-            decimal netRent = apartment.CurrentRent * 0.85m - apartment.FixedMaintanance - ANNUAL_COSTS / 12;
-            decimal anualNetIncome = netRent * 11;
+            var expectedTransactions = Context.ExpectedTransactions.Where(a => a.ApartmentId == apartmentId).ToList();
+            if (expectedTransactions.Count<3)
+            {
+                return 0;
+            }
+            var income = expectedTransactions.Where(a => a.AccountId == 1).First();
+            decimal anualRent = income.FrequencyPerYear * income.Amount;
+            var allExpenses = expectedTransactions.Where(a => a.AccountId != 1);
+
+            decimal annualExpenses = 0;
+            foreach (var expense in allExpenses)
+            {
+                annualExpenses += expense.FrequencyPerYear * expense.Amount;
+            }
+            decimal annualNetIncome = anualRent - annualExpenses;
+            ////var xxxx = allExpenses.ForEach(a=>a.FrequencyPerYear*a.Amount)
+            //// decimal yearlyCosts = 100 + 350;
+            ////TODO - find formula for enfia
+            //decimal netRent = apartment.CurrentRent * 0.85m - apartment.FixedMaintanance - ANNUAL_COSTS / 12;
+            //decimal anualNetIncome = netRent * 11;
             decimal predictedRoi = 0;
             if (investment > 0)
             {
-                predictedRoi = anualNetIncome / investment;
+                predictedRoi = annualNetIncome / investment;
             }
             return predictedRoi;
         }
 
+
+        //private decimal CalcPredictedROI_(Apartment apartment, decimal investment)
+        //{
+        //    // decimal yearlyCosts = 100 + 350;
+        //    //TODO - find formula for enfia
+        //    decimal netRent = apartment.CurrentRent * 0.85m - apartment.FixedMaintanance - ANNUAL_COSTS / 12;
+        //    decimal anualNetIncome = netRent * 11;
+        //    decimal predictedRoi = 0;
+        //    if (investment > 0)
+        //    {
+        //        predictedRoi = anualNetIncome / investment;
+        //    }
+        //    return predictedRoi;
+        //}
+
         private decimal CalcROI(Apartment apartment, SummaryReport summaryReport)
         {
-            if (apartment.PurchaseDate>DateTime.Now)
+            if (apartment.PurchaseDate > DateTime.Now)
             {
                 return 0;
             }
@@ -156,7 +187,7 @@ namespace Nadlan.Repositories
             TimeSpan span = DateTime.Today - apartment.PurchaseDate;
             decimal years_dec = ((zeroTime + span).Year - 1) + ((zeroTime + span).Month - 1) / 12m;
             decimal roi = 0;
-            if (summaryReport.Investment > 0 && years_dec>0)
+            if (summaryReport.Investment > 0 && years_dec > 0)
             {
                 roi = (summaryReport.NetIncome / summaryReport.Investment) / years_dec;
             }
@@ -206,7 +237,7 @@ namespace Nadlan.Repositories
         public async Task<IncomeReport> GetIncomeReport(int apartmentId, int year)
         {
             Func<Transaction, bool> predAll = t =>
-               !t.IsDeleted 
+               !t.IsDeleted
             && !t.IsPurchaseCost
             //&& !t.IsBusinessExpense
             && t.ApartmentId == apartmentId
@@ -233,7 +264,7 @@ namespace Nadlan.Repositories
 
             var tax = Context.Transactions.Include(a => a.Account).Where(basicPredicate)
                 .Where(a => a.AccountId == 5);
- 
+
             //Net income (distribution is not an expence)
             var netIncome = Context.Transactions.Include(a => a.Account).Where(basicPredicate).Where(a => a.AccountId != 100);
 
@@ -246,7 +277,7 @@ namespace Nadlan.Repositories
                 {
                     AccountId = a.Key.AccountId,
                     Name = a.Key.Name,
-                    Total = a.Where(x=>!x.IsBusinessExpense).Sum(s => s.Amount)
+                    Total = a.Where(x => !x.IsBusinessExpense).Sum(s => s.Amount)
                 });
 
 
