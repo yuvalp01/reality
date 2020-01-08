@@ -6,9 +6,20 @@
 <button mat-mini-fab (click)="openForm(0)">
   <mat-icon>add</mat-icon>
 </button>
-<mat-form-field>
-  <input type="text" matInput (keyup)="doFilter($event.target.value)" [(ngModel)]="selectedApartment" name="selectedApartment">
-</mat-form-field>
+
+<div style="display:inline; margin-left:20px; ">
+  <!--<button (click)="showAll()">Show all</button>
+  <button (click)="showUnconfirmed('isConfirmed')">Show unconfirmed</button>-->
+  <!--<mat-checkbox (change)="applyConfirmFilter($event)" [(ngModel)]="showConfirmed">Hide confirmed</mat-checkbox>
+  <span (click)="xxx(showConfirmed)"> {{showConfirmed}}</span>-->
+  <mat-form-field>
+    <!--<input type="text" matInput (keyup)="doFilter($event.target.value)" [(ngModel)]="selectedApartment" name="selectedApartment">-->
+    <input type="text" matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="selectedApartment" name="selectedApartment">
+  </mat-form-field>
+  <mat-slide-toggle  (change)="hideShowUnconfirmed($event)">Unconfirmed Only</mat-slide-toggle>
+
+</div>
+
 <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
