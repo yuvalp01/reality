@@ -30,7 +30,11 @@
     <a class="nav-link text-dark" [routerLink]='["/reports"]'>Reports</a>
   </li>-->
           <li *ngIf="role==1" class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-            <a class="nav-link text-dark" [routerLink]='["/reports/5"]'>Apartments Reports</a>
+            <a class="nav-link text-dark" [routerLink]='["/reports/1/rented"]'>Rented</a>
+          </li>
+
+          <li *ngIf="role==1" class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+            <a class="nav-link text-dark" [routerLink]='["/reports/5/inproc"]'>In Process</a>
           </li>
 
           <li *ngIf="role==1" class="nav-item" [routerLinkActive]='["link-active"]'>
