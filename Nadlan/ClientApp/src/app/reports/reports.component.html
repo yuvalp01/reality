@@ -1,19 +1,12 @@
 <h1>Reports</h1>
 
 <mat-drawer-container >
-  <mat-drawer mode="side"  opened>
+  <mat-drawer mode="side"   opened>
     <mat-nav-list>
-      <a mat-list-item *ngFor="let apartment of apartments" [routerLink]="['/reports',apartment.id]" routerLinkActive="link-active"> {{apartment.address}}</a>
-
-      <!--<a mat-list-item [ngClass]="selectedApartmentId==1?'selected':''" (click)="showReport(1)"> Mavromichali 103</a>
-      <a mat-list-item [ngClass]="selectedApartmentId==2?'selected':''" (click)="showReport(2)"> Filotiou 6</a>
-      <a mat-list-item [ngClass]="selectedApartmentId==3?'selected':''" (click)="showReport(3)"> Ippokratous 121</a>
-      <a mat-list-item [ngClass]="selectedApartmentId==4?'selected':''" (click)="showReport(4)"> Oreon 5 </a>
-      <a mat-list-item [ngClass]="selectedApartmentId==5?'selected':''" (click)="showReport(5)"> Bouboulinas 35</a>
-      <a mat-list-item [ngClass]="selectedApartmentId==6?'selected':''" (click)="showReport(6)"> Leoforos Ionias 26 </a>
-      <a mat-list-item [ngClass]="selectedApartmentId==7?'selected':''" (click)="showReport(7)"> Chansen 36 </a>
-      <a mat-list-item [ngClass]="selectedApartmentId==-1?'selected':''" (click)="showReport(-1)"> test </a>-->
-
+      <a mat-list-item *ngFor="let apartment of apartments"
+         [routerLink]="['/reports',apartment.id,status]"
+         routerLinkActive="link-active"> {{apartment.address}}
+      </a>
     </mat-nav-list>
 
   </mat-drawer>

@@ -72,6 +72,7 @@ import { TransactionFormComponent } from './transactions/transaction-form/transa
       { path: 'fetch-accounts', component: AccountListComponent },
       { path: 'fetch-transactions', component: TransactionListComponent },
       { path: 'reports/:apartmentId', component: ReportsComponent },
+      { path: 'reports/:apartmentId/:status', component: ReportsComponent },
 
 
       //{ path: 'reports/:apartmentId', component: ApartmentReportsComponent },

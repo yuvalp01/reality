@@ -5,27 +5,32 @@ import { Observable } from "rxjs";
 
 
 @Injectable()
-export class ApartmentService
-{
+export class ApartmentService {
 
-    constructor (private httpClient: HttpClient, @Inject('BASE_URL') private baseUrl: string)
-    {
+  constructor(private httpClient: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
 
-    }
+  }
 
-    apartments:IApartment[] ;
+  apartments: IApartment[];
 
 
-    getApartments(): Observable<IApartment[]>
-    {
-       return this.httpClient.get<IApartment[]>(this.baseUrl + 'api/apartments');
-    }
+  getApartments(): Observable<IApartment[]> {
+    return this.httpClient.get<IApartment[]>(this.baseUrl + 'api/apartments');
+  }
+  //getApartments(status:number): Observable<IApartment[]> {
+  //  return this.httpClient.get<IApartment[]>(this.baseUrl + 'api/apartments');
+  //}
+  //getRentedApartments(): Observable<IApartment[]> {
+  //  return this.httpClient.get<IApartment[]>(this.baseUrl + 'api/apartments/GetRentedApartments');
+  //}
+  //getInProcApartments(): Observable<IApartment[]> {
+  //  return this.httpClient.get<IApartment[]>(this.baseUrl + 'api/apartments/GetInProcApartments');
+  //}
 
-    addApartment(apartment):Observable<IApartment>
-    {
-        console.log(apartment);  
-        let options = {headers: new HttpHeaders({'Content-Type':'application/json'})};
-        return  this.httpClient.post<IApartment>(this.baseUrl + 'api/apartments',apartment, options);
-    }
+  addApartment(apartment): Observable<IApartment> {
+    console.log(apartment);
+    let options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    return this.httpClient.post<IApartment>(this.baseUrl + 'api/apartments', apartment, options);
+  }
 
 }

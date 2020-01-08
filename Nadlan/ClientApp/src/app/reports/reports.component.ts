@@ -3,6 +3,7 @@ import { IIncomeReport, IPurchaseReport, ISummaryReport, ITransaction, IApartmen
 import { ReportService } from '../services/reports.service';
 import { ActivatedRoute, RouterEvent, NavigationEnd } from '@angular/router';
 import { ApartmentService } from '../services/apartment.service';
+import { debug } from 'util';
 
 @Component({
   templateUrl: './reports.component.html',
@@ -16,20 +17,38 @@ export class ReportsComponent implements OnInit {
   }
   apartments: IApartment[];
   selectedApartmentId: number;
+  status: string;
   ngOnInit(): void {
-    this.selectedApartmentId = this.route.snapshot.params['apartmentId'];
-    this.apartmentService.getApartments().subscribe(result => {
-      this.apartments = result;
-      this.route.paramMap.subscribe(params => {
-        this.selectedApartmentId = +params.get("apartmentId");
-      });
-    }, error => console.error(error));
+    //this.selectedApartmentId = this.route.snapshot.params['apartmentId'];
+
+    //this.status = this.route.snapshot.params['status'];
+    this.route.paramMap.subscribe(params => {
+      this.status = params.get('status');
+      this.selectedApartmentId = +params.get('apartmentId');
+      this.apartmentService.getApartments().subscribe(result => {
+        this.apartments = result;
+        if (this.status == 'rented') {
+          this.apartments = result.filter(a => a.status == 100 && a.id > 0);
+        }
+        else {
+          this.apartments = result.filter(a => a.status < 100 && a.id > 0);
+        }
+
+        //this.route.paramMap.subscribe(params => {
+        //  this.selectedApartmentId = +params.get("apartmentId");
+        //});
+      }, error => console.error(error));
+
+    });
 
 
-  //showReport(apartmentId: number) {
-  //  this.selectedApartmentId = apartmentId;
-  //  //this.route.snapshot.params['apartmentId'] = this.selectedApartmentId;
 
-  //}
-}
+
+
+    //showReport(apartmentId: number) {
+    //  this.selectedApartmentId = apartmentId;
+    //  //this.route.snapshot.params['apartmentId'] = this.selectedApartmentId;
+
+    //}
+  }
 }

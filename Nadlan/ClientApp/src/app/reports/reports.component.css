@@ -12,6 +12,7 @@ table {
 .mat-drawer {
   float: left !important;
   position: relative !important;
+  background-color: #fafafa;
 }
 
 /*.example-container {
