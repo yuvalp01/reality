@@ -29,7 +29,16 @@ namespace Nadlan.Controllers
         {
             return _context.Apartments;
         }
-
+        //[HttpGet("GetRentedApartments")]
+        //public IEnumerable<Apartment> GetRentedApartments()
+        //{
+        //    return  _context.Apartments.Where(a => a.Status == 100);
+        //}
+        //[HttpGet("GetInProcApartments")]
+        //public IEnumerable<Apartment> GetInProcApartments()
+        //{
+        //    return _context.Apartments.Where(a => a.Status < 100);
+        //}
         // GET: api/Apartments/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetApartment([FromRoute] int id)
@@ -48,6 +57,9 @@ namespace Nadlan.Controllers
 
             return Ok(apartment);
         }
+
+
+
 
         // PUT: api/Apartments/5
         [Authorize]

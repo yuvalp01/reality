@@ -21,29 +21,24 @@
             <mat-list-item>
               <mat-icon mat-list-icon>business_center</mat-icon>
               <span matTooltip="Money belongs to you and can be withdrawn at any moment. For details see 'Transactions' tab">Cash Balance</span>
-              <span  [ngClass]="{
+              <span [ngClass]="{
           positive: isPositive(investorReportOverview.cashBalance),
           negative: !isPositive(investorReportOverview.cashBalance)
         }">{{investorReportOverview.cashBalance| currency:'EUR' : number:'1.0-0'}}</span>
             </mat-list-item>
 
-            <mat-list-item>
-              <mat-icon mat-list-icon>business_center</mat-icon>
-              <span matTooltip="Minimal profit up-to-date (3% per year). For details see 'Portfolio' tab"> Minimal Profit</span>
-              <span [ngClass]="{
-          positive: isPositive(investorReportOverview.minimalProfitUpToDate),
-          negative: !isPositive(investorReportOverview.minimalProfitUpToDate)
-        }">{{investorReportOverview.minimalProfitUpToDate| currency:'EUR' : number:'1.0-0'}}</span>
-            </mat-list-item>
-            <mat-divider></mat-divider>
-            <mat-list-item style="color:#2222c7">
-              <mat-icon mat-list-icon>business_center</mat-icon>
-              <span matTooltip="Cash Balance + Minimal Profit">Total Balace</span>
-              <span>{{investorReportOverview.totalBalace| currency:'EUR' : number:'1.0-0'}}</span>
-            </mat-list-item>
-            <mat-divider></mat-divider>
+            <!--<mat-list-item>
+        <mat-icon mat-list-icon>business_center</mat-icon>
+        <span matTooltip="Minimal profit up-to-date (3% per year). For details see 'Portfolio' tab"> Minimal Profit</span>
+        <span [ngClass]="{
+    positive: isPositive(investorReportOverview.minimalProfitUpToDate),
+    negative: !isPositive(investorReportOverview.minimalProfitUpToDate)
+  }">{{investorReportOverview.minimalProfitUpToDate| currency:'EUR' : number:'1.0-0'}}</span>
+      </mat-list-item>-->
 
-            <mat-list-item (click)="showDistributions()" style="cursor:pointer;" >
+
+
+            <mat-list-item (click)="showDistributions()" style="cursor:pointer;">
               <mat-icon mat-list-icon>business_center</mat-icon>
               <span matTooltip="Total amount distributed from all apartments so far">Distributed so far</span>
               <span style="font-weight:bold" [ngClass]="{
@@ -51,6 +46,13 @@
           negative: !isPositive(investorReportOverview.totalDistribution)
         }">{{investorReportOverview.totalDistribution| currency:'EUR' : number:'1.0-0'}}</span>
             </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item style="color:#2222c7">
+              <mat-icon mat-list-icon>business_center</mat-icon>
+              <span matTooltip="Cash Balance + Distributed so far">Total Balace</span>
+              <span>{{investorReportOverview.totalBalace| currency:'EUR' : number:'1.0-0'}}</span>
+            </mat-list-item>
+
 
 
 
@@ -65,65 +67,65 @@
         <mat-card>
           <mat-card-title>Portfolio</mat-card-title>
 
-   
 
-            <table id="portfolio" *ngIf="investorReportOverview" mat-table [dataSource]="investorReportOverview?.portfolioLines" class="mat-elevation-z8">
 
-              <ng-container matColumnDef="apartment">
-  
-                <th mat-header-cell *matHeaderCellDef>Apartment</th>
-                <td mat-cell *matCellDef="let line">
-                  <!--<a class="nav-link text-dark" routerLinkActive="link-active" [routerLink]="['/investor-reports',this.stakeholderId,line.apartmentId]"> {{line.apartment}}</a>-->
-                  <a mat-button routerLinkActive="link-active" (click)="showApartmentReport(line.apartmentId)">{{line.apartment}}</a>
-                </td>
+          <table id="portfolio" *ngIf="investorReportOverview" mat-table [dataSource]="investorReportOverview?.portfolioLines" class="mat-elevation-z8">
 
-                <td mat-footer-cell *matFooterCellDef> Total</td>
+            <ng-container matColumnDef="apartment">
 
-              </ng-container>
+              <th mat-header-cell *matHeaderCellDef>Apartment</th>
+              <td mat-cell *matCellDef="let line">
+                <!--<a class="nav-link text-dark" routerLinkActive="link-active" [routerLink]="['/investor-reports',this.stakeholderId,line.apartmentId]"> {{line.apartment}}</a>-->
+                <a mat-button routerLinkActive="link-active" (click)="showApartmentReport(line.apartmentId)">{{line.apartment}}</a>
+              </td>
 
-              <ng-container matColumnDef="purchaseDate">
-                <th mat-header-cell *matHeaderCellDef> Purchase Date </th>
-                <td mat-cell *matCellDef="let line"> {{line.purchaseDate | date:'yyyy-MM-dd'}} </td>
-                <td mat-footer-cell *matFooterCellDef> </td>
+              <td mat-footer-cell *matFooterCellDef> Total</td>
 
-              </ng-container>
+            </ng-container>
 
-              <ng-container matColumnDef="investment">
-                <th mat-header-cell matTooltip="Personal investment" *matHeaderCellDef> Investment </th>
-                <td mat-cell *matCellDef="let line"> {{line.investment | currency:'EUR' : number:'1.0-0'}} </td>
-                <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalInvestment|currency:'EUR' : number:'1.0-0'}}</td>
+            <ng-container matColumnDef="purchaseDate">
+              <th mat-header-cell *matHeaderCellDef> Purchase Date </th>
+              <td mat-cell *matCellDef="let line"> {{line.purchaseDate | date:'yyyy-MM-dd'}} </td>
+              <td mat-footer-cell *matFooterCellDef> </td>
 
-              </ng-container>
+            </ng-container>
 
-              <ng-container matColumnDef="ownership">
-                <th mat-header-cell *matHeaderCellDef> Ownership </th>
-                <td mat-cell *matCellDef="let line"> {{line.ownership|percent}} </td>
-                <td mat-footer-cell *matFooterCellDef> </td>
-              </ng-container>
+            <ng-container matColumnDef="investment">
+              <th mat-header-cell matTooltip="Personal investment" *matHeaderCellDef> Investment </th>
+              <td mat-cell *matCellDef="let line"> {{line.investment | currency:'EUR' : number:'1.0-0'}} </td>
+              <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalInvestment|currency:'EUR' : number:'1.0-0'}}</td>
 
-              <ng-container matColumnDef="minimalProfitUpToDate">
-                <th mat-header-cell matTooltip="Minimal profit up-to-date (3% per year)" *matHeaderCellDef> Minimal Profit</th>
-                <td mat-cell *matCellDef="let line"> {{line.minimalProfitUpToDate | currency:'EUR' : number:'1.0-0'}} </td>
-                <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.minimalProfitUpToDate| currency:'EUR' : number:'1.0-0'}}</td>
-              </ng-container>
+            </ng-container>
 
-              <ng-container matColumnDef="distributed">
-                <th mat-header-cell *matHeaderCellDef> Distributed </th>
-                <td mat-cell *matCellDef="let line"> {{line.distributed | currency:'EUR' : number:'1.0-0'}} </td>
-                <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalDistribution| currency:'EUR' : number:'1.0-0'}}</td>
-              </ng-container>
+            <ng-container matColumnDef="ownership">
+              <th mat-header-cell *matHeaderCellDef> Ownership </th>
+              <td mat-cell *matCellDef="let line"> {{line.ownership|percent}} </td>
+              <td mat-footer-cell *matFooterCellDef> </td>
+            </ng-container>
 
-              <tr mat-header-row *matHeaderRowDef="portfolioColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: portfolioColumns;"></tr>
-              <tr mat-footer-row *matFooterRowDef="portfolioColumns"></tr>
-            </table>
+            <!--<ng-container matColumnDef="minimalProfitUpToDate">
+              <th mat-header-cell matTooltip="Minimal profit up-to-date (3% per year)" *matHeaderCellDef> Minimal Profit</th>
+              <td mat-cell *matCellDef="let line"> {{line.minimalProfitUpToDate | currency:'EUR' : number:'1.0-0'}} </td>
+              <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.minimalProfitUpToDate| currency:'EUR' : number:'1.0-0'}}</td>
+            </ng-container>-->
 
- 
+            <ng-container matColumnDef="distributed">
+              <th mat-header-cell *matHeaderCellDef> Distributed </th>
+              <td mat-cell *matCellDef="let line"> {{line.distributed | currency:'EUR' : number:'1.0-0'}} </td>
+              <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalDistribution| currency:'EUR' : number:'1.0-0'}}</td>
+            </ng-container>
 
-     
+            <tr mat-header-row *matHeaderRowDef="portfolioColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: portfolioColumns;"></tr>
+            <tr mat-footer-row *matFooterRowDef="portfolioColumns"></tr>
+          </table>
+
+
+
+
 
           <!--<router-outlet></router-outlet>-->
-  
+
         </mat-card>
       </mat-card>
     </mat-tab>
@@ -155,6 +157,3 @@
 
   </mat-drawer-content>
 </mat-drawer-container>-->
-
-
-

@@ -25,7 +25,7 @@ export class InvestorReportComponent implements OnInit {
   @Output() stakeholderId: number;
   investorReportOverview: IInvestorReportOverview;
   stakeholders: IStakeholder[];
-  portfolioColumns = ['apartment', 'purchaseDate', 'investment', 'minimalProfitUpToDate','distributed', 'ownership'];//'minimalProfitUpToDate', 'distributed'
+  portfolioColumns = ['apartment', 'purchaseDate', 'investment','distributed', 'ownership'];//'minimalProfitUpToDate', 'distributed'
   selectedTab: number;
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {

@@ -106,7 +106,7 @@ namespace Nadlan.Repositories
                     TotalDistribution = _totalDistribution,
 
                 };
-                investorReportOverview.TotalBalace = investorReportOverview.CashBalance + investorReportOverview.MinimalProfitUpToDate;
+                investorReportOverview.TotalBalace = investorReportOverview.CashBalance + investorReportOverview.TotalDistribution;
                 return investorReportOverview;
 
             }
