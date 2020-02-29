@@ -114,7 +114,7 @@ namespace Nadlan.Repositories
         private void SwitchIsBusinessExpense(Transaction transaction)
         {
             ////hours for existing apartment maintances - the the expense of the business
-            if (transaction.AccountId==4)
+            if (transaction.AccountId == 4 && transaction.Hours > 0)
             {
                 transaction.IsBusinessExpense = true;
             }
@@ -129,12 +129,10 @@ namespace Nadlan.Repositories
             if (transaction.Hours > 0)
             {
                 transaction.Comments = $"Hours: {transaction.Comments}";
-
             }
-
+            SwitchIsBusinessExpense(transaction);
             //Charge the original amount
             transaction.Amount = transaction.Amount * -1;
-            SwitchIsBusinessExpense(transaction);
             Create(transaction);
             Expense assiatantExpense = CreateCorrespondingExpense(transaction);
             //Create(assiatantTransaction);

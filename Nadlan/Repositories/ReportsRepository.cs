@@ -96,12 +96,14 @@ namespace Nadlan.Repositories
             Func<Transaction, bool> basicPredicatePurchase = t =>
             !t.IsDeleted
             && t.IsPurchaseCost
+            && !t.IsBusinessExpense
             && t.ApartmentId == apartmentId
             && t.Account.AccountTypeId == 0;
 
             Func<Transaction, bool> basicPredicateIncome = t =>
             !t.IsDeleted
             && !t.IsPurchaseCost
+            && !t.IsBusinessExpense
             && t.ApartmentId == apartmentId
             && t.Account.AccountTypeId == 0;
 
@@ -239,7 +241,7 @@ namespace Nadlan.Repositories
             Func<Transaction, bool> predAll = t =>
                !t.IsDeleted
             && !t.IsPurchaseCost
-            //&& !t.IsBusinessExpense
+            && !t.IsBusinessExpense
             && t.ApartmentId == apartmentId
             && t.Account.AccountTypeId == 0
             && t.AccountId != 100;
@@ -247,7 +249,7 @@ namespace Nadlan.Repositories
             Func<Transaction, bool> predWithYear = t =>
                !t.IsDeleted
             && !t.IsPurchaseCost
-            //&& !t.IsBusinessExpense
+            && !t.IsBusinessExpense
             && t.ApartmentId == apartmentId
             && t.Account.AccountTypeId == 0
             && t.AccountId != 100
