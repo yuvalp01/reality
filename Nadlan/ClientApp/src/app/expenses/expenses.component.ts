@@ -14,7 +14,7 @@ import { TransactionService } from '../services/transaction.service';
 })
 export class ExpensesComponent implements OnInit {
   displayedColumnsAssistant: string[] = ['date', 'isPurchaseCost', 'apartmentId', 'amount', 'comments', 'hours', 'actions'];
-  dataSourceExpenses = new MatTableDataSource<ITransaction>();
+  //dataSourceExpenses = new MatTableDataSource<ITransaction>();
   dataSourceAssistant = new MatTableDataSource<ITransaction>();
   selectedApartment: any;
   assistantBalance: number = 0;
@@ -51,6 +51,10 @@ export class ExpensesComponent implements OnInit {
       });
   }
 
+  applyFilter(filterValue: string) {
+    this.dataSourceAssistant.filter = filterValue.trim().toLocaleLowerCase();
+
+  }
 
   openAddMode(actionType: string) {
     let _visibleAccounts;
@@ -112,17 +116,17 @@ export class ExpensesComponent implements OnInit {
 
   ngAfterViewInit(): void {
     this.dataSourceAssistant.sort = this.sort;
-    this.dataSourceExpenses.sort = this.sort;
+    //this.dataSourceExpenses.sort = this.sort;
   }
 
   doFilter(value: string) {
     this.dataSourceAssistant.filter = value.trim().toLocaleLowerCase();
-    this.dataSourceExpenses.filter = value.trim().toLocaleLowerCase();
+    //this.dataSourceExpenses.filter = value.trim().toLocaleLowerCase();
   }
 
   filter() {
     this.dataSourceAssistant.filter = this.selectedApartment.trim().toLocaleLowerCase();
-    this.dataSourceExpenses.filter = this.selectedApartment.trim().toLocaleLowerCase();
+    //this.dataSourceExpenses.filter = this.selectedApartment.trim().toLocaleLowerCase();
 
   }
 

@@ -10,11 +10,21 @@
   </button>
   <br />
   Your personal account balance is <b>€{{assistantBalance}}</b>
-  <!--<expenses-form></expenses-form>-->
+
 </p>
 <p *ngIf="!dataSourceAssistant.data"><em>Loading...</em></p>
 
 <div style="width:100%; float:left; margin-left:3px" id="tbl">
+
+  <div style="display:inline; margin-left:20px; ">
+
+    <mat-form-field>
+      <mat-label>Search</mat-label>
+      <input type="text" matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="selectedApartment" name="selectedApartment">
+    </mat-form-field>
+
+  </div>
+
   <table mat-table [dataSource]="dataSourceAssistant" matSort class="mat-elevation-z8">
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
