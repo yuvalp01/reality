@@ -199,14 +199,18 @@ namespace Nadlan.Repositories
 
         public async Task<PurchaseReport> GetPurchaseReport(int apartmentId)
         {
-            Func<Transaction, bool> basicPredicate = t => t.IsPurchaseCost && t.ApartmentId == apartmentId && t.Account.AccountTypeId == 0;
+            Func<Transaction, bool> basicPredicate = t => 
+            t.IsPurchaseCost && 
+            t.ApartmentId == apartmentId && 
+            t.Account.AccountTypeId == 0 &&
+            !t.IsDeleted;
             var investment = Context.Transactions.Include(a => a.Account).Where(basicPredicate).Where(a => a.AccountId == 13);
 
             var totalCost = Context.Transactions.Include(a => a.Account).Where(basicPredicate)
                 .Where(a => !a.Account.IsIncome);
             //.Where(a => a.Amount <= 0);
             var renovationCost = Context.Transactions.Include(a => a.Account).Where(basicPredicate)
-                .Where(a => !a.IsDeleted && a.AccountId == 6);
+                .Where(a => a.AccountId == 6);
             var expensesNoRenovation = Context.Transactions.Include(a => a.Account).Where(basicPredicate)
                 .Where(a => !a.IsDeleted && !a.Account.IsIncome && a.AccountId != 6 && a.AccountId != 12);
             // .Where(a => a.Amount <= 0 && a.AccountId != 6 && a.AccountId != 12);
