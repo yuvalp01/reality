@@ -27,7 +27,7 @@ namespace Nadlan.Controllers
             _context = context;
             _mapper = mapper;
         }
-
+        //[Authorize(Policy = "CanViewTransactions")]
         // GET: api/Transactions
         [HttpGet]
         public async Task<IEnumerable<TransactionDto>> GetTransactions()

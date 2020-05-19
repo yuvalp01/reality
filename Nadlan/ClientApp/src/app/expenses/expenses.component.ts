@@ -4,6 +4,7 @@ import { ExpensesService } from '../services/expenses.service';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { AddExpenseComponent } from '../expenses/expenses-form.component';
 import { TransactionService } from '../services/transaction.service';
+import { ExcelService } from '../services/excel.service';
 
 
 
@@ -19,18 +20,19 @@ export class ExpensesComponent implements OnInit {
   selectedApartment: any;
   assistantBalance: number = 0;
   visibleAccountsHours: number[] = [4, 6, 11, 16, 200];
-  visibleAccountsExpenses: number[] = [1, 4, 6, 11, 8,16, 198, 200, 201];
+  visibleAccountsExpenses: number[] = [1, 4, 6, 11, 8, 16, 198, 200, 201];
 
   role: number;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   constructor(
     private expensesService: ExpensesService,
     private transactionService: TransactionService,
+    private excelService: ExcelService,
     //private reportsService: ReportService,
     private dialog: MatDialog) {
   }
   ngOnInit(): void {
-    this.role = +window.sessionStorage.getItem("role");
+    //this.role = +window.sessionStorage.getItem("role");
     this.refreshData();
   }
   refreshData() {
@@ -154,5 +156,20 @@ export class ExpensesComponent implements OnInit {
     });
   }
 
+  exportAsXLSX(): void {
+
+    //this.dataSourceAssistant.data.forEach(a => delete a.stakeholderId);
+   var xxxx= this.filterByString(this.dataSourceAssistant.data,'bouboulinas')
+
+
+
+    this.excelService.exportAsExcelFile(xxxx, 'Transactions');
+   // this.excelService.exportAsExcelFile(this.dataSourceAssistant.data, 'Transactions');
+  }
+
+  filterByString(data, s) {
+    return data.filter(e => e.apartmentId.includes(s) || e.comments.includes(s));
+      //.sort((a, b) => a.id.includes(s) && !b.id.includes(s) ? -1 : b.id.includes(s) && !a.id.includes(s) ? 1 : 0);
+  }
 }
 

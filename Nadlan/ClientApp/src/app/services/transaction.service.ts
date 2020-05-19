@@ -7,11 +7,15 @@ import { ITransaction } from '../models';
 export class TransactionService {
 
 
-  constructor(private httpClient: HttpClient, @Inject('BASE_URL') private baseUrl: String) {
+  constructor(private httpClient: HttpClient,
+    @Inject('BASE_URL') private baseUrl: String) {
   }
 
   getTransactions(): Observable<ITransaction[]> {
     return this.httpClient.get<ITransaction[]>(this.baseUrl + 'api/transactions');
+
+    //let options = new HttpHeaders().set('Authorization', 'Bearer ' + this.securityService.securityObject.bearerToken);
+    //return this.httpClient.get<ITransaction[]>(this.baseUrl + 'api/transactions', { headers: options });
   }
 
   getTransactionById(transactionId: number): Observable<ITransaction> {

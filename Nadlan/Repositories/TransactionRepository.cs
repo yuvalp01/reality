@@ -177,16 +177,6 @@ namespace Nadlan.Repositories
             Create(transaction);
             foreach (var portfolioLine in portfolioLines)
             {
-                //Transaction distribution = new Transaction
-                //{
-                //    //ApartmentId = transaction.ApartmentId,
-                //    AccountId = portfolioLine.StakeholderId,
-                //    Amount = absoluteAmount * portfolioLine.Percentage,
-                //    Date = transaction.Date,
-                //    Comments = $"{transaction.Comments} (Distribution of {absoluteAmount} based on {portfolioLine.Percentage * 100}% ownership)"
-                //};
-                //Create(distribution);
-
                 PersonalTransaction distribution = new PersonalTransaction
                 {
                     TransactionType = TransactionType.Distribution,

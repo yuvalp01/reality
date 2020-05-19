@@ -41,6 +41,7 @@ export interface IPersonalTransaction {
   comments: string;
   stakeholderId: number;
   apartment: IApartment;
+  transactionType: number;
 
 }
 

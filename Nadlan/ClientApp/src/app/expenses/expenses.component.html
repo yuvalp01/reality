@@ -115,7 +115,9 @@
           <button *ngIf="!transaction.isConfirmed" (click)="delete(transaction.id)" mat-button color="warn">Delete</button>
           <!--<button (click)="openEdit(transaction.id)" mat-button color="primary">Edit</button>
           <button (click)="delete(transaction.id)" mat-button color="warn">Delete</button>-->
-          <button *ngIf="!transaction.isConfirmed && role==1" (click)="confirm(transaction.id)" mat-button color="green">Confirm</button>
+          <ng-container *ngIf="!transaction.isConfirmed">
+            <button *hasClaim="['admin']" (click)="confirm(transaction.id)" mat-button color="green">Confirm</button>
+          </ng-container>
         </div>
         <mat-icon *ngIf="transaction.isConfirmed" matTooltip="Confirmed">check_circle</mat-icon>
 
@@ -126,6 +128,9 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumnsAssistant"></tr>
 
   </table>
+
+  <!--<button mat-button color="primary" (click)="exportAsXLSX()">Export to Excel</button>-->
+
 </div>
 
 <!--<mat-form-field>

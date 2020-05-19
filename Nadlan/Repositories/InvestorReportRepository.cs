@@ -127,7 +127,7 @@ namespace Nadlan.Repositories
                     .Where(a =>
                     a.ApartmentId == portfolioLine.ApartmentId &&
                     a.StakeholderId == portfolioLine.StakeholderId &&
-                    a.TransactionType == TransactionType.Commitment).Sum(a => a.Amount);
+                    a.TransactionType == TransactionType.PaidOnBefalf).Sum(a => a.Amount);
                 if (portfolioLineReport.Investment != Math.Abs(personalInvestment))
                 {
                     throw new Exception("Personal investment does not equal to general investment.");

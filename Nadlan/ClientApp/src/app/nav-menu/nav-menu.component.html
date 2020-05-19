@@ -1,71 +1,86 @@
 <header>
   <nav class='navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3'>
     <div class="container">
-      <!--<a class="navbar-brand" [routerLink]='["/"]'>Nadlan</a>-->
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-label="Toggle navigation"
+      <!--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-label="Toggle navigation"
               [attr.aria-expanded]="isExpanded" (click)="toggle()">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" [ngClass]='{"show": isExpanded}'>
+        <span class="navbar-toggler-icon">hhhhh</span>
+      </button>-->
+      <div class="navbar-collapse collapse d-sm-inline-flex" [ngClass]='{"show": isExpanded}'>
         <ul class="navbar-nav flex-grow">
 
-          <li *ngIf="role==3" class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-dark" [routerLink]='["/investor-reports",userId]'>Investment Reports</a>
-          </li>
 
-          <li *ngIf="role==1" class="nav-item" [routerLinkActive]='["link-active"]'>
 
-            <a mat-button class="nav-link text-dark" [matMenuTriggerFor]="menu">Investors Reports</a>
-            <mat-menu #menu="matMenu">
+          <ng-container *ngIf="securityObject.isAuthenticated">
+            <!--<li  *hasClaim="'canViewReports'" class="nav-item" [routerLinkActive]='["link-active"]'>
+              <a class="nav-link text-dark" [routerLink]='["/investor-reports",userId]'>Investment Reports</a>
+            </li>-->
+            <!--<li *ngIf="role==1" class="nav-item" [routerLinkActive]='["link-active"]'>-->
+            <li *hasClaim="['admin']" class="nav-item" [routerLinkActive]='["link-active"]'>
+              <a mat-button class="nav-link text-dark" [matMenuTriggerFor]="menu">Investors Reports</a>
+              <mat-menu #menu="matMenu">
 
-              <button [routerLink]='["/investor-reports",101]' class="nav-link text-dark" mat-menu-item>Ohad</button>
-              <button [routerLink]='["/investor-reports",102]' class="nav-link text-dark" mat-menu-item>Avi</button>
-              <button [routerLink]='["/investor-reports",103]' class="nav-link text-dark" mat-menu-item>Etai</button>
-              <button [routerLink]='["/investor-reports",104]' class="nav-link text-dark" mat-menu-item>Naphtali</button>
-              <button [routerLink]='["/investor-reports",105]' class="nav-link text-dark" mat-menu-item>Shosh</button>
+                <button *hasClaim="['ohad','admin']" [routerLink]='["/investor-reports",101]' class="nav-link text-dark" mat-menu-item>Ohad</button>
+                <button *hasClaim="['avi','admin']" [routerLink]='["/investor-reports",102]' class="nav-link text-dark" mat-menu-item>Avi</button>
+                <button *hasClaim="['etai','admin']" [routerLink]='["/investor-reports",103]' class="nav-link text-dark" mat-menu-item>Etai</button>
+                <button *hasClaim="['naphtali','admin']" [routerLink]='["/investor-reports",104]' class="nav-link text-dark" mat-menu-item>Naphtali</button>
+                <!--<button *hasClaim="['shosh','admin']" [routerLink]='["/investor-reports",105]' class="nav-link text-dark" mat-menu-item>Shosh</button>-->
 
-            </mat-menu>
-          </li>
-          <!--<li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-    <a class="nav-link text-dark" [routerLink]='["/reports"]'>Reports</a>
-  </li>-->
-          <li *ngIf="role==1" class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-            <a class="nav-link text-dark" [routerLink]='["/reports/1/rented"]'>Rented</a>
-          </li>
+              </mat-menu>
+            </li>
+            <ng-container *hasClaim="'admin'">
+              <!--<li *ngIf="role==1" class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>-->
+              <li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+                <a class="nav-link text-dark" [routerLink]='["/reports/1/rented"]'>Rented</a>
+              </li>
 
-          <li *ngIf="role==1" class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-            <a class="nav-link text-dark" [routerLink]='["/reports/5/inproc"]'>In Process</a>
-          </li>
+              <li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+                <a class="nav-link text-dark" [routerLink]='["/reports/8/inproc"]'>In Process</a>
+              </li>
 
-          <li *ngIf="role==1" class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-dark" [routerLink]='["/fetch-transactions"]'>Transactions</a>
-          </li>
+              <li class="nav-item" [routerLinkActive]='["link-active"]'>
+                <a class="nav-link text-dark" [routerLink]='["/fetch-transactions"]'>Transactions</a>
+              </li>
 
+              <li class="nav-item" [routerLinkActive]='["link-active"]'>
+                <a class="nav-link text-dark" [routerLink]='["/personal-admin","101"]'>Personal Transactions</a>
+              </li>
+            </ng-container>
+            <!--<li *hasClaim="'canAccessRest'" class="nav-item" [routerLinkActive]='["link-active"]'>
+              <a class="nav-link text-dark" [routerLink]='["/renovation-list"]'>Renovation</a>
+            </li>-->
+
+            <li *hasClaim="['stella','admin']" class="nav-item" [routerLinkActive]='["link-active"]'>
+              <a class="nav-link text-dark" [routerLink]='["/expenses"]'>Expenses & Hours</a>
+            </li>
+
+          </ng-container>
+
+
+
+        </ul>
+      </div>
+      <div class="navbar-collapse collapse d-sm-inline-flex flex-row-reverse" [ngClass]='{"show": isExpanded}'>
+        <!--asdfasdfasdf
+        {{securityObject.userName}}-->
+        <ul class="navbar-nav flex-grow">
 
           <!--<li class="nav-item" [routerLinkActive]='["link-active"]'>
-    <a class="nav-link text-dark" [routerLink]='["/investor-reports",1]'>Investor Reports</a>
-  </li>-->
-          <li *ngIf="role==1" class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-dark" [routerLink]='["/personal-admin","101"]'>Personal Transactions</a>
-          </li>
+      <a *ngIf="!securityObject.isAuthenticated" class="nav-link text-dark" [routerLink]='["/login"]'>Login</a>
 
-          <li *ngIf="role==1" class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-dark" [routerLink]='["/renovation-list"]'>Renovation</a>
+    </li>-->
+          <li>
+            <ng-container *ngIf="securityObject.isAuthenticated">
+              <!--<a href="#" > Hello {{securityObject.userName}}</a>-->
+              <a href="#" class="nav-link text-dark" (click)="logout()">
+                <span title="Logout ({{securityObject.userName}})" class="material-icons">
+                  exit_to_app
+                </span>
+              </a>
+            </ng-container>
           </li>
-
-          <li *ngIf="role==1||role==2" class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-dark" [routerLink]='["/expenses"]'>Expenses & Hours</a>
-          </li>
-
-          <!--<li style="position:relative; left:100px; " class="nav-item" [routerLinkActive]='["link-active"]'>
-    <a style="color:lightgray !important" class="nav-link text-dark" (click)="toggleAdmin()">.</a>
-  </li>-->
         </ul>
       </div>
     </div>
   </nav>
-  <!--<form #admin="ngForm" style="position:absolute">
-    <input style="width:20px" [(ngModel)]="role" name="role" type="number" />
-  </form>-->
 
 </header>

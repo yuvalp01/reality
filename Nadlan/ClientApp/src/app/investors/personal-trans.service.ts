@@ -25,9 +25,9 @@ export class PersonalTransService {
     return this.httpClient.get<IPersonalTransaction[]>(`${this.baseUrl}api/personalTransactions/GetByStakeholderId/${stakeholderId}`);
   }
 
-  getPesonalTransByType(stakeholderId: number, transactionTypeId): Observable<IPersonalTransaction[]> {
-    return this.httpClient.get<IPersonalTransaction[]>(`${this.baseUrl}api/personalTransactions/GetByType/${stakeholderId}/${transactionTypeId}`);
-  }
+  //getPesonalTransByType(stakeholderId: number, transactionTypeId): Observable<IPersonalTransaction[]> {
+  //  return this.httpClient.get<IPersonalTransaction[]>(`${this.baseUrl}api/personalTransactions/GetByType/${stakeholderId}/${transactionTypeId}`);
+  //}
   getAllDistributions(stakeholderId: number): Observable<IPersonalTransaction[]> {
     return this.httpClient.get<IPersonalTransaction[]>(`${this.baseUrl}api/personalTransactions/GetAllDistributions/${stakeholderId}`);
   }

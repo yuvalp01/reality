@@ -31,16 +31,16 @@ namespace Nadlan.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<PersonalTransaction>> GetByStakeholderAsync(int stakeholderId, int transactionTypeId)
-        {
-            return await Context.PersonalTransactions
-                .Where(a => a.StakeholderId == stakeholderId)
-                .Where(a => a.TransactionType ==  (TransactionType)transactionTypeId)
-                .OrderByDescending(a => a.Date)
-                .Include(a => a.Stakeholder)
-                .Include(a => a.Apartment)
-                .ToListAsync();
-        }
+        //public async Task<List<PersonalTransaction>> GetByStakeholderAsync(int stakeholderId, int transactionTypeId)
+        //{
+        //    return await Context.PersonalTransactions
+        //        .Where(a => a.StakeholderId == stakeholderId)
+        //        .Where(a => a.TransactionType ==  (TransactionType)transactionTypeId)
+        //        .OrderByDescending(a => a.Date)
+        //        .Include(a => a.Stakeholder)
+        //        .Include(a => a.Apartment)
+        //        .ToListAsync();
+        //}
 
 
         internal async Task<List<PersonalTransaction>>  GetAllDistributions(int stakeholderId)

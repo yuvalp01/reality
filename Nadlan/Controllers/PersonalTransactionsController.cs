@@ -13,7 +13,7 @@ namespace Nadlan.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class PersonalTransactionsController : ControllerBase
     {
         //private readonly NadlanConext _context;
@@ -29,14 +29,12 @@ namespace Nadlan.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PersonalTransaction>>> GetPersonalTransactions()
         {
-            // return await _context.PersonalTransactions.ToListAsync();
             return await _repositoryWrapper.PersonalTransaction.GetAllAsync();
         }
 
         [HttpGet("GetStakeholders")]
         public async Task<ActionResult<IEnumerable<Stakeholder>>> GetStakeholders()
         {
-            //return await _context.Stakeholders.ToListAsync();
             return await _repositoryWrapper.PersonalTransaction.GetStakeholdersAsync();
         }
 
@@ -69,19 +67,19 @@ namespace Nadlan.Controllers
             return  personalTransactionsDto;
         }
 
-        [HttpGet("GetByType/{stakeholderId}/{transactionTypeId}")]
-        public async Task<ActionResult<IEnumerable<PersonalTransaction>>> GetPersonalTransactionByType(int stakeholderId, int transactionTypeId)
-        {
-            //var personalTransaction = await _context.PersonalTransactions.Where(a => a.StakeholderId == stakeholderId).ToListAsync();
-            var personalTransactions = _repositoryWrapper.PersonalTransaction.GetByStakeholderAsync(stakeholderId, transactionTypeId);
+        //[HttpGet("GetByType/{stakeholderId}/{transactionTypeId}")]
+        //public async Task<ActionResult<IEnumerable<PersonalTransaction>>> GetPersonalTransactionByType(int stakeholderId, int transactionTypeId)
+        //{
+        //    //var personalTransaction = await _context.PersonalTransactions.Where(a => a.StakeholderId == stakeholderId).ToListAsync();
+        //    var personalTransactions = _repositoryWrapper.PersonalTransaction.GetByStakeholderAsync(stakeholderId, transactionTypeId);
 
-            if (personalTransactions == null)
-            {
-                return NotFound();
-            }
+        //    if (personalTransactions == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return await personalTransactions;
-        }
+        //    return await personalTransactions;
+        //}
 
         [HttpGet("GetAllDistributions/{stakeholderId}")]
         public async Task<ActionResult<IEnumerable<PersonalTransaction>>> GetAllDistributions(int stakeholderId)

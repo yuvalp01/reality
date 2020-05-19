@@ -10,6 +10,7 @@ import { InvestorReportComponent } from './investor-reports/investor-reports.com
 import { PersonalTransDialogComponent } from './personal-trans-dialog/personal-trans-dialog.component';
 import { SharedModule } from '../shared/shared.module';
 import { ApartmentReportsComponent } from '../reports/apartment-reports.component';
+import { AuthGuard } from '../security/auth.guard';
 
 //import { ApartmentReportsComponent } from '../reports/apartment-reports.component';
 
@@ -34,6 +35,8 @@ import { ApartmentReportsComponent } from '../reports/apartment-reports.componen
       {
         path: 'investor-reports/:stakeholderId',
         component: InvestorReportComponent,
+        canActivate: [AuthGuard],
+        data: { claimType: ['investor', 'admin'] },
         children: [
           {
             //path: '', redirectTo: '', pathMatch: 'full',

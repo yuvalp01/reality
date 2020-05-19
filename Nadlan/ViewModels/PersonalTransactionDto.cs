@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Nadlan.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,5 +21,7 @@ namespace Nadlan.ViewModels
         public int ApartmentId { get; set; }
         public string ApartmentAddress { get; set; }
         public string Comments { get; set; }
+        public TransactionType TransactionType { get; set; }
+
     }
 }

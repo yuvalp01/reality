@@ -16,3 +16,10 @@ html {
 .box-shadow {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
+a.mat-button {
+  top:-4px;
+  font-size:15px;
+}
+a.nav-link{
+  display:inline;
+} 

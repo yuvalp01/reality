@@ -35,6 +35,11 @@ import { ExpensesService } from './services/expenses.service';
 import { SharedModule } from './shared/shared.module';
 import { WelcomepageComponent } from './welcomepage/welcomepage.component';
 import { TransactionFormComponent } from './transactions/transaction-form/transaction-form.component';
+import { LoginComponent } from './security/login/login.component';
+import { AuthGuard } from './security/auth.guard';
+import { HttpInterceptorModule } from './security/http-interceptor';
+import { HasClaimDirective } from './security/has-claim.directive';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -56,6 +61,8 @@ import { TransactionFormComponent } from './transactions/transaction-form/transa
     AddExpenseComponent,
     WelcomepageComponent,
     TransactionFormComponent,
+    LoginComponent,
+    HasClaimDirective,
 
   ],
   imports: [
@@ -66,23 +73,40 @@ import { TransactionFormComponent } from './transactions/transaction-form/transa
     MyOwnCustomMaterialModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([
-      { path: '', component: WelcomepageComponent, pathMatch: 'full' },
+      //{ path: '', component: WelcomepageComponent, pathMatch: 'full' },
+      { path: '', component: LoginComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'add-apartment', component: AddApartmentForm },
       { path: 'fetch-accounts', component: AccountListComponent },
-      { path: 'fetch-transactions', component: TransactionListComponent },
-      { path: 'reports/:apartmentId', component: ReportsComponent },
+      {
+        path: 'fetch-transactions',
+        component: TransactionListComponent,
+        canActivate: [AuthGuard],
+        data: { claimType: 'admin' }
+      },
+      {
+        path: 'reports/:apartmentId',
+        component: ReportsComponent,
+        canActivate: [AuthGuard],
+        data: { claimType: ['investor','admin'] }
+      },
       { path: 'reports/:apartmentId/:status', component: ReportsComponent },
 
 
       //{ path: 'reports/:apartmentId', component: ApartmentReportsComponent },
       { path: 'renovation', component: RenovationComponent },
       { path: 'renovation-list', component: RenovationListComponent },
-      { path: 'expenses', component: ExpensesComponent },
+      {
+        path: 'expenses', component: ExpensesComponent,
+        canActivate: [AuthGuard],
+        data: {claimType:['stella','admin']}
+      },
+      { path: 'login', component: LoginComponent },
 
     ]),
     SharedModule,
     InvestrorsModule,
+    HttpInterceptorModule
     //ApartmentReportsComponent
   ],
 

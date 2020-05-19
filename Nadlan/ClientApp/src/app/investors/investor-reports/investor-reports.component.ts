@@ -5,22 +5,20 @@ import { ActivatedRoute } from "@angular/router";
 import { MatTableDataSource, MatDialog } from "@angular/material";
 import { PersonalTransDialogComponent } from "../personal-trans-dialog/personal-trans-dialog.component";
 import { ApartmentReportsComponent } from "src/app/reports/apartment-reports.component";
-import { debug } from "util";
-import  * as Global  from "src/app/shared/globalVars";
+//import { SecurityService } from "src/app/security/security.service";
 
 @Component({
   selector: 'investor-reports',
   templateUrl: './investor-reports.component.html',
   styleUrls: ['./investor-reports.component.css'],
-  //styles: [`.mat-tab-header {
-  //background - color: red!important;
-  //}`]
+
 })
 export class InvestorReportComponent implements OnInit {
 
   constructor(
     private personalTransService: PersonalTransService,
     private route: ActivatedRoute,
+    //private securityService: SecurityService,
     private dialog: MatDialog) { }
   @Output() stakeholderId: number;
   investorReportOverview: IInvestorReportOverview;
@@ -84,10 +82,5 @@ export class InvestorReportComponent implements OnInit {
     }
     return false;
   }
-
-  //changeTab(tabIndex) {
-  //  debugger
-  //  this.selectedTab = tabIndex;
-  //}
 
 }

@@ -31,7 +31,7 @@ export class PersonalTransComponent implements OnChanges, OnInit {
   ngOnInit() {
     if (this.editable) {
       //      this.displayedColumns.push('actions');
-      this.displayedColumns = ['date', 'stakeholderId', 'amount', 'apartment', 'comments', 'actions'];
+      this.displayedColumns = ['date', 'stakeholderId', 'amount', 'apartment', 'comments','transactionType', 'actions'];
     }
     //this.refreshData(this.stakeholderId);
   }

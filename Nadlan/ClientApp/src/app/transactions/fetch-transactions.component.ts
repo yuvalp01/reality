@@ -3,8 +3,8 @@ import { ITransaction } from '../models';
 import { TransactionService } from '../services/transaction.service';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { TransactionFormComponent } from './transaction-form/transaction-form.component';
-import { element } from 'protractor';
-
+import { AppUserAuth } from '../security/app.user.auth';
+  
 @Component({
   templateUrl: './fetch-transactions.component.html',
   styleUrls: ['./fetch-transactions.component.css']
@@ -16,9 +16,13 @@ export class TransactionListComponent implements OnInit {
   allData: ITransaction[];
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   selectedApartment: any;
+  securityObject: AppUserAuth = null;
   constructor(
     private transactionService: TransactionService,
-    private dialog: MatDialog) {
+    private dialog: MatDialog,
+    //private securityService: SecurityService
+  ) {
+    //this.securityObject = this.securityService.securityObject;
   }
   ngOnInit(): void {
     this.transactionService.getTransactions().subscribe(result => {
@@ -108,9 +112,6 @@ export class TransactionListComponent implements OnInit {
 
   }
 
-
-
-
   public isPositive(value: number): boolean {
     if (value >= 0) {
       return true;
@@ -121,77 +122,3 @@ export class TransactionListComponent implements OnInit {
 }
 
 
-
-
-  //showUnconfirmed() {
-  //  //console.log(value);
-  //  //console.log(value.checked);
-  //  this.dataSource.filter = value.checked.toString();
-  //}
-      //this.dataSource.filterPredicate == null;
-
-      //this.dataSource.filterPredicate =
-      //  (data: ITransaction, filtersJson: string) => {
-      //    const matchFilter = [];
-      //    const filters = JSON.parse(filtersJson);
-
-      //    filters.forEach(filter => {
-      //      let val = data[filter.id] === null ? '' : data[filter.id];
-      //      let filterVal = filter.valuetoLowerCase();
-      //      val = val.toLowerCase();
-      //      matchFilter.push(val.includes(filterVal));
-      //    });
-      //    return matchFilter.every(Boolean);
-      //  };
-
-      //this.dataSource.filterPredicate = function (data, filter: string): boolean {
-      //  let yyy = data.isConfirmed.toString();
-      //  return yyy != filter;
-      //  //let xxx = data.isConfirmed.includes(filter);
-      //  return data.apartmentAddress.toLowerCase().includes(filter);
-      //};
-    //this.dataSource.filterPredicate = function (data, filter: string): boolean {
-    //  let yyy = data.isConfirmed.toString();
-    //  return yyy != filter;
-    //  //let xxx = data.isConfirmed.includes(filter);
-    //  return data.apartmentAddress.toLowerCase().includes(filter);
-    //};
-
-
-    //this.dataSource.filterPredicate = (d: ITransaction, filter: string) => {
-    //  const textToSearch = d[column] && d[column].toLowerCase() || '';
-    //  return textToSearch.indexOf(filter) !== -1;
-    //};
-
-  //  this.dataSource.filterPredicate == null;
-  //  this.dataSource.filter = "";
-
-    //const tableFilters = [];
-    //tableFilters.push({
-    //  id: 'apartmentAddress',
-    //  value: filterValue
-    //},
-    //  //{
-    //  //  id: 'comments',
-    //  //  value: filterValue
-    //  //}
-
-    //);
-    //this.dataSource.filter = JSON.stringify(tableFilters);
-  //customFilterPredicate() {
-  //  this.dataSource.filterPredicate = function (data, filter: string): boolean {
-  //    let xxx = data.isConfirmed === filter;
-  //    return data.apartmentAddress.toLowerCase().includes(filter);
-  //  };
-  //}
-
-
-  //xxx(val: boolean) {
-  //  console.log(val);
-  //  //this.dataSource.filter = value.trim().toLocaleLowerCase();
-
-  //}
-  //onChangeYuv(val: any) {
-  //  console.log(val);
-  //  console.log(val.checked);
-  //}

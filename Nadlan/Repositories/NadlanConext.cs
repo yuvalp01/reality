@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nadlan.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Nadlan.Models.Renovation;
+using Nadlan.Models.Security;
 
 namespace Nadlan.Repositories
 {
@@ -26,6 +24,8 @@ namespace Nadlan.Repositories
         public DbSet<PersonalTransaction> PersonalTransactions { get; set; }
         public DbSet<Stakeholder> Stakeholders { get; set; }
         public DbSet<Expense> Expenses { get; set; }
+        public DbSet<AppUser> Users { get; set; }
+        public DbSet<AppUserClaim> Claims { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
