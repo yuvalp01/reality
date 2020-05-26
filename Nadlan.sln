@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.757
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nadlan", "Nadlan\Nadlan.csproj", "{2F5F134F-BB14-43A1-AE1D-C16DC1E9FCC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nadlan", "Nadlan\Nadlan.csproj", "{2F5F134F-BB14-43A1-AE1D-C16DC1E9FCC0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestNadlan", "TestNadlan\TestNadlan.csproj", "{018D7CFE-BF2E-48B5-9C7D-8B27F1B25680}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{2F5F134F-BB14-43A1-AE1D-C16DC1E9FCC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F5F134F-BB14-43A1-AE1D-C16DC1E9FCC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F5F134F-BB14-43A1-AE1D-C16DC1E9FCC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{018D7CFE-BF2E-48B5-9C7D-8B27F1B25680}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{018D7CFE-BF2E-48B5-9C7D-8B27F1B25680}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{018D7CFE-BF2E-48B5-9C7D-8B27F1B25680}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{018D7CFE-BF2E-48B5-9C7D-8B27F1B25680}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
