@@ -18,12 +18,17 @@ namespace Nadlan.Repositories
 
         public override async Task<List<PersonalTransaction>> GetAllAsync()
         {
-            return await Context.PersonalTransactions.OrderByDescending(a => a.Id).Include(a => a.Stakeholder).ToListAsync();
+            return await Context.PersonalTransactions
+                .OrderByDescending(a => a.Id)
+                .Include(a => a.Stakeholder)
+                .Where(a=>!a.IsDeleted)
+                .ToListAsync();
         }
 
         public async Task<List<PersonalTransaction>> GetByStakeholderAsync(int stakeholderId)
         {
             return await Context.PersonalTransactions
+                .Where(a => !a.IsDeleted)
                 .Where(a => a.StakeholderId == stakeholderId)
                 .OrderByDescending(a => a.Date)
                 .Include(a=>a.Stakeholder)
@@ -31,23 +36,14 @@ namespace Nadlan.Repositories
                 .ToListAsync();
         }
 
-        //public async Task<List<PersonalTransaction>> GetByStakeholderAsync(int stakeholderId, int transactionTypeId)
-        //{
-        //    return await Context.PersonalTransactions
-        //        .Where(a => a.StakeholderId == stakeholderId)
-        //        .Where(a => a.TransactionType ==  (TransactionType)transactionTypeId)
-        //        .OrderByDescending(a => a.Date)
-        //        .Include(a => a.Stakeholder)
-        //        .Include(a => a.Apartment)
-        //        .ToListAsync();
-        //}
 
 
         internal async Task<List<PersonalTransaction>>  GetAllDistributions(int stakeholderId)
         {
             return await Context.PersonalTransactions
+                .Where(a => !a.IsDeleted)
                 .Where(a => a.StakeholderId == stakeholderId)
-                .Where(a => a.TransactionType == TransactionType.Distribution || a.TransactionType == TransactionType.ReminderDistribution)
+                .Where(a => a.TransactionType == TransactionType.Distribution)
                 .OrderByDescending(a => a.Date)
                 .Include(a => a.Stakeholder)
                 .Include(a => a.Apartment)
@@ -79,10 +75,12 @@ namespace Nadlan.Repositories
         //    Update(transaction);
         //    await SaveAsync();
         //}
+        [Obsolete]
         public async Task DeleteTransactionAsync(PersonalTransaction transaction)
         {
-            Delete(transaction);
-            await SaveAsync();
+            throw new NotImplementedException("delete only direcly in db with boolean flag");
+            //Delete(transaction);
+            //await SaveAsync();
         }
 
         public Task<PersonalTransaction> GetByIdAsync(int id)

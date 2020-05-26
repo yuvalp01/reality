@@ -16,5 +16,6 @@ namespace Nadlan.Models
         public Stakeholder Stakeholder { get; set; }
         public int ApartmentId { get; set; }
         public Apartment Apartment { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

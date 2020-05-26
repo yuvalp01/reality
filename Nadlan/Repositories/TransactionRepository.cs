@@ -202,8 +202,10 @@ namespace Nadlan.Repositories
             Update(transaction);
             await SaveAsync();
         }
+        [Obsolete]
         public async Task DeleteTransactionAsync(Transaction transaction)
         {
+            throw new NotImplementedException("delete only direcly in db with boolean flag");
             Delete(transaction);
             await SaveAsync();
         }

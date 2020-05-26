@@ -111,7 +111,7 @@ namespace Nadlan.Repositories
             var netIncome = Context.Transactions.Include(a => a.Account).Where(basicPredicateIncome).Where(a => a.AccountId != 100);
             var totalCost = Context.Transactions.Include(a => a.Account).Where(basicPredicatePurchase).Where(a => !a.Account.IsIncome);//.Where(a => a.Amount <= 0);
             var accumulated = Context.Transactions.Include(a => a.Account).Where(basicPredicateIncome);
-            var distributed = Context.Transactions.Include(a => a.Account).Where(a => a.ApartmentId == apartmentId && a.AccountId == 100);
+            var distributed = Context.Transactions.Include(a => a.Account).Where(a => !a.IsDeleted && a.ApartmentId == apartmentId && a.AccountId == 100);
             SummaryReport summaryReport = new SummaryReport
             {
                 Investment = await Task.FromResult(investment.Sum(a => a.Amount)),
