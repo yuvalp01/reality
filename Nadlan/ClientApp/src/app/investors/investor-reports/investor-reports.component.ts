@@ -61,7 +61,7 @@ export class InvestorReportComponent implements OnInit {
         const dialogRef = this.dialog.open(PersonalTransDialogComponent, {
           height: 'auto',
           width: 'auto',
-          data: { transactions: this.dataSource.data, columns: ['date', 'amount', 'comments', 'apartment'] }
+          data: { transactions: this.dataSource.data, columns: ['date', 'amount','transactionType', 'comments', 'apartment'] }
         });
       }
       , error => console.error(error));

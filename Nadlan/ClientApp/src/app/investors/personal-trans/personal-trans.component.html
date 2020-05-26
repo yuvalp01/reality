@@ -7,7 +7,7 @@
 <span > Personal account balance is <b [ngClass]="{
           positive: isPositive(balance),
           negative: !isPositive(balance)
-        }">{{balance | currency:'EUR' : 'symbol':'1.0-1'}}</b></span>
+        }">{{balance | currency:'EUR' : 'symbol':'1.0-0'}}</b></span>
 <p *ngIf="!dataSourceTrans.data"><em>Loading...</em></p>
 <div id="tbl">
   <table style="width: 100%;" mat-table [dataSource]="dataSourceTrans" matSort class="mat-elevation-z8">
@@ -15,17 +15,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
       <td mat-cell *matCellDef="let transaction">{{transaction.id}}</td>
     </ng-container>
-    <ng-container matColumnDef="transactionType">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
-      <td mat-cell *matCellDef="let transaction">
-        <mat-icon matTooltip="Paid on behalf" *ngIf="transaction.transactionType==10">money</mat-icon>
-        <mat-icon matTooltip="Profit distribution" *ngIf="transaction.transactionType==20">trending_up</mat-icon>
-        <mat-icon matTooltip="Profit distribution" *ngIf="transaction.transactionType==0">atm</mat-icon>
 
-
-        {{transaction.transactionType}}
-      </td>
-    </ng-container>
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
       <td mat-cell *matCellDef="let transaction">{{transaction.date | date:'dd-MM-yyyy'}}</td>
@@ -38,7 +28,24 @@
           negative: !isPositive(transaction.amount)
         }"
           *matCellDef="let transaction">
-        {{transaction.amount | currency:'EUR' : 'symbol':'1.0-1'}}
+        {{transaction.amount | currency:'EUR' : 'symbol':'1.0-0'}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="transactionType">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+      <td mat-cell *matCellDef="let transaction">
+        <mat-icon matTooltip="Paid on behalf" *ngIf="transaction.transactionType==10">money</mat-icon>
+        <mat-icon matTooltip="Profit distribution" *ngIf="transaction.transactionType==20">trending_up</mat-icon>
+        <mat-icon matTooltip="Cash withdrawal" *ngIf="transaction.transactionType==13">atm</mat-icon>
+        <mat-icon matTooltip="Money transfer" *ngIf="transaction.transactionType==5">swap_horiz</mat-icon>
+        <!--<mat-icon matTooltip="Money transfer" *ngIf="transaction.transactionType==10">supervisor_account</mat-icon>-->
+        <!--<mat-icon matTooltip="Money transfer">account_balance</mat-icon>-->
+        <!--<mat-icon matTooltip="Money transfer">swap_horiz</mat-icon>
+      <mat-icon matTooltip="Money transfer">sync_alt</mat-icon>
+      <mat-icon matTooltip="Money transfer">monetization_on</mat-icon>
+      <mat-icon matTooltip="Money transfer">money</mat-icon>
+      <mat-icon matTooltip="Money transfer">euro</mat-icon>-->
+        <!--{{transaction.transactionType}}-->
       </td>
     </ng-container>
     <ng-container matColumnDef="apartment">

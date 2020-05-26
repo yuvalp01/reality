@@ -2,4 +2,12 @@
   top: 46px;
   left: 88%;
 }
-
+.mat-column-date {
+  width: 100px;
+}
+.mat-column-amount {
+  width: 90px;
+}
+.mat-column-actions {
+  width: 245px;
+}

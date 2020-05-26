@@ -22,7 +22,7 @@ export class PersonalTransComponent implements OnChanges, OnInit {
     private excelService: ExcelService,
     private personalTransService: PersonalTransService,
     private dialog: MatDialog) { }
-  displayedColumns: string[] = ['date', 'amount', 'apartment', 'comments'];
+  displayedColumns: string[] = ['date', 'amount', 'transactionType', 'apartment', 'comments'];
   balance: number = 0;
 
   dataSourceTrans = new MatTableDataSource<IPersonalTransaction>();
@@ -31,7 +31,7 @@ export class PersonalTransComponent implements OnChanges, OnInit {
   ngOnInit() {
     if (this.editable) {
       //      this.displayedColumns.push('actions');
-      this.displayedColumns = ['date', 'stakeholderId', 'amount', 'apartment', 'comments','transactionType', 'actions'];
+      this.displayedColumns = ['date', 'stakeholderId', 'amount', 'transactionType', 'apartment', 'comments', 'actions'];
     }
     //this.refreshData(this.stakeholderId);
   }
