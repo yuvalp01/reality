@@ -19,10 +19,12 @@ namespace Nadlan.Models
     }
     public enum TransactionType
     {
+        MoneyTransfer = 5,
         PaidOnBefalf = 10,
         CashWithdrawal = 13,
-        ReminderDistribution = 15,
+        //ReminderDistribution = 15,
         Distribution = 20,
         Moneyback = 30
     }
 }
+
