@@ -5,8 +5,7 @@ import { MatTableDataSource, MatSort, MatDialog, fadeInContent } from '@angular/
 import { PersonalTransFormComponent } from '.././personal-trans-form/personal-trans-form.component';
 import { Router } from '@angular/router';
 import { ExcelService } from '../../services/excel.service';
-import { debug } from 'util';
-import { element } from 'protractor';
+
 
 @Component({
   selector: 'app-personal-trans',
@@ -54,7 +53,7 @@ export class PersonalTransComponent implements OnChanges, OnInit {
       let personalTrans = result as IPersonalTransaction[];
       this.dataSourceTrans.data = personalTrans;
       this.dataSourceTrans.sort = this.sort;
-      this.dataSourceTrans.filterPredicate = (data: Element, filter: string) => {
+      this.dataSourceTrans.filterPredicate = (data: any, filter: string):boolean => {
         return data.transactionType == filter;
       };
 
