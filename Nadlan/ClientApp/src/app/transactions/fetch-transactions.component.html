@@ -17,8 +17,8 @@
     <input type="text" matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="selectedApartment" name="selectedApartment">
   </mat-form-field>
   <!--<mat-slide-toggle (change)="hideShowUnconfirmed($event)">Unconfirmed Only</mat-slide-toggle>-->
-  <mat-slide-toggle (change)="hideShowUnconfirmed($event)" [(ngModel)]="unconfirmedOnly">Unconfirmed Only</mat-slide-toggle>
-  <mat-slide-toggle (change)="hideShowNotCovered($event)" [(ngModel)]="notCoveredOnly">Not Covered Only</mat-slide-toggle>
+  <mat-slide-toggle (change)="hideShowUnconfirmed($event)" [(ngModel)]="showUnconfirmedOnly">Unconfirmed Only</mat-slide-toggle>
+  <mat-slide-toggle (change)="hideShowNotCovered($event)" [(ngModel)]="showNotCoveredOnly">Not Covered Only</mat-slide-toggle>
 
   <span>{{sum}}</span>
 
