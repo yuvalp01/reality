@@ -4,7 +4,9 @@ import { TransactionService } from '../services/transaction.service';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { TransactionFormComponent } from './transaction-form/transaction-form.component';
 import { AppUserAuth } from '../security/app.user.auth';
-  
+import { debug } from 'util';
+import { strictEqual } from 'assert';
+
 @Component({
   templateUrl: './fetch-transactions.component.html',
   styleUrls: ['./fetch-transactions.component.css']
@@ -12,11 +14,14 @@ import { AppUserAuth } from '../security/app.user.auth';
 export class TransactionListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'date', 'apartmentId', 'isPurchaseCost', 'accountId', 'amount', 'comments', 'actions'];
   dataSource = new MatTableDataSource<ITransaction>();
-  showConfirmedOnly: boolean = true;
-  allData: ITransaction[];
+  // showConfirmedOnly: boolean = true;
+  //allData: ITransaction[];
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  selectedApartment: any;
+  selectedApartment: string = "";
   securityObject: AppUserAuth = null;
+  showUnconfirmedOnly: boolean = false;
+  showNotCoveredOnly: boolean = false;
+  sum: number = 0;
   constructor(
     private transactionService: TransactionService,
     private dialog: MatDialog,
@@ -25,55 +30,93 @@ export class TransactionListComponent implements OnInit {
     //this.securityObject = this.securityService.securityObject;
   }
   ngOnInit(): void {
-    this.transactionService.getTransactions().subscribe(result => {
-      this.allData = result as ITransaction[];
-      this.dataSource.data = this.allData;
-      this.dataSource.sort = this.sort;
-    }, error => console.error(error));
+    this.refreshData();
+    //this.transactionService.getTransactions().subscribe(result => {
+    //  //this.allData = result as ITransaction[];
+    //  //this.dataSource.data = this.allData;
+    //  this.dataSource.data = result as ITransaction[];
+    //  this.dataSource.sort = this.sort;
+    //}, error => console.error(error));
   }
 
   refreshData() {
     //refresh tables
     this.transactionService.getTransactions().subscribe(result => {
-      this.allData = result as ITransaction[];
-      this.filterIsConfirmed();
+      // this.allData = result as ITransaction[];
+      //  this.filterIsConfirmed();
       //this.dataSource.data = this.allData;
+      this.dataSource.data = result as ITransaction[];
       this.dataSource.sort = this.sort;
-      //this.dataSource.filterPredicate = function (data, filter: string): boolean {
-      //  return data.apartmentAddress.toLowerCase().includes(filter);
-      //};
+
+      this.dataSource.filterPredicate = (data: any, filter: any): boolean => {
+        let cleanFilter = filter.substring(1, 100);
+        let isMatchApartment = data.apartmentAddress.toLowerCase().includes(cleanFilter);
+        let isMatchUnconfirmed = true;
+        let isMatchNotCovered = true;
+        if (this.showNotCoveredOnly) {
+          isMatchNotCovered = data.isCoveredByInvestor == false;
+          //isMatchNotCovered = data.personalTransactionId == -1;
+        }
+        if (this.showUnconfirmedOnly) {
+          isMatchUnconfirmed = data.isConfirmed == false;
+        }
+        if (isMatchApartment && isMatchUnconfirmed && isMatchNotCovered) {
+          this.sum += data.amount;
+          return true;
+        }
+        return false;
+
+      };
     }, error => console.error(error));
   }
 
-  showUnconfirmed() {
-    this.dataSource.data = this.allData.filter(a => !a.isConfirmed);
-  }
-  showAll() {
-    this.dataSource.data = this.allData;
-  }
-
-  hideShowUnconfirmed(val: any) {
-    this.showConfirmedOnly = val.checked;
-    this.filterIsConfirmed();
-  }
-
-  filterIsConfirmed() {
-    if (this.showConfirmedOnly) {
-      this.dataSource.data = this.allData.filter(a => !a.isConfirmed);
-    }
-    else {
-      this.dataSource.data = this.allData;
-    }
-  }
-
-
   applyFilter(filterValue: string) {
+    this.sum = 0;
     this.dataSource.filter = filterValue.trim().toLocaleLowerCase();
 
   }
-  doFilter(value: string) {
-    this.dataSource.filter = value.trim().toLocaleLowerCase();
+  hideShowUnconfirmed(val: any) {
+    this.sum = 0;
+    this.showUnconfirmedOnly = val.checked;
+    //Workaround to trigger the filter predicate:
+    this.selectedApartment = 'w' + this.selectedApartment;
+    //
+    this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
+    this.selectedApartment = this.selectedApartment.substring(1, 100);
   }
+  hideShowNotCovered(val: any) {
+    this.sum = 0;
+    this.showNotCoveredOnly = val.checked;
+    //Workaround to trigger the filter predicate:
+    this.selectedApartment = 'w' + this.selectedApartment;
+    //
+    this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
+    this.selectedApartment = this.selectedApartment.substring(1, 100);
+  }
+
+
+  //showUnconfirmed() {
+  //  //this.dataSource.data = this.allData.filter(a => !a.isConfirmed);
+  //}
+  //showAll() {
+  //  //this.dataSource.data = this.allData;
+  //}
+
+
+
+  //filterIsConfirmed() {
+  //  //if (this.showConfirmedOnly) {
+  //  //  this.dataSource.data = this.allData.filter(a => !a.isConfirmed);
+  //  //}
+  //  //else {
+  //  //  this.dataSource.data = this.allData;
+  //  //}
+  //}
+
+
+  //doFilter(value: string) {
+  //  this.dataSource.filter = value.trim().toLocaleLowerCase();
+  //}
 
 
 
@@ -106,11 +149,11 @@ export class TransactionListComponent implements OnInit {
   }
 
 
-  ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
-    // this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
+  //ngAfterViewInit(): void {
+  //  this.dataSource.sort = this.sort;
+  //  // this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
 
-  }
+  //}
 
   public isPositive(value: number): boolean {
     if (value >= 0) {
