@@ -8,6 +8,8 @@ import {MatTableModule} from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatChipsModule } from '@angular/material/chips';
+
 
 @NgModule({
   imports: [
@@ -36,7 +38,8 @@ import { MatRadioModule } from '@angular/material/radio';
     MatSnackBarModule,
     MatMenuModule,
     MatSlideToggleModule,
-    MatRadioModule
+    MatRadioModule,
+    MatChipsModule
 
     ],
   exports: [
@@ -65,7 +68,8 @@ import { MatRadioModule } from '@angular/material/radio';
     MatSnackBarModule,
     MatMenuModule,
     MatSlideToggleModule,
-    MatRadioModule
+    MatRadioModule,
+    MatChipsModule
       ],
 })
 export class MyOwnCustomMaterialModule { }

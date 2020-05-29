@@ -4,11 +4,100 @@
 </button>
 
 
-<span > Personal account balance is <b [ngClass]="{
+<span>
+  Personal account balance is <b [ngClass]="{
           positive: isPositive(balance),
           negative: !isPositive(balance)
-        }">{{balance | currency:'EUR' : 'symbol':'1.0-0'}}</b></span>
+        }">{{balance | currency:'EUR' : 'symbol':'1.0-0'}}</b>
+</span>
 <p *ngIf="!dataSourceTrans.data"><em>Loading...</em></p>
+<br />
+<!--<p>
+  Icon with a badge
+  <mat-icon matBadge="15" matBadgeColor="warn">home</mat-icon>
+</p>-->
+<mat-chip-list>
+  <mat-chip (click)="switchFilter('paidOnBehalf')"
+            [ngClass]="{'hide-type':show_paidOnBehalf,'show-type':!show_paidOnBehalf}">
+    <mat-icon style="font-size:20px;"
+              matTooltip="Paid on behalf">
+      money
+    </mat-icon>
+  </mat-chip>
+  <mat-chip (click)="switchFilter('profitDistribution')"
+            [ngClass]="{'hide-type':show_profitDistribution,'show-type':!show_profitDistribution}">
+    <mat-icon style="font-size:20px;"
+              matTooltip="Profit distribution">
+      trending_up
+    </mat-icon>
+  </mat-chip>
+  <mat-chip (click)="switchFilter('cashWithdrawal')"
+            [ngClass]="{'hide-type':show_cashWithdrawal,'show-type':!show_cashWithdrawal}">
+    <mat-icon style=" font-size:20px;"
+              matTooltip="Cash withdrawal">
+      atm
+    </mat-icon>
+  </mat-chip>
+  <mat-chip (click)="switchFilter('moneyTransfer')"
+            [ngClass]="{'hide-type':show_moneyTransfer,'show-type':!show_moneyTransfer}">
+    <mat-icon style=" font-size:20px;"
+              matTooltip="Money transfer">
+      swap_horiz
+    </mat-icon>
+  </mat-chip>
+  <mat-chip (click)="switchFilter('')" >
+    <mat-icon style=" font-size:20px;"
+              matTooltip="Show All">
+      <!--[ngClass]="{'hide-type':show_moneyTransfer,'show-type':!show_moneyTransfer}">-->
+      cancel
+    </mat-icon>
+  </mat-chip>
+</mat-chip-list>
+<br />
+<!--<mat-icon id="paidOnBehalf" (click)="switchFilter('paidOnBehalf')" style="margin-right:25px; font-size:40px; cursor:pointer"
+          matTooltip="Paid on behalf"
+          [ngClass]="{'hide-type':show_paidOnBehalf,'show-type':!show_paidOnBehalf}">
+  money
+</mat-icon>
+
+<mat-icon id="profiDistribution" (click)="switchFilter('profiDistribution')"  style="margin-right:25px; font-size:40px; cursor:pointer"
+          matTooltip="Profit distribution"
+          [ngClass]="{'hide-type':show_profitDistribution,'show-type':!show_profitDistribution}">
+  trending_up
+</mat-icon>
+
+
+<mat-icon id="cashWithdrawal" (click)="switchFilter('cashWithdrawal')"  style="margin-right:25px; font-size:40px; cursor:pointer"
+          matTooltip="Cash withdrawal"
+          [ngClass]="{'hide-type':show_cashWithdrawal,'show-type':!show_cashWithdrawal}">
+  atm
+</mat-icon>
+
+
+<mat-icon id="moneyTransfer" (click)="switchFilter('moneyTransfer')"  style="margin-right:25px; font-size:40px; cursor:pointer"
+          matTooltip="Money transfer"
+          [ngClass]="{'hide-type':show_moneyTransfer,'show-type':!show_moneyTransfer}">
+  swap_horiz
+</mat-icon>
+<mat-icon id="moneyTransfer" (click)="switchFilter('')" style="margin-right:25px; font-size:40px; cursor:pointer"
+          matTooltip="Show All"
+          [ngClass]="{'hide-type':show_moneyTransfer,'show-type':!show_moneyTransfer}">
+  cancel
+</mat-icon>
+
+<mat-icon id="moneyTransfer" (click)="switchFilter('')"  style="margin-right:25px; font-size:40px; cursor:pointer"
+          matTooltip="Show All"
+          [ngClass]="{'hide-type':show_moneyTransfer,'show-type':!show_moneyTransfer}">
+  remove_red_eye
+</mat-icon>-->
+<!--<mat-icon matTooltip="Paid on behalf" *ngIf="transaction.transactionType==10">money</mat-icon>
+<mat-icon matTooltip="Profit distribution" *ngIf="transaction.transactionType==20">trending_up</mat-icon>
+<mat-icon matTooltip="Cash withdrawal" *ngIf="transaction.transactionType==13">atm</mat-icon>
+<mat-icon matTooltip="Money transfer" *ngIf="transaction.transactionType==5">swap_horiz</mat-icon>-->
+
+
+
+
 <div id="tbl">
   <table style="width: 100%;" mat-table [dataSource]="dataSourceTrans" matSort class="mat-elevation-z8">
     <ng-container matColumnDef="id">
@@ -38,14 +127,6 @@
         <mat-icon matTooltip="Profit distribution" *ngIf="transaction.transactionType==20">trending_up</mat-icon>
         <mat-icon matTooltip="Cash withdrawal" *ngIf="transaction.transactionType==13">atm</mat-icon>
         <mat-icon matTooltip="Money transfer" *ngIf="transaction.transactionType==5">swap_horiz</mat-icon>
-        <!--<mat-icon matTooltip="Money transfer" *ngIf="transaction.transactionType==10">supervisor_account</mat-icon>-->
-        <!--<mat-icon matTooltip="Money transfer">account_balance</mat-icon>-->
-        <!--<mat-icon matTooltip="Money transfer">swap_horiz</mat-icon>
-      <mat-icon matTooltip="Money transfer">sync_alt</mat-icon>
-      <mat-icon matTooltip="Money transfer">monetization_on</mat-icon>
-      <mat-icon matTooltip="Money transfer">money</mat-icon>
-      <mat-icon matTooltip="Money transfer">euro</mat-icon>-->
-        <!--{{transaction.transactionType}}-->
       </td>
     </ng-container>
     <ng-container matColumnDef="apartment">

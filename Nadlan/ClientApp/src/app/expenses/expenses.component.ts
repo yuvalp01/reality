@@ -121,16 +121,14 @@ export class ExpensesComponent implements OnInit {
     //this.dataSourceExpenses.sort = this.sort;
   }
 
-  doFilter(value: string) {
-    this.dataSourceAssistant.filter = value.trim().toLocaleLowerCase();
-    //this.dataSourceExpenses.filter = value.trim().toLocaleLowerCase();
-  }
+  //doFilter(value: string) {
+  //  this.dataSourceAssistant.filter = value.trim().toLocaleLowerCase();
+  //}
 
-  filter() {
-    this.dataSourceAssistant.filter = this.selectedApartment.trim().toLocaleLowerCase();
-    //this.dataSourceExpenses.filter = this.selectedApartment.trim().toLocaleLowerCase();
+  //filter() {
+  //  this.dataSourceAssistant.filter = this.selectedApartment.trim().toLocaleLowerCase();
 
-  }
+  //}
 
   public isPositive(value: number): boolean {
     if (value >= 0) {

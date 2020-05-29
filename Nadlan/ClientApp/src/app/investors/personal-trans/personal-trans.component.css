@@ -2,12 +2,38 @@
   top: 46px;
   left: 88%;
 }
+
 .mat-column-date {
   width: 100px;
 }
+
 .mat-column-amount {
   width: 90px;
 }
+
 .mat-column-actions {
   width: 245px;
 }
+
+/*#moneyTransfer .mat-badge-content {
+  background-color: gray;
+  color: white;
+}*/
+
+.show-type {
+  color: gray;
+  background-color: #3f51b5;
+  cursor: pointer;
+}
+
+.hide-type {
+  color: white;
+  background-color: #3f51b5;
+  cursor: pointer;
+}
+/*.mat-chip {
+  background-color: #b3d0d6
+}*/
+/*.mat-chip.mat-standard-chip.mat-chip-selected.mat-primary {
+
+}*/

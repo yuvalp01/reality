@@ -39,11 +39,12 @@ export interface IInvestorReportOverview {
   name: string,
   totalInvestment: number,
   cashBalance: number,
-  minimalProfitUpToDate: number,
+  totalPendingProfits: number,
   totalBalace: number,
-  totalDistribution: number,
   portfolioLines: IPortfolioReport[],
-
+  totalDistribution: number,
+  //obsolete
+  minimalProfitUpToDate: number,
 }
 
 export interface IPortfolioReport {
@@ -51,8 +52,11 @@ export interface IPortfolioReport {
   apartment: string,
   purchaseDate: Date,
   investment: number,
+  pendingProfits: number,
   ownership: number,
+  //[Obsolete]
   minimalProfitUpToDate: number,
+  //[Obsolete]
   distributed: number,
 
 }

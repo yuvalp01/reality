@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Nadlan.Repositories
 {
-    public class InvestorReportRepository : Repository<Transaction>
+    public class InvestorReportRepository_ : Repository<Transaction>
     {
 
         //const decimal ANNUAL_COSTS = 100 + 350;
-        public InvestorReportRepository(NadlanConext context) : base(context)
+        public InvestorReportRepository_(NadlanConext context) : base(context)
         {
         }
 

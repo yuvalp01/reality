@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Nadlan.Repositories
 {
-    public class InvestorReportRepositoryNew : Repository<Transaction>
+    public class InvestorReportRepository : Repository<Transaction>
     {
 
-        public InvestorReportRepositoryNew(NadlanConext context) : base(context)
+        public InvestorReportRepository(NadlanConext context) : base(context)
         {
         }
 
@@ -22,16 +22,20 @@ namespace Nadlan.Repositories
             {
                 IQueryable<Portfolio> portfolioLines = GetPortfolioLines(investorId);
                 List<PortfolioReport> portfolioReportLines = await GetPortfolioReportLines(portfolioLines);
+                var totalPendingProfits = portfolioReportLines.Sum(a => a.PendingProfits);
+                var totalDistribution = portfolioReportLines.Sum(a => a.Distributed);
                 InvestorReportOverview investorReportOverview = new InvestorReportOverview
                 {
                     Name = Context.Stakeholders.Find(investorId).Name,
                     CashBalance = await GetPersonalBalance(investorId),
                     TotalInvestment = portfolioReportLines.Sum(a => a.Investment),
                     PortfolioLines = portfolioReportLines,
-                    TotalPendingProfit = portfolioReportLines.Sum(a => a.PendingProfit),
+                    TotalPendingProfits = totalPendingProfits,
+                    TotalDistribution = totalDistribution,
+                    //ProfitsSoFar = totalPendingProfits + totalDistribution
                 };
                 investorReportOverview.TotalBalace = investorReportOverview.CashBalance
-                    + investorReportOverview.TotalPendingProfit;
+                    + investorReportOverview.TotalPendingProfits;
                 return investorReportOverview;
             }
             catch (Exception)
@@ -67,8 +71,8 @@ namespace Nadlan.Repositories
                 portfolioLineReport.PurchaseDate = apartment.PurchaseDate;
                 portfolioLineReport.Ownership = portfolioLine.Percentage;
                 portfolioLineReport.Investment = await GetTotalInvestment(portfolioLine) * portfolioLine.Percentage;
-                portfolioLineReport.PendingProfit = await GetPendingProfit(portfolioLine) * -1 * portfolioLine.Percentage;
-                portfolioLineReport.Distributed = await GetGeneralDistributionPerInvestor(portfolioLine) * -1 * portfolioLine.Percentage;
+                portfolioLineReport.PendingProfits = GetPendingProfit(portfolioLine) * portfolioLine.Percentage;
+                portfolioLineReport.Distributed =  GetGeneralDistributionPerInvestor(portfolioLine) * -1 * portfolioLine.Percentage;
                 ValidateWithPersonalTransactions(portfolioLineReport, portfolioLine);
                 portfolioReportLines.Add(portfolioLineReport);
             }
@@ -83,7 +87,7 @@ namespace Nadlan.Repositories
                 .Select(a => a.Amount).FirstOrDefaultAsync();
             return totalInvestment;
         }
-        private Task<decimal> GetGeneralDistributionPerInvestor(Portfolio portfolioLine)
+        private decimal GetGeneralDistributionPerInvestor(Portfolio portfolioLine)
         {
             var distributionPredicate = PredicateFilters.GetBasicDistributionFilter();
 
@@ -92,34 +96,34 @@ namespace Nadlan.Repositories
                 .Where(distributionPredicate)
                 .Where(a => a.ApartmentId == portfolioLine.ApartmentId)
                 .AsQueryable();
-            return distributed.SumAsync(a => a.Amount);
+            return distributed.Sum(a => a.Amount);
         }
 
 
-        private Task<decimal> GetPendingProfit(Portfolio portfolioLine)
+        private decimal GetPendingProfit(Portfolio portfolioLine)
         {
-            var profitPredicate = PredicateFilters.GetBasicProfitFilter();
+            var profitPredicate = PredicateFilters.GetProfitAfterDistributionFilter();
             var profit = Context.Transactions
                 .Include(a => a.Account)
                 .Where(profitPredicate)
                 .Where(a => a.ApartmentId == portfolioLine.ApartmentId)
                 .AsQueryable()
-                .SumAsync(a => a.Amount);
+                .Sum(a => a.Amount);
             //var profitToInvestor = profit;
             return profit;
         }
-        private decimal GetPendingProfitPerInvestor_(Portfolio portfolioLine)
-        {
-            var profitPredicate = PredicateFilters.GetBasicProfitFilter();
-            var profit = Context.Transactions
-                .Include(a => a.Account)
-                .Where(profitPredicate)
-                .Where(a => a.ApartmentId == portfolioLine.ApartmentId)
-                .AsQueryable()
-                .SumAsync(a => a.Amount);
-            var profitToInvestor = profit.Result * portfolioLine.Percentage * -1;
-            return profitToInvestor;
-        }
+        //private decimal GetPendingProfitPerInvestor_(Portfolio portfolioLine)
+        //{
+        //    var profitPredicate = PredicateFilters.GetProfitAfterDistributionFilter();
+        //    var profit = Context.Transactions
+        //        .Include(a => a.Account)
+        //        .Where(profitPredicate)
+        //        .Where(a => a.ApartmentId == portfolioLine.ApartmentId)
+        //        .AsQueryable()
+        //        .SumAsync(a => a.Amount);
+        //    var profitToInvestor = profit.Result * portfolioLine.Percentage * -1;
+        //    return profitToInvestor;
+        //}
 
         public async Task<decimal> GetPersonalBalance(int stakeholderId)
         {
