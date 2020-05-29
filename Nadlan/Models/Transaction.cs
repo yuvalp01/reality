@@ -20,6 +20,7 @@ namespace Nadlan.Models
         public Account Account { get; set; }
 
         public bool IsCoveredByInvestor { get; set; }
+        public int PersonalTransactionId { get; set; }
 
 
         //public int PaidById { get; set; }

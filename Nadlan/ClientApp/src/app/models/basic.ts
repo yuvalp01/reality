@@ -13,6 +13,7 @@ export interface ITransaction {
   isConfirmed: boolean;
   hours: number;
   isCoveredByInvestor: boolean;
+  personalTransactionId: number;
 }
 
 

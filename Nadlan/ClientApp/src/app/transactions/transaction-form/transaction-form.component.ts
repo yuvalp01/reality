@@ -40,6 +40,7 @@ export class TransactionFormComponent implements OnInit {
       date: [null, Validators.required],
       isPurchaseCost: [false],
       isCoveredByInvestor: [false],
+      personalTransactionId: [-1],      
       comments: [''],
     });
   }
