@@ -21,6 +21,8 @@ export class TransactionListComponent implements OnInit {
   securityObject: AppUserAuth = null;
   showUnconfirmedOnly: boolean = false;
   showNotCoveredOnly: boolean = false;
+  ShowPurchaseCostOnly: boolean = false;
+
   sum: number = 0;
   constructor(
     private transactionService: TransactionService,
@@ -31,12 +33,6 @@ export class TransactionListComponent implements OnInit {
   }
   ngOnInit(): void {
     this.refreshData();
-    //this.transactionService.getTransactions().subscribe(result => {
-    //  //this.allData = result as ITransaction[];
-    //  //this.dataSource.data = this.allData;
-    //  this.dataSource.data = result as ITransaction[];
-    //  this.dataSource.sort = this.sort;
-    //}, error => console.error(error));
   }
 
   refreshData() {
@@ -53,14 +49,17 @@ export class TransactionListComponent implements OnInit {
         let isMatchApartment = data.apartmentAddress.toLowerCase().includes(cleanFilter);
         let isMatchUnconfirmed = true;
         let isMatchNotCovered = true;
+        let isMatchPurchaseCost = true;
         if (this.showNotCoveredOnly) {
-          isMatchNotCovered = data.isCoveredByInvestor == false;
-          //isMatchNotCovered = data.personalTransactionId == -1;
+          isMatchNotCovered = data.personalTransactionId == -1;
         }
         if (this.showUnconfirmedOnly) {
           isMatchUnconfirmed = data.isConfirmed == false;
         }
-        if (isMatchApartment && isMatchUnconfirmed && isMatchNotCovered) {
+        if (this.ShowPurchaseCostOnly) {
+          isMatchPurchaseCost = data.isPurchaseCost == true;
+        }
+        if (isMatchApartment && isMatchUnconfirmed && isMatchNotCovered && isMatchPurchaseCost) {
           this.sum += data.amount;
           return true;
         }
@@ -94,29 +93,19 @@ export class TransactionListComponent implements OnInit {
     this.selectedApartment = this.selectedApartment.substring(1, 100);
   }
 
+  hideShowPurchaseCost(val: any) {
+    this.arrangeFilter();
+    this.ShowPurchaseCostOnly = val.checked;
+    //Workaround to trigger the filter predicate:
+  }
 
-  //showUnconfirmed() {
-  //  //this.dataSource.data = this.allData.filter(a => !a.isConfirmed);
-  //}
-  //showAll() {
-  //  //this.dataSource.data = this.allData;
-  //}
-
-
-
-  //filterIsConfirmed() {
-  //  //if (this.showConfirmedOnly) {
-  //  //  this.dataSource.data = this.allData.filter(a => !a.isConfirmed);
-  //  //}
-  //  //else {
-  //  //  this.dataSource.data = this.allData;
-  //  //}
-  //}
-
-
-  //doFilter(value: string) {
-  //  this.dataSource.filter = value.trim().toLocaleLowerCase();
-  //}
+  arrangeFilter() {
+    this.sum = 0;
+    //Workaround to trigger the filter predicate:
+    this.selectedApartment = 'w' + this.selectedApartment;   //
+    this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
+    this.selectedApartment = this.selectedApartment.substring(1, 100);
+  }
 
 
 
@@ -149,11 +138,6 @@ export class TransactionListComponent implements OnInit {
   }
 
 
-  //ngAfterViewInit(): void {
-  //  this.dataSource.sort = this.sort;
-  //  // this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
-
-  //}
 
   public isPositive(value: number): boolean {
     if (value >= 0) {
@@ -164,4 +148,32 @@ export class TransactionListComponent implements OnInit {
 
 }
 
+  //ngAfterViewInit(): void {
+  //  this.dataSource.sort = this.sort;
+  //  // this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
+
+  //}
+
+  //showUnconfirmed() {
+  //  //this.dataSource.data = this.allData.filter(a => !a.isConfirmed);
+  //}
+  //showAll() {
+  //  //this.dataSource.data = this.allData;
+  //}
+
+
+
+  //filterIsConfirmed() {
+  //  //if (this.showConfirmedOnly) {
+  //  //  this.dataSource.data = this.allData.filter(a => !a.isConfirmed);
+  //  //}
+  //  //else {
+  //  //  this.dataSource.data = this.allData;
+  //  //}
+  //}
+
+
+  //doFilter(value: string) {
+  //  this.dataSource.filter = value.trim().toLocaleLowerCase();
+  //}
 

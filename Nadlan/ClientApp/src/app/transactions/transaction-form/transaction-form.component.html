@@ -1,6 +1,7 @@
 <div class="container">
   <form [formGroup]="transactionFormGroup" (ngSubmit)="saveTransaction()">
     <h3><mat-icon>cached</mat-icon>{{title}} transaction</h3>
+
     <fieldset>
       <mat-form-field style="width: 100%" appearance="outline">
         <mat-label>Date</mat-label>
@@ -13,10 +14,24 @@
       <mat-form-field style="width: 50%" appearance="outline" class="example-full-width">
         <mat-label>Amount (€)</mat-label>
         <input matInput formControlName="amount" type="text" required placeholder="Amount (€)">
+        <!--<input matInput formControlName="personalTransactionId" type="text" placeholder="Personal Transaction Id">-->
 
       </mat-form-field>
-      <mat-checkbox style="width: 50%; padding-left: 25px" formControlName="isCoveredByInvestor">Covered by Investor?</mat-checkbox>
-      <input matInput formControlName="personalTransactionId" type="text" required placeholder="Personal Transaction Id">
+      <mat-checkbox style="width: 50%; padding-left: 25px" formControlName="isConfirmed">
+        Confirmed?
+      </mat-checkbox>
+      <!--<mat-slide-toggle formControlName="isConfirmed">Confirmed</mat-slide-toggle>-->
+
+    </fieldset>
+    <fieldset style="height: 33px;">
+      <mat-slide-toggle (change)="switchIsCovered()"
+                        [checked]="transactionFormGroup.controls.personalTransactionId.value==-1"
+                        [ngClass]="{'toggleOff':transactionFormGroup.controls.personalTransactionId.value==-1}"
+                        [disabled]="disableCoveredSwitch">
+        Paid with investor
+      </mat-slide-toggle>
+      <span [ngClass]="{'toggleOff':transactionFormGroup.controls.personalTransactionId.value==-1}">
+      (personalTransactionId:{{transactionFormGroup.controls.personalTransactionId.value}})</span>
     </fieldset>
     <fieldset>
       <mat-form-field style="width: 100%" appearance="outline">
@@ -38,7 +53,8 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-checkbox style="width: 50%; padding-left: 25px" formControlName="isPurchaseCost">Purchase Cost?</mat-checkbox>
+      <mat-checkbox style="width: 50%; padding-left: 25px" formControlName="isPurchaseCost">
+      Purchase Cost?</mat-checkbox>
     </fieldset>
 
     <fieldset>

@@ -8,19 +8,19 @@
 </button>
 
 <div style="display:inline; margin-left:20px; ">
-  <!--<button (click)="showAll()">Show all</button>
-  <button (click)="showUnconfirmed('isConfirmed')">Show unconfirmed</button>-->
-  <!--<mat-checkbox (change)="applyConfirmFilter($event)" [(ngModel)]="showConfirmed">Hide confirmed</mat-checkbox>
-  <span (click)="xxx(showConfirmed)"> {{showConfirmed}}</span>-->
   <mat-form-field>
-    <!--<input type="text" matInput (keyup)="doFilter($event.target.value)" [(ngModel)]="selectedApartment" name="selectedApartment">-->
-    <input type="text" matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="selectedApartment" name="selectedApartment">
+    <input type="text" matInput (keyup)="applyFilter($event.target.value)"
+           [(ngModel)]="selectedApartment" name="selectedApartment">
   </mat-form-field>
+  <span>
+    {{sum |  currency:'EUR' : 'symbol':'1.0-2'}}
+  </span>
+  <br />
   <!--<mat-slide-toggle (change)="hideShowUnconfirmed($event)">Unconfirmed Only</mat-slide-toggle>-->
   <mat-slide-toggle (change)="hideShowUnconfirmed($event)" [(ngModel)]="showUnconfirmedOnly">Unconfirmed Only</mat-slide-toggle>
   <mat-slide-toggle (change)="hideShowNotCovered($event)" [(ngModel)]="showNotCoveredOnly">Not Covered Only</mat-slide-toggle>
+  <mat-slide-toggle (change)="hideShowPurchaseCost($event)" [(ngModel)]="ShowPurchaseCostOnly">Show Purchase Cost Only</mat-slide-toggle>
 
-  <span>{{sum}}</span>
 
 </div>
 
@@ -39,7 +39,8 @@
     <td mat-cell
         *matCellDef="let transaction">
       <!--how_to_reg-->
-      <mat-icon matTooltip="Still not covered by the investor" *ngIf="!transaction.isCoveredByInvestor">hourglass_full</mat-icon>
+      <mat-icon matTooltip="Still not covered by the investor"
+                *ngIf="transaction.personalTransactionId == -1">hourglass_full</mat-icon>
       <span [ngClass]="{
           positive: isPositive(transaction.amount),
           negative: !isPositive(transaction.amount)
@@ -76,8 +77,8 @@
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let transaction">
 
-      <button  (click)="openForm(transaction.id)" mat-button color="primary">Edit</button>
-      <button  (click)="delete(transaction.id)" mat-button color="warn">Delete</button>
+      <button (click)="openForm(transaction.id)" mat-button color="primary">Edit</button>
+      <button (click)="delete(transaction.id)" mat-button color="warn">Delete</button>
       <button *ngIf="!transaction.isConfirmed" (click)="confirm(transaction.id)" mat-button color="green">Confirm</button>
       <mat-icon *ngIf="transaction.isConfirmed" matTooltip="Confirmed">check_circle</mat-icon>
 

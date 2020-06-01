@@ -45,7 +45,7 @@
       swap_horiz
     </mat-icon>
   </mat-chip>
-  <mat-chip (click)="switchFilter('')" >
+  <mat-chip (click)="switchFilter('')">
     <mat-icon style=" font-size:20px;"
               matTooltip="Show All">
       <!--[ngClass]="{'hide-type':show_moneyTransfer,'show-type':!show_moneyTransfer}">-->
@@ -140,7 +140,7 @@
     <ng-container matColumnDef="comments">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>
       <td mat-cell *matCellDef="let transaction">
-        {{transaction.comments}}
+        <span>  {{transaction.comments}}</span>
       </td>
 
     </ng-container>
@@ -156,7 +156,7 @@
 
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr (click)="printId(row.id)" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
   </table>
   <button mat-button color="primary" (click)="exportAsXLSX()">Export to Excel</button>

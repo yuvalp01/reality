@@ -4,13 +4,9 @@ import { IApartment, ITransaction, IAccount } from "../models";
 import { FormControl, FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { AccountService } from "../services/account.service";
 import { ExpensesService } from "../services/expenses.service";
-import { Router } from "@angular/router";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
-import { take, expand } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog, MatSnackBar } from "@angular/material";
-import { win32 } from "path";
-import { element } from "protractor";
-
 
 
 @Component(
@@ -23,7 +19,6 @@ export class AddExpenseComponent implements OnInit {
   constructor(private apartmentService: ApartmentService,
     private accountService: AccountService,
     private expensesService: ExpensesService,
-    //private router: Router,
     private _ngZone: NgZone,
     private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
@@ -48,7 +43,6 @@ export class AddExpenseComponent implements OnInit {
 
   @Output() refreshEmitter = new EventEmitter();
 
-
   saveTransaction(formValues: any): void {
 
 
@@ -58,6 +52,10 @@ export class AddExpenseComponent implements OnInit {
         var transaction: ITransaction = Object.assign({}, this.transactionForm.value);
         let isPurchaseCost = this.transactionForm.controls['isPurchaseCost'].value;
         transaction.isPurchaseCost = isPurchaseCost;
+        //In the future, add a checkbox "use investor credit card" 
+        //transaction.personalTransactionId = -1;
+        transaction.personalTransactionId = 0;//still not covered
+        //
         if (this.isHourForm) {
           transaction.amount = formValues.hours * 9;
         }

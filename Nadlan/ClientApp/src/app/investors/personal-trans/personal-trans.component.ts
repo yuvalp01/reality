@@ -146,11 +146,9 @@ export class PersonalTransComponent implements OnChanges, OnInit {
     // filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSourceTrans.filter = filterValue;
   }
-
-  //filterByString(data, s) {
-  //  return data.filter(e => e.transactionType==s);
-  //  //.sort((a, b) => a.id.includes(s) && !b.id.includes(s) ? -1 : b.id.includes(s) && !a.id.includes(s) ? 1 : 0);
-  //}
+  printId(id) {
+    console.log(id);
+  }
 
 
   public isPositive(value: number): boolean {
@@ -161,9 +159,26 @@ export class PersonalTransComponent implements OnChanges, OnInit {
   }
 
   exportAsXLSX(): void {
-
     this.dataSourceTrans.data.forEach(a => delete a.id);
     this.dataSourceTrans.data.forEach(a => delete a.stakeholderId);
+    this.excelService.exportAsExcelFile(this.dataSourceTrans.data, 'Transactions');
+  }
+}
+
+  //filterByString(data, s) {
+  //  return data.filter(e => e.transactionType==s);
+  //  //.sort((a, b) => a.id.includes(s) && !b.id.includes(s) ? -1 : b.id.includes(s) && !a.id.includes(s) ? 1 : 0);
+  //}
+
+
+
+    ////var xxxx = this.filterByString(this.dataSourceTrans.data, 'bouboulinas')
+    //var yyy = this.dataSourceTrans.data.filter(e => e.apartment.address.includes('bouboulinas') || e.comments.includes('bouboulinas'));
+    ////xxxx.forEach(a => delete a.id);
+    ////xxxx.data.forEach(a => delete a.stakeholderId);
+
+    //this.excelService.exportAsExcelFile(yyy, 'testfilter');
+
 
     //this.dataSourceTrans.data.forEach(a => a.date = a.date.toDateString())
     //this.dataSourceTrans.data.forEach(a => a.date = new Date(a.date).toLocaleDateString('en-GB')) as const;
@@ -175,7 +190,19 @@ export class PersonalTransComponent implements OnChanges, OnInit {
     //  delete a.date;
     //});
     //debugger;
+  //exportAsXLSX__(): void {
 
-    this.excelService.exportAsExcelFile(this.dataSourceTrans.data, 'Transactions');
-  }
-}
+  //  //this.dataSourceAssistant.data.forEach(a => delete a.stakeholderId);
+  //  var xxxx = this.filterByString(this.dataSourceTrans.data, 'bouboulinas')
+
+
+
+  //  this.excelService.exportAsExcelFile(xxxx, 'Transactions');
+  //  // this.excelService.exportAsExcelFile(this.dataSourceAssistant.data, 'Transactions');
+  //}
+
+  //filterByString(data, s) {
+  //  return data.filter(e => e.apartmentId.includes(s) || e.comments.includes(s));
+  //  //.sort((a, b) => a.id.includes(s) && !b.id.includes(s) ? -1 : b.id.includes(s) && !a.id.includes(s) ? 1 : 0);
+  //}
+

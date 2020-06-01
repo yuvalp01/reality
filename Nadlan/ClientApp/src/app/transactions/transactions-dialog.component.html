@@ -6,11 +6,21 @@
       <th mat-header-cell *matHeaderCellDef>ID</th>
       <td mat-cell *matCellDef="let transaction">{{transaction.id }}</td>
     </ng-container>
+    <ng-container  matColumnDef="ptid">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let transaction">
+        <mat-icon matTooltip="Paid directly via bank account" *ngIf="transaction.personalTransactionId==-1">credit_card</mat-icon>
+        <mat-icon matTooltip="Paid in cash - covered by project funds" *ngIf="transaction.personalTransactionId==-2">money</mat-icon>
+        <mat-icon matTooltip="Paid in cash - already covered by investor(ref: {{transaction.personalTransactionId}})" *ngIf="transaction.personalTransactionId>0">money</mat-icon>
+        <mat-icon matTooltip="Paid in cash - still not convered by investor" *ngIf="transaction.personalTransactionId==0">hourglass_full</mat-icon>
 
+        <!--{{transaction.personalTransactionId }}-->
+      </td>
+    </ng-container>
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef>Date</th>
       <td mat-cell *matCellDef="let transaction">
-        <mat-icon *ngIf="!transaction.isCoveredByInvestor">hourglass_full</mat-icon>
+        <!--<mat-icon *ngIf="transaction.personalTransactionId==-1">hourglass_full</mat-icon>-->
 
         {{transaction.date | date:'dd-MM-yyyy'}}
       </td>
@@ -33,13 +43,23 @@
 
     <ng-container matColumnDef="comments">
       <th mat-header-cell *matHeaderCellDef>Comments</th>
-      <td mat-cell *matCellDef="let transaction">{{transaction.comments}}</td>
+      <td mat-cell *matCellDef="let transaction">
+        <ng-container *hasClaim="['admin']">
+          <mat-icon style="cursor:pointer" (click)="openForm(transaction.id)" matTooltip="No confirmed yet"
+                    *ngIf="!transaction.isConfirmed">pending_actions</mat-icon>
+          <mat-icon style="cursor:pointer" (click)="openForm(transaction.id)" matTooltip="Confirmed"
+                    *ngIf="transaction.isConfirmed">check_circle_outline</mat-icon>
+
+        </ng-container>
+
+        {{transaction.comments}}
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="transactionColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let row; columns: transactionColumns"
-    [ngClass]="{'disabled': row.isBusinessExpense}"
-    data-id="{{row.id}}"></tr>
+        [ngClass]="{'disabled': row.isBusinessExpense}"
+        data-id="{{row.id}}"></tr>
 
   </table>
 

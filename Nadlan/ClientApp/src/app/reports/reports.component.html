@@ -5,7 +5,7 @@
     <mat-nav-list>
       <a mat-list-item *ngFor="let apartment of apartments"
          [routerLink]="['/reports',apartment.id,status]"
-         routerLinkActive="link-active"> {{apartment.address}}
+         routerLinkActive="link-active"> {{apartment.address}} ({{apartment.id}})
       </a>
     </mat-nav-list>
 

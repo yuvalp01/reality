@@ -18,12 +18,16 @@ namespace Nadlan.Repositories
 
         public override async Task<List<Transaction>> GetAllAsync()
         {
-            return await Context.Transactions.OrderByDescending(a => a.Id).Include(a => a.Account).Include(a => a.Apartment).Where(a => !a.IsDeleted).ToListAsync();
+            return await Context.Transactions.OrderByDescending(a => a.Id)
+                .Include(a => a.Account)
+                .Include(a => a.Apartment)
+                .Where(a => !a.IsDeleted).ToListAsync();
         }
         public async Task<List<TransactionDto>> GetAllExpensesAsync()
         {
             return await Context.Expenses.Join(
-                Context.Transactions.Where(a => !a.IsDeleted),
+                Context.Transactions
+                .Where(a => !a.IsDeleted),
                 expense => expense.TransactionId,
                 transaction => transaction.Id,
                 (expense, transaction) => new TransactionDto
@@ -47,7 +51,8 @@ namespace Nadlan.Repositories
         public async Task<TransactionDto> GetExpenseByIdAsync(int transactionId)
         {
             return await Context.Expenses.Join(
-                Context.Transactions.Where(a => a.Id == transactionId && !a.IsDeleted),
+                Context.Transactions.Where(a => a.Id == transactionId
+                && !a.IsDeleted),
                 expense => expense.TransactionId,
                 transaction => transaction.Id,
                 (expense, transaction) => new TransactionDto
@@ -219,68 +224,24 @@ namespace Nadlan.Repositories
         public Task<List<Transaction>> GetByAcountAsync(int apartmentId, int accountId, bool isPurchaseCost, int year)
         {
             Expression<Func<Transaction, bool>> predAll = c =>
-                c.ApartmentId == apartmentId
+               !c.IsDeleted
+              && c.ApartmentId == apartmentId
               && c.AccountId == accountId
               && c.IsPurchaseCost == isPurchaseCost;
 
             Expression<Func<Transaction, bool>> predWithYear = c =>
-                c.ApartmentId == apartmentId
+                 !c.IsDeleted
+                && c.ApartmentId == apartmentId
                 && c.AccountId == accountId
                 && c.IsPurchaseCost == isPurchaseCost
                 && c.Date.Year == year;
             Expression<Func<Transaction, bool>> predicate = year == 0 ? predAll : predWithYear;
             return FindByCondition(predicate).OrderByDescending(a => a.Date).ToListAsync();
-
-            //return FindByCondition(c =>
-            ////c.Amount <= 0  &&
-            //c.ApartmentId == apartmentId
-            //&& c.AccountId == accountId
-            //&& c.IsPurchaseCost == isPurchaseCost).OrderByDescending(a => a.Date).ToListAsync();
         }
-
-
 
     }
 
 
 }
-
-
-
-//private Transaction CreateCorrespondingTransaction_old(Transaction originalTransaction, int accountId)
-//{
-//    Transaction correspondingTransaction = new Transaction
-//    {
-//        ApartmentId = originalTransaction.ApartmentId,
-//        AccountId = accountId,
-//        Amount = originalTransaction.Amount,
-//        Date = originalTransaction.Date,
-//        Comments = $"{originalTransaction.Comments}"
-//    };
-//    return correspondingTransaction;
-//}
-
-//public async Task CreateDoubleTransactionAsync_old(Transaction transaction, bool isHourCharge)
-//{
-//    if (isHourCharge)
-//    {
-//        transaction.Comments = $"Hours: {transaction.Comments}";
-//    }
-//    Transaction assiatantTransaction = CreateCorrespondingTransaction(transaction, 107);
-//    Create(assiatantTransaction);
-
-//    //hours for existing apartment maintances - the the expense of the business
-//    if (isHourCharge && transaction.AccountId == 4)
-//    {
-//        transaction.AccountId = 200;
-//    }
-
-//    //Charge the original account
-//    transaction.Amount = transaction.Amount * -1;
-//    Create(transaction);
-//    await SaveAsync();
-//}
-
-
 
 

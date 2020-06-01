@@ -1,6 +1,7 @@
 import { Component, Inject } from "@angular/core";
-import {  MatDialogRef, MAT_DIALOG_DATA   } from "@angular/material";
-import { ITransaction } from "../models";
+import {  MatDialogRef, MAT_DIALOG_DATA, MatDialog   } from "@angular/material";
+import { SecurityService } from "../security/security.service";
+import { TransactionFormComponent } from "./transaction-form/transaction-form.component";
 
 
 
@@ -11,11 +12,26 @@ import { ITransaction } from "../models";
 
 })
 export class TransactionsDialogComponent {
-  transactionColumns: string[] = ['date', 'amount', 'comments']; /*'id', 'isPurchaseCost' isBusinessExpense*/
+  transactionColumns: string[] = ['ptid','date', 'amount', 'comments']; /*'id', 'isPurchaseCost' isBusinessExpense*/
   //transactionColumns: string[] = [ 'date', 'amount',  'comments'];
 
   constructor(
     private dialogRef: MatDialogRef<TransactionsDialogComponent>,
+    //private securityService: SecurityService,
+    private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any) {
+    //if (securityService.hasClaim('admin')) {
+    //  this.transactionColumns = ['ptid', 'date', 'amount', 'comments'];
+    //}
+  }
+
+  openForm(_transactionId: number) {
+    console.log(_transactionId);
+    let dialogRef = this.dialog.open(TransactionFormComponent, {
+      height: '600px',
+      width: '500px',
+      data: { transactionId: _transactionId }
+    });
+    dialogRef.componentInstance.refreshEmitter.subscribe(() => { });
   }
 }

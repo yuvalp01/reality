@@ -8,6 +8,7 @@ import { MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { ApartmentService } from 'src/app/services/apartment.service';
 import { AccountService } from 'src/app/services/account.service';
 
+
 @Component({
   selector: 'app-transaction-form',
   templateUrl: './transaction-form.component.html',
@@ -30,6 +31,17 @@ export class TransactionFormComponent implements OnInit {
   apartments: IApartment[];
   transaction: ITransaction;
   @Output() refreshEmitter = new EventEmitter();
+  disableCoveredSwitch: boolean = false;
+
+  switchIsCovered() {
+    if (this.transactionFormGroup.controls.personalTransactionId.value == 0) {
+      this.transactionFormGroup.patchValue({ personalTransactionId: -1 });
+    }
+    else {
+      this.transactionFormGroup.patchValue({ personalTransactionId: 0 });
+    }
+    this.transactionFormGroup.controls.personalTransactionId.markAsDirty();
+  }
 
   ngOnInit() {
     this.loadData();
@@ -40,7 +52,8 @@ export class TransactionFormComponent implements OnInit {
       date: [null, Validators.required],
       isPurchaseCost: [false],
       isCoveredByInvestor: [false],
-      personalTransactionId: [-1],      
+      isConfirmed: [false],
+      personalTransactionId: [0],
       comments: [''],
     });
   }
@@ -76,6 +89,9 @@ export class TransactionFormComponent implements OnInit {
   loadTrans(result: ITransaction) {
     this.transaction = result;
     this.transactionFormGroup.patchValue(this.transaction);
+    if (this.transactionFormGroup.controls.personalTransactionId.value > 0) {
+      this.disableCoveredSwitch = true;
+    }
   }
 
 
@@ -124,9 +140,6 @@ export class TransactionFormComponent implements OnInit {
     let snackBarRef = this.snackBar.open(`Transaction`, action, { duration: 2000 });
     this.refreshEmitter.emit();
   }
-
-
-
 
 
   public fixUtcDate(dateIn) {
