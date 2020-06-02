@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Nadlan.Repositories.ApartmentReports;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,9 +12,9 @@ namespace Nadlan.Repositories
         private TransactionRepository _transaction;
         private PersonalTransactionRepository _personalTransaction;
         private AccountRepository _account;
-        private ReportRepository _apartmentReport;
+        private ApartmentReportRepositoryNew _apartmentReport;
         private InvestorReportRepository _investorReport;
-        //private RenovationItemRepository _renovationItem;
+
 
         public RepositoryWrapper(NadlanConext conext)
         {
@@ -57,17 +58,48 @@ namespace Nadlan.Repositories
             }
         }
 
-        public ReportRepository ApartmentReport
+        public ApartmentReportRepositoryNew ApartmentReport
         {
             get
             {
                 if (_apartmentReport == null)
                 {
-                    _apartmentReport = new ReportRepository(_conext);
+                    _apartmentReport = new ApartmentReportRepositoryNew(_conext);
                 }
                 return _apartmentReport;
             }
         }
+
+        //public GeneralInfoReportRepository GeneralInfoReportRepo
+        //{
+        //    get
+        //    {
+        //        if (_apartmentReport == null)
+        //        {
+        //            _apartmentReport = new ApartmentReportRepository(_conext);
+        //        }
+        //        return _apartmentReport;
+        //    }
+        //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public InvestorReportRepository InvestorReport
         {
             get

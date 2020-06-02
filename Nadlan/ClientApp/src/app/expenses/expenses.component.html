@@ -72,7 +72,8 @@
         <!--shopping_basket-->
         <!--<mat-icon matTooltip="Maintenance cost" *ngIf="!transaction.isPurchaseCost">format_paint</mat-icon>-->
         <mat-icon matTooltip="Maintenance" *ngIf="transaction.accountId==4">build</mat-icon>
-        <mat-icon matTooltip="Renovation" *ngIf="transaction.accountId==6">format_paint</mat-icon>
+        <mat-icon matTooltip="Renovation (miscellaneous)" *ngIf="transaction.accountId==6">format_paint</mat-icon>
+        <mat-icon matTooltip="Renovation (contractor)" style="color:blue" *ngIf="transaction.accountId==17">format_paint</mat-icon>
         <!--receipt vpn_key<mat-icon *ngIf="transaction.accountId==4">description</mat-icon*ngIf="transaction.accountId==4">-->
         <mat-icon matTooltip="Registration" *ngIf="transaction.accountId==8">assignment</mat-icon>
         <mat-icon matTooltip="Purcahse Miscellaneous" *ngIf="transaction.accountId==11">star</mat-icon>
@@ -81,24 +82,27 @@
         <mat-icon matTooltip="Business" *ngIf="transaction.accountId==200">business</mat-icon>
         <mat-icon matTooltip="Balance" *ngIf="transaction.accountId==201">compare_arrows</mat-icon>
         <mat-icon matTooltip="Personal Administration" *ngIf="transaction.accountId==16">face</mat-icon>
-        <!--<mat-icon>face</mat-icon>
-        <mat-icon>directions_walk</mat-icon>
-        <mat-icon>emoji_people</mat-icon>-->
-        <!--<mat-icon>compare_arrows</mat-icon>
-        <mat-icon>swap_horiz</mat-icon>
-        <mat-icon>swap_vertical_circle</mat-icon>
-        <mat-icon> import_export</mat-icon>
-        <mat-icon>repeat</mat-icon>
-        <mat-icon>shuffle</mat-icon>
-        <mat-icon> 360</mat-icon>
-        <mat-icon>refresh</mat-icon>
-        <mat-icon>sync</mat-icon>
-        <mat-icon>account_balance</mat-icon>-->
-        <!--<span *ngIf="transaction.accountId==1" matTooltip="Rent">
-          <mat-icon>attach_money payment</mat-icon>
-          <mat-icon>home</mat-icon>
+        <mat-icon matTooltip="Personal Administration" *ngIf="transaction.accountId==18">person_search</mat-icon>
 
-        </span>-->
+        
+        <!--<mat-icon>face</mat-icon>
+  <mat-icon>directions_walk</mat-icon>
+  <mat-icon>emoji_people</mat-icon>-->
+        <!--<mat-icon>compare_arrows</mat-icon>
+  <mat-icon>swap_horiz</mat-icon>
+  <mat-icon>swap_vertical_circle</mat-icon>
+  <mat-icon> import_export</mat-icon>
+  <mat-icon>repeat</mat-icon>
+  <mat-icon>shuffle</mat-icon>
+  <mat-icon> 360</mat-icon>
+  <mat-icon>refresh</mat-icon>
+  <mat-icon>sync</mat-icon>
+  <mat-icon>account_balance</mat-icon>-->
+        <!--<span *ngIf="transaction.accountId==1" matTooltip="Rent">
+    <mat-icon>attach_money payment</mat-icon>
+    <mat-icon>home</mat-icon>
+
+  </span>-->
         {{transaction.comments}}
 
         <span style="color:lightgray">({{transaction.accountId}})</span>

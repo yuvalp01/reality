@@ -13,6 +13,7 @@ namespace Nadlan.ViewModels.Reports
         public decimal NetIncome { get; set; }
         public decimal ROI { get; set; }
         public decimal PredictedROI { get; set; }
+        [Obsolete]
         public decimal InitialRemainder { get; set; }
         public decimal Balance { get; set; }
         public decimal Distributed { get; set; }
@@ -25,6 +26,7 @@ namespace Nadlan.ViewModels.Reports
         public decimal TotalCost { get; set; }
         public decimal RenovationCost { get; set; }
         public decimal ExpensesNoRenovation { get; set; }
+        [Obsolete]
         public decimal Remainder{ get; set; }
         public IEnumerable<AccountSummary> AccountsSum { get; set; }
     }
@@ -33,6 +35,7 @@ namespace Nadlan.ViewModels.Reports
     {
         public decimal GrossIncome { get; set; }
         public decimal Expenses { get; set; }
+        [Obsolete]
         public decimal Tax { get; set; }
         public decimal NetIncome { get; set; }
         //public decimal ForDistribution { get; set; }

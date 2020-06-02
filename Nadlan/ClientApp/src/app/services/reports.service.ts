@@ -25,12 +25,12 @@ export class ReportService {
     let url = this.baseUrl + `api/reports/GetIncomeReport/${apartmentId}/${year}`;
     return this.httpClient.get<IIncomeReport>(url);
   }
-  getAccountBalance(accountId: number): Observable<number> {
+  //getAccountBalance(accountId: number): Observable<number> {
 
-    //let url = this.baseUrl + 'api/GetIncomeReports/' + apartmentId + '/' + year;
-    let url = this.baseUrl + `api/reports/GetBalance/${accountId}`;
-    return this.httpClient.get<number>(url);
-  }
+  //  //let url = this.baseUrl + 'api/GetIncomeReports/' + apartmentId + '/' + year;
+  //  let url = this.baseUrl + `api/reports/GetBalance/${accountId}`;
+  //  return this.httpClient.get<number>(url);
+  //}
   //getExpensesBalance(): Observable<number> {
 
   //  let url = `${this.baseUrl}api/reports/GetExpensesBalance/`;

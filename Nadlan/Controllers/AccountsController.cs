@@ -27,7 +27,7 @@ namespace Nadlan.Controllers
         [HttpGet]
         public IEnumerable<Account> GetAccount()
         {
-            return _context.Accounts;
+            return _context.Accounts.OrderBy(a=>a.DisplayOrder);
         }
 
         // GET: api/Accounts/5
@@ -54,35 +54,36 @@ namespace Nadlan.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAccount([FromRoute] int id, [FromBody] Apartment account)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            throw new NotImplementedException("It is not possible to change account from the API");
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
-            if (id != account.Id)
-            {
-                return BadRequest();
-            }
+            //if (id != account.Id)
+            //{
+            //    return BadRequest();
+            //}
 
-            _context.Entry(account).State = EntityState.Modified;
+            //_context.Entry(account).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AccountExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            //try
+            //{
+            //    await _context.SaveChangesAsync();
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //    if (!AccountExists(id))
+            //    {
+            //        return NotFound();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
 
-            return NoContent();
+            //return NoContent();
         }
 
         // POST: api/Accounts
@@ -120,21 +121,22 @@ namespace Nadlan.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccount([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            throw new NotImplementedException("It is not possible to delete account from the API");
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
-            var account = await _context.Accounts.FindAsync(id);
-            if (account == null)
-            {
-                return NotFound();
-            }
+            //var account = await _context.Accounts.FindAsync(id);
+            //if (account == null)
+            //{
+            //    return NotFound();
+            //}
 
-            _context.Accounts.Remove(account);
-            await _context.SaveChangesAsync();
+            //_context.Accounts.Remove(account);
+            //await _context.SaveChangesAsync();
 
-            return Ok(account);
+            //return Ok(account);
         }
 
         private bool AccountExists(int id)

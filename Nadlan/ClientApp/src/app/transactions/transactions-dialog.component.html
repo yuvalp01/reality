@@ -1,12 +1,14 @@
 <h1 mat-dialog-title style="font-weight:bold">{{data.accountName}}</h1>
 
 <div class="transactions-list">
+  <button mat-button color="primary" (click)="exportAsXLSX()">Export to Excel</button>
+
   <table id="transactions-popup" mat-table [dataSource]="data.transactions">
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef>ID</th>
       <td mat-cell *matCellDef="let transaction">{{transaction.id }}</td>
     </ng-container>
-    <ng-container  matColumnDef="ptid">
+    <ng-container matColumnDef="ptid">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let transaction">
         <mat-icon matTooltip="Paid directly via bank account" *ngIf="transaction.personalTransactionId==-1">credit_card</mat-icon>
@@ -18,10 +20,11 @@
       </td>
     </ng-container>
     <ng-container matColumnDef="date">
+      er
+      at
       <th mat-header-cell *matHeaderCellDef>Date</th>
       <td mat-cell *matCellDef="let transaction">
         <!--<mat-icon *ngIf="transaction.personalTransactionId==-1">hourglass_full</mat-icon>-->
-
         {{transaction.date | date:'dd-MM-yyyy'}}
       </td>
     </ng-container>

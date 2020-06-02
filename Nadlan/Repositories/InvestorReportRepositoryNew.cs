@@ -70,7 +70,7 @@ namespace Nadlan.Repositories
                 portfolioLineReport.Apartment = apartment.Address;
                 portfolioLineReport.PurchaseDate = apartment.PurchaseDate;
                 portfolioLineReport.Ownership = portfolioLine.Percentage;
-                portfolioLineReport.Investment = await GetTotalInvestment(portfolioLine) * portfolioLine.Percentage;
+                portfolioLineReport.Investment =  GetTotalInvestment(portfolioLine) * portfolioLine.Percentage;
                 portfolioLineReport.PendingProfits = GetPendingProfit(portfolioLine) * portfolioLine.Percentage;
                 portfolioLineReport.Distributed =  GetGeneralDistributionPerInvestor(portfolioLine) * -1 * portfolioLine.Percentage;
                 ValidateWithPersonalTransactions(portfolioLineReport, portfolioLine);
@@ -79,17 +79,19 @@ namespace Nadlan.Repositories
             return portfolioReportLines;
         }
 
-        private Task<decimal> GetTotalInvestment(Portfolio portfolioLine)
+        private decimal GetTotalInvestment(Portfolio portfolioLine)
         {
+            var distributionPredicate = PurchaseFilters.GetInvestmentFilter();
+
             var totalInvestment = Context.Transactions
-                .Where(a => a.ApartmentId == portfolioLine.Apartment.Id
-                         && a.AccountId == 13)
-                .Select(a => a.Amount).FirstOrDefaultAsync();
+                .Where(distributionPredicate)
+                .Where(a => a.ApartmentId == portfolioLine.Apartment.Id)                        
+                .Select(a => a.Amount).FirstOrDefault();
             return totalInvestment;
         }
         private decimal GetGeneralDistributionPerInvestor(Portfolio portfolioLine)
         {
-            var distributionPredicate = PredicateFilters.GetBasicDistributionFilter();
+            var distributionPredicate = NonPurchaseFilters.GetAllDistributionsFilter();
 
             var distributed = Context.Transactions
                 .Include(a => a.Account)
@@ -102,7 +104,7 @@ namespace Nadlan.Repositories
 
         private decimal GetPendingProfit(Portfolio portfolioLine)
         {
-            var profitPredicate = PredicateFilters.GetProfitAfterDistributionFilter();
+            var profitPredicate = NonPurchaseFilters.GetProfitIncludingDistributionsFilter();
             var profit = Context.Transactions
                 .Include(a => a.Account)
                 .Where(profitPredicate)

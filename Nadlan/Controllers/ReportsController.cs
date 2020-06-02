@@ -19,12 +19,14 @@ namespace Nadlan.Controllers
     [ApiController]
     public class ReportsController : ControllerBase
     {
-        private readonly IRepositoryWrapper _repositoryWraper;
+        private readonly ApartmentReportsRepositoryWrapper _repositoryWraper;
+        private readonly InvestorReportRepository _investorReportWraper;
         private readonly IMapper _mapper;
 
         public ReportsController(IRepositoryWrapper repositoryWrapper, NadlanConext context, IMapper mapper)
         {
-            _repositoryWraper = repositoryWrapper;
+            _repositoryWraper = new ApartmentReportsRepositoryWrapper(context);
+            _investorReportWraper = new InvestorReportRepository(context);
             _mapper = mapper;
         }
 
@@ -35,7 +37,8 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
-            ApartmentDto apartmentDto = await _repositoryWraper.ApartmentReport.GetApartmentInfo(apartmentId);
+            //ApartmentDto apartmentDto = await _repositoryWraper.ApartmentReport.GetApartmentInfo(apartmentId);
+            ApartmentDto apartmentDto = await _repositoryWraper.GeneralView.GetApartmentInfo(apartmentId);
             return Ok(apartmentDto);
         }
 
@@ -48,23 +51,23 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
 
-            InvestorReportOverview investorReportOverview = await _repositoryWraper.InvestorReport.GetInvestorReport(accountId);
+            InvestorReportOverview investorReportOverview = await _investorReportWraper.GetInvestorReport(accountId);
 
             return Ok(investorReportOverview);
         }
-        //TODO: check if in use
-        [HttpGet("GetBalance/{accountId}")]
-        public async Task<IActionResult> GetBalance([FromRoute]  int accountId)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        ////TODO: check if in use
+        //[HttpGet("GetBalance/{accountId}")]
+        //public async Task<IActionResult> GetBalance([FromRoute]  int accountId)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            decimal balance = await _repositoryWraper.ApartmentReport.GetBalance(accountId);
+        //    decimal balance = await _repositoryWraper.ApartmentReport.GetBalance(accountId);
 
-            return Ok(balance);
-        }
+        //    return Ok(balance);
+        //}
 
 
         [HttpGet("GetPersonalBalance/{stakeholderId}")]
@@ -75,7 +78,7 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
 
-            decimal balance = await _repositoryWraper.InvestorReport.GetPersonalBalance(stakeholderId);
+            decimal balance = await _investorReportWraper.GetPersonalBalance(stakeholderId);
 
             return Ok(balance);
         }
@@ -87,7 +90,7 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
 
-            DiagnosticReport diagnosticReport = await _repositoryWraper.ApartmentReport.GetDiagnosticReport(diagnosticRequest);
+            DiagnosticReport diagnosticReport = await _repositoryWraper.Diagnostic.GetDiagnosticReport(diagnosticRequest);
             if (diagnosticReport == null)
             {
                 return NotFound();
@@ -105,7 +108,7 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
 
-            SummaryReport purchaseReport = await _repositoryWraper.ApartmentReport.GetSummaryReport(apartmentId);
+            SummaryReport purchaseReport = await _repositoryWraper.Summary.GetSummaryReport(apartmentId);
             if (purchaseReport == null)
             {
                 return NotFound();
@@ -123,7 +126,7 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
 
-            PurchaseReport purchaseReport = await _repositoryWraper.ApartmentReport.GetPurchaseReport(apartmentId);
+            PurchaseReport purchaseReport = await _repositoryWraper.Purchase.GetPurchaseReport(apartmentId);
             if (purchaseReport == null)
             {
                 return NotFound();
@@ -141,7 +144,7 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
 
-            IncomeReport summaryReport = await _repositoryWraper.ApartmentReport.GetIncomeReport(apartmentId, year);
+            IncomeReport summaryReport = await _repositoryWraper.Income.GetIncomeReport(apartmentId, year);
 
             if (summaryReport == null)
             {

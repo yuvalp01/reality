@@ -30,7 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Repositories\ApartmentReports\ApartmentReportRepository.cs" />
+    <Compile Remove="Repositories\ApartmentReports\ApartmentReportRepositoryNew_old.cs" />
     <Compile Remove="Repositories\ApartmentRepository.cs" />
+    <Compile Remove="Repositories\InvestorReportRepository.cs" />
     <Compile Remove="Repositories\RenovationRepository.cs" />
   </ItemGroup>
 

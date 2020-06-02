@@ -2,6 +2,8 @@ import { Component, Inject } from "@angular/core";
 import {  MatDialogRef, MAT_DIALOG_DATA, MatDialog   } from "@angular/material";
 import { SecurityService } from "../security/security.service";
 import { TransactionFormComponent } from "./transaction-form/transaction-form.component";
+import { ExcelService } from "../services/excel.service";
+import { debug } from "util";
 
 
 
@@ -18,6 +20,7 @@ export class TransactionsDialogComponent {
   constructor(
     private dialogRef: MatDialogRef<TransactionsDialogComponent>,
     //private securityService: SecurityService,
+    private excelService: ExcelService,
     private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     //if (securityService.hasClaim('admin')) {
@@ -33,5 +36,10 @@ export class TransactionsDialogComponent {
       data: { transactionId: _transactionId }
     });
     dialogRef.componentInstance.refreshEmitter.subscribe(() => { });
+  }
+  exportAsXLSX(): void {
+    //this.data.data.forEach(a => delete a.id);
+    //this.data.data.forEach(a => delete a.stakeholderId);
+    this.excelService.exportAsExcelFile(this.data.transactions, 'Transactions');
   }
 }

@@ -10,6 +10,7 @@ namespace Nadlan.Models
         public bool IsIncome { get; set; }
         public int AccountTypeId { get; set; }
         public AccountType AccountType { get; set; }
+        public int DisplayOrder { get; set; }
 
     }
     [Table("accountTypes", Schema = "nadlan")]
