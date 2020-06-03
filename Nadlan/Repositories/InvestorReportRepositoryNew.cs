@@ -11,6 +11,8 @@ namespace Nadlan.Repositories
 {
     public class InvestorReportRepository : Repository<Transaction>
     {
+        private PurchaseFilters purchaseFilters = new PurchaseFilters();
+        private NonPurchaseFilters nonPurchaseFilters = new NonPurchaseFilters();
 
         public InvestorReportRepository(NadlanConext context) : base(context)
         {
@@ -81,7 +83,7 @@ namespace Nadlan.Repositories
 
         private decimal GetTotalInvestment(Portfolio portfolioLine)
         {
-            var distributionPredicate = PurchaseFilters.GetInvestmentFilter();
+            var distributionPredicate = purchaseFilters.GetInvestmentFilter();
 
             var totalInvestment = Context.Transactions
                 .Where(distributionPredicate)
@@ -91,7 +93,7 @@ namespace Nadlan.Repositories
         }
         private decimal GetGeneralDistributionPerInvestor(Portfolio portfolioLine)
         {
-            var distributionPredicate = NonPurchaseFilters.GetAllDistributionsFilter();
+            var distributionPredicate = nonPurchaseFilters.GetAllDistributionsFilter();
 
             var distributed = Context.Transactions
                 .Include(a => a.Account)
@@ -104,7 +106,7 @@ namespace Nadlan.Repositories
 
         private decimal GetPendingProfit(Portfolio portfolioLine)
         {
-            var profitPredicate = NonPurchaseFilters.GetProfitIncludingDistributionsFilter();
+            var profitPredicate = nonPurchaseFilters.GetProfitIncludingDistributionsFilter();
             var profit = Context.Transactions
                 .Include(a => a.Account)
                 .Where(profitPredicate)

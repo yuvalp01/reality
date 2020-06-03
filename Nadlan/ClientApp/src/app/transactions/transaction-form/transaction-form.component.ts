@@ -5,8 +5,8 @@ import { take } from 'rxjs/operators';
 import { IApartment, IAccount, ITransaction } from '../../models';
 import { TransactionService } from '../../services/transaction.service';
 import { MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
-import { ApartmentService } from 'src/app/services/apartment.service';
-import { AccountService } from 'src/app/services/account.service';
+import { ApartmentService } from '../../services/apartment.service';
+import { AccountService } from '../../services/account.service';
 
 
 @Component({

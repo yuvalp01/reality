@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Nadlan.Models;
+﻿using Nadlan.Models;
+using System;
 
 namespace Nadlan.BusinessLogic
 {
     public class NonPurchaseFilters
     {
 
-        public static Func<Transaction, bool> GetProfitIncludingDistributionsFilter()
+        public  Func<Transaction, bool> GetProfitIncludingDistributionsFilter()
         {
             Func<Transaction, bool> basicPredicate = t =>
                         !t.IsDeleted &&
@@ -20,7 +17,7 @@ namespace Nadlan.BusinessLogic
             return basicPredicate;
         }
 
-        public static Func<Transaction, bool> GetProfitRemoveDistributionFilter()
+        public  Func<Transaction, bool> GetProfitRemoveDistributionFilter()
         {
             Func<Transaction, bool> basic = GetProfitIncludingDistributionsFilter();
             //int[] ExcludedAccounts = { 100,198 };//Distribution and deposit account account.
@@ -31,16 +28,16 @@ namespace Nadlan.BusinessLogic
             return basicProfitPredicate;
         }
 
-        public static Func<Transaction, bool> GetAllDistributionsFilter()
+        public  Func<Transaction, bool> GetAllDistributionsFilter()
         {
             Func<Transaction, bool> basic = GetProfitIncludingDistributionsFilter();
-            Func<Transaction, bool> distributionPredicate = t => 
+            Func<Transaction, bool> distributionPredicate = t =>
                         basic(t) &&
-                        t.AccountId==100;//Distribution account
+                        t.AccountId == 100;//Distribution account
             return distributionPredicate;
         }
 
-        public static Func<Transaction, bool> GetGrossIncomeFilter()
+        public  Func<Transaction, bool> GetGrossIncomeFilter()
         {
             Func<Transaction, bool> basic = GetProfitRemoveDistributionFilter();
             Func<Transaction, bool> distributionPredicate = t =>
@@ -48,13 +45,13 @@ namespace Nadlan.BusinessLogic
                         t.AccountId == 1;//Rent
             return distributionPredicate;
         }
-        public static Func<Transaction, bool> GetAllExpensesFilter()
+        public Func<Transaction, bool> GetAllExpensesFilter()
         {
             Func<Transaction, bool> basic = GetProfitRemoveDistributionFilter();
-            Func<Transaction, bool> distributionPredicate = t =>
+            Func<Transaction, bool> expensesFilter = t =>
                         basic(t) &&
                         t.AccountId != 1;//Except for rent
-            return distributionPredicate;
+            return expensesFilter;
         }
     }
 }

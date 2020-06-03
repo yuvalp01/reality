@@ -11,16 +11,22 @@ namespace Nadlan.Repositories.ApartmentReports
 {
     public class PurchaseReportRepository : ApartmentReportRepositoryNew
     {
+        private PurchaseFilters purchaseFilters = new PurchaseFilters();
+
         public PurchaseReportRepository(NadlanConext conext) : base(conext)
         {
         }
+
+
         public async Task<PurchaseReport> GetPurchaseReport(int apartmentId)
         {
-            var investment = GetInvestment(apartmentId);
-            var totalCost = GetTotalCost(apartmentId);
-            var renovationCost = GetRenovationCost(apartmentId);
-            var expensesNoRenovation = GetExpensesNoRenovation(apartmentId);
-            var accountSummary = GetAccountSummaryPurchase(apartmentId);
+            var allPurchase = GetAllPurchase(apartmentId);
+
+            var investment = GetInvestment(allPurchase);
+            var totalCost = GetTotalCost(allPurchase);
+            var renovationCost = allPurchase.Where(purchaseFilters.GetRenovationFilter());
+            var expensesNoRenovation = allPurchase.Where(purchaseFilters.GetCostNotRenovataionFilter());
+            var accountSummary = GetAccountSummaryPurchase(allPurchase);
 
             PurchaseReport purchaseReport = new PurchaseReport
             {
@@ -31,36 +37,16 @@ namespace Nadlan.Repositories.ApartmentReports
                 AccountsSum = await Task.FromResult(accountSummary.ToList())
             };
 
-            //purchaseReport.Remainder = purchaseReport.Investment + purchaseReport.TotalCost;
-
             purchaseReport.AccountsSum = KeepRenovationAccountsTogether(purchaseReport.AccountsSum);
-
 
             return purchaseReport;
         }
-        private IEnumerable<Transaction> GetRenovationCost(int apartmetId)
+
+        private IEnumerable<AccountSummary> GetAccountSummaryPurchase(IEnumerable<Transaction> transactions)
         {
-            var basic = PurchaseFilters.GetRenovationFilter();
-            return Context.Transactions
-                 .Include(a => a.Account)
-                 .Where(basic)
-                 .Where(a => a.ApartmentId == apartmetId);
-        }
-        private IEnumerable<Transaction> GetExpensesNoRenovation(int apartmetId)
-        {
-            var basic = PurchaseFilters.GetCostNotRenovataionFilter();
-            return Context.Transactions
-                 .Include(a => a.Account)
-                 .Where(basic)
-                 .Where(a => a.ApartmentId == apartmetId);
-        }
-        private IEnumerable<AccountSummary> GetAccountSummaryPurchase(int apartmetId)
-        {
-            var basic = PurchaseFilters.GetTotalCostFilter();
-            return Context.Transactions
-                .Include(a => a.Account)
+            var basic = purchaseFilters.GetTotalCostFilter();
+            return transactions
                 .Where(basic)
-                .Where(a => a.ApartmentId == apartmetId)
                 .GroupBy(g => new { g.AccountId, g.Account.Name })
                 .OrderBy(a => a.Sum(s => s.Amount))
                 .Select(a => new AccountSummary
@@ -70,6 +56,10 @@ namespace Nadlan.Repositories.ApartmentReports
                     Total = Math.Abs(a.Sum(s => s.Amount))
                 });
         }
+
+
+
+
         private List<AccountSummary> KeepRenovationAccountsTogether(IEnumerable<AccountSummary> accnoutsList_)
         {
             var accnoutsList = accnoutsList_.ToList();
@@ -106,3 +96,48 @@ namespace Nadlan.Repositories.ApartmentReports
 
     }
 }
+//private IEnumerable<Transaction> GetExpensesNoRenovation(IEnumerable<Transaction> transactions)
+//{
+//    var basic = purchaseFilters.GetCostNotRenovataionFilter();
+//    return transactions.Where(purchaseFilters.GetCostNotRenovataionFilter());
+//}
+//private IEnumerable<AccountSummary> GetAccountSummaryPurchase(int apartmetId)
+//{
+//    var basic = purchaseFilters.GetTotalCostFilter();
+//    return Context.Transactions
+//        .Include(a => a.Account)
+//        .Where(basic)
+//        .Where(a => a.ApartmentId == apartmetId)
+//        .GroupBy(g => new { g.AccountId, g.Account.Name })
+//        .OrderBy(a => a.Sum(s => s.Amount))
+//        .Select(a => new AccountSummary
+//        {
+//            AccountId = a.Key.AccountId,
+//            Name = a.Key.Name,
+//            Total = Math.Abs(a.Sum(s => s.Amount))
+//        });
+//}
+
+//private IEnumerable<Transaction> GetRenovationCost(IEnumerable<Transaction> transactions)
+//{
+//    var basic = purchaseFilters.GetRenovationFilter();
+//    return transactions.Where(basic);
+//}
+
+//private IEnumerable<Transaction> GetRenovationCost(int apartmetId)
+//{
+//    var basic = purchaseFilters.GetRenovationFilter();
+//    return Context.Transactions
+//         .Include(a => a.Account)
+//         .Where(basic)
+//         .Where(a => a.ApartmentId == apartmetId);
+//}
+
+//private IEnumerable<Transaction> GetExpensesNoRenovation(int apartmetId)
+//{
+//    var basic = purchaseFilters.GetCostNotRenovataionFilter();
+//    return Context.Transactions
+//         .Include(a => a.Account)
+//         .Where(basic)
+//         .Where(a => a.ApartmentId == apartmetId);
+//}

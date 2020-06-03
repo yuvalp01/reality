@@ -212,17 +212,20 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
+            await _repositoryWraper.Transaction.SoftDelete(id);
+            return Ok();
 
-            var transaction = await _context.Transactions.FindAsync(id);
-            if (transaction == null)
-            {
-                return NotFound();
-            }
 
-            _context.Transactions.Remove(transaction);
-            await _context.SaveChangesAsync();
+            //var transaction = await _context.Transactions.FindAsync(id);
+            //if (transaction == null)
+            //{
+            //    return NotFound();
+            //}
 
-            return Ok(transaction);
+            //_context.Transactions.Remove(transaction);
+            //await _context.SaveChangesAsync();
+
+            //return Ok(transaction);
         }
 
         private bool TransactionExists(int id)

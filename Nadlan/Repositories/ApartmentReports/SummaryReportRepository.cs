@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Nadlan.BusinessLogic;
+﻿using Nadlan.BusinessLogic;
 using Nadlan.Models;
 using Nadlan.ViewModels.Reports;
 using System;
@@ -12,18 +11,27 @@ namespace Nadlan.Repositories.ApartmentReports
 {
     public class SummaryReportRepository : ApartmentReportRepositoryNew
     {
-        public SummaryReportRepository(NadlanConext conext):base( conext)
+        private PurchaseFilters purchaseFilters = new PurchaseFilters();
+        private NonPurchaseFilters nonPurchaseFilters = new NonPurchaseFilters();
+
+        public SummaryReportRepository(NadlanConext conext) : base(conext)
         {
 
         }
 
         public async Task<SummaryReport> GetSummaryReport(int apartmentId)
         {
+            var allNonPurchase = GetAllNonPurchase(apartmentId);
+            var allPurchase = GetAllPurchase(apartmentId);
 
-            var investment = GetInvestment(apartmentId);
-            var netIncome = GetNetIncome(apartmentId,0);//all years
-            var totalCost = GetTotalCost(apartmentId);
-            var distributed = GetAllDistributions(apartmentId);
+            var investment = GetInvestment(allPurchase);
+            var netIncome = GetNetIncome(allNonPurchase, 0);//all years
+            var distributed = GetAllDistributions(allNonPurchase);
+
+            //var netIncome = GetNetIncome(apartmentId,0);//all years
+            //var investment = GetInvestment(allPurchase);
+            //var totalCost = GetTotalCost(apartmentId);
+            //var distributed = GetAllDistributions(apartmentId);
 
             SummaryReport summaryReport = new SummaryReport
             {
@@ -32,7 +40,7 @@ namespace Nadlan.Repositories.ApartmentReports
                 Distributed = await Task.FromResult(distributed.Sum(a => a.Amount)),
             };
             //summaryReport.InitialRemainder = summaryReport.Investment + await Task.FromResult(totalCost.Sum(a => a.Amount));
-            summaryReport.Balance =  summaryReport.NetIncome + summaryReport.Distributed;
+            summaryReport.Balance = summaryReport.NetIncome + summaryReport.Distributed;
             //summaryReport.Balance = summaryReport.InitialRemainder + await Task.FromResult(accumulated.Sum(a => a.Amount));
             //summaryReport.Balance = summaryReport.InitialRemainder + summaryReport.NetIncome;
 
@@ -45,15 +53,19 @@ namespace Nadlan.Repositories.ApartmentReports
             return summaryReport;
         }
 
-        private IEnumerable<Transaction> GetAllDistributions(int apartmentId)
+        //private IEnumerable<Transaction> GetAllDistributions(int apartmentId)
+        //{
+        //    var basic = nonPurchaseFilters.GetAllDistributionsFilter();
+        //    return Context.Transactions
+        //          .Include(a => a.Account)
+        //          .Where(basic)
+        //          .Where(a => a.ApartmentId==apartmentId);
+        //}
+        private IEnumerable<Transaction> GetAllDistributions(IEnumerable<Transaction> transactions)
         {
-            var basic = NonPurchaseFilters.GetAllDistributionsFilter();
-            return Context.Transactions
-                  .Include(a => a.Account)
-                  .Where(basic)
-                  .Where(a => a.ApartmentId==apartmentId);
+            var basic = nonPurchaseFilters.GetAllDistributionsFilter();
+            return transactions.Where(basic);
         }
-
 
         private decimal CalcPredictedROI(int apartmentId, decimal investment)
         {

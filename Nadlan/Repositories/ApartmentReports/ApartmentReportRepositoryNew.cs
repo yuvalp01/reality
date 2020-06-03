@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nadlan.BusinessLogic;
 using Nadlan.Models;
-using Nadlan.ViewModels;
-using Nadlan.ViewModels.Reports;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,46 +12,87 @@ namespace Nadlan.Repositories.ApartmentReports
     {
 
         protected NadlanConext Context { get; set; }
+        private PurchaseFilters purchaseFilters = new PurchaseFilters();
+        private NonPurchaseFilters nonPurchaseFilters = new NonPurchaseFilters();
+
         public ApartmentReportRepositoryNew(NadlanConext conext)
         {
             Context = conext;
         }
 
-        protected IEnumerable<Transaction> GetInvestment(int apartmetId)
+        //protected IEnumerable<Transaction> GetInvestment(int apartmetId)
+        //{
+        //    var basic = purchaseFilters.GetInvestmentFilter();
+        //    return Context.Transactions
+        //         .Include(a => a.Account)
+        //         .Where(basic)
+        //         .Where(a => a.ApartmentId == apartmetId);
+        //}
+
+        protected IEnumerable<Transaction> GetInvestment(IEnumerable<Transaction> transactions)
         {
-            var basic = PurchaseFilters.GetInvestmentFilter();
-            return Context.Transactions
-                 .Include(a => a.Account)
-                 .Where(basic)
-                 .Where(a=>a.ApartmentId ==apartmetId);
+            var basic = purchaseFilters.GetInvestmentFilter();
+            return transactions
+                 .Where(basic);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="apartmetId"></param>
         /// <param name="year">0 for all years</param>
-        /// <returns></returns>
-        protected IEnumerable<Transaction> GetNetIncome(int apartmetId, int year)
+        protected IEnumerable<Transaction> GetNetIncome(IEnumerable<Transaction> transactions, int year)
         {
-            var basic = NonPurchaseFilters.GetProfitRemoveDistributionFilter();
-            if (year != 0) basic = t => basic(t) && t.Date.Year == year;
+            var basic = nonPurchaseFilters.GetProfitRemoveDistributionFilter();
+            //if (year != 0) basic = t => basic(t) && t.Date.Year == year;
+            var result = transactions.Where(basic);
+            if (year != 0) return result.Where(a => a.Date.Year == year);
+            return result;
+        }
 
-            return Context.Transactions
+        protected IEnumerable<Transaction> GetAllNonPurchase(int apartmetId)
+        {
+            var basic = nonPurchaseFilters.GetProfitIncludingDistributionsFilter();
+            var result = Context.Transactions
                  .Include(a => a.Account)
                  .Where(basic)
                  .Where(a => a.ApartmentId == apartmetId);
+            return result;
         }
 
-        protected IEnumerable<Transaction> GetTotalCost(int apartmentId)
+        protected IEnumerable<Transaction> GetAllPurchase(int apartmetId)
         {
-            var basic = PurchaseFilters.GetTotalCostFilter();
-            return Context.Transactions
-                  .Include(a => a.Account)
-                  .Where(basic)
-                  .Where(a => !a.Account.IsIncome)
-                  .Where(a => a.ApartmentId==apartmentId);
+            var basic = purchaseFilters.GetAllPurchaseFilter();
+            var result = Context.Transactions
+                 .Include(a => a.Account)
+                 .Where(basic)
+                 .Where(a => a.ApartmentId == apartmetId);
+            return result;
         }
+
+        //protected IEnumerable<Transaction> GetNetIncome(int apartmetId, int year)
+        //{
+        //    var basic = nonPurchaseFilters.GetProfitRemoveDistributionFilter();
+        //    if (year != 0) basic = t => basic(t) && t.Date.Year == year;
+
+        //    return Context.Transactions
+        //         .Include(a => a.Account)
+        //         .Where(basic)
+        //         .Where(a => a.ApartmentId == apartmetId);
+        //}
+
+        //protected IEnumerable<Transaction> GetTotalCost(int apartmentId)
+        //{
+        //    var basic = purchaseFilters.GetTotalCostFilter();
+        //    return Context.Transactions
+        //          .Include(a => a.Account)
+        //          .Where(basic)
+        //          .Where(a => !a.Account.IsIncome)
+        //          .Where(a => a.ApartmentId == apartmentId);
+        //}
+        protected IEnumerable<Transaction> GetTotalCost(IEnumerable<Transaction> transactions)
+        {
+            var basic = purchaseFilters.GetTotalCostFilter();
+            return transactions.Where(basic);
+        }
+
+
 
         public async Task<decimal> GetExpensesBalance()
         {

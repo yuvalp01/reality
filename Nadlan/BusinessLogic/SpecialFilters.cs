@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Nadlan.Models;
+﻿using Nadlan.Models;
+using System;
 
 namespace Nadlan.BusinessLogic
 {
     public class SpecialFilters
     {
 
-        public static Func<Transaction, bool> GetAllDepositFilter()
+        public Func<Transaction, bool> GetAllDepositFilter()
         {
             Func<Transaction, bool> basicPredicate = t =>
                         !t.IsDeleted &&
@@ -19,7 +16,7 @@ namespace Nadlan.BusinessLogic
             return basicPredicate;
         }
 
-        public static Func<Transaction, bool> GetAllBusinessFilter()
+        public Func<Transaction, bool> GetAllBusinessFilter()
         {
             Func<Transaction, bool> basicPredicate = t =>
                         !t.IsDeleted &&
