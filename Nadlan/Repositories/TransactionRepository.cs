@@ -118,8 +118,11 @@ namespace Nadlan.Repositories
 
         private void SwitchIsBusinessExpense(Transaction transaction)
         {
-            ////hours for existing apartment maintances - the the expense of the business
-            if (transaction.AccountId == 4 && transaction.Hours > 0)
+            // The expense is on the business when:
+            //"Business/Geneal" transaction is a business expense and also
+            // when it's hours for apartment maintances (so only apartments with tenants)
+            if (transaction.AccountId == 200
+                ||(transaction.AccountId == 4 && transaction.Hours > 0))
             {
                 transaction.IsBusinessExpense = true;
             }
