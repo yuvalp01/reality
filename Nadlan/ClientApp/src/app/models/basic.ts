@@ -12,7 +12,7 @@ export interface ITransaction {
   isBusinessExpense: boolean;
   isConfirmed: boolean;
   hours: number;
-  isCoveredByInvestor: boolean;
+  //isCoveredByInvestor: boolean;
   personalTransactionId: number;
 }
 

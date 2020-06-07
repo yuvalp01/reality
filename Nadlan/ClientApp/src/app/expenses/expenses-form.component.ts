@@ -55,6 +55,14 @@ export class AddExpenseComponent implements OnInit {
         //In the future, add a checkbox "use investor credit card" 
         //transaction.personalTransactionId = -1;
         transaction.personalTransactionId = 0;//still not covered
+        if (transaction.accountId == 200 || transaction.accountId == 201) {
+          transaction.personalTransactionId = -3;//not relevant
+        }
+        //this is consider as business expense (turns to isbuisiness=1 on the server)
+        if (this.isHourForm && transaction.accountId==4) {
+          transaction.personalTransactionId = -3;
+        }
+
         //
         if (this.isHourForm) {
           transaction.amount = formValues.hours * 9;

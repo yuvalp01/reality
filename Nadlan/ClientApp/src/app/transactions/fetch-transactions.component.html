@@ -17,10 +17,11 @@
   </span>
   <br />
   <!--<mat-slide-toggle (change)="hideShowUnconfirmed($event)">Unconfirmed Only</mat-slide-toggle>-->
-  <mat-slide-toggle (change)="hideShowUnconfirmed($event)" [(ngModel)]="showUnconfirmedOnly">Unconfirmed Only</mat-slide-toggle>
-  <mat-slide-toggle (change)="hideShowNotCovered($event)" [(ngModel)]="showNotCoveredOnly">Not Covered Only</mat-slide-toggle>
-  <mat-slide-toggle (change)="hideShowPurchaseCost($event)" [(ngModel)]="ShowPurchaseCostOnly">Show Purchase Cost Only</mat-slide-toggle>
-
+  <div style="margin:20px">
+    <mat-slide-toggle (change)="hideShowUnconfirmed($event)" [(ngModel)]="showUnconfirmedOnly">Unconfirmed Only</mat-slide-toggle>
+    <mat-slide-toggle (change)="hideShowNotCovered($event)" [(ngModel)]="showNotCoveredOnly">Not Covered Only</mat-slide-toggle>
+    <mat-slide-toggle (change)="hideShowPurchaseCost($event)" [(ngModel)]="ShowPurchaseCostOnly">Show Purchase Cost Only</mat-slide-toggle>
+  </div>
 
 </div>
 
@@ -40,7 +41,7 @@
         *matCellDef="let transaction">
       <!--how_to_reg-->
       <mat-icon matTooltip="Still not covered by the investor"
-                *ngIf="transaction.personalTransactionId == -1">hourglass_full</mat-icon>
+                *ngIf="transaction.personalTransactionId == 0">hourglass_full</mat-icon>
       <span [ngClass]="{
           positive: isPositive(transaction.amount),
           negative: !isPositive(transaction.amount)

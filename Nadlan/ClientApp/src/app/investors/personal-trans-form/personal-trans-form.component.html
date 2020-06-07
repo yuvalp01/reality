@@ -21,6 +21,18 @@
     </fieldset>
     <fieldset>
       <mat-form-field style="width: 100%" appearance="outline">
+        <mat-label>Transaction Type</mat-label>
+        <mat-select formControlName="transactionType">
+          <mat-option [value]="5">Money Transfer</mat-option>
+          <mat-option [value]="10">Paid on Behalf</mat-option>
+          <mat-option [value]="13">Cash Withdrawal</mat-option>
+          <mat-option [value]="20">Distribution</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </fieldset>
+    <fieldset>
+      <mat-form-field style="width: 100%" appearance="outline">
         <mat-label>Apartment</mat-label>
         <mat-select formControlName="apartmentId">
           <mat-option *ngFor="let apartment of apartments" [value]="apartment.id">

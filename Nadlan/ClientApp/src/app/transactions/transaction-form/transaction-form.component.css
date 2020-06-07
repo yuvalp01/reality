@@ -1,7 +1,25 @@
 fieldset {
-height: 70px
+  height: 70px
 }
 /*#dadada*/
 .toggleOff {
   color: #00000061;
+}
+
+.flex-container {
+  display: flex;
+  background-color: DodgerBlue;
+}
+
+  /*.flex-container > div {
+    background-color: #f1f1f1;
+    margin: 10px;
+    padding: 20px;
+    font-size: 30px;
+  }*/
+.flex-container-child {
+  /*background-color: #f1f1f1;*/
+  margin-bottom: 42px;
+  margin-left: 20px;
+  width: 25px;
 }

@@ -9,7 +9,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatChipsModule } from '@angular/material/chips';
-
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
   imports: [
@@ -39,7 +39,8 @@ import { MatChipsModule } from '@angular/material/chips';
     MatMenuModule,
     MatSlideToggleModule,
     MatRadioModule,
-    MatChipsModule
+    MatChipsModule,
+    MatButtonToggleModule
 
     ],
   exports: [
@@ -69,7 +70,8 @@ import { MatChipsModule } from '@angular/material/chips';
     MatMenuModule,
     MatSlideToggleModule,
     MatRadioModule,
-    MatChipsModule
+    MatChipsModule,
+    MatButtonToggleModule
       ],
 })
 export class MyOwnCustomMaterialModule { }

@@ -17,13 +17,64 @@
         <!--<input matInput formControlName="personalTransactionId" type="text" placeholder="Personal Transaction Id">-->
 
       </mat-form-field>
-      <mat-checkbox style="width: 50%; padding-left: 25px" formControlName="isConfirmed">
+      <mat-checkbox style="width: 25%; padding-left: 25px" formControlName="isConfirmed">
         Confirmed?
       </mat-checkbox>
+      <input class="flex-container-child" matInput
+             formControlName="personalTransactionId"
+             value="{{group.value}}"
+             type="text" required>
+      <!--<mat-form-field style="width: 20%; background-color:rebeccapurple" appearance="outline" class="example-full-width">
+        <mat-label>test</mat-label>
+      </mat-form-field>-->
+      <!--<div class="flex-container">
+        <div class="flex-container-child">2</div>
+        <input class="flex-container-child" style="width:50px; background-color:antiquewhite" type="text">
+        <div class="flex-container-child">3</div>
+      </div>-->
+      <!--<input style="width: 25%;padding-left: 25px; background-color:rebeccapurple"
+      matInput value="-4" type="text"
+      required placeholder="personal TransactionId">-->
       <!--<mat-slide-toggle formControlName="isConfirmed">Confirmed</mat-slide-toggle>-->
 
     </fieldset>
-    <fieldset style="height: 33px;">
+    <fieldset>
+      <mat-button-toggle-group formControlName="personalTransactionId"
+                               #group="matButtonToggleGroup"
+                               value="{{transactionFormGroup.controls.personalTransactionId.value}}">
+        <mat-button-toggle value="0" aria-label="Text align left">
+          <!--<mat-icon>format_align_left</mat-icon>-->
+          Not covered yet
+        </mat-button-toggle>
+        <mat-button-toggle value="-1" aria-label="Text align center">
+          Via bank
+          <!--<mat-icon>format_align_center</mat-icon>-->
+        </mat-button-toggle>
+        <mat-button-toggle value="-2" aria-label="Text align right">
+          From funds
+          <!--<mat-icon>format_align_right</mat-icon>-->
+        </mat-button-toggle>
+        <mat-button-toggle value="-3" aria-label="Text align right">
+          <!--<mat-icon>format_align_right</mat-icon>-->
+          Not relevant
+        </mat-button-toggle>
+        <!--<mat-button-toggle value="insert code" disabled aria-label="Text align justify">
+          <mat-icon>format_align_justify</mat-icon>
+        </mat-button-toggle>-->
+      </mat-button-toggle-group>
+      <!--<span class="example-selected-value">Selected value: {{group.value}}</span>-->
+
+
+    </fieldset>
+
+
+    <!--<fieldset>
+      <mat-form-field style="width: 50%" appearance="outline" class="example-full-width">
+        <mat-label>test</mat-label>
+              <input matInput formControlName="personalTransactionId" type="text" required placeholder="personal TransactionId">
+      </mat-form-field>
+    </fieldset>-->
+    <!--<fieldset style="height: 33px;">
       <mat-slide-toggle (change)="switchIsCovered()"
                         [checked]="transactionFormGroup.controls.personalTransactionId.value==-1"
                         [ngClass]="{'toggleOff':transactionFormGroup.controls.personalTransactionId.value==-1}"
@@ -31,8 +82,9 @@
         Paid with investor
       </mat-slide-toggle>
       <span [ngClass]="{'toggleOff':transactionFormGroup.controls.personalTransactionId.value==-1}">
-      (personalTransactionId:{{transactionFormGroup.controls.personalTransactionId.value}})</span>
-    </fieldset>
+        (personalTransactionId:{{transactionFormGroup.controls.personalTransactionId.value}})
+      </span>
+    </fieldset>-->
     <fieldset>
       <mat-form-field style="width: 100%" appearance="outline">
         <mat-label>Apartment</mat-label>
@@ -54,7 +106,8 @@
         </mat-select>
       </mat-form-field>
       <mat-checkbox style="width: 50%; padding-left: 25px" formControlName="isPurchaseCost">
-      Purchase Cost?</mat-checkbox>
+        Purchase Cost?
+      </mat-checkbox>
     </fieldset>
 
     <fieldset>
