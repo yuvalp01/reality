@@ -39,7 +39,7 @@ export class AddExpenseComponent implements OnInit {
   tooltipSign: string = 'Increase your account';
   enableSwitch: boolean = false;
 
-  purchaseCostAccounts: number[] = [6, 7, 8, 11, 12, 13, 16, 17,18];
+  purchaseCostAccounts: number[] = [6, 7, 8, 11, 12, 13, 16, 17, 18];
 
   @Output() refreshEmitter = new EventEmitter();
 
@@ -54,12 +54,12 @@ export class AddExpenseComponent implements OnInit {
         transaction.isPurchaseCost = isPurchaseCost;
         //In the future, add a checkbox "use investor credit card" 
         //transaction.personalTransactionId = -1;
-        transaction.personalTransactionId = 0;//still not covered
+        transaction.personalTransactionId = 0;//most cases: still not covered
         if (transaction.accountId == 200 || transaction.accountId == 201) {
           transaction.personalTransactionId = -3;//not relevant
         }
         //this is consider as business expense (turns to isbuisiness=1 on the server)
-        if (this.isHourForm && transaction.accountId==4) {
+        if (this.isHourForm && transaction.accountId == 4) {
           transaction.personalTransactionId = -3;
         }
 
@@ -139,7 +139,7 @@ export class AddExpenseComponent implements OnInit {
           this.transactionForm.controls['isPurchaseCost'].setValue(false);
 
         }
-        if (accountId==201) {
+        if (accountId == 201) {
           this.transactionForm.controls['apartmentId'].setValue(0);
           this.transactionForm.controls['apartmentId'].disable();
         }
@@ -177,10 +177,13 @@ export class AddExpenseComponent implements OnInit {
 
 
   setSign(accountId: number) {
-    if (accountId == 1 || accountId==198 || accountId == 201) {
-      this.sign = -1;      
+    if (accountId == 1 || accountId == 198 || accountId == 201) {
+      this.sign = -1;
     }
-    if (accountId== 201|| accountId==198) {
+    else {
+      this.sign = 1;
+    }
+    if (accountId == 201 || accountId == 198) {
       this.enableSwitch = true;
     }
     else {
