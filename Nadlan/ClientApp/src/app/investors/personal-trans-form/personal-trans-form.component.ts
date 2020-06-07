@@ -35,9 +35,9 @@ export class PersonalTransFormComponent implements OnInit {
   ngOnInit() {
     this.loadData();
     this.personalTransForm = this.formBuilder.group({
-      stakeholderId: [0, Validators.min(-2)],
+      stakeholderId: [0, Validators.required],
       apartmentId: [0, Validators.min(-2)],
-      transactionType: [null, Validators.min(5)],
+      transactionType: [null, Validators.required],
       amount: [null, Validators.required],
       date: [null, Validators.required],
       comments: ['', Validators.required],
