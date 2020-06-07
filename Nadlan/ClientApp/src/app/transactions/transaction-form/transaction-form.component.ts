@@ -51,6 +51,7 @@ export class TransactionFormComponent implements OnInit {
       amount: [null, Validators.required],
       date: [null, Validators.required],
       isPurchaseCost: [false],
+      isBusinessExpense: [false],
       //isCoveredByInvestor: [false],
       isConfirmed: [false],
       personalTransactionId: [null],
