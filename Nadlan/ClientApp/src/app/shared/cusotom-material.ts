@@ -10,6 +10,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
   imports: [
@@ -40,7 +42,9 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatSlideToggleModule,
     MatRadioModule,
     MatChipsModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule
 
     ],
   exports: [
@@ -71,7 +75,9 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatSlideToggleModule,
     MatRadioModule,
     MatChipsModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule
       ],
 })
 export class MyOwnCustomMaterialModule { }

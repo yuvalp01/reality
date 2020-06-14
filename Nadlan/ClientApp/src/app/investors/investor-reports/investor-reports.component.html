@@ -6,6 +6,7 @@
     <mat-tab label="Overview">
       <mat-card>
         <mat-card-title>Overview</mat-card-title>
+        <mat-card-subtitle>This view is about the situation between us. If the "Total Balance" is positive, it means that I owe you that sum.</mat-card-subtitle>
         <mat-card-content>
           <mat-list>
             <!--<mat-list-item (click)="showTrans(10)" style="cursor:pointer;">-->
@@ -29,7 +30,7 @@
 
             <!-- (click)="showDistributions() " style="cursor:pointer;"
 
-            <!--Total amount distributed from all apartments so far-->
+      <!--Total amount distributed from all apartments so far-->
             <mat-list-item>
               <mat-icon mat-list-icon>business_center</mat-icon>
               <span matTooltip="This is your proportional profit so far for this year that will be distributed to your Cash Balance at the end of the year.">
@@ -56,7 +57,7 @@
       <mat-card>
         <mat-card>
           <mat-card-title>Portfolio</mat-card-title>
-
+          <mat-card-subtitle>This view is about the situation between us. If the "Total Balance" is positive, it means that I owe you that sum.</mat-card-subtitle>
           <table id="portfolio" *ngIf="investorReportOverview" mat-table [dataSource]="investorReportOverview?.portfolioLines" class="mat-elevation-z8">
 
             <ng-container matColumnDef="apartment">
@@ -64,8 +65,8 @@
               <th mat-header-cell *matHeaderCellDef>Apartment</th>
               <td mat-cell *matCellDef="let line">
                 <!--<a class="nav-link text-dark" routerLinkActive="link-active" [routerLink]="['/investor-reports',this.stakeholderId,line.apartmentId]"> {{line.apartment}}</a>-->
-                
-                <a mat-button routerLinkActive="link-active" (click)="showApartmentReport(line.apartmentId)">{{line.apartment}}</a>
+
+                <a mat-button routerLinkActive="link-active" (click)="showApartmentReport(line.apartmentId, line.ownership)">{{line.apartment}}</a>
               </td>
 
               <td mat-footer-cell *matFooterCellDef> Total</td>
@@ -122,6 +123,9 @@
     </mat-tab>
     <mat-tab label="Transactions">
       <mat-card>
+        <mat-card-title>Transactions</mat-card-title>
+        <mat-card-subtitle>This view is about the situation between us. If the "Total Balance" is positive, it means that I owe you that sum.</mat-card-subtitle>
+
         <app-personal-trans [stakeholderId]="stakeholderId" [editable]="false"></app-personal-trans>
       </mat-card>
     </mat-tab>

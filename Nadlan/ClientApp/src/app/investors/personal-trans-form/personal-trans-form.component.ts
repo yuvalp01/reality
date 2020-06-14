@@ -127,24 +127,10 @@ export class PersonalTransFormComponent implements OnInit {
     this.personalTrans = result;
     this.personalTransForm.patchValue(this.personalTrans);
     this.personalTransForm.get('stakeholderId').disable();;
-    //let stakeholderIdControl =
-    //stakeholderIdControl.disable();
   }
 
 
 
-
-  //initializeNewTransaction(): IPersonalTransaction {
-
-  //  return {
-  //    id: 0,
-  //    Amount: null,
-  //    Comments: '',
-  //    date: null,
-  //    StakeholderId: null
-  //  }
-
-  //}
 
   public fixUtcDate(dateIn) {
     ///fix UTC issue:

@@ -8,5 +8,7 @@ export function getRole(userId: number):number {
       return 3;
   }
 }
-
+export function printId(id:any) {
+  console.log(id);
+}
 //export const role: number;

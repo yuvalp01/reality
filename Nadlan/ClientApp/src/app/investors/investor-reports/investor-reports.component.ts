@@ -68,12 +68,12 @@ export class InvestorReportComponent implements OnInit {
       , error => console.error(error));
 
   }
-  showApartmentReport(apartmentId) {
+  showApartmentReport(apartmentId, ownership) {
 
     const dialogRef = this.dialog.open(ApartmentReportsComponent, {
       height: 'auto',
       width: 'auto',
-      data: { apartmentId: apartmentId }
+      data: { apartmentId: apartmentId, investorPercentage: ownership }
     });
   }
 

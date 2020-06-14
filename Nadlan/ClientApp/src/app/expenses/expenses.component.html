@@ -24,7 +24,10 @@
     </mat-form-field>
 
   </div>
-
+  <div *ngIf="dataSourceAssistant.data.length==0" style="margin-left: 50%;;">
+    <mat-spinner 
+    diameter="40"></mat-spinner>
+  </div>
   <table mat-table [dataSource]="dataSourceAssistant" matSort class="mat-elevation-z8">
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>

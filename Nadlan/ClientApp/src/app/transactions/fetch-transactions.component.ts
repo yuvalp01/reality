@@ -4,8 +4,7 @@ import { TransactionService } from '../services/transaction.service';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { TransactionFormComponent } from './transaction-form/transaction-form.component';
 import { AppUserAuth } from '../security/app.user.auth';
-import { debug } from 'util';
-import { strictEqual } from 'assert';
+
 
 @Component({
   templateUrl: './fetch-transactions.component.html',

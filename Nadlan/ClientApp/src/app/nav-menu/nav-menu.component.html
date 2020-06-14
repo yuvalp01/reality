@@ -1,19 +1,13 @@
 <header>
   <nav class='navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3'>
     <div class="container">
-      <!--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-label="Toggle navigation"
-              [attr.aria-expanded]="isExpanded" (click)="toggle()">
-        <span class="navbar-toggler-icon">hhhhh</span>
-      </button>-->
       <div class="navbar-collapse collapse d-sm-inline-flex" [ngClass]='{"show": isExpanded}'>
         <ul class="navbar-nav flex-grow">
 
-
-
           <ng-container *ngIf="securityObject.isAuthenticated">
             <!--<li  *hasClaim="'canViewReports'" class="nav-item" [routerLinkActive]='["link-active"]'>
-              <a class="nav-link text-dark" [routerLink]='["/investor-reports",userId]'>Investment Reports</a>
-            </li>-->
+    <a class="nav-link text-dark" [routerLink]='["/investor-reports",userId]'>Investment Reports</a>
+  </li>-->
             <!--<li *ngIf="role==1" class="nav-item" [routerLinkActive]='["link-active"]'>-->
             <li *hasClaim="['admin']" class="nav-item" [routerLinkActive]='["link-active"]'>
               <a mat-button class="nav-link text-dark" [matMenuTriggerFor]="menu">Investors Reports</a>
@@ -27,7 +21,7 @@
 
               </mat-menu>
             </li>
-            <ng-container *hasClaim="'admin'">
+            <ng-container *hasClaim="['admin']">
               <!--<li *ngIf="role==1" class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>-->
               <li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
                 <a class="nav-link text-dark" [routerLink]='["/reports/1/rented"]'>Rented</a>
@@ -45,9 +39,9 @@
                 <a class="nav-link text-dark" [routerLink]='["/personal-admin","101"]'>Personal Transactions</a>
               </li>
             </ng-container>
-            <!--<li *hasClaim="'canAccessRest'" class="nav-item" [routerLinkActive]='["link-active"]'>
-              <a class="nav-link text-dark" [routerLink]='["/renovation-list"]'>Renovation</a>
-            </li>-->
+            <li *hasClaim="['admin']" class="nav-item" [routerLinkActive]='["link-active"]'>
+              <a class="nav-link text-dark" [routerLink]='["/renovation-overview"]'>Renovation</a>
+            </li>
 
             <li *hasClaim="['stella','admin']" class="nav-item" [routerLinkActive]='["link-active"]'>
               <a class="nav-link text-dark" [routerLink]='["/expenses"]'>Expenses & Hours</a>
