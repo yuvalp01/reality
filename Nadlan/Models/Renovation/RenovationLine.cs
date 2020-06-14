@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Nadlan.Models.Renovation
 {
-    [Table("Lines",Schema ="renovation")]
+    [Table("lines",Schema ="renovation")]
     public class RenovationLine
     {
         public int Id { get; set; }

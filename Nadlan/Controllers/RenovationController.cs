@@ -34,14 +34,14 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
             //var mockRepo = new RenovationLineRepositoryMock();
-            var renovationLines = await _repositoryWraper.RenovationPaymentRepository
+            var renovationPayments = await _repositoryWraper.RenovationPaymentRepository
                 .GetPaymentsAsync(renovationProjectId);
-            if (renovationLines == null)
+            if (renovationPayments == null)
             {
                 return NotFound();
             }
 
-            return Ok(renovationLines);
+            return Ok(renovationPayments);
         }
         [HttpGet("payment/{id}")]
         public async Task<IActionResult> GetRenovationPaymentById([FromRoute] int id)
@@ -147,13 +147,13 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
             var mockRepo = new RenovationLineRepositoryMock();
-            var renovationLines = await mockRepo.GetAllRenovationProjectsAsync();
-            if (renovationLines == null)
+            var projects = await mockRepo.GetAllRenovationProjectsAsync();
+            if (projects == null)
             {
                 return NotFound();
             }
 
-            return Ok(renovationLines);
+            return Ok(projects);
         }
 
         [HttpGet("lines/{renovationProjectId}")]
