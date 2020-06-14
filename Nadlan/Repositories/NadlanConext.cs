@@ -16,9 +16,9 @@ namespace Nadlan.Repositories
         public DbSet<Account> Accounts { get; set; }
         public DbSet<AccountType> AccountTypes { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<Line> Lines { get; set; }
-        public DbSet<Item> Items { get; set; }
-        public DbSet<Product> Products { get; set; }
+        //public DbSet<Line> Lines { get; set; }
+        //public DbSet<Item> Items { get; set; }
+        //public DbSet<Product> Products { get; set; }
         public DbSet<Portfolio> Portfolios { get; set; }
         public DbSet<ExpectedTransaction> ExpectedTransactions { get; set; }
         public DbSet<PersonalTransaction> PersonalTransactions { get; set; }
@@ -26,18 +26,21 @@ namespace Nadlan.Repositories
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<AppUser> Users { get; set; }
         public DbSet<AppUserClaim> Claims { get; set; }
-        
+        public DbSet<RenovationProject> RenovationProjects { get; set; }
+        public DbSet<RenovationLine> RenovationLines { get; set; }
+        public DbSet<RenovationPayment> RenovationPayments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Expense>()
                 .Property(a => a.Hours)
                 .HasDefaultValue(0);
-            modelBuilder.Entity<Product>()
-                .Property(a => a.Price)
-                .HasDefaultValue(0);
-            modelBuilder.Entity<Item>()
-                .Property(a => a.Quantity)
-                .HasDefaultValue(1);
+            //modelBuilder.Entity<Product>()
+            //    .Property(a => a.Price)
+            //    .HasDefaultValue(0);
+            //modelBuilder.Entity<Item>()
+            //    .Property(a => a.Quantity)
+            //    .HasDefaultValue(1);
         }
     }
 }

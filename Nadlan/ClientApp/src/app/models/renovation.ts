@@ -1,3 +1,49 @@
+import { IApartment, ITransaction } from "./basic";
+
+export interface IRenovationLine {
+  id: number;
+  title: string;
+  category: number;
+  cost: number;
+  //totalPrice: number;
+  comments: string;
+  renovationProject: IRenovationProject;
+  isCompleted: boolean;
+}
+export interface IRenovationProject {
+  id: number;
+  name: string;
+  //cost: number;
+  comments: string;
+  dateStart: Date;
+  dateEnd: Date;
+  apartment: IApartment;
+  peneltyPerDay: number;
+  transactionId: number;
+}
+
+export interface IRenovationPayment {
+  id: number;
+  title: string;
+  amount: number;
+  //cost: number;
+  criteria: string;
+  comments: string;
+  datePayment: Date;
+  renovationProjectId: number;
+  renovationProject: IRenovationProject;
+  // checkIdWriten: boolean;
+  // checkInvoiceScanned: boolean;
+  isConfirmed: boolean;
+  
+}
+
+
+
+
+
+
+
 
 export interface ILine {
   id: number;

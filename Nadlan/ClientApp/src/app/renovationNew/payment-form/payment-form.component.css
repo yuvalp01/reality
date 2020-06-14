@@ -1,0 +1,22 @@
+
+.test
+{
+
+    color: red;
+}
+
+.customChip {
+    background-color: #8692d3;
+    border-radius: 30px;
+    color: white;
+    padding: 5px;
+    font-size: 15px;
+}
+
+::ng-deep .mat-form-field-wrapper
+{
+    padding-bottom: 0;
+    height: 70px;
+    /* margin-top: 5px !important;
+    margin-bottom: 5px !important; */
+}

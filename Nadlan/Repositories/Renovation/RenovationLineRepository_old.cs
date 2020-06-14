@@ -7,23 +7,23 @@ using System.Threading.Tasks;
 
 namespace Nadlan.Repositories
 {
-    public class RenovationLineRepository : Repository<Line>
+    public class RenovationLineRepository_old : Repository<Line>
     {
-        public RenovationLineRepository(NadlanConext nadlanConext) : base(nadlanConext)
+        public RenovationLineRepository_old(NadlanConext nadlanConext) : base(nadlanConext)
         {
         }
 
-        public Task<List<Line>> GetByApartmentIdAsync(int apartmentId)
-        {
+        //public Task<List<Line>> GetByApartmentIdAsync(int apartmentId)
+        //{
 
-            var lines = Context.Lines.Where(a => a.ApartmentId == apartmentId)
-                .Include(a => a.Items)
-                .ThenInclude(b => b.Product)
-                //.Select(a=>a.ItemsTotalPrice= a.Items.Sum(b=>b.Product.Price))
-                .ToListAsync();
+        //    var lines = Context.Lines.Where(a => a.ApartmentId == apartmentId)
+        //        .Include(a => a.Items)
+        //        .ThenInclude(b => b.Product)
+        //        //.Select(a=>a.ItemsTotalPrice= a.Items.Sum(b=>b.Product.Price))
+        //        .ToListAsync();
 
-            return lines;
-        }
+        //    return lines;
+        //}
 
         public Task CreateAsync(Line line)
         {

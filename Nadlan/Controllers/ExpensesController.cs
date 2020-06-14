@@ -10,6 +10,7 @@ namespace Nadlan.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ExpensesController : ControllerBase
     {
         private readonly NadlanConext _context;

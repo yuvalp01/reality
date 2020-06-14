@@ -1,0 +1,117 @@
+<div class="container">
+  <form [formGroup]="renovationPaymentForm" (ngSubmit)="save()">
+    
+    <h3>
+      <mat-icon color="accent">{{formIcon}}</mat-icon>
+      {{formTitle}}</h3>
+<h4>{{renovationPaymentForm.controls.title.value}}
+
+ 
+</h4>
+    <fieldset *hasClaim="['admin']">
+      <mat-form-field style="width: 100%" appearance="outline">
+        <mat-label>Title</mat-label>
+        <input  formControlName="title" matInput  />
+      </mat-form-field>
+    </fieldset>
+      
+    <fieldset *hasClaim="['stella']">
+      <!-- <mat-chip-list>
+      <mat-chip  color="accent" selected>{{renovationPaymentForm.controls.amount.value | currency:'EUR': 'symbol':'1.0-1'}}</mat-chip>
+      <mat-chip color="primary" selected>Primary fish</mat-chip>
+  <mat-chip color="accent" selected>Accent fish</mat-chip>
+    </mat-chip-list> -->
+    </fieldset>
+    <fieldset *hasClaim="['admin']">
+      <mat-form-field style="width: 100%" appearance="outline">
+        <mat-label>Amount</mat-label>
+        <input formControlName="amount" matInput />
+      </mat-form-field>
+    </fieldset>
+    <fieldset *hasClaim="['stella']">
+      <pre style="margin: 0;">{{renovationPaymentForm.controls.criteria.value}}</pre>
+    </fieldset>
+    <fieldset>
+      <div style="font-weight: bold; font-size: 25px; margin-bottom: 5px; color:green;">
+        {{renovationPaymentForm.controls.amount.value | currency:'EUR': 'symbol':'1.0-1'}}</div>
+    </fieldset>
+    <fieldset *hasClaim="['admin']">
+      <mat-form-field appearance="outline"  style="width: 100%">
+        <mat-label>Criteria</mat-label>
+        <textarea 
+        cdkAutosizeMinRows="2"
+        formControlName="criteria"
+        cdkTextareaAutosize
+        #autosize="cdkTextareaAutosize"
+        matInput
+        placeholder="Ex. Finish plumming, at least 5 sets of pictures from each day of work etc."></textarea>
+      </mat-form-field>
+    </fieldset>
+    <fieldset>
+      <mat-form-field style="width: 100%" appearance="outline">
+        <mat-label>Payment Date</mat-label>
+        <input formControlName="datePayment" matInput [matDatepicker]="picker" placeholder="Date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </fieldset>
+ 
+
+    <fieldset *hasClaim="['admin']">
+      <mat-form-field style="width: 100%" appearance="outline">
+        <mat-label>Project</mat-label>
+        <input formControlName="renovationProjectId" matInput placeholder="Project Id" />
+        <!--<mat-select formControlName="stakeholderId">
+          <mat-option *ngFor="let stakeholder of stakeholders" [value]="stakeholder.id">
+            {{stakeholder.name}}
+          </mat-option>
+        </mat-select>-->
+      </mat-form-field>
+    </fieldset>
+
+
+    <fieldset>
+      <mat-form-field appearance="outline" style="width: 100%">
+        <mat-label>Comments</mat-label>
+        <textarea 
+                  placeholder="Denote the time, location and circumstances of the payment"
+                  formControlName="comments"
+                  matInput
+                  cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="2"
+                  cdkAutosizeMaxRows="5"></textarea>
+      </mat-form-field>
+    </fieldset>
+    <fieldset *hasClaim="['stella']" style="margin-top: 5px;">
+
+
+<!-- <span *ngIf="renovationPaymentForm.controls.checkIdWriten.invalid && this.renovationPaymentForm.dirty">Error</span> -->
+
+<mat-checkbox 
+[ngClass]="{'test':this.renovationPaymentForm.dirty
+&&renovationPaymentForm.controls.checkCriteriaMet.invalid}" 
+ style="width: 50%;"
+formControlName="checkCriteriaMet">Criteria met?</mat-checkbox>
+<br/>
+<mat-checkbox 
+      [ngClass]="{'test':this.renovationPaymentForm.dirty
+      &&renovationPaymentForm.controls.checkIdWriten.invalid}" 
+      style="width: 50%;"
+      formControlName="checkIdWriten">Id denoted on tnvoice?</mat-checkbox>
+      <br/>
+  <mat-checkbox 
+       [ngClass]="{'test':this.renovationPaymentForm.dirty
+       &&renovationPaymentForm.controls.checkInvoiceScanned.invalid}" 
+        style="width: 50%;"
+       formControlName="checkInvoiceScanned">Invoice scanned and uploaded?</mat-checkbox>
+    
+      
+
+      </fieldset>
+
+    <fieldset>
+      <button mat-flat-button color="primary" [disabled]="this.renovationPaymentForm.invalid" type="submit" name="submit">Save</button>
+    </fieldset>
+  </form>
+</div>

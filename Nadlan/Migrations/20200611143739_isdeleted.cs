@@ -2,13 +2,13 @@
 
 namespace Nadlan.Migrations
 {
-    public partial class addDeleteflag : Migration
+    public partial class isdeleted : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<bool>(
                 name: "IsDeleted",
-                table: "personalTransactions",
+                table: "renovationPayments",
                 nullable: false,
                 defaultValue: false);
         }
@@ -17,7 +17,7 @@ namespace Nadlan.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "IsDeleted",
-                table: "personalTransactions");
+                table: "renovationPayments");
         }
     }
 }

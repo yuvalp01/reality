@@ -14,6 +14,7 @@ namespace Nadlan.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ApartmentsController : ControllerBase
     {
         private readonly NadlanConext _context;
@@ -29,17 +30,7 @@ namespace Nadlan.Controllers
         {
             return _context.Apartments;
         }
-        //[HttpGet("GetRentedApartments")]
-        //public IEnumerable<Apartment> GetRentedApartments()
-        //{
-        //    return  _context.Apartments.Where(a => a.Status == 100);
-        //}
-        //[HttpGet("GetInProcApartments")]
-        //public IEnumerable<Apartment> GetInProcApartments()
-        //{
-        //    return _context.Apartments.Where(a => a.Status < 100);
-        //}
-        // GET: api/Apartments/5
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetApartment([FromRoute] int id)
         {
@@ -64,7 +55,7 @@ namespace Nadlan.Controllers
         // PUT: api/Apartments/5
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutApartment([FromRoute] int id, [FromBody] Apartment apartment)
+        protected async Task<IActionResult> PutApartment([FromRoute] int id, [FromBody] Apartment apartment)
         {
             if (!ModelState.IsValid)
             {
@@ -100,7 +91,7 @@ namespace Nadlan.Controllers
         // POST: api/Apartments
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> PostApartment([FromBody] Apartment apartment)
+        protected async Task<IActionResult> PostApartment([FromBody] Apartment apartment)
         {
             if (!ModelState.IsValid)
             {
@@ -130,7 +121,7 @@ namespace Nadlan.Controllers
         // DELETE: api/Apartments/5
         [Authorize]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteApartment([FromRoute] int id)
+        protected async Task<IActionResult> DeleteApartment([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {

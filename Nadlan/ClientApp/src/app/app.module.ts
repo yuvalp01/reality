@@ -39,6 +39,8 @@ import { LoginComponent } from './security/login/login.component';
 import { AuthGuard } from './security/auth.guard';
 import { HttpInterceptorModule } from './security/http-interceptor';
 import { HasClaimDirective } from './security/has-claim.directive';
+import { RenovationOverviewComponent } from './renovationNew/renovation-overview/renovation-overview.component';
+import { PaymentFormComponent } from './renovationNew/payment-form/payment-form.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +65,8 @@ import { HasClaimDirective } from './security/has-claim.directive';
     TransactionFormComponent,
     LoginComponent,
     HasClaimDirective,
+    RenovationOverviewComponent,
+    PaymentFormComponent,
 
   ],
   imports: [
@@ -73,8 +77,8 @@ import { HasClaimDirective } from './security/has-claim.directive';
     MyOwnCustomMaterialModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([
-      //{ path: '', component: WelcomepageComponent, pathMatch: 'full' },
-      { path: '', component: LoginComponent, pathMatch: 'full' },
+     // { path: '', component: LoginComponent, pathMatch: 'full' },
+      { path: '', component: RenovationOverviewComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'add-apartment', component: AddApartmentForm },
       { path: 'fetch-accounts', component: AccountListComponent },
@@ -82,7 +86,7 @@ import { HasClaimDirective } from './security/has-claim.directive';
         path: 'fetch-transactions',
         component: TransactionListComponent,
         canActivate: [AuthGuard],
-        data: { claimType: 'admin' }
+        data: { claimType: ['admin'] }
       },
       {
         path: 'reports/:apartmentId',
@@ -94,12 +98,17 @@ import { HasClaimDirective } from './security/has-claim.directive';
 
 
       //{ path: 'reports/:apartmentId', component: ApartmentReportsComponent },
-      { path: 'renovation', component: RenovationComponent },
+      //{ path: 'renovation', component: RenovationComponent },
       { path: 'renovation-list', component: RenovationListComponent },
       {
         path: 'expenses', component: ExpensesComponent,
         canActivate: [AuthGuard],
         data: {claimType:['stella','admin']}
+      },
+      {
+        path: 'renovation-overview', component: RenovationOverviewComponent,
+        canActivate: [AuthGuard],
+        data: { claimType: ['stella','admin'] }
       },
       { path: 'login', component: LoginComponent },
 
@@ -121,6 +130,10 @@ import { HasClaimDirective } from './security/has-claim.directive';
     { provide: MAT_DIALOG_DATA, useValue: {} },
     { provide: MatDialogRef, useValue: {} }],
   bootstrap: [AppComponent],
-  entryComponents: [TransactionsDialogComponent, TransactionFormComponent, AddExpenseComponent]
+  entryComponents: [
+    TransactionsDialogComponent,
+     TransactionFormComponent, 
+     AddExpenseComponent,
+    PaymentFormComponent]
 })
 export class AppModule { }

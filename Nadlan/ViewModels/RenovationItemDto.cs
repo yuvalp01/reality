@@ -7,7 +7,7 @@ namespace Nadlan.ViewModels.Renovation
         public int ItemId { get; set; }
         public int LineId { get; set; }
         public string LineTitle { get; set; }
-        public Category LineCategory { get; set; }
+        public RenovationCategory LineCategory { get; set; }
         public string ItemDescription { get; set; }
         public int ProductId { get; set; }
         public string ProductName { get; set; }

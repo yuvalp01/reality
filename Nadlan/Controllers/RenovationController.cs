@@ -1,19 +1,16 @@
-﻿using System;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Nadlan.Models.Renovation;
+using Nadlan.Repositories.Renovation;
+using Nadlan.Repositories;
+using Nadlan.ViewModels.Renovation;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Nadlan.ViewModels.Renovation;
-using Nadlan.Models.Renovation;
-using Nadlan.Repositories;
-using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Nadlan.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class RenovationController : ControllerBase
@@ -25,38 +22,132 @@ namespace Nadlan.Controllers
         public RenovationController(NadlanConext context, IMapper mapper)
         {
             _repositoryWraper = new RenovationRepositoryWrapper(context);
-            //_context = context;
             _mapper = mapper;
         }
 
-        // GET: api/Transactions
-        [HttpGet("renovationItems/{apartmentId}")]
-        public async Task<IEnumerable<ItemDto>> GetRenovationItems([FromRoute] int apartmentId)
+
+        [HttpGet("payments/{renovationProjectId}")]
+        public async Task<IActionResult> GetRenovationPaymentsByProjectId([FromRoute] int renovationProjectId)
         {
-            var renovationItems = await _repositoryWraper.RenovationItemRepository.GetItemsDtoAsync(apartmentId);
-            //var transactionsDto = _mapper.Map<List<RenovationItem>, IEnumerable<TransactionDto>>(transactions);
-            return renovationItems;
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            //var mockRepo = new RenovationLineRepositoryMock();
+            var renovationLines = await _repositoryWraper.RenovationPaymentRepository
+                .GetPaymentsAsync(renovationProjectId);
+            if (renovationLines == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(renovationLines);
+        }
+        [HttpGet("payment/{id}")]
+        public async Task<IActionResult> GetRenovationPaymentById([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            //var mockRepo = new RenovationLineRepositoryMock();
+            var payment = await _repositoryWraper.RenovationPaymentRepository
+                 .GetPaymentByIdAsync(id);
+            if (payment == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(payment);
         }
 
-
-        [HttpGet("renovationLines/{apartmentId}")]
-
-        public async Task<IActionResult> GetRenovationLines([FromRoute] int apartmentId)
+        [HttpPut("payment")]
+        public async Task<IActionResult> UpdatePayment([FromBody] RenovationPayment payment)
         {
+
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            // SummaryReport purchaseReport = await _repositoryWraper.Report.GetSummaryReport(apartmentId);
-            var renovationLines = await _repositoryWraper.RenovationLineRepository.GetByApartmentIdAsync(apartmentId);
-            //var xxx = renovationLines.ForEach(a=>a.ItemsTotalPrice= a.Items.Sum(a=>a.Product.Price))
-            renovationLines.ForEach(a =>
+            //var mockRepo = new RenovationLineRepositoryMock();
+            await _repositoryWraper.RenovationPaymentRepository.UpdateAsync(payment);
+            //var payment = await mockRepo
+            //.GetPaymentByIdAsync(id);
+            if (payment == null)
             {
-                a.ItemsTotalPrice = a.Items.Sum(b => b.Product.Price);
-                a.TotalPrice = a.ItemsTotalPrice + a.WorkCost;
-            });
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
+        [HttpPut("makePayment")]
+        public async Task<IActionResult> MakePayment([FromBody] RenovationPayment payment)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            decimal newBalance =  await _repositoryWraper.RenovationPaymentRepository.MakePaymentAsync(payment);
+
+            return Ok(newBalance);
+        }
+
+
+        [HttpPut("confirmPayment")]
+        public async Task<IActionResult> ConfirmPayment([FromBody] int paymentId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            await _repositoryWraper.RenovationPaymentRepository.ConfirmAsync(paymentId);
+
+            return NoContent();
+        }
+
+        [HttpPut("deletePayment")]
+        public async Task<IActionResult> DeletePayment([FromBody] int paymentId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            await _repositoryWraper.RenovationPaymentRepository.SoftDeleteAsync(paymentId);
+
+            return NoContent();
+        }
+
+        [HttpPost("payment")]
+        public async Task<IActionResult> AddPayment([FromBody] RenovationPayment payment)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            //var mockRepo = new RenovationLineRepositoryMock();
+            await _repositoryWraper.RenovationPaymentRepository.CreateAsync(payment);
+
+            //var payment = await mockRepo
+            //.GetPaymentByIdAsync(id);
+            if (payment == null)
+            {
+                return NotFound();
+            }
+            return CreatedAtAction("PaymentUpdated", new { id = payment.Id },payment);
+
+        }
+
+        [HttpGet("projects")]
+        public async Task<IActionResult> GetRenovationProjects()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var mockRepo = new RenovationLineRepositoryMock();
+            var renovationLines = await mockRepo.GetAllRenovationProjectsAsync();
             if (renovationLines == null)
             {
                 return NotFound();
@@ -65,48 +156,28 @@ namespace Nadlan.Controllers
             return Ok(renovationLines);
         }
 
-        //public async Task<IEnumerable<RenovationLine>> GetRenovationLines([FromRoute] int apartmentId)
-        //{
-        //    var renovationLines = await _repositoryWraper.RenovationLineRepository.GetAllAsync();
-        //    return renovationLines;
-        //}
-
-        //[HttpGet("GetSummaryReport/{apartmentId}")]
-        //public async Task<IActionResult> GetSummaryReport([FromRoute] int apartmentId)
-        //{
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    SummaryReport purchaseReport = await _repositoryWraper.Report.GetSummaryReport(apartmentId);
-        //    if (purchaseReport == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(purchaseReport);
-        //}
-
-
-        // POST: api/Transactions
-        [HttpPost]
-        public async Task<IActionResult> PostRenovationItem([FromBody] Item renovationItem)
+        [HttpGet("lines/{renovationProjectId}")]
+        public async Task<IActionResult> GetRenovationLines([FromRoute] int renovationProjectId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            var mockRepo = new RenovationLineRepositoryMock();
+            var renovationLines = await mockRepo
+                 .GetLinesAsync(renovationProjectId);
 
-            //var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
-            await _repositoryWraper.RenovationItemRepository.CreateAsync(renovationItem);
-            //await _repositoryWraper.Transaction.SaveAsync(transaction);
-            //_context.Transactions.Add(transaction);
-            //await _context.SaveChangesAsync();
+            if (renovationLines == null)
+            {
+                return NotFound();
+            }
 
-            return CreatedAtAction("PostRenovationItem", new { id = renovationItem.Id }, renovationItem);
+            return Ok(renovationLines);
         }
+
+
 
     }
 }
+
+

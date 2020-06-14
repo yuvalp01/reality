@@ -14,6 +14,7 @@ namespace Nadlan.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AccountsController : ControllerBase
     {
         private readonly NadlanConext _context;
@@ -52,7 +53,7 @@ namespace Nadlan.Controllers
         // PUT: api/Accounts/5
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAccount([FromRoute] int id, [FromBody] Apartment account)
+        protected async Task<IActionResult> PutAccount([FromRoute] int id, [FromBody] Apartment account)
         {
             throw new NotImplementedException("It is not possible to change account from the API");
             //if (!ModelState.IsValid)
@@ -89,7 +90,7 @@ namespace Nadlan.Controllers
         // POST: api/Accounts
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> PostAccount([FromBody] Account account)
+        protected async Task<IActionResult> PostAccount([FromBody] Account account)
         {
             if (!ModelState.IsValid)
             {
@@ -119,7 +120,7 @@ namespace Nadlan.Controllers
         // DELETE: api/Accounts/5
         [Authorize]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAccount([FromRoute] int id)
+        protected async Task<IActionResult> DeleteAccount([FromRoute] int id)
         {
             throw new NotImplementedException("It is not possible to delete account from the API");
             //if (!ModelState.IsValid)

@@ -1,0 +1,543 @@
+<ng-container *ngIf="dataSourceLines.data && project && paymentTransaction">
+  <mat-tab-group dynamicHeight="false">
+
+    <mat-tab label="Payments">
+      <mat-card>
+        <mat-card-title style="font-size: 19px;">
+          <span> Renovation Price:</span><span style="font-weight:bold;">
+            {{totalCost| currency:'EUR' : 'symbol':'1.0-0'}}</span>
+          <span> Paid so far: </span><span style="font-weight:bold; color:green;">
+            {{paymentTransaction.amount | currency:'EUR':'symbol':'1.0-0'}}</span>
+          <span> Left to pay: </span><span style="font-weight:bold; color:red;">
+            {{totalCost-paymentTransaction.amount | currency:'EUR':'symbol':'1.0-0'}}</span>
+            <div style="height: 20px;">
+            <mat-progress-bar mode="determinate" 
+            value="{{(paymentTransaction.amount / totalCost)*100}}">
+          </mat-progress-bar>
+          <span 
+    
+          [ngStyle]="{'left':(paymentTransaction.amount / totalCost)*100 +1 +'%'}"
+
+          style="position:relative; font-size: 15px; top:-22px; font-weight: bold;color:green;;">
+            {{(paymentTransaction.amount / totalCost)| percent:'1.0'}}
+          </span>
+      </div>
+          <div id="errors" 
+          *ngIf="totalPaymentsDone!=paymentTransaction.amount ||totalPaymentsPlanned!=totalCost"
+          style="border-style:dashed;border-color: red; font-size: 14px; ">
+            <ul>
+              <li *ngIf="totalPaymentsDone!=paymentTransaction.amount">
+                Payment transaction amount does not equal to total payments!
+                ({{paymentTransaction.amount}} != {{totalPaymentsDone}})
+              </li>
+              <li *ngIf="totalPaymentsPlanned!=totalCost">
+                The renovation cost does not equal to the the payments plan!
+                ({{totalCost}} != {{totalPaymentsPlanned}})
+              </li>
+            </ul>
+          </div>
+
+          <!-- <p *ngIf="totalPaymentsDone!=paymentTransaction.amount" style="color:red">
+            Payment transaction amount does not equal to total payments!
+            <br />
+            <span>
+              {{paymentTransaction.amount}} != {{totalPaymentsDone}}
+            </span>
+          </p> -->
+        </mat-card-title>
+        <mat-card-content>
+          <button *hasClaim="['admin']" class="add-item" mat-mini-fab (click)="openForm(0)" title="Add Payment">
+            <mat-icon>add</mat-icon>
+          </button>
+          <div id="tblPayments">
+            <table style="width: 100%;" mat-table [dataSource]="dataSourcePayments" matSort class="mat-elevation-z8">
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                <td mat-cell *matCellDef="let item">{{item.id}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="title">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+                <td mat-cell *matCellDef="let item">{{item.title}}</td>
+              </ng-container>
+              <ng-container matColumnDef="criteria">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Criteria</th>
+                <td mat-cell *matCellDef="let item">
+                  {{item.criteria }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="amount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+                <td mat-cell *matCellDef="let item">
+                  {{item.amount}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="comments">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>
+                <td mat-cell *matCellDef="let item">
+                  <span> {{item.comments}}</span>
+                </td>
+              </ng-container>
+              <!-- <ng-container matColumnDef="projectName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Renovation Project</th>
+                <td mat-cell *matCellDef="let item">{{item.renovationProject.name}}</td>
+              </ng-container> -->
+              <ng-container matColumnDef="datePayment">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Paid On</th>
+                <td mat-cell *matCellDef="let item">
+                  <span> {{item.datePayment| date:'dd/MM/yyyy'}}</span>
+                </td>
+
+              </ng-container>
+              <ng-container matColumnDef="checkCriteriaMet">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Criteria Met?</th>
+                <td mat-cell *matCellDef="let item">
+                  <ng-container>
+                    <!-- <mat-checkbox [checked]="item.checkInvoiceScanned"></mat-checkbox> -->
+                    <!-- <span>  {{item.checkInvoiceScanned}}</span> -->
+                    <mat-icon *ngIf="!item.datePayment">close</mat-icon>
+                    <mat-icon *ngIf="item.datePayment">done</mat-icon>
+                  </ng-container>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="checkIdWriten">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Id Denoted?</th>
+                <td mat-cell *matCellDef="let item">
+                  <ng-container>
+                    <!-- <mat-checkbox [checked]="item.checkIdWriten"></mat-checkbox> -->
+                    <mat-icon *ngIf="!item.datePayment">close</mat-icon>
+                    <mat-icon *ngIf="item.datePayment">done</mat-icon>
+                    <!-- <span>  {{item.checkIdWriten}}</span> -->
+                  </ng-container>
+                </td>
+
+              </ng-container>
+              <ng-container matColumnDef="checkInvoiceScanned">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Scanned?</th>
+                <td mat-cell *matCellDef="let item">
+                  <ng-container>
+                    <!-- <mat-checkbox [checked]="item.checkInvoiceScanned"></mat-checkbox> -->
+                    <!-- <span>  {{item.checkInvoiceScanned}}</span> -->
+                    <mat-icon *ngIf="!item.datePayment">close</mat-icon>
+                    <mat-icon *ngIf="item.datePayment">done</mat-icon>
+                  </ng-container>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let item">
+                  <mat-icon *ngIf="item.isConfirmed" matTooltip="Payment Confirmed">check_circle</mat-icon>
+
+                  <ng-container *ngIf="!item.isConfirmed">
+                    <!-- <button *ngIf="!item.datePayment" (click)="openForm(item.id)" mat-button color="primary">Pay</button> -->
+                    <!-- <button *ngIf="!item.datePayment" class="add-item" mat-icon-button color="primary"  (click)="openForm(item.id)"  matTooltip="Make Payment">
+                      <mat-icon>monetization_on</mat-icon>
+                    </button> -->
+                    <mat-icon style="cursor: pointer;" color="accent" matTooltip="Make Payment"
+                      *ngIf="!item.datePayment" (click)="openForm('payment',item.id)">monetization_on</mat-icon>
+                    <ng-container *hasClaim="['admin']">
+                      <button *ngIf="item.datePayment" (click)="delete(item.id)" mat-button color="warn">Delete</button>
+                      <button *ngIf="item.datePayment" (click)="confirm(item.id)" mat-button
+                        color="success">Confirm</button>
+                    </ng-container>
+
+                    <button *ngIf="item.datePayment" (click)="openForm('edit',item.id)" mat-button
+                      color="primary">Edit</button>
+
+                  </ng-container>
+                </td>
+              </ng-container>
+
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns_payments"></tr>
+              <tr [ngClass]="{'pending':row.datePayment && !row.isConfirmed,
+                                 'completed':row.isConfirmed }" (click)="printId(row.id)" mat-row
+                *matRowDef="let row; columns: displayedColumns_payments"></tr>
+            </table>
+
+          </div>
+
+
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+
+    <mat-tab label="Contract">
+      <mat-card>
+        <mat-card-title>Contract</mat-card-title>
+        <mat-card-content>
+
+          <mat-accordion id="report_" *ngIf="project">
+            <mat-expansion-panel disabled="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon mat-list-icon>business_center</mat-icon>
+                  <span>Project Name</span>
+                </mat-panel-title>
+                <mat-panel-description>
+                  <span>{{project.name}}</span>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel disabled="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon mat-list-icon>business_center</mat-icon>
+                  <span>Start Date</span>
+                </mat-panel-title>
+                <mat-panel-description>
+                  <span>{{project.dateStart | date:'dd-MM-yyyy'}}</span>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel disabled="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon mat-list-icon>business_center</mat-icon>
+                  <span>End Date</span>
+                </mat-panel-title>
+                <mat-panel-description>
+                  <span>{{project.dateEnd | date:'dd-MM-yyyy'}}</span>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel disabled="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon mat-list-icon>business_center</mat-icon>
+                  <span>Penelty Per Day</span>
+                </mat-panel-title>
+                <mat-panel-description>
+                  <span> {{project.peneltyPerDay| currency:'EUR' : number:'1.0-0'}}</span>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+              <mat-expansion-panel-header matTooltip="Click to view scope and prices">
+                <mat-panel-title>
+                  <mat-icon mat-list-icon>business_center</mat-icon>
+                  <span>Total Price</span>
+                </mat-panel-title>
+                <mat-panel-description>
+                  <mat-list-item>
+                    <span>{{totalCost| currency:'EUR' : 'symbol':'1.0-0'}}</span>
+                  </mat-list-item>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <div id="tblLines">
+                <table style="width: 100%;" mat-table [dataSource]="dataSourceLines" matSort class="mat-elevation-z8">
+                  <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef>ID</th>
+                    <td mat-cell *matCellDef="let item">{{item.id}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="title">
+                    <th mat-header-cell *matHeaderCellDef>Title</th>
+                    <td mat-cell *matCellDef="let item">{{item.title}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="cost">
+                    <th mat-header-cell *matHeaderCellDef>Cost</th>
+                    <td mat-cell *matCellDef="let item">
+                      {{item.cost | currency:'EUR' : 'symbol':'1.0-0'}}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="category">
+                    <th mat-header-cell *matHeaderCellDef>Category</th>
+                    <td mat-cell *matCellDef="let item">
+                      <mat-icon matTooltip="General" *ngIf="item.category==0">format_paint</mat-icon>
+                      <mat-icon matTooltip="kitchen" *ngIf="item.category==1">kitchen</mat-icon>
+                      <mat-icon matTooltip="Bathroom" *ngIf="item.category==2">bathtub</mat-icon>
+                      <mat-icon matTooltip="Rooms" *ngIf="item.category==3">checkroom</mat-icon>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="comments">
+                    <th mat-header-cell *matHeaderCellDef>Comments</th>
+                    <td mat-cell *matCellDef="let item">
+                      <span> {{item.comments}}</span>
+                    </td>
+
+                  </ng-container>
+                  <ng-container matColumnDef="isCompleted">
+                    <th mat-header-cell *matHeaderCellDef>Completed?</th>
+                    <td mat-cell *matCellDef="let item">
+                      <mat-icon matTooltip="Task Completed" *ngIf="item.isCompleted">check_circle</mat-icon>
+
+                      <span> {{item.isCompleted}}</span>
+                    </td>
+
+                  </ng-container>
+
+
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let item">
+                      <button (click)="openForm(item.id)" mat-button color="primary">Edit</button>
+                      <button (click)="delete(item.id)" mat-button color="warn">Delete</button>
+                    </td>
+                  </ng-container>
+
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns_lines"></tr>
+                  <tr (click)="printId(row.id)" mat-row *matRowDef="let row; columns: displayedColumns_lines"></tr>
+
+                </table>
+
+
+              </div>
+              <!--<mat-list>
+                <mat-list-item  style="color:#3764ad"
+                               *ngFor="let account of purchaseReport?.accountsSum" id="{{account.accountId}}">
+                  <mat-icon mat-list-icon>business_center</mat-icon>
+                  <span>{{account.name}}</span>
+                  <span>{{account.total*percentage  | currency:'EUR' : number:'1.0-1'}}</span>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+              </mat-list>-->
+            </mat-expansion-panel>
+
+          </mat-accordion>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+
+  </mat-tab-group>
+</ng-container>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <mat-tab label="Contract_">
+
+  <mat-card>
+    <mat-card-title>Contract</mat-card-title>
+    <mat-list *ngIf="project">
+      <mat-list-item>
+        <mat-icon mat-list-icon>business_center</mat-icon>
+        <span style="width:260px">Renovation Project</span>
+        <span>{{project.name}}</span>
+      </mat-list-item>
+
+      <mat-list-item>
+        <mat-icon mat-list-icon>business_center</mat-icon>
+        <span matTooltip="" style="width:260px">Start date</span>
+        <span>{{project.dateEnd | date:'dd-MM-yyyy'}}</span>
+      </mat-list-item>
+
+      <mat-list-item (click)="showTrans(100, 'Distributed', false)">
+        <mat-icon mat-list-icon>business_center</mat-icon>
+        <span style="width:260px;">End Date</span>
+        <span>{{project.dateEnd | date:'dd-MM-yyyy'}}</span>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+
+      <mat-list-item matTooltip="">
+        <mat-icon mat-list-icon>business_center</mat-icon>
+        <span style="width:260px">Penelty Per Day</span>
+        <span>   {{project.peneltyPerDay| currency:'EUR' : number:'1.0-0'}}</span>
+      </mat-list-item>
+      <div>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <mat-icon mat-list-icon>business_center</mat-icon>
+          <span style="width:260px">Renovation Price</span>
+          <span>{{totalCost| currency:'EUR' : 'symbol':'1.0-0'}} </span>
+        </mat-list-item>
+      </div>
+    </mat-list>
+  </mat-card>
+</mat-tab> -->
+<!--
+
+
+  <div>
+
+    <div id="tblPayments_">
+      <table style="width: 100%;" mat-table [dataSource]="dataSourcePayments" matSort class="mat-elevation-z8">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+          <td mat-cell *matCellDef="let item">{{item.id}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+          <td mat-cell *matCellDef="let item">{{item.title}}</td>
+        </ng-container>
+        <ng-container matColumnDef="criteria">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Criteria</th>
+          <td mat-cell *matCellDef="let item">
+            {{item.criteria }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+          <td mat-cell *matCellDef="let item">
+            {{item.amount}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="comments">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>
+          <td mat-cell *matCellDef="let item">
+            <span>  {{item.comments}}</span>
+          </td>
+          </ng-container>
+          <ng-container matColumnDef="projectName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Renovation Project</th>
+            <td mat-cell *matCellDef="let item">{{item.renovationProject.name}}</td>
+          </ng-container>
+          <ng-container matColumnDef="datePayment">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Received On</th>
+            <td mat-cell *matCellDef="let item">
+              <span>  {{item.datePayment| date:'dd/MM/yyyy'}}</span>
+            </td>
+
+          </ng-container>
+          <ng-container matColumnDef="checkIdWriten">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Id Writen?</th>
+            <td mat-cell *matCellDef="let item">
+              <mat-checkbox [checked]="item.checkIdWriten"></mat-checkbox>
+              <span>  {{item.checkIdWriten}}</span>
+            </td>
+
+          </ng-container>
+          <ng-container matColumnDef="checkInvoiceScanned">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Scanned?</th>
+            <td mat-cell *matCellDef="let item">
+              <span>  {{item.checkInvoiceScanned}}</span>
+            </td>
+
+          </ng-container>
+
+          <!--<ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let item">
+              <button (click)="openForm(item.id)" mat-button color="primary">Edit</button>
+              <button (click)="delete(item.id)" mat-button color="warn">Delete</button>
+            </td>
+          </ng-container>
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns_payments"></tr>
+          <tr (click)="printId(row.id)" mat-row *matRowDef="let row; columns: displayedColumns_payments"></tr>
+
+
+          </table>
+    </div>
+
+    <p>TODO: Form to add new payment</p>
+  </div>
+  <div>
+    <h3>Contract</h3>
+    <p>TODO: Show only contract and the details in acconrion</p>
+    <div *ngIf="project">
+      <p>Renovation Project: <span>{{project.name}}</span></p>
+      <p>Start date: <span>{{project.dateStart|date:'dd-MM-yyyy'}}</span></p>
+      <p>End date: <span>{{project.dateEnd | date:'dd-MM-yyyy'}}</span></p>
+      <p>Penelty Per Day: <span>{{project.peneltyPerDay}}</span></p>
+      <p>Agreed price: <span>{{totalCost| currency:'EUR' : 'symbol':'1.0-0'}}</span></p>
+    </div>
+
+
+    <div id="tblLines_">
+      <table style="width: 100%;" mat-table [dataSource]="dataSourceLines" matSort class="mat-elevation-z8">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+          <td mat-cell *matCellDef="let item">{{item.id}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+          <td mat-cell *matCellDef="let item">{{item.title}}</td>
+        </ng-container>
+        <ng-container matColumnDef="cost">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cost</th>
+          <td mat-cell
+              *matCellDef="let item">
+            {{item.cost | currency:'EUR' : 'symbol':'1.0-0'}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
+          <td mat-cell *matCellDef="let item">
+            <mat-icon matTooltip="Paid on behalf" *ngIf="item.category==0">format_paint</mat-icon>
+            <mat-icon matTooltip="Profit distribution" *ngIf="item.category==1">kitchen</mat-icon>
+            <mat-icon matTooltip="Cash withdrawal" *ngIf="item.category==2">bathtub</mat-icon>
+            <mat-icon matTooltip="Money transfer" *ngIf="item.category==3">checkroom</mat-icon>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="projectName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Renovation Project</th>
+          <td mat-cell *matCellDef="let item">{{item.renovationProject.name}}</td>
+        </ng-container>
+        <ng-container matColumnDef="comments">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>
+          <td mat-cell *matCellDef="let item">
+            <span>  {{item.comments}}</span>
+          </td>
+
+        </ng-container>
+        <ng-container matColumnDef="isCompleted">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Completed?</th>
+          <td mat-cell *matCellDef="let item">
+            <mat-icon matTooltip="Task Completed" *ngIf="item.isCompleted">check_circle</mat-icon>
+
+            <span>  {{item.isCompleted}}</span>
+          </td>
+
+        </ng-container>
+
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let item">
+            <button (click)="openForm(item.id)" mat-button color="primary">Edit</button>
+            <button (click)="delete(item.id)" mat-button color="warn">Delete</button>
+          </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns_lines"></tr>
+        <tr (click)="printId(row.id)" mat-row *matRowDef="let row; columns: displayedColumns_lines"></tr>
+
+      </table>
+
+
+    </div>
+  </div>
+</ng-container>
+-->

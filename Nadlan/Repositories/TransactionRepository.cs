@@ -150,11 +150,6 @@ namespace Nadlan.Repositories
             await SaveAsync();
         }
 
-
-
-
-
-
         public async Task CreateTransactionAsync(Transaction transaction)
         {
             Account account = await Context.Accounts.FirstAsync(a => a.Id == transaction.AccountId);
@@ -203,7 +198,15 @@ namespace Nadlan.Repositories
             await SaveAsync();
         }
 
-
+        public async Task<decimal> IncreaseTransactionAmountAsync(int transactionId, decimal additionalAmount)
+        {
+            var transaction = Context.Transactions.FirstOrDefault(a=>a.Id == transactionId);
+            decimal currentAmount = transaction.Amount;
+            transaction.Amount = currentAmount + additionalAmount;
+            Update(transaction);
+            await SaveAsync();
+            return transaction.Amount;
+        }
 
         public async Task UpdateTransactionAsync(Transaction dbTransaction, Transaction transaction)
         {

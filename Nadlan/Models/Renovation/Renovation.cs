@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 
 namespace Nadlan.Models.Renovation
 {
-    [Table("Lines",Schema ="renovation")]
+    //[Table("Lines", Schema = "renovation")]
+    [Obsolete]
     public class Line
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public Category Category { get; set; }
+        public RenovationCategory Category { get; set; }
         public decimal WorkCost { get; set; }
         public string Comments { get; set; }
 
@@ -21,18 +22,18 @@ namespace Nadlan.Models.Renovation
         public decimal ItemsTotalPrice { get; set; }
         [NotMapped]
         public decimal TotalPrice { get; set; }
-        public  Apartment Apartment { get; set; }
+        public Apartment Apartment { get; set; }
         public int ApartmentId { get; set; }
     }
 
-    public enum Category
-    {
-        General = 0,
-        Kitchen = 1,
-        Bathroom = 2,
-        Room =3
-    }
-
+    //public enum RenovationCategory
+    //{
+    //    General = 0,
+    //    Kitchen = 1,
+    //    Bathroom = 2,
+    //    Room = 3
+    //}
+    [Obsolete]
     [Table("Items", Schema = "renovation")]
     public class Item
     {
@@ -41,6 +42,7 @@ namespace Nadlan.Models.Renovation
         public int Quantity { get; set; }
         public Product Product { get; set; }
     }
+    [Obsolete]
     [Table("Products", Schema = "renovation")]
     public class Product
     {

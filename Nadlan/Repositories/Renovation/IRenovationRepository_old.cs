@@ -7,7 +7,7 @@ using Nadlan.Models.Renovation;
 
 namespace Nadlan.Repositories
 {
-    public interface IRenovationItemRepository 
+    public interface IRenovationItemRepository_old 
     {
         Task<List<Item>> GetAllAsync();
         Task<Item> GetByIdAsync(int id);

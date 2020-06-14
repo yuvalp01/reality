@@ -13,7 +13,7 @@ namespace Nadlan.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class PersonalTransactionsController : ControllerBase
     {
         //private readonly NadlanConext _context;
@@ -55,7 +55,6 @@ namespace Nadlan.Controllers
         [HttpGet("GetByStakeholderId/{stakeholderId}")]
         public async Task<IEnumerable<PersonalTransactionDto>> GetPersonalTransactionByStakeholderId(int stakeholderId)
         {
-            //var personalTransaction = await _context.PersonalTransactions.Where(a => a.StakeholderId == stakeholderId).ToListAsync();
             var personalTransactions = await _repositoryWrapper.PersonalTransaction.GetByStakeholderAsync(stakeholderId);
             var personalTransactionsDto = _mapper.Map<List<PersonalTransaction>, IEnumerable<PersonalTransactionDto>>(personalTransactions);
 
@@ -67,24 +66,10 @@ namespace Nadlan.Controllers
             return  personalTransactionsDto;
         }
 
-        //[HttpGet("GetByType/{stakeholderId}/{transactionTypeId}")]
-        //public async Task<ActionResult<IEnumerable<PersonalTransaction>>> GetPersonalTransactionByType(int stakeholderId, int transactionTypeId)
-        //{
-        //    //var personalTransaction = await _context.PersonalTransactions.Where(a => a.StakeholderId == stakeholderId).ToListAsync();
-        //    var personalTransactions = _repositoryWrapper.PersonalTransaction.GetByStakeholderAsync(stakeholderId, transactionTypeId);
-
-        //    if (personalTransactions == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return await personalTransactions;
-        //}
 
         [HttpGet("GetAllDistributions/{stakeholderId}")]
         public async Task<ActionResult<IEnumerable<PersonalTransaction>>> GetAllDistributions(int stakeholderId)
         {
-            //var personalTransaction = await _context.PersonalTransactions.Where(a => a.StakeholderId == stakeholderId).ToListAsync();
             var personalTransactions = _repositoryWrapper.PersonalTransaction.GetAllDistributions(stakeholderId);
 
             if (personalTransactions == null)
@@ -109,10 +94,8 @@ namespace Nadlan.Controllers
         [HttpPost]
         public async Task<ActionResult<PersonalTransaction>> PostPersonalTransaction(PersonalTransaction personalTransaction)
         {
-            await _repositoryWrapper.PersonalTransaction.CreateTransactionAsync(personalTransaction);
-            //_context.PersonalTransactions.Add(personalTransaction);
-            //await _context.SaveChangesAsync();
-
+            await _repositoryWrapper.PersonalTransaction
+                .CreateTransactionAsync(personalTransaction);
             return CreatedAtAction("GetPersonalTransaction", new { id = personalTransaction.Id }, personalTransaction);
         }
 
@@ -120,9 +103,10 @@ namespace Nadlan.Controllers
 
         // DELETE: api/PersonalTransactions/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<PersonalTransaction>> DeletePersonalTransaction(int id)
+        protected async Task<ActionResult<PersonalTransaction>> DeletePersonalTransaction(int id)
         {
-            await _repositoryWrapper.PersonalTransaction.DeleteTransactionAsync(new PersonalTransaction { Id = id });
+            await _repositoryWrapper.PersonalTransaction
+                .DeleteTransactionAsync(new PersonalTransaction { Id = id });
 
             //var personalTransaction = await _context.PersonalTransactions.FindAsync(id);
             //if (personalTransaction == null)
@@ -136,9 +120,5 @@ namespace Nadlan.Controllers
 
         }
 
-        //private bool PersonalTransactionExists(int id)
-        //{
-        //    return _context.PersonalTransactions.Any(e => e.Id == id);
-        //}
     }
 }
