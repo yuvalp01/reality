@@ -20,18 +20,22 @@ export class ApartmentReportsComponent implements OnInit {
   purchaseReport: IPurchaseReport;
   summaryReport: ISummaryReport;
   apartmentInfo: IApartment;
-  transactions: ITransaction[];
+  //transactions: ITransaction[];
   years: number[] = [2018, 2019, 2020];
   selectedYear: number = 0;
   @Input() apartmentId: number = 0;
   dataSource = new MatTableDataSource<ITransaction>();
   isIgnoreChanges: boolean = true;
   @Output() myEvent = new EventEmitter();
-  role: number;
+  //role: number;
 
   //simulation params:
   rentMonthsInYear: number = 11;
   buyerExpectedRerutn: number = 0.05;
+
+  @Input() investorPercentage: number = null;
+  percentage: number = 1;
+  showPercentage: boolean = false;
 
   constructor(private reportsService: ReportService,
     private transactionService: TransactionService,
@@ -41,38 +45,27 @@ export class ApartmentReportsComponent implements OnInit {
   }
   ngOnInit(): void {
 
-    this.role = +window.sessionStorage.getItem("role");
-    ////window.sessionStorage.setItem("role", this.role.toString());
-    //Global.getrole(this.role);
+    //this.role = +window.sessionStorage.getItem("role");
 
     //when open as a dialog
     if (this.data.apartmentId) {
       this.apartmentId = +this.data.apartmentId;
+      this.investorPercentage = +this.data.investorPercentage;
       this.loadApartmentReports(this.apartmentId);
       this.isIgnoreChanges = false;
-      //this.loadApartmentReports(this.apartmentId);
 
     }
     else {
-      //this.isIgnoreChanges = true;
       this.route.paramMap.subscribe(params => {
         let _apartmentId = +params.get('apartmentId');
-        //if (_apartmentId > 0) {
-          this.apartmentId = _apartmentId;
-          this.loadApartmentReports(this.apartmentId);
-        //}
+        this.apartmentId = _apartmentId;
+        this.loadApartmentReports(this.apartmentId);
       });
     }
-
-
-
-
-
   }
 
 
   ngOnChanges(changes: SimpleChanges): void {
-    //this.apartmentId = changes.apartmentId.currentValue;
     if (!this.isIgnoreChanges) {
       this.apartmentId = changes.apartmentId.currentValue;
       this.loadApartmentReports(this.apartmentId);
@@ -95,7 +88,7 @@ export class ApartmentReportsComponent implements OnInit {
   showTrans(accountId, accountName, isPurchaseCost) {
     let year = this.selectedYear;
     //Purchase costs and distribution are not year dependant
-    if (isPurchaseCost || accountId==100) {
+    if (isPurchaseCost || accountId == 100) {
       year = 0;
     }
     this.transactionService.getTransactionsByAccount(this.apartmentId, accountId, isPurchaseCost, year).subscribe(
@@ -113,6 +106,16 @@ export class ApartmentReportsComponent implements OnInit {
   }
 
 
+
+  showHidePercentage() {
+    this.showPercentage = !this.showPercentage;
+    if (this.showPercentage) {
+      this.percentage = this.investorPercentage;
+    }
+    else {
+      this.percentage = 1;;       
+    }
+  }
   onChange(e) {
     this.reportsService.getIncomeReport(this.apartmentId, this.selectedYear).subscribe(result => this.incomeReport = result, error => console.error(error));
   }

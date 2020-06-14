@@ -37,8 +37,9 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
-            //ApartmentDto apartmentDto = await _repositoryWraper.ApartmentReport.GetApartmentInfo(apartmentId);
-            ApartmentDto apartmentDto = await _repositoryWraper.GeneralView.GetApartmentInfo(apartmentId);
+            ApartmentDto apartmentDto = await _repositoryWraper
+                .GeneralView
+                .GetApartmentInfo(apartmentId);
             return Ok(apartmentDto);
         }
 
@@ -55,20 +56,7 @@ namespace Nadlan.Controllers
 
             return Ok(investorReportOverview);
         }
-        ////TODO: check if in use
-        //[HttpGet("GetBalance/{accountId}")]
-        //public async Task<IActionResult> GetBalance([FromRoute]  int accountId)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    decimal balance = await _repositoryWraper.ApartmentReport.GetBalance(accountId);
-
-        //    return Ok(balance);
-        //}
-
+        
 
         [HttpGet("GetPersonalBalance/{stakeholderId}")]
         public async Task<IActionResult> GetPersonalBalance([FromRoute]  int stakeholderId)

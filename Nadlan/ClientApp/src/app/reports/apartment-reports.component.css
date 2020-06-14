@@ -12,7 +12,13 @@ mat-card {
   color: gray;
 }
 
-
+.align-icon {
+  position: absolute;
+  margin-left: 5px;
+}
+.percentage-icon {
+  color: darkcyan;
+}
 
 /*::ng-deep .mat-tab-header {
   background-color: red;
