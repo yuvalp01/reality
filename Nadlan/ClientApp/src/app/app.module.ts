@@ -77,8 +77,8 @@ import { PaymentFormComponent } from './renovationNew/payment-form/payment-form.
     MyOwnCustomMaterialModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([
-     // { path: '', component: LoginComponent, pathMatch: 'full' },
-      { path: '', component: RenovationOverviewComponent, pathMatch: 'full' },
+      { path: '', component: LoginComponent, pathMatch: 'full' },
+     //   { path: '', component: RenovationOverviewComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'add-apartment', component: AddApartmentForm },
       { path: 'fetch-accounts', component: AccountListComponent },
