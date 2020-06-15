@@ -213,19 +213,19 @@
             </mat-expansion-panel>
 
             <mat-expansion-panel [expanded]='true'>
-              <mat-expansion-panel-header matTooltip="Click to view scope and prices">
+              <mat-expansion-panel-header matTooltip="Work done so far">
                 <mat-panel-title>
                   <mat-icon mat-list-icon>attach_money</mat-icon>
                   <span>Total Price</span>
-                  
-              <div id="linesProgressBar" style="height: 20px;">
-                <mat-progress-bar  color="accent" mode="determinate" value="{{(totalLinesDone / totalCost)*100}}">
-                </mat-progress-bar>
-                <span [ngStyle]="{'left':(totalLinesDone / totalCost)*100 +1 +'%'}"
-                  style="position:relative; font-size: 13px; top:-19px; font-weight: bold;color:green;;">
-                  {{(totalLinesDone / totalCost)| percent:'1.0'}}
-                </span>
-              </div>
+
+                  <div id="linesProgressBar" style="height: 20px;">
+                    <mat-progress-bar color="accent" mode="determinate" value="{{(totalLinesDone / totalCost)*100}}">
+                    </mat-progress-bar>
+                    <span [ngStyle]="{'left':(totalLinesDone / totalCost)*100 +1 +'%'}"
+                      style="position:relative; font-size: 13px; top:-19px; font-weight: bold;color:green;;">
+                      {{(totalLinesDone / totalCost)| percent:'1.0'}}
+                    </span>
+                  </div>
                 </mat-panel-title>
                 <mat-panel-description>
                   <mat-list-item>
