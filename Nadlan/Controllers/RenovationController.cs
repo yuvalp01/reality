@@ -125,7 +125,16 @@ namespace Nadlan.Controllers
             var newBalance = await _repositoryWraper.RenovationPaymentRepository.SoftDeleteAsync(paymentId);
             return Ok(newBalance);
         }
-
+        [HttpPut("cancelPayment")]
+        public async Task<IActionResult> CancelPayment([FromBody] int paymentId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var newBalance = await _repositoryWraper.RenovationPaymentRepository.CancelPayment(paymentId);
+            return Ok(newBalance);
+        }
 
 
         [HttpPost("payment")]

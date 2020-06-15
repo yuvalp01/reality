@@ -136,6 +136,11 @@
                       <button (click)="delete(item.id)" mat-button color="warn">Delete</button>
                       <button *ngIf="item.datePayment" (click)="confirm(item.id)" mat-button
                         color="success">Confirm</button>
+                        <!-- <button *ngIf="item.datePayment" (click)="cancelPayment(item.id)" mat-button
+                        color="success">Cancel</button> -->
+                        <mat-icon style="cursor: pointer;" color="accent" matTooltip="Cancel Payment"
+                        *ngIf="item.datePayment" (click)="cancelPayment(item.id)">cancel</mat-icon>
+                        
                     </ng-container>
 
                     <button *ngIf="item.datePayment" (click)="openForm('edit',item.id)" mat-button
@@ -212,7 +217,7 @@
               </mat-expansion-panel-header>
             </mat-expansion-panel>
 
-            <mat-expansion-panel [expanded]='true'>
+            <mat-expansion-panel [expanded]='false'>
               <mat-expansion-panel-header matTooltip="Work done so far">
                 <mat-panel-title>
                   <mat-icon mat-list-icon>attach_money</mat-icon>

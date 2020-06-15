@@ -42,6 +42,11 @@ export class RenovationService
   //   return this.httpClient.put<number>(`${this.baseUrl}/api/renovation/revertPayment`,payment,options);
   // }
 
+  cancelPayment(paymentId: number): Observable<number> {
+    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    return this.httpClient.put<number>(`${this.baseUrl}/api/renovation/cancelPayment`,paymentId,options);
+  }
+
   confirmPayment(paymentId: number): Observable<IRenovationPayment> {
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.httpClient.put<IRenovationPayment>(`${this.baseUrl}/api/renovation/confirmPayment`,paymentId,options);

@@ -126,6 +126,14 @@ export class RenovationOverviewComponent implements OnInit {
         });
     }
   }
+  cancelPayment(id:number)
+  {
+    this.renovationService.cancelPayment(id)
+    .subscribe({
+      next: newBalance => this.loadPayments(this.PROJECT_ID, newBalance),
+      error: err => console.error(err)
+    });
+  }
 
   exportAsXLSX(): void {
     this.dataSourceLines.data.forEach(a => delete a.id);
