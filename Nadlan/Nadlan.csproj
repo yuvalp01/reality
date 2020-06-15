@@ -25,8 +25,12 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp\src\app\renovation\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\src\app\renovation\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\renovation\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="ClientApp\src\app\renovation\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
@@ -41,6 +45,11 @@
   <ItemGroup>
     <None Remove="ClientApp\src\app\fetch-data\transactions-dialog.component.html" />
     <None Remove="ClientApp\src\app\fetch-data\transactions-dialog.component.ts" />
+    <None Remove="ClientApp\src\app\renovation\renovation-list.component.html" />
+    <None Remove="ClientApp\src\app\renovation\renovation-list.component.ts" />
+    <None Remove="ClientApp\src\app\renovation\renovation.component.css" />
+    <None Remove="ClientApp\src\app\renovation\renovation.component.html" />
+    <None Remove="ClientApp\src\app\renovation\renovation.component.ts" />
     <None Remove="ClientApp\src\app\security\login.mocks..ts" />
     <None Remove="ClientApp\src\app\services\excel.service.ts" />
     <None Remove="ClientApp\src\app\shared\globalVars.ts" />

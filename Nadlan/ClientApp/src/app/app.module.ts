@@ -23,10 +23,10 @@ import { MyOwnCustomMaterialModule } from './shared/cusotom-material';
 import { MAT_DATE_LOCALE, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { MinusSignToParens } from './shared/minusSignToParens';
 import { TransactionsDialogComponent } from './transactions/transactions-dialog.component';
-import { RenovationComponent } from './renovation/renovation.component';
+// import { RenovationComponent } from './renovation/renovation.component';
 import { RenovationService } from './services/renovation.service';
 import { ExcelService } from './services/excel.service';
-import { RenovationListComponent } from './renovation/renovation-list.component';
+// import { RenovationListComponent } from './renovation/renovation-list.component';
 import { ExpensesComponent } from './expenses/expenses.component';
 import { TransactionsTableComponent } from './transactions/transactions-table.component';
 import { AddExpenseComponent } from './expenses/expenses-form.component';
@@ -56,8 +56,8 @@ import { PaymentFormComponent } from './renovationNew/payment-form/payment-form.
     //ApartmentReportsComponent,
     //MinusSignToParens,
     TransactionsDialogComponent,
-    RenovationComponent,
-    RenovationListComponent,
+    // RenovationComponent,
+    // RenovationListComponent,
     ExpensesComponent,
     TransactionsTableComponent,
     AddExpenseComponent,
@@ -99,7 +99,7 @@ import { PaymentFormComponent } from './renovationNew/payment-form/payment-form.
 
       //{ path: 'reports/:apartmentId', component: ApartmentReportsComponent },
       //{ path: 'renovation', component: RenovationComponent },
-      { path: 'renovation-list', component: RenovationListComponent },
+      // { path: 'renovation-list', component: RenovationListComponent },
       {
         path: 'expenses', component: ExpensesComponent,
         canActivate: [AuthGuard],

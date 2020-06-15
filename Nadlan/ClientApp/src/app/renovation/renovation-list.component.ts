@@ -18,17 +18,15 @@ export class RenovationListComponent implements OnInit {
   //data: ILine[];
 
   ngOnInit() {
-    this.renovationService.getRenovationLines(-1).subscribe(result => {
-      //this.renovationLines = result;
-      this.generalLines = result.filter(a => a.category == 0);
-      this.kitchenLines = result.filter(a => a.category == 1);
-      this.bathLines = result.filter(a => a.category == 2);
-      //this.dataSource.data = result as ILine[];
-    }, error => console.error(error));
+    // this.renovationService.getRenovationLines(-1).subscribe(result => {
+    //   this.generalLines = result.filter(a => a.category == 0);
+    //   this.kitchenLines = result.filter(a => a.category == 1);
+    //   this.bathLines = result.filter(a => a.category == 2);
+    // }, error => console.error(error));
 
-    this.renovationService.getRenovationItems(-1).subscribe(result => {
-      this.allItems = result;
-    }, error => console.error(error));
+    // this.renovationService.getRenovationItems(-1).subscribe(result => {
+    //   this.allItems = result;
+    // }, error => console.error(error));
 
   }
   exportAsXLSX(): void {
