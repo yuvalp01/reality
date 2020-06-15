@@ -37,16 +37,21 @@ export class RenovationService
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.httpClient.put<number>(`${this.baseUrl}/api/renovation/makePayment`,payment,options);
   }
-
+  // revertPayment(payment: number): Observable<number> {
+  //   const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+  //   return this.httpClient.put<number>(`${this.baseUrl}/api/renovation/revertPayment`,payment,options);
+  // }
 
   confirmPayment(paymentId: number): Observable<IRenovationPayment> {
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.httpClient.put<IRenovationPayment>(`${this.baseUrl}/api/renovation/confirmPayment`,paymentId,options);
   }
-  deletePayment(paymentId: number): Observable<IRenovationPayment> {
+
+  updateLine(line:IRenovationLine): Observable<IRenovationLine> {
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return this.httpClient.put<IRenovationPayment>(`${this.baseUrl}/api/renovation/deletePayment`,paymentId,options);
+    return this.httpClient.put<IRenovationLine>(`${this.baseUrl}/api/renovation/line`, line, options);
   }
+
 
   addRenovationPayment(payment: IRenovationPayment): Observable<IRenovationPayment> {
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
@@ -54,14 +59,17 @@ export class RenovationService
   }
 
 
-
-
-  getRenovationLines(apartmentId):Observable<ILine[]> {
-    return this.httpClient.get<ILine[]>(`${this.baseUrl}/api/renovation/renovationLines/${apartmentId}`);
+  deletePayment(paymentId: number): Observable<number> {
+   const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+   return this.httpClient.put<number>(`${this.baseUrl}/api/renovation/deletePayment`,paymentId,options);
   }
 
-  getRenovationItems(apartmentId): Observable<IItemDto[]> {
-    return this.httpClient.get<IItemDto[]>(`${this.baseUrl}/api/renovation/renovationItems/${apartmentId}`);
-  }
+  //getRenovationLines(apartmentId):Observable<ILine[]> {
+  //  return this.httpClient.get<ILine[]>(`${this.baseUrl}/api/renovation/renovationLines/${apartmentId}`);
+  //}
+
+  //getRenovationItems(apartmentId): Observable<IItemDto[]> {
+  //  return this.httpClient.get<IItemDto[]>(`${this.baseUrl}/api/renovation/renovationItems/${apartmentId}`);
+  //}
 
 }

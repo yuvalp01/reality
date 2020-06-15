@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Nadlan.Models.Renovation;
-using Nadlan.Repositories.Renovation;
 using Nadlan.Repositories;
-using Nadlan.ViewModels.Renovation;
-using System.Collections.Generic;
-using System.Linq;
+using Nadlan.Repositories.Renovation;
 using System.Threading.Tasks;
 
 namespace Nadlan.Controllers
@@ -89,11 +86,22 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
-            decimal newBalance =  await _repositoryWraper.RenovationPaymentRepository.MakePaymentAsync(payment);
+            decimal? newBalance = await _repositoryWraper.RenovationPaymentRepository.MakePaymentAsync(payment);
 
             return Ok(newBalance);
         }
 
+        //[HttpPut("revertPayment")]
+        //public async Task<IActionResult> RevertPayment([FromBody] int paymentId)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+        //    decimal newBalance = await _repositoryWraper.RenovationPaymentRepository.RevertPaymentAsync(paymentId);
+
+        //    return Ok(newBalance);
+        //}
 
         [HttpPut("confirmPayment")]
         public async Task<IActionResult> ConfirmPayment([FromBody] int paymentId)
@@ -114,10 +122,11 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
-            await _repositoryWraper.RenovationPaymentRepository.SoftDeleteAsync(paymentId);
-
-            return NoContent();
+            var newBalance = await _repositoryWraper.RenovationPaymentRepository.SoftDeleteAsync(paymentId);
+            return Ok(newBalance);
         }
+
+
 
         [HttpPost("payment")]
         public async Task<IActionResult> AddPayment([FromBody] RenovationPayment payment)
@@ -135,7 +144,8 @@ namespace Nadlan.Controllers
             {
                 return NotFound();
             }
-            return CreatedAtAction("PaymentUpdated", new { id = payment.Id },payment);
+            return Ok();
+            // return CreatedAtAction("PaymentUpdated", new { id = payment.Id },payment);
 
         }
 
@@ -163,8 +173,8 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var mockRepo = new RenovationLineRepositoryMock();
-            var renovationLines = await mockRepo
+            // var mockRepo = new RenovationLineRepositoryMock();
+            var renovationLines = await _repositoryWraper.RenovationLineRepository
                  .GetLinesAsync(renovationProjectId);
 
             if (renovationLines == null)
@@ -175,7 +185,22 @@ namespace Nadlan.Controllers
             return Ok(renovationLines);
         }
 
+        [HttpPut("line")]
+        public async Task<IActionResult> UpdateLine([FromBody] RenovationLine line)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            //var mockRepo = new RenovationLineRepositoryMock();
+            await _repositoryWraper.RenovationLineRepository.UpdateAsync(line);
+            if (line == null)
+            {
+                return NotFound();
+            }
 
+            return NoContent();
+        }
 
     }
 }

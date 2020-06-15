@@ -5,7 +5,7 @@ import { IRenovationLine, IRenovationProject } from '../../models';
 import { MatTableDataSource, MatDialog } from '@angular/material';
 import { IRenovationPayment, ITransaction } from '../../models';
 import { PaymentFormComponent } from '../payment-form/payment-form.component';
-import { CloseScrollStrategy, ScrollStrategyOptions } from '@angular/cdk/overlay';
+import { ExcelService } from '../../services/excel.service';
 
 @Component({
   selector: 'app-renovation-overview',
@@ -16,20 +16,22 @@ export class RenovationOverviewComponent implements OnInit {
 
   constructor(private renovationService: RenovationService,
     private transactionService: TransactionService,
+    private excelService: ExcelService,
     private dialog: MatDialog) { }
   dataSourceLines = new MatTableDataSource<IRenovationLine>();
   dataSourcePayments = new MatTableDataSource<IRenovationPayment>();
-  displayedColumns_lines: string[] = ['category', 'id', 'title', 'cost', 'comments', 'isCompleted'];
-  displayedColumns_payments: string[] = ['id', 'title', 'criteria', 'amount', 'comments', 'datePayment', 'checkIdWriten', 'checkInvoiceScanned', 'checkCriteriaMet', 'actions'];
+  displayedColumns_lines: string[] = ['category', 'title', 'cost', 'comments', 'isCompleted'];
+  displayedColumns_payments: string[] = ['title', 'criteria', 'amount', 'comments', 'datePayment', 'checkIdWriten', 'checkInvoiceScanned', 'checkCriteriaMet', 'actions'];
 
   project: IRenovationProject;
   // lines: IRenovationLine[];
   totalCost: number = 0;
   totalPaymentsPlanned: number = 0;
   totalPaymentsDone: number = 0;
+  totalLinesDone: number = 0;
   paymentTransaction: ITransaction;
   getRenovationPayments: IRenovationPayment[];
-  progressPercent:string = '33%';
+  progressPercent: string = '33%';
   readonly PROJECT_ID: number = 1;
   ngOnInit() {
     this.loadData();
@@ -64,8 +66,9 @@ export class RenovationOverviewComponent implements OnInit {
     this.renovationService.getRenovationLinesNew(this.PROJECT_ID)
       .subscribe(result => {
         let lines = result
-        this.totalCost = lines.reduce((total, line) => total + line.cost, 0); 
+        this.totalCost = lines.reduce((total, line) => total + line.cost, 0);
         this.dataSourceLines.data = lines;
+        this.calcCompletedLines();
       }, error => console.error(error));
 
   }
@@ -74,7 +77,7 @@ export class RenovationOverviewComponent implements OnInit {
     this.renovationService.getRenovationPayments(projectId)
       .subscribe(result => {
         this.dataSourcePayments.data = result;
-        this.totalPaymentsPlanned = result.reduce((total,payment)=>total+payment.amount,0);
+        this.totalPaymentsPlanned = result.reduce((total, payment) => total + payment.amount, 0);
         var alreadyPaid = result.filter(a => a.datePayment);
         this.totalPaymentsDone = alreadyPaid.reduce((total, payment) => total + payment.amount, 0);
         if (newBalance) {
@@ -83,13 +86,19 @@ export class RenovationOverviewComponent implements OnInit {
       }, error => console.error(error));
   }
 
-  openForm(_actionType: string, _renovationProjectId: number) {
+  private calcCompletedLines() {
+    let linesDone: IRenovationLine[] = this.dataSourceLines.data.filter(a=>a.isCompleted);
+    this.totalLinesDone = linesDone.reduce((total, line) => total + line.cost, 0);
+  }
+
+
+  openForm(_actionType: string, _paymentId: number) {
     let dialogRef = this.dialog.open(PaymentFormComponent, {
       maxHeight: '580px',
       // panelClass: 'xxx',
       width: '500px',
       data: {
-        renovationProjectId: _renovationProjectId,
+        paymentId: _paymentId,
         actionType: _actionType,
         //  isEdit : _isEdit
       }
@@ -112,14 +121,51 @@ export class RenovationOverviewComponent implements OnInit {
     if (confirm("Are you sure you want to delete?")) {
       this.renovationService.deletePayment(id)
         .subscribe({
-          next: () => this.loadPayments(this.PROJECT_ID, null),
+          next: newBalance => this.loadPayments(this.PROJECT_ID, newBalance),
           error: err => console.error(err)
         });
     }
   }
 
+  exportAsXLSX(): void {
+    this.dataSourceLines.data.forEach(a => delete a.id);
+    this.dataSourceLines.data.forEach(a => delete a.renovationProject);
+    this.dataSourceLines.data.forEach(a => delete a['renovationProjectId']);
+    this.dataSourceLines.data.forEach(a => {
+      a['Category'] = this.getCategoryName(a.category);
+      delete a.category;
+    });
+    this.excelService.exportAsExcelFile(this.dataSourceLines.data, 'Renovaiton - ' + this.project.name);
+  }
+
+
+  complete(event: any, item: IRenovationLine) {
+    item.isCompleted = event.checked;
+    this.renovationService.updateLine(item).subscribe(
+      {
+        next: () => this.loadLines(),
+        error: err => console.error(err)
+      });
+  }
+
+
+
   printId(id) {
     console.log(id);
+  }
+
+  getCategoryName(num: number) {
+    switch (num) {
+      case 0:
+        return 'General';
+      case 1:
+        return 'Kitchen';
+      case 2:
+        return 'Bathroom';
+      case 3:
+        return 'Rooms'
+    }
+
   }
 
 }

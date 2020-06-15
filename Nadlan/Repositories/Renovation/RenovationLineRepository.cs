@@ -17,6 +17,7 @@ namespace Nadlan.Repositories.Renovation
         {
             var lines = Context.RenovationLines
                  .Where(a => a.RenovationProjectId == projectId)
+                 .OrderBy(a=>a.Category)
                  .ToListAsync();
 
             return lines;

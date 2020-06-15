@@ -35,3 +35,12 @@
 {
   height: 15px;
 }
+
+#linesProgressBar
+{
+
+  height: 20px;
+  width: 70%;
+  margin-left: 10px;
+  padding-top: 3px;
+}

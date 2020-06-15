@@ -53,7 +53,7 @@ export class PaymentFormComponent implements OnInit {
     let isAdmin = this.securityService.hasClaim('admin');
 
     //add new
-    if (this.data.renovationProjectId == 0) {
+    if (this.data.paymentId == 0) {
       this.formTitle = "Add new";
       this.renovationPaymentForm.controls.title.enable();
       //  this.isLimitedMode = false;
@@ -77,7 +77,7 @@ export class PaymentFormComponent implements OnInit {
       }
 
       //this.loadTrans(this.data.transactionId);
-      this.renovationService.getRenovationPaymentById(this.data.renovationProjectId)
+      this.renovationService.getRenovationPaymentById(this.data.paymentId)
         .subscribe({
           next: result => {
             this.loadItem(result)
