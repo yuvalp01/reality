@@ -159,20 +159,18 @@ export class PersonalTransComponent implements OnChanges, OnInit {
     this.transactionService.getByPersonalTransactionId(transactionId).subscribe(
       result => {
         let transactions = result as ITransaction[];
-        if(transactionType ==10)
-        {
-        if (transactions.length > 0) {
-          const dialogRef = this.dialog.open(TransactionsDialogComponent, {
-            height: 'auto',
-            width: 'auto',
-            data: { transactions: transactions, accountName: 'Cash Transactions' }
-          });
+        if (transactionType == 10) {
+          if (transactions.length > 0) {
+            const dialogRef = this.dialog.open(TransactionsDialogComponent, {
+              height: 'auto',
+              width: 'auto',
+              data: { transactions: transactions, accountName: 'Cash Transactions' }
+            });
+          }
+          else {
+            let snackBarRef = this.snackBar.open("There are no details to show", "", { duration: 2000 });
+          }
         }
-        else
-        {
-          let snackBarRef = this.snackBar.open("There are no details to show", "", { duration: 2000 });
-        }
-      }
       }, error => console.error(error)
     );
 
