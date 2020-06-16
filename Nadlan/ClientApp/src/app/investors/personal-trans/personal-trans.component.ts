@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild, Input, SimpleChanges, OnChanges } from '@angular/core';
-import { IPersonalTransaction } from '../../models';
+import { IPersonalTransaction, ITransaction } from '../../models';
 import { PersonalTransService } from '../personal-trans.service';
-import { MatTableDataSource, MatSort, MatDialog, fadeInContent } from '@angular/material';
+import { MatTableDataSource, MatSort, MatDialog, fadeInContent, MatSnackBar } from '@angular/material';
 import { PersonalTransFormComponent } from '.././personal-trans-form/personal-trans-form.component';
 import { Router } from '@angular/router';
 import { ExcelService } from '../../services/excel.service';
-import { debug } from 'util';
+import { TransactionsDialogComponent } from '../../transactions/transactions-dialog.component';
+import { TransactionService } from '../../services/transaction.service';
 
 
 @Component({
@@ -20,6 +21,8 @@ export class PersonalTransComponent implements OnChanges, OnInit {
     private route: Router,
     private excelService: ExcelService,
     private personalTransService: PersonalTransService,
+    private transactionService: TransactionService,
+    private snackBar: MatSnackBar,
     private dialog: MatDialog) { }
   displayedColumns: string[] = ['date', 'amount', 'transactionType', 'apartment', 'comments'];
   balance: number = 0;
@@ -54,7 +57,7 @@ export class PersonalTransComponent implements OnChanges, OnInit {
       let personalTrans = result as IPersonalTransaction[];
       this.dataSourceTrans.data = personalTrans;
       this.dataSourceTrans.sort = this.sort;
-      this.dataSourceTrans.filterPredicate = (data: any, filter: string):boolean => {
+      this.dataSourceTrans.filterPredicate = (data: any, filter: string): boolean => {
         return data.transactionType == filter;
       };
 
@@ -152,6 +155,31 @@ export class PersonalTransComponent implements OnChanges, OnInit {
   }
 
 
+  showTransactions(transactionId, transactionType) {
+    this.transactionService.getByPersonalTransactionId(transactionId).subscribe(
+      result => {
+        let transactions = result as ITransaction[];
+        if(transactionType ==10)
+        {
+        if (transactions.length > 0) {
+          const dialogRef = this.dialog.open(TransactionsDialogComponent, {
+            height: 'auto',
+            width: 'auto',
+            data: { transactions: transactions, accountName: 'Cash Transactions' }
+          });
+        }
+        else
+        {
+          let snackBarRef = this.snackBar.open("There are no details to show", "", { duration: 2000 });
+        }
+      }
+      }, error => console.error(error)
+    );
+
+  }
+
+
+
   public isPositive(value: number): boolean {
     if (value >= 0) {
       return true;
@@ -197,10 +225,6 @@ export class PersonalTransComponent implements OnChanges, OnInit {
   //  var xxxx = this.filterByString(this.dataSourceTrans.data, 'bouboulinas')
 
 
-
-  //  this.excelService.exportAsExcelFile(xxxx, 'Transactions');
-  //  // this.excelService.exportAsExcelFile(this.dataSourceAssistant.data, 'Transactions');
-  //}
 
   //filterByString(data, s) {
   //  return data.filter(e => e.apartmentId.includes(s) || e.comments.includes(s));

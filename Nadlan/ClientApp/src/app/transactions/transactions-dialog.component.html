@@ -1,7 +1,6 @@
 <h1 mat-dialog-title style="font-weight:bold">{{data.accountName}}</h1>
 
 <div class="transactions-list">
-  <button mat-button color="primary" (click)="exportAsXLSX()">Export to Excel</button>
 
   <table id="transactions-popup" mat-table [dataSource]="data.transactions">
     <ng-container matColumnDef="id">
@@ -20,8 +19,6 @@
       </td>
     </ng-container>
     <ng-container matColumnDef="date">
-      er
-      at
       <th mat-header-cell *matHeaderCellDef>Date</th>
       <td mat-cell *matCellDef="let transaction">
         <!--<mat-icon *ngIf="transaction.personalTransactionId==-1">hourglass_full</mat-icon>-->
@@ -65,5 +62,6 @@
         data-id="{{row.id}}"></tr>
 
   </table>
+  <button  mat-button color="primary" (click)="exportAsXLSX()">Export to Excel</button>
 
 </div>

@@ -56,6 +56,29 @@ namespace Nadlan.Controllers
             return Ok(transaction);
         }
 
+        [HttpGet("getByPersonalTransactionId/{id}")]
+        public async Task<IActionResult> GetByPersonalTransactionId([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var transaction = await _context.Transactions
+                .Where(a=>a.IsDeleted==false)
+                .Where(a=>a.PersonalTransactionId==id)
+                .OrderByDescending(a=>a.Date)
+                .ToListAsync();
+
+            if (transaction == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(transaction);
+        }
+
+
         // GET: api/Transactions/5
         [HttpGet("{apartmentId}/{accountId}/{isPurchaseCost}/{year=0}")]
         public async Task<IActionResult> GetTransaction([FromRoute] int apartmentId, int accountId, bool isPurchaseCost, int year)
@@ -215,17 +238,6 @@ namespace Nadlan.Controllers
             await _repositoryWraper.Transaction.SoftDelete(id);
             return Ok();
 
-
-            //var transaction = await _context.Transactions.FindAsync(id);
-            //if (transaction == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //_context.Transactions.Remove(transaction);
-            //await _context.SaveChangesAsync();
-
-            //return Ok(transaction);
         }
 
         private bool TransactionExists(int id)

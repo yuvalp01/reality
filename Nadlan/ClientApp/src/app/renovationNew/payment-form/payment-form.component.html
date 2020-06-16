@@ -4,10 +4,9 @@
     <h3>
       <mat-icon color="accent">{{formIcon}}</mat-icon>
       {{formTitle}}</h3>
-<h4>{{renovationPaymentForm.controls.title.value}}
-
- 
-</h4>
+<h5>
+  {{renovationPaymentForm.controls.title.value}}
+</h5>
     <fieldset *hasClaim="['admin']">
       <mat-form-field style="width: 100%" appearance="outline">
         <mat-label>Title</mat-label>
@@ -98,7 +97,7 @@ formControlName="checkCriteriaMet">Criteria met?</mat-checkbox>
       [ngClass]="{'test':this.renovationPaymentForm.dirty
       &&renovationPaymentForm.controls.checkIdWriten.invalid}" 
       style="width: 50%;"
-      formControlName="checkIdWriten">Id denoted on tnvoice?</mat-checkbox>
+      formControlName="checkIdWriten">Id [{{data.paymentId}}] Denoted on the invoice?</mat-checkbox>
       <br/>
   <mat-checkbox 
        [ngClass]="{'test':this.renovationPaymentForm.dirty

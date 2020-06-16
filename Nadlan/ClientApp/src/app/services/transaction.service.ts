@@ -27,6 +27,10 @@ export class TransactionService {
     return this.httpClient.get<ITransaction[]>(`${this.baseUrl}api/transactions/${apartmentId}/${accountId}/${isPurchaseCost}/${year}`);
   }
 
+  getByPersonalTransactionId(personalTransactionId: number): Observable<ITransaction[]> {
+    return this.httpClient.get<ITransaction[]>(`${this.baseUrl}api/transactions/getByPersonalTransactionId/${personalTransactionId}`);
+  }
+
   addTransaction(transaction: ITransaction): Observable<ITransaction> {
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.httpClient.post<ITransaction>(this.baseUrl + 'api/transactions', transaction, options);

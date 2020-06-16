@@ -2,12 +2,10 @@ import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges, Inject }
 import { IIncomeReport, IPurchaseReport, ISummaryReport, ITransaction, IApartment } from '../models';
 import { ReportService } from '../services/reports.service';
 import { ActivatedRoute, RouterEvent, NavigationEnd } from '@angular/router';
-import { filter, debounce } from 'rxjs/operators';
 import { TransactionService } from '../services/transaction.service';
 import { MatDialog, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { TransactionsDialogComponent } from '../transactions/transactions-dialog.component';
-import { ProviderAst } from '@angular/compiler';
-import { debug } from 'util';
+
 
 @Component({
   selector: 'apartment-reports',
