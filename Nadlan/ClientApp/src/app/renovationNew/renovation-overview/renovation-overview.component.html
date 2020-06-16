@@ -152,7 +152,9 @@
 
 
               <tr mat-header-row *matHeaderRowDef="displayedColumns_payments"></tr>
-              <tr [ngClass]="{'pending':row.datePayment && !row.isConfirmed,
+              <tr 
+              [matTooltip]="!row.isConfirmed && row.datePayment?'Pending for confirmation':''"
+              [ngClass]="{'pending':row.datePayment && !row.isConfirmed,
                                  'completed':row.isConfirmed }" (click)="printId(row.id)" mat-row
                 *matRowDef="let row; columns: displayedColumns_payments"></tr>
             </table>

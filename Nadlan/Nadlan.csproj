@@ -40,6 +40,7 @@
     <Compile Remove="Repositories\ApartmentRepository.cs" />
     <Compile Remove="Repositories\InvestorReportRepository.cs" />
     <Compile Remove="Repositories\RenovationRepository.cs" />
+    <Compile Remove="Repositories\Renovation\RenovationItemRepository.cs" />
   </ItemGroup>
 
   <ItemGroup>
