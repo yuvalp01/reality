@@ -118,8 +118,8 @@
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let transaction">
         <div>
-          <button *ngIf="!transaction.isConfirmed" (click)="openEdit(transaction.id)" mat-button color="primary">Edit</button>
-          <button *ngIf="!transaction.isConfirmed" (click)="delete(transaction.id)" mat-button color="warn">Delete</button>
+          <button *ngIf="!transaction.isConfirmed && transaction.accountId!=17" (click)="openEdit(transaction.id)" mat-button color="primary">Edit</button>
+          <button *ngIf="!transaction.isConfirmed && transaction.accountId!=17" (click)="delete(transaction.id)" mat-button color="warn">Delete</button>
           <!--<button (click)="openEdit(transaction.id)" mat-button color="primary">Edit</button>
           <button (click)="delete(transaction.id)" mat-button color="warn">Delete</button>-->
           <ng-container *ngIf="!transaction.isConfirmed">
