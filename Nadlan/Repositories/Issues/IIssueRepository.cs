@@ -1,19 +1,20 @@
-﻿using Nadlan.Models.Issues;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Nadlan.Models.Issues;
 
 namespace Nadlan.Repositories.Issues
 {
-    interface IIssueRepository
+    public interface IIssueRepository
     {
-        Task<List<Issue>> GetAllIssues(bool isOnlyOpen);
-        Task<List<Issue>> GetOpenIssues(bool isOnlyOpen);
-        Task<List<IssueItem>> GetItemsByIssueId(int issueId);
-
-        Task<Issue> CreateIssue(Issue issue);
-        Task<Issue> UpdateIssue(Issue issue);
+        Task<List<Issue>> GetAllIssuesAsync(bool isOnlyOpen);
+        Task<Issue> GetIssueByIdAsync(int issueId);
+        Task<List<Message>> GetMassagesByIssueIdAsync(int issueId);
+        Task UpdateIssueAsync(Issue issue);
+        Task UpdateMessageAsync(Message message);
+        Task CreateIssueAsync(Issue issue);
+        Task CreateMessageAsync(Message message);
+        Task SoftDeleteIssueAsync(int id);
+        Task SoftDeletMessageAsync(int id);
 
     }
 }

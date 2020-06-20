@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Nadlan.MockData;
+using Nadlan.Models.Issues;
 using Nadlan.Models.Renovation;
 using Nadlan.Repositories;
 using Nadlan.Repositories.Renovation;
@@ -13,202 +15,121 @@ namespace Nadlan.Controllers
     public class IssuesController : ControllerBase
     {
         //private readonly NadlanConext _context;
-        private readonly RenovationRepositoryWrapper _repositoryWraper;
+        private readonly RepositoryWrapper _repositoryWraper;
         private readonly IMapper _mapper;
+        private void LoadTestData(NadlanConext context)
+        {
 
+            context.Issues.AddRange(MockIssues.GetAllIssues());
+            context.Messages.AddRange(MockIssues.GetAllMessages());
+
+            context.SaveChanges();
+        }
         public IssuesController(NadlanConext context, IMapper mapper)
         {
-            _repositoryWraper = new RenovationRepositoryWrapper(context);
+
+            LoadTestData(context);
+
+            _repositoryWraper = new RepositoryWrapper(context);
             _mapper = mapper;
+
+
         }
 
 
-        //[HttpGet("issues/{isOpenOnly}")]
-        //public async Task<IActionResult> GetRenovationPaymentsByProjectId([FromRoute] bool isOpenOnly)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-        //    var mockRepo = new MockData.MockIssues();
-        //    var renovationPayments = await MockData.MockIssues.GetAllIssues();
-        //        .GetPaymentsAsync(renovationProjectId);
-        //    if (renovationPayments == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(renovationPayments);
-        //}
-        [HttpGet("payment/{id}")]
-        public async Task<IActionResult> GetRenovationPaymentById([FromRoute] int id)
+        [HttpGet("issues/{isOpenOnly}")]
+        public async Task<IActionResult> GetIssues([FromRoute] bool isOpenOnly)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            //var mockRepo = new RenovationLineRepositoryMock();
-            var payment = await _repositoryWraper.RenovationPaymentRepository
-                 .GetPaymentByIdAsync(id);
-            if (payment == null)
-            {
-                return NotFound();
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var mockRepo = new MockData.MockIssues();
+            var issues = await _repositoryWraper.IssueRepository
+                .GetAllIssuesAsync(isOpenOnly);
+            if (issues == null) return NotFound();
+
+            return Ok(issues);
+        }
+        [HttpGet("issue/{id}")]
+        public async Task<IActionResult> GetIssueById([FromRoute] int id)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var payment = await _repositoryWraper.IssueRepository
+                 .GetMassagesByIssueIdAsync(id);
+            if (payment == null) return NotFound();
 
             return Ok(payment);
         }
-
-        [HttpPut("payment")]
-        public async Task<IActionResult> UpdatePayment([FromBody] RenovationPayment payment)
+        [HttpGet("message/{id}")]
+        public async Task<IActionResult> GetMessageById([FromRoute] int id)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var message = await _repositoryWraper.IssueRepository
+                 .GetMessageByIdAsync(id);
+            if (message == null) return NotFound();
+
+            return Ok(message);
+        }
+
+        [HttpGet("messages/{id}")]
+        public async Task<IActionResult> GetMessagesByIssueId([FromRoute] int id)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var messages = await _repositoryWraper.IssueRepository
+                 .GetMassagesByIssueIdAsync(id);
+            if (messages == null) return NotFound();
+
+            return Ok(messages);
+        }
 
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            //var mockRepo = new RenovationLineRepositoryMock();
-            await _repositoryWraper.RenovationPaymentRepository.UpdateAsync(payment);
-            //var payment = await mockRepo
-            //.GetPaymentByIdAsync(id);
-            if (payment == null)
-            {
-                return NotFound();
-            }
-
+        [HttpPut("issue")]
+        public async Task<IActionResult> UpdateIssue([FromBody] Issue issue)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (issue == null) return NotFound();
+            await _repositoryWraper.IssueRepository.UpdateIssueAsync(issue);
             return NoContent();
         }
 
-        [HttpPut("makePayment")]
-        public async Task<IActionResult> MakePayment([FromBody] RenovationPayment payment)
+        [HttpPut("message")]
+        public async Task<IActionResult> UpdateMessage([FromBody] Message message)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            decimal? newBalance = await _repositoryWraper.RenovationPaymentRepository.MakePaymentAsync(payment);
-
-            return Ok(newBalance);
-        }
-
-        //[HttpPut("revertPayment")]
-        //public async Task<IActionResult> RevertPayment([FromBody] int paymentId)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-        //    decimal newBalance = await _repositoryWraper.RenovationPaymentRepository.RevertPaymentAsync(paymentId);
-
-        //    return Ok(newBalance);
-        //}
-
-        [HttpPut("confirmPayment")]
-        public async Task<IActionResult> ConfirmPayment([FromBody] int paymentId)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            await _repositoryWraper.RenovationPaymentRepository.ConfirmAsync(paymentId);
-
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (message == null) return NotFound();
+            await _repositoryWraper.IssueRepository.CreateMessageAsync(message);
             return NoContent();
         }
 
-        [HttpPut("deletePayment")]
-        public async Task<IActionResult> DeletePayment([FromBody] int paymentId)
+
+        [HttpDelete("issue")]
+        public async Task<IActionResult> DeleteIssue([FromBody] int issueId)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var newBalance = await _repositoryWraper.RenovationPaymentRepository.SoftDeleteAsync(paymentId);
-            return Ok(newBalance);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            await _repositoryWraper.IssueRepository.SoftDeleteIssueAsync(issueId);
+            return NoContent();
         }
-        [HttpPut("cancelPayment")]
-        public async Task<IActionResult> CancelPayment([FromBody] int paymentId)
+        [HttpDelete("message")]
+        public async Task<IActionResult> DeleteMessage([FromBody] int issueItemId)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var newBalance = await _repositoryWraper.RenovationPaymentRepository.CancelPayment(paymentId);
-            return Ok(newBalance);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            await _repositoryWraper.IssueRepository.SoftDeletMessageAsync(issueItemId);
+            return NoContent();
         }
 
 
-        [HttpPost("payment")]
-        public async Task<IActionResult> AddPayment([FromBody] RenovationPayment payment)
+        [HttpPost("issue")]
+        public async Task<IActionResult> AddIssue([FromBody] Issue  issue)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            //var mockRepo = new RenovationLineRepositoryMock();
-            await _repositoryWraper.RenovationPaymentRepository.CreateAsync(payment);
-
-            //var payment = await mockRepo
-            //.GetPaymentByIdAsync(id);
-            if (payment == null)
-            {
-                return NotFound();
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            await _repositoryWraper.IssueRepository.CreateIssueAsync(issue);
             return Ok();
-            // return CreatedAtAction("PaymentUpdated", new { id = payment.Id },payment);
-
         }
 
-        [HttpGet("projects")]
-        public async Task<IActionResult> GetRenovationProjects()
+        [HttpPost("message")]
+        public async Task<IActionResult> AddMessage([FromBody] Message message)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var mockRepo = new RenovationLineRepositoryMock();
-            var projects = await mockRepo.GetAllRenovationProjectsAsync();
-            if (projects == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(projects);
-        }
-
-        [HttpGet("lines/{renovationProjectId}")]
-        public async Task<IActionResult> GetRenovationLines([FromRoute] int renovationProjectId)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            // var mockRepo = new RenovationLineRepositoryMock();
-            var renovationLines = await _repositoryWraper.RenovationLineRepository
-                 .GetLinesAsync(renovationProjectId);
-
-            if (renovationLines == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(renovationLines);
-        }
-
-        [HttpPut("line")]
-        public async Task<IActionResult> UpdateLine([FromBody] RenovationLine line)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            //var mockRepo = new RenovationLineRepositoryMock();
-            await _repositoryWraper.RenovationLineRepository.UpdateAsync(line);
-            if (line == null)
-            {
-                return NotFound();
-            }
-
-            return NoContent();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            await _repositoryWraper.IssueRepository.CreateMessageAsync(message);
+            return Ok();
         }
 
     }

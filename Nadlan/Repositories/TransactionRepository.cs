@@ -18,10 +18,18 @@ namespace Nadlan.Repositories
 
         public override async Task<List<Transaction>> GetAllAsync()
         {
-            return await Context.Transactions.OrderByDescending(a => a.Id)
+            var transactions = Context.Transactions.OrderByDescending(a => a.Id)
                 .Include(a => a.Account)
                 .Include(a => a.Apartment)
-                .Where(a => !a.IsDeleted).ToListAsync();
+                .Where(a => !a.IsDeleted);
+
+            //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            //{
+            //    transactions = transactions.Where(a=> a.Id>1000);
+            //}
+
+            return await transactions.ToListAsync();
+
         }
         public async Task<List<TransactionDto>> GetAllExpensesAsync()
         {
@@ -122,7 +130,7 @@ namespace Nadlan.Repositories
             //"Business/Geneal" transaction is a business expense and also
             // when it's hours for apartment maintances (so only apartments with tenants)
             if (transaction.AccountId == 200
-                ||(transaction.AccountId == 4 && transaction.Hours > 0))
+                || (transaction.AccountId == 4 && transaction.Hours > 0))
             {
                 transaction.IsBusinessExpense = true;
             }
@@ -200,7 +208,7 @@ namespace Nadlan.Repositories
 
         public async Task<decimal> IncreaseTransactionAmountAsync(int transactionId, decimal additionalAmount)
         {
-            var transaction = Context.Transactions.FirstOrDefault(a=>a.Id == transactionId);
+            var transaction = Context.Transactions.FirstOrDefault(a => a.Id == transactionId);
             decimal currentAmount = transaction.Amount;
             transaction.Amount = currentAmount + additionalAmount;
             Update(transaction);

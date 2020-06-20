@@ -91,12 +91,12 @@ namespace Nadlan.MockData
                      DateEnd = new DateTime(2020,05,01),
                      PeneltyPerDay = 40,
                      Comments ="New bathroom*2 + wall + kitchen",
-                     TransactionId = 1224
+                     TransactionId = 1000
                  }
             };
         }
 
-        public static IEnumerable<RenovationLine> GetRenovationLines()
+        public static List<RenovationLine> GetRenovationLines()
         {
             var project = GetRenovationProjects()[0];
             return new List<RenovationLine>

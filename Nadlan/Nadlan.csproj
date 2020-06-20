@@ -35,12 +35,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="MockData\MockContext.cs" />
+    <Compile Remove="Models\Message.cs" />
     <Compile Remove="Repositories\ApartmentReports\ApartmentReportRepository.cs" />
     <Compile Remove="Repositories\ApartmentReports\ApartmentReportRepositoryNew_old.cs" />
     <Compile Remove="Repositories\ApartmentRepository.cs" />
+    <Compile Remove="Repositories\INadlanConext.cs" />
     <Compile Remove="Repositories\InvestorReportRepository.cs" />
+    <Compile Remove="Repositories\Issues\IMockIssueRepository.cs" />
     <Compile Remove="Repositories\RenovationRepository.cs" />
     <Compile Remove="Repositories\Renovation\RenovationItemRepository.cs" />
+    <Compile Remove="Repositories\Renovation\RenovationLineRepositoryMock.cs" />
   </ItemGroup>
 
   <ItemGroup>

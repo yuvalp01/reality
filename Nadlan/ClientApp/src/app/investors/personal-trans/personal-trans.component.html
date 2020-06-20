@@ -70,7 +70,7 @@
     <ng-container matColumnDef="amount">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
       <td mat-cell
-          (click)="showTransactions(transaction.id, transaction.transactionType)"
+          (click)="showTransactions(transaction, transaction.transactionType)"
           [ngClass]="{
           positive: isPositive(transaction.amount),
           negative: !isPositive(transaction.amount),
@@ -84,7 +84,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
       <td mat-cell *matCellDef="let transaction">
         <mat-icon  class="clickable"
-        (click)="showTransactions(transaction.id, transaction.transactionType)"
+        (click)="showTransactions(transaction, transaction.transactionType)"
         matTooltip="Paid on behalf" *ngIf="transaction.transactionType==10">money</mat-icon>
         <mat-icon matTooltip="Profit distribution" *ngIf="transaction.transactionType==20">trending_up</mat-icon>
         <mat-icon matTooltip="Cash withdrawal" *ngIf="transaction.transactionType==13">atm</mat-icon>

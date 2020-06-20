@@ -46,30 +46,7 @@ namespace Nadlan.Repositories.Renovation
             await SaveAsync();
         }
 
-        public async Task<decimal?> MakePaymentAsync(RenovationPayment renovationPayment)
-        {
-            Update(renovationPayment);
-            //TransactionRepository transactionRepository = new TransactionRepository(Context);
 
-            decimal? newBalance = null;
-            if (renovationPayment.DatePayment != null)
-            {
-                TransactionRepository transactionRepository = new TransactionRepository(Context);
-                newBalance = await transactionRepository
-                    .IncreaseTransactionAmountAsync(renovationPayment.RenovationProject.TransactionId,
-                    renovationPayment.Amount);
-                Update(renovationPayment);
-
-            }
-
-
-
-            //decimal newBalance =   await transactionRepository
-            //    .IncreaseTransactionAmountAsync(renovationPayment.RenovationProject.TransactionId,
-            //    renovationPayment.Amount);
-            await SaveAsync();
-            return newBalance;
-        }
 
 
 
@@ -83,6 +60,26 @@ namespace Nadlan.Repositories.Renovation
             await SaveAsync();
         }
 
+        public async Task<decimal?> MakePaymentAsync(RenovationPayment renovationPayment)
+        {
+            Update(renovationPayment);
+            decimal? newBalance = null;
+            //Payment is always with a date but we make a server side check anyway:
+            if (renovationPayment.DatePayment != null)
+            {
+                TransactionRepository transactionRepository = new TransactionRepository(Context);
+                //Increase the negativity of the transaction:
+                newBalance = await transactionRepository
+                    .IncreaseTransactionAmountAsync(renovationPayment.RenovationProject.TransactionId,
+                    renovationPayment.Amount * -1);
+                Update(renovationPayment);
+
+            }
+            await SaveAsync();
+            return newBalance;
+        }
+        /// 1. Delete the milestone/payment altogether
+        /// 2. Decrease the negativity of the transaction
         public async Task<decimal?> SoftDeleteAsync(int paymentId)
         {
             RenovationPayment renovationPayment = Context.RenovationPayments
@@ -92,9 +89,10 @@ namespace Nadlan.Repositories.Renovation
             if (renovationPayment.DatePayment != null)
             {
                 TransactionRepository transactionRepository = new TransactionRepository(Context);
+                //Decrease the negativity of the transaction:
                 newBalance = await transactionRepository
                     .IncreaseTransactionAmountAsync(renovationPayment.RenovationProject.TransactionId,
-                    renovationPayment.Amount * -1);
+                    renovationPayment.Amount);
                 Update(renovationPayment);
 
             }
@@ -103,35 +101,33 @@ namespace Nadlan.Repositories.Renovation
             await SaveAsync();
             return newBalance;
         }
-
-        internal async Task<decimal> CancelPayment(int paymentId)
+        /// <summary>
+        /// 1. Remove the date from the payment
+        /// 2. Decrease the negativity of the transaction
+        /// 3. The milestone stays
+        /// </summary>
+        /// <param name="paymentId"></param>
+        /// <returns></returns>
+        public async Task<decimal> CancelPayment(int paymentId)
         {
             RenovationPayment renovationPayment = Context.RenovationPayments
                 .Include(a => a.RenovationProject)
                 .FirstOrDefault(a => a.Id == paymentId);
             renovationPayment.DatePayment = null;
             TransactionRepository transactionRepository = new TransactionRepository(Context);
+            //Decrease the negativity of the transaction:
             decimal newBalance = await transactionRepository
                 .IncreaseTransactionAmountAsync(renovationPayment.RenovationProject.TransactionId,
-                renovationPayment.Amount *-1);
+                renovationPayment.Amount);
             Update(renovationPayment);
             await SaveAsync();
             return newBalance;
         }
 
-        //[Obsolete]
-        //public async Task<decimal> RevertPaymentAsync(int paymentId)
-        //{
-        //    RenovationPayment renovationPayment = Context.RenovationPayments
-        //        .FirstOrDefault(a => a.Id == paymentId);
-        //    renovationPayment.IsDeleted = true;
-        //    TransactionRepository transactionRepository = new TransactionRepository(Context);
-        //    decimal newBalance = await transactionRepository
-        //        .IncreaseTransactionAmountAsync(-1 * renovationPayment.RenovationProject.TransactionId,
-        //        renovationPayment.Amount);
-        //    Update(renovationPayment);
-        //    await SaveAsync();
-        //    return newBalance;
-        //}
+        public Task<List<RenovationProject>> GetAllRenovationProjectsAsync()
+        {
+            return Context.RenovationProjects.ToListAsync();
+        }
+
     }
 }

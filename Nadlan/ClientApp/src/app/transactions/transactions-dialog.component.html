@@ -1,5 +1,4 @@
-<h1 mat-dialog-title style="font-weight:bold">{{data.accountName}}</h1>
-
+<h1 (click)="printTotal()" mat-dialog-title style="font-weight:bold">{{data.accountName}}</h1>
 <div class="transactions-list">
 
   <table id="transactions-popup" mat-table [dataSource]="data.transactions">
@@ -62,6 +61,6 @@
         data-id="{{row.id}}"></tr>
 
   </table>
-  <button  mat-button color="primary" (click)="exportAsXLSX()">Export to Excel</button>
+  <button *hasClaim="['admin']"  mat-button color="primary" (click)="exportAsXLSX()">Export to Excel</button>
 
 </div>

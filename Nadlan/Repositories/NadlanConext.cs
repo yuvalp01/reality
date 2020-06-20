@@ -3,10 +3,11 @@ using Nadlan.Models;
 using System;
 using Nadlan.Models.Renovation;
 using Nadlan.Models.Security;
+using Nadlan.Models.Issues;
 
 namespace Nadlan.Repositories
 {
-    public class NadlanConext: DbContext
+    public class NadlanConext : DbContext
     {
         public NadlanConext(DbContextOptions<NadlanConext> options) : base(options) 
         {
@@ -29,6 +30,8 @@ namespace Nadlan.Repositories
         public DbSet<RenovationProject> RenovationProjects { get; set; }
         public DbSet<RenovationLine> RenovationLines { get; set; }
         public DbSet<RenovationPayment> RenovationPayments { get; set; }
+        public DbSet<Issue> Issues { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

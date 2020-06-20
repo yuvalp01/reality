@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { ExcelService } from '../../services/excel.service';
 import { TransactionsDialogComponent } from '../../transactions/transactions-dialog.component';
 import { TransactionService } from '../../services/transaction.service';
+import { concat } from 'rxjs';
+import { debug } from 'util';
 
 
 @Component({
@@ -155,8 +157,11 @@ export class PersonalTransComponent implements OnChanges, OnInit {
   }
 
 
-  showTransactions(transactionId, transactionType) {
-    this.transactionService.getByPersonalTransactionId(transactionId).subscribe(
+  showTransactions(transaction, transactionType) {
+    //TODO: move this logig to the server side
+    const partnershipApartments: number[] = [1, 3, 4, 20];
+    //
+    this.transactionService.getByPersonalTransactionId(transaction.id).subscribe(
       result => {
         let transactions = result as ITransaction[];
         if (transactionType == 10) {
@@ -168,7 +173,13 @@ export class PersonalTransComponent implements OnChanges, OnInit {
             });
           }
           else {
-            let snackBarRef = this.snackBar.open("There are no details to show", "", { duration: 2000 });
+
+            if (partnershipApartments.includes(transaction.apartmentId)) {
+              this.snackBar.open("See complete details at the 'Portfolio' Tab", "", { duration: 3000 });
+            }
+            else {
+              this.snackBar.open("Self-explanatory", "", { duration: 2000 });
+            }
           }
         }
       }, error => console.error(error)

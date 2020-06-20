@@ -33,6 +33,7 @@ namespace Nadlan.Controllers
         public async Task<IEnumerable<TransactionDto>> GetTransactions()
         {
             var transactions = await _repositoryWraper.Transaction.GetAllAsync();
+
             var transactionsDto = _mapper.Map<List<Transaction>, IEnumerable<TransactionDto>>(transactions);
             return transactionsDto;
         }

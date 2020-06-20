@@ -59,7 +59,7 @@ import { PaymentFormComponent } from './renovationNew/payment-form/payment-form.
     // RenovationComponent,
     // RenovationListComponent,
     ExpensesComponent,
-    TransactionsTableComponent,
+    //TransactionsTableComponent,
     AddExpenseComponent,
     WelcomepageComponent,
     TransactionFormComponent,

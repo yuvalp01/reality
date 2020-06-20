@@ -11,8 +11,8 @@ namespace Nadlan.Repositories
     {
         Task<List<RenovationProject>> GetAllRenovationProjectsAsync();
         Task<List<RenovationLine>> GetLinesAsync(int projectId);
-        Task<List<RenovationPayment>> GetPaymentsAsync(int projectId);
-        Task<RenovationPayment> GetPaymentByIdAsync(int id);
+        //Task<List<RenovationPayment>> GetPaymentsAsync(int projectId);
+        //Task<RenovationPayment> GetPaymentByIdAsync(int id);
 
         Task CreateAsync(RenovationLine renovationLine);
         Task DeleteAsync(RenovationLine renovationLine);

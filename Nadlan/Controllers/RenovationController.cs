@@ -30,7 +30,6 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
-            //var mockRepo = new RenovationLineRepositoryMock();
             var renovationPayments = await _repositoryWraper.RenovationPaymentRepository
                 .GetPaymentsAsync(renovationProjectId);
             if (renovationPayments == null)
@@ -47,7 +46,6 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
-            //var mockRepo = new RenovationLineRepositoryMock();
             var payment = await _repositoryWraper.RenovationPaymentRepository
                  .GetPaymentByIdAsync(id);
             if (payment == null)
@@ -67,10 +65,7 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
-            //var mockRepo = new RenovationLineRepositoryMock();
             await _repositoryWraper.RenovationPaymentRepository.UpdateAsync(payment);
-            //var payment = await mockRepo
-            //.GetPaymentByIdAsync(id);
             if (payment == null)
             {
                 return NotFound();
@@ -144,11 +139,7 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
-            //var mockRepo = new RenovationLineRepositoryMock();
             await _repositoryWraper.RenovationPaymentRepository.CreateAsync(payment);
-
-            //var payment = await mockRepo
-            //.GetPaymentByIdAsync(id);
             if (payment == null)
             {
                 return NotFound();
@@ -165,8 +156,8 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var mockRepo = new RenovationLineRepositoryMock();
-            var projects = await mockRepo.GetAllRenovationProjectsAsync();
+            var projects = await _repositoryWraper.RenovationPaymentRepository
+                .GetAllRenovationProjectsAsync();
             if (projects == null)
             {
                 return NotFound();

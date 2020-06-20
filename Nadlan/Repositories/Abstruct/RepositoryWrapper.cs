@@ -1,4 +1,5 @@
 ﻿using Nadlan.Repositories.ApartmentReports;
+using Nadlan.Repositories.Issues;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace Nadlan.Repositories
         private AccountRepository _account;
         private ApartmentReportRepositoryNew _apartmentReport;
         private InvestorReportRepository _investorReport;
+        private IssueRepository _issueRepository;
 
 
         public RepositoryWrapper(NadlanConext conext)
@@ -32,7 +34,6 @@ namespace Nadlan.Repositories
                 return _transaction;
             }
         }
-
         public PersonalTransactionRepository PersonalTransaction
         {
             get
@@ -44,8 +45,6 @@ namespace Nadlan.Repositories
                 return _personalTransaction;
             }
         }
-
-
         public AccountRepository Account
         {
             get
@@ -57,7 +56,6 @@ namespace Nadlan.Repositories
                 return _account;
             }
         }
-
         public ApartmentReportRepositoryNew ApartmentReport
         {
             get
@@ -69,18 +67,17 @@ namespace Nadlan.Repositories
                 return _apartmentReport;
             }
         }
-
-        //public GeneralInfoReportRepository GeneralInfoReportRepo
-        //{
-        //    get
-        //    {
-        //        if (_apartmentReport == null)
-        //        {
-        //            _apartmentReport = new ApartmentReportRepository(_conext);
-        //        }
-        //        return _apartmentReport;
-        //    }
-        //}
+        public IssueRepository  IssueRepository
+        {
+            get
+            {
+                if (_issueRepository == null)
+                {
+                    _issueRepository = new IssueRepository(_conext);
+                }
+                return _issueRepository;
+            }
+        }
 
 
 

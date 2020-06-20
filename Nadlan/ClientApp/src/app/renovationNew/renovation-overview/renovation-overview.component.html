@@ -7,23 +7,23 @@
           <span> Renovation Price:</span><span style="font-weight:bold;">
             {{totalCost| currency:'EUR' : 'symbol':'1.0-0'}}</span>
           <span> Paid so far: </span><span style="font-weight:bold; color:green;">
-            {{paymentTransaction.amount | currency:'EUR':'symbol':'1.0-0'}}</span>
+            {{transactionAmount | currency:'EUR':'symbol':'1.0-0'}}</span>
           <span> Left to pay: </span><span style="font-weight:bold; color:red;">
-            {{totalCost-paymentTransaction.amount | currency:'EUR':'symbol':'1.0-0'}}</span>
+            {{totalCost-transactionAmount | currency:'EUR':'symbol':'1.0-0'}}</span>
           <div id="paymentsProgressBar" style="height: 20px;">
-            <mat-progress-bar mode="determinate" value="{{(paymentTransaction.amount / totalCost)*100}}">
+            <mat-progress-bar mode="determinate" value="{{(transactionAmount / totalCost)*100}}">
             </mat-progress-bar>
-            <span [ngStyle]="{'left':(paymentTransaction.amount / totalCost)*100 +1 +'%'}"
+            <span [ngStyle]="{'left':(transactionAmount / totalCost)*100 +1 +'%'}"
               style="position:relative; font-size: 15px; top:-22px; font-weight: bold;color:green;;">
-              {{(paymentTransaction.amount / totalCost)| percent:'1.0'}}
+              {{(transactionAmount / totalCost)| percent:'1.0'}}
             </span>
           </div>
-          <div id="errors" *ngIf="totalPaymentsDone!=paymentTransaction.amount ||totalPaymentsPlanned!=totalCost"
+          <div id="errors" *ngIf="totalPaymentsDone!=transactionAmount ||totalPaymentsPlanned!=totalCost"
             style="border-style:dashed;border-color: red; font-size: 14px; ">
             <ul>
-              <li *ngIf="totalPaymentsDone!=paymentTransaction.amount">
+              <li *ngIf="totalPaymentsDone!=transactionAmount">
                 Payment transaction amount does not equal to total payments!
-                ({{paymentTransaction.amount}} != {{totalPaymentsDone}})
+                ({{transactionAmount}} != {{totalPaymentsDone}})
               </li>
               <li *ngIf="totalPaymentsPlanned!=totalCost">
                 The renovation cost does not equal to the the payments plan!
@@ -32,11 +32,11 @@
             </ul>
           </div>
 
-          <!-- <p *ngIf="totalPaymentsDone!=paymentTransaction.amount" style="color:red">
+          <!-- <p *ngIf="totalPaymentsDone!=transactionAmount" style="color:red">
             Payment transaction amount does not equal to total payments!
             <br />
             <span>
-              {{paymentTransaction.amount}} != {{totalPaymentsDone}}
+              {{transactionAmount}} != {{totalPaymentsDone}}
             </span>
           </p> -->
         </mat-card-title>

@@ -7,11 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Nadlan.MockData;
 using Nadlan.Models.Security;
 using Nadlan.Repositories;
 using System;
 using System.Text;
-using Microsoft.OpenApi.Models;
 
 namespace Nadlan
 {
@@ -75,7 +76,13 @@ namespace Nadlan
             //});
 
 
-            services.AddDbContext<NadlanConext>(options => options.UseSqlServer(Configuration.GetConnectionString("Nadlan")));
+            services.AddDbContext<NadlanConext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("Nadlan")));
+            //services.AddDbContext<NadlanConext>(options =>
+            //    options.UseInMemoryDatabase(databaseName: "InMemoryMockNadlanDatabase"));
+
+
+
             services.AddAutoMapper(typeof(Startup));
             //services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
@@ -104,7 +111,7 @@ namespace Nadlan
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-               // c.RoutePrefix = string.Empty;
+                // c.RoutePrefix = string.Empty;
             });
 
 
@@ -128,6 +135,13 @@ namespace Nadlan
             //    });
 
             app.UseAuthentication();
+
+
+            //var context = app.ApplicationServices.GetService<NadlanConext>();
+            // var _testDbContext = new InMemoryDbContextFactory().GetMockNadlanDbContext();
+            //var _testDbContext = app.ApplicationServices.GetService<NadlanConext>();
+            //LoadTestData(_testDbContext);
+
 
             app.UseMvc(routes =>
             {
@@ -163,5 +177,14 @@ namespace Nadlan
 
             return jwtSettings;
         }
+
+        //private static void LoadTestData(NadlanConext context)
+        //{
+
+        //    context.Issues.AddRange(MockIssues.GetAllIssues());
+        //    context.Messages.AddRange(MockIssues.GetAllMessages());
+
+        //    context.SaveChanges();
+        //}
     }
 }

@@ -30,8 +30,9 @@ export class RenovationOverviewComponent implements OnInit {
   totalPaymentsDone: number = 0;
   totalLinesDone: number = 0;
   paymentTransaction: ITransaction;
+  transactionAmount: number = 0;
   getRenovationPayments: IRenovationPayment[];
-  progressPercent: string = '33%';
+  progressPercent: string = '0%';
   readonly PROJECT_ID: number = 1;
   ngOnInit() {
     this.loadData();
@@ -58,6 +59,7 @@ export class RenovationOverviewComponent implements OnInit {
     this.transactionService.getTransactionById(transactionId)
       .subscribe(result => {
         this.paymentTransaction = result;
+        this.transactionAmount = result.amount*-1;
       });
   }
 
@@ -81,7 +83,7 @@ export class RenovationOverviewComponent implements OnInit {
         var alreadyPaid = result.filter(a => a.datePayment);
         this.totalPaymentsDone = alreadyPaid.reduce((total, payment) => total + payment.amount, 0);
         if (newBalance) {
-          this.paymentTransaction.amount = newBalance;
+          this.transactionAmount = newBalance*-1;
         }
       }, error => console.error(error));
   }

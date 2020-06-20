@@ -17,17 +17,9 @@ namespace Nadlan.Models.Issues
 
         public int ApartmentId { get; set; }
         public Apartment Apartment { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 
-    public class IssueItem
-    {
-        public int Id { get; set; }
-        public string Description { get; set; }
-        public DateTime DateStamp { get; set; }
 
-        public int UserId { get; set; }
-        public AppUser User { get; set; }
-        public int IssueId { get; set; }
-        public Issue Issue { get; set; }
-    }
 }
