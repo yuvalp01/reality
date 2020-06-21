@@ -15,8 +15,10 @@
               <span matTooltip="The amount of money invested up-to-date">Total Investment</span>
               <span [ngClass]="{
           positive: isPositive(investorReportOverview.totalInvestment),
-          negative: !isPositive(investorReportOverview.totalInvestment)
-        }">{{investorReportOverview.totalInvestment | currency:'EUR' : number:'1.0-0'}}</span>
+          negative: !isPositive(investorReportOverview.totalInvestment)}">
+
+                {{investorReportOverview.totalInvestment | currency:'EUR' : number:'1.0-0'}}
+              </span>
             </mat-list-item>
             <!--<mat-divider></mat-divider>-->
             <mat-list-item>
@@ -44,10 +46,12 @@
         }">{{investorReportOverview.totalPendingProfits| currency:'EUR' : number:'1.0-0'}}</span>
             </mat-list-item>
             <mat-divider></mat-divider>
-            <mat-list-item style="color:#2222c7">
+            <mat-list-item>
               <mat-icon mat-list-icon>business_center</mat-icon>
               <span matTooltip="Cash Balance + Pending Profits">Total Balace</span>
-              <span>{{investorReportOverview.totalBalace| currency:'EUR' : number:'1.0-0'}}</span>
+              <span [ngClass]="{
+          positive: isPositive(investorReportOverview.totalBalace),
+          negative: !isPositive(investorReportOverview.totalBalace)}">{{investorReportOverview.totalBalace| currency:'EUR' : number:'1.0-0'}}</span>
             </mat-list-item>
           </mat-list>
         </mat-card-content>
