@@ -28,7 +28,7 @@ import { RenovationService } from './services/renovation.service';
 import { ExcelService } from './services/excel.service';
 // import { RenovationListComponent } from './renovation/renovation-list.component';
 import { ExpensesComponent } from './expenses/expenses.component';
-import { TransactionsTableComponent } from './transactions/transactions-table.component';
+//import { TransactionsTableComponent } from './transactions/transactions-table.component';
 import { AddExpenseComponent } from './expenses/expenses-form.component';
 import { InvestrorsModule } from './investors/investrors.module';
 import { ExpensesService } from './services/expenses.service';

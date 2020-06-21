@@ -5,7 +5,7 @@
 
 
 <span>
-  Personal account balance is <b [ngClass]="{
+  Virtual Account balance is <b [ngClass]="{
           positive: isPositive(balance),
           negative: !isPositive(balance)
         }">{{balance | currency:'EUR' : 'symbol':'1.0-0'}}</b>
@@ -20,7 +20,7 @@
   <mat-chip (click)="switchFilter('paidOnBehalf')"
             [ngClass]="{'hide-type':show_paidOnBehalf,'show-type':!show_paidOnBehalf}">
     <mat-icon style="font-size:20px;"
-              matTooltip="Paid on behalf">
+              matTooltip="Paid on behalf (money paid from my personal account on your behalf)">
       money
     </mat-icon>
   </mat-chip>
@@ -34,14 +34,14 @@
   <mat-chip (click)="switchFilter('cashWithdrawal')"
             [ngClass]="{'hide-type':show_cashWithdrawal,'show-type':!show_cashWithdrawal}">
     <mat-icon style=" font-size:20px;"
-              matTooltip="Cash withdrawal">
+              matTooltip="Cash withdrawal (from your local bank account">
       atm
     </mat-icon>
   </mat-chip>
   <mat-chip (click)="switchFilter('moneyTransfer')"
             [ngClass]="{'hide-type':show_moneyTransfer,'show-type':!show_moneyTransfer}">
     <mat-icon style=" font-size:20px;"
-              matTooltip="Money transfer">
+              matTooltip="Money transfer (from your real bank account to mine)">
       swap_horiz
     </mat-icon>
   </mat-chip>
