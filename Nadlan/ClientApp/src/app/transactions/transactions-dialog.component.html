@@ -1,4 +1,11 @@
 <h1 (click)="printTotal()" mat-dialog-title style="font-weight:bold">{{data.accountName}}</h1>
+<div *hasClaim="['admin']" style="margin-top:-25px; margin-bottom:10px">
+  <span>Total: {{total}}</span>
+  <span *ngIf="data.amount && data.amount!=total"  style="color:red">
+    The list is not equal to the total!
+  </span>
+</div>
+
 <div class="transactions-list">
 
   <table id="transactions-popup" mat-table [dataSource]="data.transactions">

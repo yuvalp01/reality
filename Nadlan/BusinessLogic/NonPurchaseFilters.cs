@@ -5,7 +5,10 @@ namespace Nadlan.BusinessLogic
 {
     public class NonPurchaseFilters
     {
-
+        /// <summary>
+        /// This means that the distribution amount is reduced from the profit
+        /// </summary>
+        /// <returns></returns>
         public  Func<Transaction, bool> GetProfitIncludingDistributionsFilter()
         {
             Func<Transaction, bool> basicPredicate = t =>

@@ -158,7 +158,7 @@ export class PersonalTransComponent implements OnChanges, OnInit {
 
 
   showTransactions(transaction, transactionType) {
-    //TODO: move this logig to the server side
+    //TODO: move this logic to the server side
     const partnershipApartments: number[] = [1, 3, 4, 20];
     //
     this.transactionService.getByPersonalTransactionId(transaction.id).subscribe(
@@ -169,7 +169,7 @@ export class PersonalTransComponent implements OnChanges, OnInit {
             const dialogRef = this.dialog.open(TransactionsDialogComponent, {
               height: 'auto',
               width: 'auto',
-              data: { transactions: transactions, accountName: 'Cash Transactions' }
+              data: { transactions: transactions, accountName: 'Cash Transactions',amount:transaction.amount }
             });
           }
           else {

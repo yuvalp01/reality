@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from "@angular/material";
 import { SecurityService } from "../security/security.service";
 import { TransactionFormComponent } from "./transaction-form/transaction-form.component";
 import { ExcelService } from "../services/excel.service";
-import {ITransaction} from "../models";
+import { ITransaction } from "../models";
 
 
 
@@ -27,6 +27,9 @@ export class TransactionsDialogComponent {
     //if (securityService.hasClaim('admin')) {
     //  this.transactionColumns = ['ptid', 'date', 'amount', 'comments'];
     //}
+    let transactions = data.transactions as ITransaction[]
+    this.total = transactions.reduce((sum, trans) => sum + trans.amount, 0)
+    // let sum = transactions.reduce((total, item)=>total + item.amount,0)
   }
 
   openForm(_transactionId: number) {
@@ -43,12 +46,10 @@ export class TransactionsDialogComponent {
     //this.data.data.forEach(a => delete a.stakeholderId);
     this.excelService.exportAsExcelFile(this.data.transactions, 'Transactions');
   }
-  printTotal()
-  {
-    if(this.data.transactions)
-    {
-      let trans = this.data.transactions as ITransaction[];
-      this.total = trans.reduce((total,trans)=> total+ trans.amount,0) 
+  printTotal() {
+    if (this.data.transactions) {
+      // let trans = this.data.transactions as ITransaction[];
+      // this.total = trans.reduce((total,trans)=> total+ trans.amount,0) 
       console.log(this.total);
     }
   }

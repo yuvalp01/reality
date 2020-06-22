@@ -63,6 +63,8 @@ namespace Nadlan.Repositories
 
         private async Task<List<PortfolioReport>> GetPortfolioReportLines(IQueryable<Portfolio> portfolioLines)
         {
+            //TODO: move this logic to the server side
+            List<int> partnershipApartments = new List<int> { 1, 3, 4, 20 };
             List<PortfolioReport> portfolioReportLines = new List<PortfolioReport>();
             foreach (var portfolioLine in portfolioLines)
             {
@@ -72,9 +74,23 @@ namespace Nadlan.Repositories
                 portfolioLineReport.Apartment = apartment.Address;
                 portfolioLineReport.PurchaseDate = apartment.PurchaseDate;
                 portfolioLineReport.Ownership = portfolioLine.Percentage;
-                portfolioLineReport.Investment =  GetTotalInvestment(portfolioLine) * portfolioLine.Percentage;
-                portfolioLineReport.PendingProfits = GetPendingProfit(portfolioLine) * portfolioLine.Percentage;
-                portfolioLineReport.Distributed =  GetGeneralDistributionPerInvestor(portfolioLine) * -1 * portfolioLine.Percentage;
+                portfolioLineReport.Investment = GetTotalInvestment(portfolioLine) * portfolioLine.Percentage;
+                //decimal profit = GetPendingProfit(portfolioLine) * portfolioLine.Percentage;
+                //decimal profitFromFullOwnershipApartment = 0;
+                if (partnershipApartments.Contains(portfolioLine.ApartmentId))
+                {
+                    portfolioLineReport.PendingProfits = GetPendingProfit(portfolioLine) * portfolioLine.Percentage;
+                    portfolioLineReport.Distributed = GetGeneralDistributionPerInvestor(portfolioLine) * -1 * portfolioLine.Percentage;
+                }
+                else
+                {
+                    portfolioLineReport.PendingProfits = 0;
+                    portfolioLineReport.Distributed = GetPendingProfit(portfolioLine) * portfolioLine.Percentage;
+                }
+
+                //portfolioLineReport.PendingProfits = profit;// GetPendingProfit(portfolioLine) * portfolioLine.Percentage;
+                //portfolioLineReport.Distributed = profitFromFullOwnershipApartment + 
+                //    GetGeneralDistributionPerInvestor(portfolioLine) * -1 * portfolioLine.Percentage;
                 ValidateWithPersonalTransactions(portfolioLineReport, portfolioLine);
                 portfolioReportLines.Add(portfolioLineReport);
             }
@@ -87,7 +103,7 @@ namespace Nadlan.Repositories
 
             var totalInvestment = Context.Transactions
                 .Where(distributionPredicate)
-                .Where(a => a.ApartmentId == portfolioLine.Apartment.Id)                        
+                .Where(a => a.ApartmentId == portfolioLine.Apartment.Id)
                 .Select(a => a.Amount).FirstOrDefault();
             return totalInvestment;
         }
@@ -116,18 +132,6 @@ namespace Nadlan.Repositories
             //var profitToInvestor = profit;
             return profit;
         }
-        //private decimal GetPendingProfitPerInvestor_(Portfolio portfolioLine)
-        //{
-        //    var profitPredicate = PredicateFilters.GetProfitAfterDistributionFilter();
-        //    var profit = Context.Transactions
-        //        .Include(a => a.Account)
-        //        .Where(profitPredicate)
-        //        .Where(a => a.ApartmentId == portfolioLine.ApartmentId)
-        //        .AsQueryable()
-        //        .SumAsync(a => a.Amount);
-        //    var profitToInvestor = profit.Result * portfolioLine.Percentage * -1;
-        //    return profitToInvestor;
-        //}
 
         public async Task<decimal> GetPersonalBalance(int stakeholderId)
         {
@@ -172,47 +176,3 @@ namespace Nadlan.Repositories
 
     }
 }
-//private Task<decimal> GetCashBalance(int investorId)
-//{
-//    var cashBalance = Context.PersonalTransactions
-//                        .Where(a => !a.IsDeleted)
-//                        .Where(a => a.StakeholderId == investorId)
-//                        .SumAsync(a => a.Amount);
-//    return cashBalance;
-//}
-
-
-
-//private decimal GetPendingProfitPerInvestor_(Portfolio portfolioLine)
-//{
-//    int[] ExcludedAccounts = { 100, 198 };//Distribution and deposit account account.
-//    var distributed = Context.Transactions
-//        .Include(a => a.Account)
-//        .Where(a => !a.IsDeleted)
-//        .Where(a => !a.IsPurchaseCost)
-//        .Where(a => !a.IsBusinessExpense)
-//        .Where(a => a.Account.AccountTypeId == 0)
-//        .Where(a => a.ApartmentId == portfolioLine.ApartmentId)
-//        .Where(a => ExcludedAccounts.Contains(a.AccountId));
-
-//    return distributed.SumAsync(a => a.Amount).Result * portfolioLine.Percentage * -1;
-//}
-
-//private decimal GetPendingProfit(int investorId)
-//{
-//    //TODO
-//    //var xxxxx = CalculateGeneralPendingDistributionPerInvestor()
-//    return 0;
-
-
-//private decimal GetGeneralDistributionPerInvestor(Portfolio portfolioLine)
-//{
-//    var distributionPredicate = PredicateFilters.GetBasicDistributionFilter();
-
-//    var distributed = Context.Transactions
-//        .Include(a => a.Account)
-//        .Where(distributionPredicate)
-//        .Where(a => a.ApartmentId == portfolioLine.ApartmentId)
-//        .AsQueryable();
-//    return distributed.SumAsync(a => a.Amount).Result * portfolioLine.Percentage * -1;
-//}
