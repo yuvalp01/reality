@@ -165,6 +165,22 @@ namespace Nadlan.Controllers
 
             return Ok(projects);
         }
+        [HttpGet("project/{projectId}")]
+        public async Task<IActionResult> GetRenovationProject(int projectId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var projects = await _repositoryWraper.RenovationPaymentRepository
+                .GetRenovationProjectAsync(projectId);
+            if (projects == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(projects);
+        }
 
         [HttpGet("lines/{renovationProjectId}")]
         public async Task<IActionResult> GetRenovationLines([FromRoute] int renovationProjectId)

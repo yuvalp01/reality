@@ -6,8 +6,8 @@
 
           <ng-container *ngIf="securityObject.isAuthenticated">
             <!--<li  *hasClaim="'canViewReports'" class="nav-item" [routerLinkActive]='["link-active"]'>
-    <a class="nav-link text-dark" [routerLink]='["/investor-reports",userId]'>Investment Reports</a>
-  </li>-->
+              <a class="nav-link text-dark" [routerLink]='["/investor-reports",userId]'>Investment Reports</a>
+            </li>-->
             <!--<li *ngIf="role==1" class="nav-item" [routerLinkActive]='["link-active"]'>-->
             <li *hasClaim="['admin']" class="nav-item" [routerLinkActive]='["link-active"]'>
               <a mat-button class="nav-link text-dark" [matMenuTriggerFor]="menu">Investors Reports</a>
@@ -39,14 +39,18 @@
                 <a class="nav-link text-dark" [routerLink]='["/personal-admin","101"]'>Personal Transactions</a>
               </li>
             </ng-container>
-            <li *hasClaim="['admin']" class="nav-item" [routerLinkActive]='["link-active"]'>
-              <a class="nav-link text-dark" [routerLink]='["/renovation-overview"]'>Renovation</a>
-            </li>
+
 
             <li *hasClaim="['stella','admin']" class="nav-item" [routerLinkActive]='["link-active"]'>
               <a class="nav-link text-dark" [routerLink]='["/expenses"]'>Expenses & Hours</a>
             </li>
-
+            <li *hasClaim="['stella','admin']" class="nav-item" [routerLinkActive]='["link-active"]'>
+              <a mat-button class="nav-link text-dark" [matMenuTriggerFor]="menu">Renovation</a>
+              <mat-menu #menu="matMenu">
+                <button *hasClaim="['stella','admin']" [routerLink]='["/renovation-overview",1]' class="nav-link text-dark" mat-menu-item>Mavromichali</button>
+                <button *hasClaim="['stella','admin']" [routerLink]='["/renovation-overview",2]' class="nav-link text-dark" mat-menu-item>Makedonias</button>
+              </mat-menu>
+            </li>
           </ng-container>
 
 
@@ -59,9 +63,9 @@
         <ul class="navbar-nav flex-grow">
 
           <!--<li class="nav-item" [routerLinkActive]='["link-active"]'>
-      <a *ngIf="!securityObject.isAuthenticated" class="nav-link text-dark" [routerLink]='["/login"]'>Login</a>
+            <a *ngIf="!securityObject.isAuthenticated" class="nav-link text-dark" [routerLink]='["/login"]'>Login</a>
 
-    </li>-->
+          </li>-->
           <li>
             <ng-container *ngIf="securityObject.isAuthenticated">
               <!--<a href="#" > Hello {{securityObject.userName}}</a>-->

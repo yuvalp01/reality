@@ -1,7 +1,7 @@
-<ng-container *ngIf="dataSourceLines.data && project && paymentTransaction">
+<ng-container *ngIf="dataSourceLines.data && project">
   <mat-tab-group dynamicHeight="false">
 
-    <mat-tab label="Milestones & Payments">
+    <mat-tab *ngIf="paymentTransaction" label="Milestones & Payments">
       <mat-card>
         <mat-card-title style="font-size: 19px;">
           <span> Renovation Price:</span><span style="font-weight:bold;">

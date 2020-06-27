@@ -106,7 +106,7 @@ import { PaymentFormComponent } from './renovationNew/payment-form/payment-form.
         data: {claimType:['stella','admin']}
       },
       {
-        path: 'renovation-overview', component: RenovationOverviewComponent,
+        path: 'renovation-overview/:projectId', component: RenovationOverviewComponent,
         canActivate: [AuthGuard],
         data: { claimType: ['stella','admin'] }
       },

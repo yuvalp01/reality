@@ -14,6 +14,9 @@ export class RenovationService
   getRenovationProjects(): Observable<IRenovationProject[]> {
     return this.httpClient.get<IRenovationProject[]>(`${this.baseUrl}/api/renovation/projects`);
   }
+  getRenovationProject(projectId): Observable<IRenovationProject> {
+    return this.httpClient.get<IRenovationProject>(`${this.baseUrl}/api/renovation/project/${projectId}`);
+  }
   //renovationLines: ILine[];
   getRenovationLinesNew(projectId): Observable<IRenovationLine[]> {
     return this.httpClient.get<IRenovationLine[]>(`${this.baseUrl}/api/renovation/lines/${projectId}`);
