@@ -37,7 +37,7 @@ namespace Nadlan.Controllers
         }
 
 
-        [HttpGet("issues/{isOpenOnly}")]
+        [HttpGet("{isOpenOnly}")]
         public async Task<IActionResult> GetIssues([FromRoute] bool isOpenOnly)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);

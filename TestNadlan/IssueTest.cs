@@ -53,13 +53,13 @@ namespace TestNadlan
         }
 
         [TestMethod]
-        public void GetIssueItemsOfDeletedIssue()
+        public void GetMessagesOfDeletedIssue()
         {
 
             //act
             var openIssues_ = _issueRepository.GetMassagesByIssueIdAsync(5).Result;
             //assert       
-            Assert.IsTrue(openIssues_.Count == 3);
+            Assert.IsTrue(openIssues_.Count == 0);
         }
 
     }

@@ -6,8 +6,8 @@
 
           <ng-container *ngIf="securityObject.isAuthenticated">
             <!--<li  *hasClaim="'canViewReports'" class="nav-item" [routerLinkActive]='["link-active"]'>
-              <a class="nav-link text-dark" [routerLink]='["/investor-reports",userId]'>Investment Reports</a>
-            </li>-->
+    <a class="nav-link text-dark" [routerLink]='["/investor-reports",userId]'>Investment Reports</a>
+  </li>-->
             <!--<li *ngIf="role==1" class="nav-item" [routerLinkActive]='["link-active"]'>-->
             <li *hasClaim="['admin']" class="nav-item" [routerLinkActive]='["link-active"]'>
               <a mat-button class="nav-link text-dark" [matMenuTriggerFor]="menu">Investors Reports</a>
@@ -40,7 +40,9 @@
               </li>
             </ng-container>
 
-
+            <li *hasClaim="['admin']" class="nav-item" [routerLinkActive]='["link-active"]'>
+              <a class="nav-link text-dark" [routerLink]='["/open-issues"]'>Open Issues</a>
+            </li>
             <li *hasClaim="['stella','admin']" class="nav-item" [routerLinkActive]='["link-active"]'>
               <a class="nav-link text-dark" [routerLink]='["/expenses"]'>Expenses & Hours</a>
             </li>
@@ -48,7 +50,7 @@
               <a mat-button class="nav-link text-dark" [matMenuTriggerFor]="menu">Renovation</a>
               <mat-menu #menu="matMenu">
                 <button *hasClaim="['stella','admin']" [routerLink]='["/renovation-overview",1]' class="nav-link text-dark" mat-menu-item>Mavromichali</button>
-                <button *hasClaim="['stella','admin']" [routerLink]='["/renovation-overview",2]' class="nav-link text-dark" mat-menu-item>Makedonias</button>
+                <button *hasClaim="['admin']" [routerLink]='["/renovation-overview",2]' class="nav-link text-dark" mat-menu-item>Makedonias</button>
               </mat-menu>
             </li>
           </ng-container>

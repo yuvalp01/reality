@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PersonalTransService } from '../personal-trans.service';
 import { ActivatedRoute } from '@angular/router';
-import { IStakeholder } from 'src/app/models';
+import { IStakeholder } from '../../models';
 
 @Component({
   selector: 'app-personal-admin',

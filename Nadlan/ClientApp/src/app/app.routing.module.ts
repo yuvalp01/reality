@@ -42,97 +42,69 @@ import { HttpInterceptorModule } from './security/http-interceptor';
 import { HasClaimDirective } from './security/has-claim.directive';
 import { RenovationOverviewComponent } from './renovationNew/renovation-overview/renovation-overview.component';
 import { PaymentFormComponent } from './renovationNew/payment-form/payment-form.component';
-import { AppRoutingModule } from './app.routing.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    NavMenuComponent,
-    HomeComponent,
-    CounterComponent,
-    ApartmentListComponent,
-    AddApartmentForm,
-    AccountListComponent,
-    TransactionListComponent,
-    ReportsComponent,
-    //ApartmentReportsComponent,
-    //MinusSignToParens,
-    TransactionsDialogComponent,
-    // RenovationComponent,
-    // RenovationListComponent,
-    ExpensesComponent,
-    //TransactionsTableComponent,
-    AddExpenseComponent,
-    WelcomepageComponent,
-    TransactionFormComponent,
-    LoginComponent,
-    HasClaimDirective,
-    RenovationOverviewComponent,
-    PaymentFormComponent,
+    // AppComponent,
+    // NavMenuComponent,
+    // HomeComponent,
+    // CounterComponent,
+    // ApartmentListComponent,
+    // AddApartmentForm,
+    // AccountListComponent,
+    // TransactionListComponent,
+    // ReportsComponent,
+    // //ApartmentReportsComponent,
+    // //MinusSignToParens,
+    // TransactionsDialogComponent,
+    // // RenovationComponent,
+    // // RenovationListComponent,
+    // ExpensesComponent,
+    // //TransactionsTableComponent,
+    // AddExpenseComponent,
+    // WelcomepageComponent,
+    // TransactionFormComponent,
+    // LoginComponent,
+    // HasClaimDirective,
+    // RenovationOverviewComponent,
+    // PaymentFormComponent,
 
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MyOwnCustomMaterialModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    // RouterModule.forRoot([
-    //   { path: '', component: LoginComponent, pathMatch: 'full' },
-    //  //   { path: '', component: RenovationOverviewComponent, pathMatch: 'full' },
-    //   { path: 'counter', component: CounterComponent },
-    //   { path: 'add-apartment', component: AddApartmentForm },
-    //   { path: 'fetch-accounts', component: AccountListComponent },
-    //   {
-    //     path: 'fetch-transactions',
-    //     component: TransactionListComponent,
-    //     canActivate: [AuthGuard],
-    //     data: { claimType: ['admin'] }
-    //   },
-    //   {
-    //     path: 'reports/:apartmentId',
-    //     component: ReportsComponent,
-    //     canActivate: [AuthGuard],
-    //     data: { claimType: ['investor','admin'] }
-    //   },
-    //   { path: 'reports/:apartmentId/:status', component: ReportsComponent },
-    //   {
-    //     path: 'expenses', component: ExpensesComponent,
-    //     canActivate: [AuthGuard],
-    //     data: {claimType:['stella','admin']}
-    //   },
-    //   {
-    //     path: 'renovation-overview/:projectId', component: RenovationOverviewComponent,
-    //     canActivate: [AuthGuard],
-    //     data: { claimType: ['stella','admin'] }
-    //   },
-    //   { path: 'login', component: LoginComponent },
+    RouterModule.forRoot([
+      { path: '', component: LoginComponent, pathMatch: 'full' },
+      { path: 'counter', component: CounterComponent },
+      { path: 'add-apartment', component: AddApartmentForm },
+      { path: 'fetch-accounts', component: AccountListComponent },
+      {
+        path: 'fetch-transactions',
+        component: TransactionListComponent,
+        canActivate: [AuthGuard],
+        data: { claimType: ['admin'] }
+      },
+      {
+        path: 'reports/:apartmentId',
+        component: ReportsComponent,
+        canActivate: [AuthGuard],
+        data: { claimType: ['investor','admin'] }
+      },
+      { path: 'reports/:apartmentId/:status', component: ReportsComponent },
+      {
+        path: 'expenses', component: ExpensesComponent,
+        canActivate: [AuthGuard],
+        data: {claimType:['stella','admin']}
+      },
+      {
+        path: 'renovation-overview/:projectId', component: RenovationOverviewComponent,
+        canActivate: [AuthGuard],
+        data: { claimType: ['stella','admin'] }
+      },
+      { path: 'login', component: LoginComponent },
 
-    // ]),
-    SharedModule,
-    InvestrorsModule,
-    IssuesModule,
-    HttpInterceptorModule
-    //ApartmentReportsComponent
+    ])
   ],
-
-  providers: [ApartmentService,
-    AccountService,
-    TransactionService,
-    ExpensesService,
-    ReportService,
-    RenovationService,
-    ExcelService,
-    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
-    { provide: MAT_DIALOG_DATA, useValue: {} },
-    { provide: MatDialogRef, useValue: {} }],
-  bootstrap: [AppComponent],
-  entryComponents: [
-    TransactionsDialogComponent,
-     TransactionFormComponent, 
-     AddExpenseComponent,
-    PaymentFormComponent]
+exports: [
+  RouterModule
+]
 })
-export class AppModule { }
+export class AppRoutingModule { }

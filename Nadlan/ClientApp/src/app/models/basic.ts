@@ -52,3 +52,9 @@ export interface IStakeholder {
   type: number;
 }
 
+export interface IAppUser
+{
+  userId: number;
+  userName: string
+}
+

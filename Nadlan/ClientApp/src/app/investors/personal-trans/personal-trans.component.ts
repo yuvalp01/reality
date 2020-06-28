@@ -1,14 +1,12 @@
 import { Component, OnInit, ViewChild, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { IPersonalTransaction, ITransaction } from '../../models';
 import { PersonalTransService } from '../personal-trans.service';
-import { MatTableDataSource, MatSort, MatDialog, fadeInContent, MatSnackBar } from '@angular/material';
+import { MatTableDataSource, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { PersonalTransFormComponent } from '.././personal-trans-form/personal-trans-form.component';
 import { Router } from '@angular/router';
 import { ExcelService } from '../../services/excel.service';
 import { TransactionsDialogComponent } from '../../transactions/transactions-dialog.component';
 import { TransactionService } from '../../services/transaction.service';
-import { concat } from 'rxjs';
-import { debug } from 'util';
 
 
 @Component({
