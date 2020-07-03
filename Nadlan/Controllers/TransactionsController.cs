@@ -60,10 +60,7 @@ namespace Nadlan.Controllers
         [HttpGet("getByPersonalTransactionId/{id}")]
         public async Task<IActionResult> GetByPersonalTransactionId([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var transaction = await _context.Transactions
                 .Where(a=>a.IsDeleted==false)
@@ -71,10 +68,20 @@ namespace Nadlan.Controllers
                 .OrderByDescending(a=>a.Date)
                 .ToListAsync();
 
-            if (transaction == null)
-            {
-                return NotFound();
-            }
+            if (transaction == null) return NotFound();
+
+            return Ok(transaction);
+        }
+
+        [HttpGet("getPendingExpensesForInvestor/{stakeholderId}")]
+        public async Task<IActionResult> GetPendingExpensesForInvestor([FromRoute] int stakeholderId)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var transaction = await _repositoryWraper.Transaction
+                .GetPendingExpensesForInvestor(stakeholderId);
+
+            if (transaction == null) return NotFound();
 
             return Ok(transaction);
         }

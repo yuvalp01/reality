@@ -7,6 +7,7 @@ export interface ITransaction {
   amount: number;
   apartmentId: number;
   apartmentAddress: string;
+  apartmentStatus: number;
   accountId: number;
   accountName: string;
   isBusinessExpense: boolean;

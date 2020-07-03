@@ -12,6 +12,7 @@ namespace Nadlan.ViewModels.Reports
         /// </summary>
         public decimal CashBalance { get; set; }
         public decimal TotalPendingProfits { get; set; }
+        public decimal TotalPendingExpenses { get; set; }
         //public decimal ProfitsSoFar { get; set; }
         public decimal TotalBalace { get; set; }
         public List<PortfolioReport> PortfolioLines { get; set; }
@@ -28,6 +29,7 @@ namespace Nadlan.ViewModels.Reports
         public decimal Investment { get; set; }
         public decimal Ownership { get; set; }
         public decimal PendingProfits { get; set; }
+        public decimal PendingExpenses { get; set; }
         [Obsolete]
         public decimal MinimalProfitUpToDate { get; set; }
         //[Obsolete]

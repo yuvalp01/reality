@@ -25,6 +25,7 @@ namespace Nadlan.Repositories
                 IQueryable<Portfolio> portfolioLines = GetPortfolioLines(investorId);
                 List<PortfolioReport> portfolioReportLines = await GetPortfolioReportLines(portfolioLines);
                 var totalPendingProfits = portfolioReportLines.Sum(a => a.PendingProfits);
+                var totalPendingExpenses = portfolioReportLines.Sum(a => a.PendingExpenses);
                 var totalDistribution = portfolioReportLines.Sum(a => a.Distributed);
                 InvestorReportOverview investorReportOverview = new InvestorReportOverview
                 {
@@ -33,11 +34,12 @@ namespace Nadlan.Repositories
                     TotalInvestment = portfolioReportLines.Sum(a => a.Investment),
                     PortfolioLines = portfolioReportLines,
                     TotalPendingProfits = totalPendingProfits,
+                    TotalPendingExpenses = totalPendingExpenses,
                     TotalDistribution = totalDistribution,
                     //ProfitsSoFar = totalPendingProfits + totalDistribution
                 };
                 investorReportOverview.TotalBalace = investorReportOverview.CashBalance
-                    + investorReportOverview.TotalPendingProfits;
+                    + investorReportOverview.TotalPendingProfits+ investorReportOverview.TotalPendingExpenses;
                 return investorReportOverview;
             }
             catch (Exception)
@@ -78,14 +80,16 @@ namespace Nadlan.Repositories
                 //decimal profit = GetPendingProfit(portfolioLine) * portfolioLine.Percentage;
                 //decimal profitFromFullOwnershipApartment = 0;
                 if (partnershipApartments.Contains(portfolioLine.ApartmentId))
-                {
+                {               
                     portfolioLineReport.PendingProfits = GetPendingProfit(portfolioLine) * portfolioLine.Percentage;
                     portfolioLineReport.Distributed = GetGeneralDistributionPerInvestor(portfolioLine) * -1 * portfolioLine.Percentage;
+                    portfolioLineReport.PendingExpenses = 0;
                 }
                 else
                 {
                     portfolioLineReport.PendingProfits = 0;
                     portfolioLineReport.Distributed = GetPendingProfit(portfolioLine) * portfolioLine.Percentage;
+                    portfolioLineReport.PendingExpenses = GetPendingExpenses(portfolioLine);
                 }
 
                 //portfolioLineReport.PendingProfits = profit;// GetPendingProfit(portfolioLine) * portfolioLine.Percentage;
@@ -95,6 +99,20 @@ namespace Nadlan.Repositories
                 portfolioReportLines.Add(portfolioLineReport);
             }
             return portfolioReportLines;
+        }
+
+        private decimal GetPendingExpenses(Portfolio portfolioLine)
+        {
+            var expensesPredicate = nonPurchaseFilters.GetPendingExpensesFilter();
+
+            var profit = Context.Transactions
+                .Include(a => a.Account)
+                .Where(expensesPredicate)
+                .Where(a => a.ApartmentId == portfolioLine.ApartmentId)
+                .AsQueryable()
+                .Sum(a => a.Amount);
+            //var profitToInvestor = profit;
+            return profit;
         }
 
         private decimal GetTotalInvestment(Portfolio portfolioLine)

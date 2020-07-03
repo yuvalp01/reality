@@ -56,5 +56,13 @@ namespace Nadlan.BusinessLogic
                         t.AccountId != 1;//Except for rent
             return expensesFilter;
         }
+        public Func<Transaction, bool> GetPendingExpensesFilter()
+        {
+            Func<Transaction, bool> basic = GetAllExpensesFilter();
+            Func<Transaction, bool> expensesFilter = t =>
+                        basic(t) &&
+                        t.PersonalTransactionId == 0;//Not covered yet
+            return expensesFilter;
+        }
     }
 }

@@ -1,12 +1,14 @@
 import { Component, OnInit, SimpleChanges, Output } from "@angular/core";
-import { IInvestorReportOverview, IStakeholder, IPersonalTransaction } from "../../models";
+import { IInvestorReportOverview, IStakeholder, IPersonalTransaction, ITransaction } from "../../models";
 import { PersonalTransService } from "../personal-trans.service";
 import { ActivatedRoute } from "@angular/router";
 import { MatTableDataSource, MatDialog } from "@angular/material";
 import { PersonalTransDialogComponent } from "../personal-trans-dialog/personal-trans-dialog.component";
-import { ApartmentReportsComponent } from "src/app/reports/apartment-reports.component";
+import { ApartmentReportsComponent } from "../../reports/apartment-reports.component";
 import { debug } from "util";
-//import { SecurityService } from "src/app/security/security.service";
+import { TransactionsDialogComponent } from "../../transactions/transactions-dialog.component";
+import { TransactionService } from "../../services/transaction.service";
+import { SecurityService } from "../../security/security.service";
 
 @Component({
   selector: 'investor-reports',
@@ -18,13 +20,14 @@ export class InvestorReportComponent implements OnInit {
 
   constructor(
     private personalTransService: PersonalTransService,
+    private transactionService: TransactionService,
     private route: ActivatedRoute,
-    //private securityService: SecurityService,
+    private securityService: SecurityService,
     private dialog: MatDialog) { }
   @Output() stakeholderId: number;
   investorReportOverview: IInvestorReportOverview;
   stakeholders: IStakeholder[];
-  portfolioColumns = ['apartment', 'purchaseDate', 'investment', 'distributed', 'pendingProfits','profitsSoFar', 'ownership'];//'minimalProfitUpToDate', 'distributed'
+  portfolioColumns = ['apartment', 'purchaseDate', 'investment', 'distributed', 'pendingProfits', 'profitsSoFar', 'ownership'];//'minimalProfitUpToDate', 'distributed'
   selectedTab: number;
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -62,7 +65,7 @@ export class InvestorReportComponent implements OnInit {
         const dialogRef = this.dialog.open(PersonalTransDialogComponent, {
           height: 'auto',
           width: 'auto',
-          data: { transactions: this.dataSource.data, columns: ['date', 'amount','transactionType', 'comments', 'apartment'] }
+          data: { transactions: this.dataSource.data, columns: ['date', 'amount', 'transactionType', 'comments', 'apartment'] }
         });
       }
       , error => console.error(error));
@@ -75,6 +78,23 @@ export class InvestorReportComponent implements OnInit {
       width: 'auto',
       data: { apartmentId: apartmentId, investorPercentage: ownership }
     });
+  }
+
+
+  showPendingExpenses() {
+    if (this.securityService.hasClaim('admin')) {
+      this.transactionService.getPendingExpensesForInvestor(this.stakeholderId).subscribe(
+        result => {
+          //this.transactions = result;
+          let _transactions = result as ITransaction[];
+          const dialogRef = this.dialog.open(TransactionsDialogComponent, {
+            height: 'auto',
+            width: 'auto',
+            data: { transactions: _transactions, accountName: "PendingExpenses" }
+          });
+        }
+        , error => console.error(error));
+    }
   }
 
 

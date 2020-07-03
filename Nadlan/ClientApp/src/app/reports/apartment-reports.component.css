@@ -20,6 +20,10 @@ mat-card {
   color: darkcyan;
 }
 
+.accounts{
+  cursor: pointer;
+}
+
 /*::ng-deep .mat-tab-header {
   background-color: red;
 }*/

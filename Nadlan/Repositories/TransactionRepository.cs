@@ -253,6 +253,22 @@ namespace Nadlan.Repositories
             return FindByCondition(predicate).OrderByDescending(a => a.Date).ToListAsync();
         }
 
+        public Task<List<Transaction>> GetPendingExpensesForInvestor(int stakeholderId)
+        {
+            List<int> apartmentsIds = Context.Portfolios
+                .Where(a => a.StakeholderId == stakeholderId)
+                .Select(a=>a.ApartmentId)
+                .ToList();
+
+           return Context.Transactions
+                        .Where(a=>a.IsDeleted==false)
+                        .Where(a => apartmentsIds.Contains(a.ApartmentId))
+                        .Where(a=>a.PersonalTransactionId==0)
+                        .ToListAsync();
+            
+
+        }
+
     }
 
 

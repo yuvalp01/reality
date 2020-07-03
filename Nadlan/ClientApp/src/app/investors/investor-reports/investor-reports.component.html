@@ -32,19 +32,31 @@
         }">{{investorReportOverview.cashBalance| currency:'EUR' : number:'1.0-0'}}</span>
             </mat-list-item>
 
-            <!-- (click)="showDistributions() " style="cursor:pointer;"
-
-            <!--Total amount distributed from all apartments so far-->
             <mat-list-item>
               <mat-icon mat-list-icon>business_center</mat-icon>
               <span matTooltip="This is your proportional profit so far for this year that will be distributed to your virtual account at the end of the year.">
-                Pending profits
+                Pending Profits
               </span>
               <span [ngClass]="{
           positive: isPositive(investorReportOverview.totalPendingProfits),
           negative: !isPositive(investorReportOverview.totalPendingProfits)
         }">{{investorReportOverview.totalPendingProfits| currency:'EUR' : number:'1.0-0'}}</span>
             </mat-list-item>
+
+            <mat-list-item>
+              <mat-icon mat-list-icon>business_center</mat-icon>
+              <span matTooltip="Here are the expenses so far for this year that related to your full ownership apartmenes. This amount will be charged from your virtual account at the end of the year.">
+                Pending Expenses
+              </span>
+              <span (click)="showPendingExpenses()" [ngClass]="{
+          positive: isPositive(investorReportOverview.totalPendingExpenses),
+          negative: !isPositive(investorReportOverview.totalPendingExpenses)
+        }">
+        {{investorReportOverview.totalPendingExpenses| currency:'EUR' : number:'1.0-0'}}</span>
+      </mat-list-item>
+
+
+
             <mat-divider></mat-divider>
             <mat-list-item>
               <mat-icon mat-list-icon>business_center</mat-icon>

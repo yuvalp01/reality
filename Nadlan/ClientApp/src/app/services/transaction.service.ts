@@ -31,6 +31,14 @@ export class TransactionService {
     return this.httpClient.get<ITransaction[]>(`${this.baseUrl}api/transactions/getByPersonalTransactionId/${personalTransactionId}`);
   }
 
+  getPendingExpensesForInvestor(stakeholderId: number): Observable<ITransaction[]> {
+    return this.httpClient.get<ITransaction[]>(`${this.baseUrl}api/transactions/getPendingExpensesForInvestor/${stakeholderId}`);
+  }
+
+  
+
+
+
   addTransaction(transaction: ITransaction): Observable<ITransaction> {
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.httpClient.post<ITransaction>(this.baseUrl + 'api/transactions', transaction, options);

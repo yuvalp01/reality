@@ -17,6 +17,7 @@ namespace Nadlan.ViewModels
         public string Comments { get; set; }
         public int ApartmentId { get; set; }
         public string ApartmentAddress { get; set; }
+        public int ApartmentStatus { get; set; }
         public int AccountId { get; set; }
         public string AccountName { get; set; }
         public decimal Hours { get; set; }

@@ -46,9 +46,9 @@
           </mat-list-item>
           <mat-divider></mat-divider>
 
-          <mat-list-item matTooltip="Cash available for distribution that still hasn't beed distributed">
+          <mat-list-item matTooltip="Profits that are available for distribution but still hasn't beed distributed (will be distributed at the end of the year)">
             <mat-icon mat-list-icon>business_center</mat-icon>
-            <span style="width:260px">Cash</span>
+            <span style="width:260px">Pending Profits</span>
             <span attr.data-amount="{{summaryReport.balance*percentage }}"
                   style="font-weight:bold"
                   [ngClass]="'positive'">{{summaryReport.balance*percentage| currency:'EUR' : number:'1.0-0'}}</span>
@@ -117,7 +117,7 @@
                 </mat-panel-description>
               </mat-expansion-panel-header>
               <mat-list>
-                <mat-list-item (click)="showTrans(account.accountId, account.name, false)" style="color:#3764ad" *ngFor="let account of incomeReport?.accountsSum" id="{{account.accountId}}">
+                <mat-list-item  class="accounts" (click)="showTrans(account.accountId, account.name, false)" style="color:#3764ad" *ngFor="let account of incomeReport?.accountsSum" id="{{account.accountId}}">
                   <mat-icon mat-list-icon>business_center</mat-icon><!--#8a5050-->
                   <span>{{account.name}}</span>
                   <span>{{account.total*percentage*percentage   | currency:'EUR' : number:'1.0-1'}}</span>

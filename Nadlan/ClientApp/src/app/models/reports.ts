@@ -40,6 +40,7 @@ export interface IInvestorReportOverview {
   totalInvestment: number,
   cashBalance: number,
   totalPendingProfits: number,
+  totalPendingExpenses: number,
   totalBalace: number,
   portfolioLines: IPortfolioReport[],
   totalDistribution: number,
@@ -53,6 +54,7 @@ export interface IPortfolioReport {
   purchaseDate: Date,
   investment: number,
   pendingProfits: number,
+  pendingExpenses: number, 
   ownership: number,
   //[Obsolete]
   minimalProfitUpToDate: number,
