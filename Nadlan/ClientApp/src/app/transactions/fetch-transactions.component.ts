@@ -22,8 +22,8 @@ export class TransactionListComponent implements OnInit {
   showUnconfirmedOnly: boolean = false;
   showNotCoveredOnly: boolean = false;
   showPurchaseCostOnly: boolean = false;
-  showSharedApartmentsOnly: boolean=false;
-  selectedApartmentStatus: number = 100;
+  showSharedApartmentsOnly: boolean = false;
+  selectedApartmentStatus: number = 0;
   readonly sharedApartments:number[] = [1,3,4,20];
   sum: number = 0;
   constructor(
@@ -137,7 +137,7 @@ export class TransactionListComponent implements OnInit {
   //  this.ShowPurchaseCostOnly = val.checked;
   //  //Workaround to trigger the filter predicate:
   //}
-  refreshFilter(val: any) {
+  refreshFilter() {
     this.sum = 0;
     //Workaround to trigger the filter predicate:
     this.selectedApartment = 'w' + this.selectedApartment;   //
