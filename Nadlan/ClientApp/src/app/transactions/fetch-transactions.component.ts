@@ -4,6 +4,7 @@ import { TransactionService } from '../services/transaction.service';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { TransactionFormComponent } from './transaction-form/transaction-form.component';
 import { AppUserAuth } from '../security/app.user.auth';
+import { element } from 'protractor';
 
 
 @Component({
@@ -20,8 +21,10 @@ export class TransactionListComponent implements OnInit {
   securityObject: AppUserAuth = null;
   showUnconfirmedOnly: boolean = false;
   showNotCoveredOnly: boolean = false;
-  ShowPurchaseCostOnly: boolean = false;
-
+  showPurchaseCostOnly: boolean = false;
+  showSharedApartmentsOnly: boolean=false;
+  selectedApartmentStatus: number = 100;
+  readonly sharedApartments:number[] = [1,3,4,20];
   sum: number = 0;
   constructor(
     private transactionService: TransactionService,
@@ -43,22 +46,59 @@ export class TransactionListComponent implements OnInit {
       this.dataSource.data = result as ITransaction[];
       this.dataSource.sort = this.sort;
 
+
       this.dataSource.filterPredicate = (data: any, filter: any): boolean => {
         let cleanFilter = filter.substring(1, 100);
         let isMatchApartment = data.apartmentAddress.toLowerCase().includes(cleanFilter);
         let isMatchUnconfirmed = true;
         let isMatchNotCovered = true;
         let isMatchPurchaseCost = true;
-        if (this.showNotCoveredOnly) {
-          isMatchNotCovered = data.personalTransactionId == -1;
+        let isMatchSharedApartmentsOnly = true;
+        let isMatchShowAllStatuses = true;
+
+        if (this.selectedApartmentStatus == 0) {
+          isMatchShowAllStatuses = true;
         }
+        else {
+          if (this.selectedApartmentStatus == 100) {
+            if (data.apartmentStatus == 100) {
+              isMatchShowAllStatuses = true;
+            }
+            else {
+              isMatchShowAllStatuses = false;
+            }
+          }
+          if (this.selectedApartmentStatus == -1) {
+            if (data.apartmentStatus != 100) {
+              isMatchShowAllStatuses = true;
+            }
+            else {
+              isMatchShowAllStatuses = false;
+            }
+
+          }
+        }
+
+        if (this.showNotCoveredOnly) {
+          isMatchNotCovered = data.personalTransactionId == 0;
+        }
+        if (this.showSharedApartmentsOnly) {
+          isMatchSharedApartmentsOnly = this.sharedApartments.includes(data.apartmentId);
+        }
+        
+
         if (this.showUnconfirmedOnly) {
           isMatchUnconfirmed = data.isConfirmed == false;
         }
-        if (this.ShowPurchaseCostOnly) {
+        if (this.showPurchaseCostOnly) {
           isMatchPurchaseCost = data.isPurchaseCost == true;
         }
-        if (isMatchApartment && isMatchUnconfirmed && isMatchNotCovered && isMatchPurchaseCost) {
+        if (isMatchApartment &&
+          isMatchUnconfirmed &&
+          isMatchNotCovered &&
+          isMatchPurchaseCost &&
+          isMatchSharedApartmentsOnly &&
+          isMatchShowAllStatuses) {
           this.sum += data.amount;
           return true;
         }
@@ -73,38 +113,45 @@ export class TransactionListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLocaleLowerCase();
 
   }
-  hideShowUnconfirmed(val: any) {
-    this.sum = 0;
-    this.showUnconfirmedOnly = val.checked;
-    //Workaround to trigger the filter predicate:
-    this.selectedApartment = 'w' + this.selectedApartment;
-    //
-    this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
-    this.selectedApartment = this.selectedApartment.substring(1, 100);
-  }
-  hideShowNotCovered(val: any) {
-    this.sum = 0;
-    this.showNotCoveredOnly = val.checked;
-    //Workaround to trigger the filter predicate:
-    this.selectedApartment = 'w' + this.selectedApartment;
-    //
-    this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
-    this.selectedApartment = this.selectedApartment.substring(1, 100);
-  }
+  // hideShowUnconfirmed(val: any) {
+  //   this.sum = 0;
+  //   this.showUnconfirmedOnly = val.checked;
+  //   //Workaround to trigger the filter predicate:
+  //   this.selectedApartment = 'w' + this.selectedApartment;
+  //   //
+  //   this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
+  //   this.selectedApartment = this.selectedApartment.substring(1, 100);
+  // }
+  // hideShowNotCovered(val: any) {
+  //   this.sum = 0;
+  //   this.showNotCoveredOnly = val.checked;
+  //   //Workaround to trigger the filter predicate:
+  //   this.selectedApartment = 'w' + this.selectedApartment;
+  //   //
+  //   this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
+  //   this.selectedApartment = this.selectedApartment.substring(1, 100);
+  // }
 
-  hideShowPurchaseCost(val: any) {
-    this.arrangeFilter();
-    this.ShowPurchaseCostOnly = val.checked;
-    //Workaround to trigger the filter predicate:
-  }
-
-  arrangeFilter() {
+  //hideShowPurchaseCost(val: any) {
+  //  this.arrangeFilter();
+  //  this.ShowPurchaseCostOnly = val.checked;
+  //  //Workaround to trigger the filter predicate:
+  //}
+  refreshFilter(val: any) {
     this.sum = 0;
     //Workaround to trigger the filter predicate:
     this.selectedApartment = 'w' + this.selectedApartment;   //
     this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
     this.selectedApartment = this.selectedApartment.substring(1, 100);
   }
+
+  // arrangeFilter() {
+  //   this.sum = 0;
+  //   //Workaround to trigger the filter predicate:
+  //   this.selectedApartment = 'w' + this.selectedApartment;   //
+  //   this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
+  //   this.selectedApartment = this.selectedApartment.substring(1, 100);
+  // }
 
 
 
