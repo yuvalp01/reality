@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Nadlan.MockData;
 using Nadlan.Models.Issues;
-using Nadlan.Models.Renovation;
 using Nadlan.Repositories;
-using Nadlan.Repositories.Renovation;
+using Nadlan.Repositories.Issues;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace Nadlan.Controllers
@@ -15,22 +15,32 @@ namespace Nadlan.Controllers
     public class IssuesController : ControllerBase
     {
         //private readonly NadlanConext _context;
-        private readonly RepositoryWrapper _repositoryWraper;
+        private static readonly RepositoryWrapper _repositoryWraper;
         private readonly IMapper _mapper;
-        private void LoadTestData(NadlanConext context)
+        private static NadlanConext _dbContext;
+        //private static IssueRepository _issueRepository;
+        static IssuesController()
         {
-
-            context.Issues.AddRange(MockIssues.GetAllIssues());
-            context.Messages.AddRange(MockIssues.GetAllMessages());
-
-            context.SaveChanges();
+            _dbContext = new InMemoryDbContextFactory().GetMockNadlanDbContext();
+  //          _issueRepository = new IssueRepository(_dbContext);
+            _repositoryWraper = new RepositoryWrapper(_dbContext);
+            _dbContext.Issues.AddRange(MockIssues.GetAllIssues());
+            //_dbContext.Messages.AddRange(MockIssues.GetAllMessages());
+            _dbContext.SaveChanges();
         }
+        //private void LoadTestData(NadlanConext context)
+        //{
+        //        context.Issues.AddRange(MockIssues.GetAllIssues());
+        //        context.Messages.AddRange(MockIssues.GetAllMessages());
+        //        context.SaveChanges();
+
+        //}
         public IssuesController(NadlanConext context, IMapper mapper)
         {
 
-            LoadTestData(context);
-
-            _repositoryWraper = new RepositoryWrapper(context);
+            //LoadTestData(context);
+            //TODO: bring back
+            //_repositoryWraper = new RepositoryWrapper(context);
             _mapper = mapper;
 
 
@@ -41,19 +51,32 @@ namespace Nadlan.Controllers
         public async Task<IActionResult> GetIssues([FromRoute] bool isOpenOnly)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            var mockRepo = new MockData.MockIssues();
+
             var issues = await _repositoryWraper.IssueRepository
                 .GetAllIssuesAsync(isOpenOnly);
             if (issues == null) return NotFound();
-
+            var json = JsonConvert.SerializeObject(issues);
             return Ok(issues);
         }
+
+        //[HttpGet("getMessages/{isOpenOnly}")]
+        //public async Task<IActionResult> GetMessages([FromRoute] bool isOpenOnly)
+        //{
+        //    if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        //    var issues = await _repositoryWraper.IssueRepository
+        //        .GetAllmessagesAsync(isOpenOnly);
+        //    if (issues == null) return NotFound();
+
+        //    return Ok(issues);
+        //}
+
         [HttpGet("issue/{id}")]
         public async Task<IActionResult> GetIssueById([FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var payment = await _repositoryWraper.IssueRepository
-                 .GetMassagesByIssueIdAsync(id);
+                 .GetIssueByIdAsync(id);
             if (payment == null) return NotFound();
 
             return Ok(payment);
@@ -117,7 +140,7 @@ namespace Nadlan.Controllers
 
 
         [HttpPost("issue")]
-        public async Task<IActionResult> AddIssue([FromBody] Issue  issue)
+        public async Task<IActionResult> AddIssue([FromBody] Issue issue)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             await _repositoryWraper.IssueRepository.CreateIssueAsync(issue);

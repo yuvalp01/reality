@@ -23,14 +23,14 @@ namespace Nadlan.BusinessLogic
             return basicPredicate;
         }
 
-        public Func<Message, bool> GetItemsOfOpenIssues()
-        {
-            Func<Message, bool> basicPredicate = t =>
-                        t.IsDeleted == false
-                     && t.Issue.IsDeleted == false
-                     && t.Issue.DateClose == null;
-            return basicPredicate;
-        }
+        //public Func<Message, bool> GetItemsOfOpenIssues()
+        //{
+        //    Func<Message, bool> basicPredicate = t =>
+        //                t.IsDeleted == false
+        //             && t.Issue.IsDeleted == false
+        //             && t.Issue.DateClose == null;
+        //    return basicPredicate;
+        //}
 
 
         public Func<Message, bool> GetAllMessages()
@@ -43,8 +43,8 @@ namespace Nadlan.BusinessLogic
         public Func<Message, bool> GetItemsOfIssues()
         {
             Func<Message, bool> basicPredicate = t =>
-                        t.IsDeleted == false
-                     && t.Issue.IsDeleted == false;
+                        t.IsDeleted == false;
+                     //&& t.Issue.IsDeleted == false;
             return basicPredicate;
         }
 

@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IIssue } from '../models';
+import { IIssue, IMessage } from '../models';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -12,8 +12,10 @@ export class IssuesService {
     @Inject('BASE_URL') private baseUrl: String) { }
 
 
-  getOpenIssues(): Observable<IIssue[]> {
-    
+  getOpenIssues(): Observable<IIssue[]> {    
     return this.httpClient.get<IIssue[]>(this.baseUrl + 'api/issues/true');
+  }
+  getOpenIssuesWithMessages(): Observable<IMessage[]> {    
+    return this.httpClient.get<IMessage[]>(this.baseUrl + 'api/issues/getMessages/true');
   }
 }

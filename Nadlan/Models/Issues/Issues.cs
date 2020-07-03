@@ -1,8 +1,5 @@
-﻿using Nadlan.Models.Security;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Nadlan.Models.Issues
 {
@@ -11,7 +8,7 @@ namespace Nadlan.Models.Issues
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public int Priority{ get; set; }
+        public int Priority { get; set; }
         public DateTime DateOpen { get; set; }
         public DateTime? DateClose { get; set; }
 
@@ -19,6 +16,8 @@ namespace Nadlan.Models.Issues
         public Apartment Apartment { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public virtual ICollection<Message> Messages { get; set; }
     }
 
 

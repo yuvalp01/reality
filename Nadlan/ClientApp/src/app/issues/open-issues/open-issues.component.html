@@ -1,1 +1,103 @@
-<p>open-issues works!</p>
+<p *ngIf="!issues">Loading...</p>
+
+<div *ngIf="issues">
+
+
+<mat-card class="example-card" *ngFor="let issue of issues">
+    <mat-card-header>
+      <div mat-card-avatar 
+      [matTooltip]="issue.priority==1?'High Priority':(issue.priority==2?'Mid Priority':(issue.priority==3?'Low Priority':'')) "
+      [ngClass]="{'priority-high' : issue.priority==1,
+                  'priority-mid' : issue.priority==2,
+                  'priority-low' : issue.priority==3}" 
+      class="example-header-image"></div>
+      <mat-card-title>{{issue.title}}</mat-card-title>
+      <mat-card-subtitle>{{issue.dateOpen | date:'dd-MM-yyyy'}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+          {{issue.description}}
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+
+
+
+      <!-- <button mat-button>Show Discussion</button>-->
+
+      <button mat-button>Close Issue</button> 
+      <mat-accordion>
+        <mat-expansion-panel (opened)="openDiscussion()" style="cursor:pointer">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon mat-list-icon>insert_comment</mat-icon>
+              <span>Discussion</span>
+            </mat-panel-title>
+            <mat-panel-description>
+              <!-- <span>Show Discussion</span> -->
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+     
+          <p *ngFor="let message of issue.messages">
+            {{message.user.userName}}: {{message.description}}
+          </p>
+
+        </mat-expansion-panel>
+      </mat-accordion>
+
+
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+
+<div id="tbl">
+    <table style="width: 100%;" mat-table [dataSource]="dataSourceIssues" matSort class="mat-elevation-z8">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+        <td mat-cell *matCellDef="let issue">{{issue.id}}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="dateOpen">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+        <td mat-cell *matCellDef="let issue">{{issue.dateOpen | date:'dd-MM-yyyy'}}</td>
+      </ng-container>
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+        <td mat-cell *matCellDef="let issue">
+          <span>  {{issue.title}}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+        <td mat-cell *matCellDef="let issue">
+          <span>  {{issue.description}}</span>
+        </td>
+      </ng-container>
+      <!-- <ng-container matColumnDef="apartment">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Apartment</th>
+        <td mat-cell *matCellDef="let issue">{{issue.apartmentAddress}}</td>
+      </ng-container> -->
+      <ng-container matColumnDef="priority">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Priority</th>
+        <td mat-cell *matCellDef="let issue">{{issue.priority}}</td>
+      </ng-container>
+
+  
+  
+      <!-- <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let issue">
+          <button (click)="openForm(issue.id)" mat-button color="primary">Edit</button>
+          <button (click)="delete(issue.id)" mat-button color="warn">Delete</button>
+        </td>
+      </ng-container> -->
+  
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr (click)="printId(row.id)" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  
+    </table>
+  
+  </div>
+  

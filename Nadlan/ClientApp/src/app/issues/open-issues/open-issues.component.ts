@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IssuesService } from '../issues.service';
-import { IIssue } from '../../models';
+import { IIssue, IMessage } from '../../models';
 import { MatTableDataSource, MatSort } from '@angular/material';
 
 @Component({
@@ -14,13 +14,29 @@ export class OpenIssuesComponent implements OnInit {
   constructor(private issuesService: IssuesService) { }
 
   dataSourceIssues = new MatTableDataSource<IIssue>();
+  issues:IIssue[] ;
+  messages:IMessage[] ;
+  displayedColumns: string[] = ['id', 'dateOpen', 'title', 'priority', 'description'];
+
 
   ngOnInit() {
     this.issuesService.getOpenIssues().subscribe(result => {
       this.dataSourceIssues.data = result;
-      debugger
+      this.issues = result;
       this.dataSourceIssues.sort = this.sort;
     });
+
+    // this.issuesService.getOpenIssuesWithMessages().subscribe(result => {
+    //   this.messages = result;
+    // });
+  }
+
+  openDiscussion()
+  {
+    console.log('sdf');
+  }
+  printId(id) {
+    console.log(id);
   }
 }
 

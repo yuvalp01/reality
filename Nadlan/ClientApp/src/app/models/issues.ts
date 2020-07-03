@@ -9,6 +9,7 @@ export interface IIssue {
   dateClose : Date;
   aprtment: IApartment;
   isDeleted: boolean;
+  messages: IMessage[]
 }
 export interface IMessage {
   id: number;

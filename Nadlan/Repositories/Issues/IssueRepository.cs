@@ -20,18 +20,20 @@ namespace Nadlan.Repositories.Issues
         }
 
 
-        public Task<List<Message>> GetAllmessagesAsync(bool isOnlyOpen)
-        {
-            Func<Message, bool> filter = isOnlyOpen ?
-                _issueFilter.GetItemsOfOpenIssues() :
-                _issueFilter.GetItemsOfIssues();
 
-            var messages = Task.Run(() =>
-            _context.Messages
-           .Where(filter)
-           .ToList());
-            return messages;
-        }
+        //public Task<List<Message>> GetAllmessagesAsync(bool isOnlyOpen)
+        //{
+        //    Func<Message, bool> filter = isOnlyOpen ?
+        //        _issueFilter.GetItemsOfOpenIssues() :
+        //        _issueFilter.GetItemsOfIssues();
+
+        //    var messages = Task.Run(() =>
+        //    _context.Messages
+        //    //.Include(a=>a.Issue)
+        //   .Where(filter)
+        //   .ToList());
+        //    return messages;
+        //}
 
 
         public Task<List<Issue>> GetAllIssuesAsync(bool isOnlyOpen)
@@ -42,6 +44,7 @@ namespace Nadlan.Repositories.Issues
 
             var issues = Task.Run(() =>
             _context.Issues
+            .Include(a=>a.Messages)
            .Where(filter)
            .ToList());
             return issues;
@@ -64,16 +67,17 @@ namespace Nadlan.Repositories.Issues
             return messages;
         }
 
-        public Task<List<Message>> GetMassagesByIssueIdAsync(int issueId)
+        public Task<ICollection<Message>> GetMassagesByIssueIdAsync(int issueId)
         {
-            var filter = _issueFilter.GetAllMessages();
+            var filter = _issueFilter.GetAllIssues();
             var issues = Task.Run(() =>
-             _context.Messages
-             .Include(a => a.Issue)
+             _context.Issues
              .Where(filter)
-             .Where(a => a.IssueId == issueId)
-             .ToList()
-            );
+             //.Where(a => a.IssueId == issueId)             
+             .Where(a => a.Id == issueId)
+             .Select(a=>a.Messages)
+             .FirstOrDefault());
+          
             return issues;
         }
 
@@ -119,6 +123,9 @@ namespace Nadlan.Repositories.Issues
             await _context.SaveChangesAsync();
         }
 
-
+        Task<List<Message>> IIssueRepository.GetMassagesByIssueIdAsync(int issueId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

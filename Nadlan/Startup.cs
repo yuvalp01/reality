@@ -8,9 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Nadlan.MockData;
 using Nadlan.Models.Security;
 using Nadlan.Repositories;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Text;
 
@@ -32,6 +33,15 @@ namespace Nadlan
         {
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddMvc().AddJsonOptions(options => {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
+            //services.AddEntityFramework().AddSqlServer().AddDbContext<IvoryPacketDbContext>(
+            //    options => options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"])
+            //);
+
 
             if (!_env.IsDevelopment())
             {

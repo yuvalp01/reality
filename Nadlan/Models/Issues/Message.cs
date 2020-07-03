@@ -1,4 +1,5 @@
 ﻿using Nadlan.Models.Security;
+using Newtonsoft.Json;
 using System;
 
 namespace Nadlan.Models.Issues
@@ -11,8 +12,10 @@ namespace Nadlan.Models.Issues
 
         public int UserId { get; set; }
         public AppUser User { get; set; }
+        public bool IsRead { get; set; }
         public int IssueId { get; set; }
-        public Issue Issue { get; set; }
+        [JsonIgnore]
+        public virtual Issue Issue { get; set; }
 
         public bool IsDeleted { get; set; }
 
