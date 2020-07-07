@@ -10,8 +10,8 @@ namespace Nadlan.Models.Issues
         public string Description { get; set; }
         public DateTime DateStamp { get; set; }
 
-        public int UserId { get; set; }
-        public AppUser User { get; set; }
+        //public Guid UserId { get; set; }
+        public string UserName { get; set; }
         public bool IsRead { get; set; }
         public int IssueId { get; set; }
         [JsonIgnore]

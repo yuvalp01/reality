@@ -108,18 +108,18 @@ namespace Nadlan.MockData
         {
             List<Message> messages = new List<Message>()
             {
-                new Message { Id = 1, IssueId=-10, Description = "I solved the issue", User = new AppUser { UserId = Guid.NewGuid(), UserName = "stella" } } ,
-                new Message { Id = 2, IssueId = -10, Description = "Ok great thanks", User = new AppUser { UserId = Guid.NewGuid(), UserName = "yuval" } } ,
+                new Message { Id = 1, IssueId=-10, Description = "I solved the issue", UserName = "stella" }  ,
+                new Message { Id = 2, IssueId = -10, Description = "Ok great thanks", UserName = "yuval" }  ,
 
-                new Message { Id = 3, IssueId = -9, Description = "Should I do that?", User = new AppUser { UserId = Guid.NewGuid(), UserName = "stella" } },
-                new Message { Id = 4, IssueId = -9, Description = "Yes, you can do that, but don't do that and that and that, thanks.", User = new AppUser { UserId = Guid.NewGuid(), UserName = "yuval" } },
-                new Message { Id = 5, IssueId = -9, Description = "Ok no problem, Ill do that!", User = new AppUser { UserId = Guid.NewGuid(), UserName = "stella" } },
-                new Message { Id = 6, IssueId = -9, Description = "Great thanks :)", User = new AppUser { UserId = Guid.NewGuid(), UserName = "yuval" } },
+                new Message { Id = 3, IssueId = -9, Description = "Should I do that?", UserName = "stella" } ,
+                new Message { Id = 4, IssueId = -9, Description = "Yes, you can do that, but don't do that and that and that, thanks.", UserName = "yuval" } ,
+                new Message { Id = 5, IssueId = -9, Description = "Ok no problem, Ill do that!",UserName = "stella" } ,
+                new Message { Id = 6, IssueId = -9, Description = "Great thanks :)", UserName = "yuval" } ,
 
-                new Message { Id = 7, IssueId = -8, Description = "I talked to him and he said that blablbllaalala", User = new AppUser { UserId = Guid.NewGuid(), UserName = "stella" } },
-                new Message { Id = 8, IssueId = -8, Description = "Thanks for the update", User = new AppUser { UserId = Guid.NewGuid(), UserName = "yuval" } },
+                new Message { Id = 7, IssueId = -8, Description = "I talked to him and he said that blablbllaalala", UserName = "stella" } ,
+                new Message { Id = 8, IssueId = -8, Description = "Thanks for the update", UserName = "yuval" } ,
 
-                new Message { Id = 9, IssueId = 4, Description = "Any progress?", User = new AppUser { UserId = Guid.NewGuid(), UserName = "yuval" } },
+                new Message { Id = 9, IssueId = 4, Description = "Any progress?",UserName = "yuval" },
 
             };
             return messages.FindAll(a=>a.IssueId==issueId);

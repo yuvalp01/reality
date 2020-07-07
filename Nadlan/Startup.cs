@@ -87,7 +87,8 @@ namespace Nadlan
 
 
             services.AddDbContext<NadlanConext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("Nadlan")));
+            options.UseSqlServer(Configuration.GetConnectionString("Nadlan"), builder=>
+            builder.EnableRetryOnFailure()));
             //services.AddDbContext<NadlanConext>(options =>
             //    options.UseInMemoryDatabase(databaseName: "InMemoryMockNadlanDatabase"));
 

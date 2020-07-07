@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Nadlan.MockData;
 using Nadlan.Models.Issues;
 using Nadlan.Repositories;
-using Nadlan.Repositories.Issues;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace Nadlan.Controllers
@@ -15,19 +12,17 @@ namespace Nadlan.Controllers
     public class IssuesController : ControllerBase
     {
         //private readonly NadlanConext _context;
-        private static readonly RepositoryWrapper _repositoryWraper;
+        private RepositoryWrapper _repositoryWraper;
         private readonly IMapper _mapper;
-        private static NadlanConext _dbContext;
+        //private NadlanConext _dbContext;
         //private static IssueRepository _issueRepository;
-        static IssuesController()
-        {
-            _dbContext = new InMemoryDbContextFactory().GetMockNadlanDbContext();
-  //          _issueRepository = new IssueRepository(_dbContext);
-            _repositoryWraper = new RepositoryWrapper(_dbContext);
-            _dbContext.Issues.AddRange(MockIssues.GetAllIssues());
-            //_dbContext.Messages.AddRange(MockIssues.GetAllMessages());
-            _dbContext.SaveChanges();
-        }
+        //static IssuesController()
+        //{
+        //    //_dbContext = new InMemoryDbContextFactory().GetMockNadlanDbContext();
+        //    _repositoryWraper = new RepositoryWrapper(_dbContext);
+        //    //_dbContext.Issues.AddRange(MockIssues.GetAllIssues());
+        //    //_dbContext.SaveChanges();
+        //}
         //private void LoadTestData(NadlanConext context)
         //{
         //        context.Issues.AddRange(MockIssues.GetAllIssues());
@@ -40,7 +35,7 @@ namespace Nadlan.Controllers
 
             //LoadTestData(context);
             //TODO: bring back
-            //_repositoryWraper = new RepositoryWrapper(context);
+            _repositoryWraper = new RepositoryWrapper(context);
             _mapper = mapper;
 
 
@@ -55,7 +50,7 @@ namespace Nadlan.Controllers
             var issues = await _repositoryWraper.IssueRepository
                 .GetAllIssuesAsync(isOpenOnly);
             if (issues == null) return NotFound();
-            var json = JsonConvert.SerializeObject(issues);
+            //var json = JsonConvert.SerializeObject(issues);
             return Ok(issues);
         }
 

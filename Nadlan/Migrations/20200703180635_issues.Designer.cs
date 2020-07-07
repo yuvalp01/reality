@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nadlan.Repositories;
 
 namespace Nadlan.Migrations
 {
     [DbContext(typeof(NadlanConext))]
-    partial class NadlanConextModelSnapshot : ModelSnapshot
+    [Migration("20200703180635_issues")]
+    partial class issues
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,11 +167,13 @@ namespace Nadlan.Migrations
 
                     b.Property<int>("IssueId");
 
-                    b.Property<string>("UserName");
+                    b.Property<Guid?>("UserId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IssueId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Messages");
                 });
@@ -432,6 +436,10 @@ namespace Nadlan.Migrations
                         .WithMany("Messages")
                         .HasForeignKey("IssueId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Nadlan.Models.Security.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Nadlan.Models.PersonalTransaction", b =>
