@@ -51,7 +51,12 @@
             <span style="width:260px">Pending Profits</span>
             <span attr.data-amount="{{summaryReport.balance*percentage }}"
                   style="font-weight:bold"
-                  [ngClass]="'positive'">{{summaryReport.balance*percentage| currency:'EUR' : number:'1.0-0'}}</span>
+                  [ngClass]="{
+                    positive: isPositive(summaryReport.balance*percentage),
+                    negative: !isPositive(summaryReport.balance*percentage)
+                  }"
+                  
+                  >{{summaryReport.balance*percentage| currency:'EUR' : number:'1.0-0'}}</span>
           </mat-list-item>
           <!--*ngIf="apartmentId!=20"-->
           <div>
