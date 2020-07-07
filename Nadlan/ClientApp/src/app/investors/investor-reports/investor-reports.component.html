@@ -24,7 +24,7 @@
             <mat-list-item>
               <mat-icon mat-list-icon>business_center</mat-icon>
               <span matTooltip="Represents your balance in your virtual account - money that belongs to you and can be withdrawn at any moment. For details see 'Virtual Account' tab">
-                Cash Balance
+                Virtual Account Balance
               </span>
               <span [ngClass]="{
           positive: isPositive(investorReportOverview.cashBalance),
@@ -60,7 +60,7 @@
             <mat-divider></mat-divider>
             <mat-list-item>
               <mat-icon mat-list-icon>business_center</mat-icon>
-              <span matTooltip="Cash Balance + Pending Profits">Total Balace</span>
+              <span matTooltip=" Virtual Account Balance + Pending Profits">Total Balace</span>
               <span [ngClass]="{
           positive: isPositive(investorReportOverview.totalBalace),
           negative: !isPositive(investorReportOverview.totalBalace)}">{{investorReportOverview.totalBalace| currency:'EUR' : number:'1.0-0'}}</span>
@@ -142,7 +142,7 @@
     <mat-tab label="Virtual Account">
       <mat-card>
         <mat-card-title>Virtual Account</mat-card-title>
-        <mat-card-subtitle>This is where we settle the accounts between ourselves. This is how the "Cash Balance" is calculated at the "Overivew" tab.</mat-card-subtitle>
+        <mat-card-subtitle>This is where we settle the accounts between ourselves.</mat-card-subtitle>
 
         <app-personal-trans [stakeholderId]="stakeholderId" [editable]="false"></app-personal-trans>
       </mat-card>
