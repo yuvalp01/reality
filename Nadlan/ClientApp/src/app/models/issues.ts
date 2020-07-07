@@ -15,8 +15,10 @@ export interface IMessage {
   id: number;
   description: string;
   priority: number;
-  user: IAppUser;
+  userName: string;
+  dateStemp: Date;
   issue : IIssue;
+  isRead: boolean;
   isDeleted: boolean;
 }
 

@@ -10,12 +10,12 @@ import { MatTableDataSource, MatSort } from '@angular/material';
 })
 export class OpenIssuesComponent implements OnInit {
 
-  @ViewChild(MatSort, { static: true }) sort: MatSort;  
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
   constructor(private issuesService: IssuesService) { }
 
   dataSourceIssues = new MatTableDataSource<IIssue>();
-  issues:IIssue[] ;
-  messages:IMessage[] ;
+  issues: IIssue[];
+  messages: IMessage[];
   displayedColumns: string[] = ['id', 'dateOpen', 'title', 'priority', 'description'];
 
 
@@ -31,8 +31,31 @@ export class OpenIssuesComponent implements OnInit {
     // });
   }
 
-  openDiscussion()
-  {
+  checkNewMessages(issue: IIssue) {
+    return issue.messages.some(a => !a.isRead);
+  }
+  countNewMessages(issue: IIssue) {
+    return issue.messages.filter(a => !a.isRead).length;
+  }
+
+onMessagePanelOpen(issue )
+{
+    issue.isOpen = true;
+    if(issue.messages.length==0)
+    {
+      issue.showNewTextInput=true;
+    }
+}
+onMessagePanelClose(issue )
+{
+    issue.isOpen = false;
+    if(issue.messages.length==0)
+    {
+      issue.showNewTextInput=false;
+    }
+}
+
+  openDiscussion() {
     console.log('sdf');
   }
   printId(id) {

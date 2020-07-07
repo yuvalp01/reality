@@ -1,9 +1,9 @@
 <p *ngIf="!issues">Loading...</p>
 
-<div *ngIf="issues">
+<div style="width: 50%;" *ngIf="issues">
 
 
-<mat-card class="example-card" *ngFor="let issue of issues">
+<mat-card class="example-card" *ngFor="let issue of issues; let i = index">
     <mat-card-header>
       <div mat-card-avatar 
       [matTooltip]="issue.priority==1?'High Priority':(issue.priority==2?'Mid Priority':(issue.priority==3?'Low Priority':'')) "
@@ -22,36 +22,159 @@
     <mat-card-actions>
 
 
-
-      <!-- <button mat-button>Show Discussion</button>-->
-
-      <button mat-button>Close Issue</button> 
       <mat-accordion>
-        <mat-expansion-panel (opened)="openDiscussion()" style="cursor:pointer">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <mat-icon mat-list-icon>insert_comment</mat-icon>
-              <span>Discussion</span>
+        <mat-expansion-panel (opened)="onMessagePanelOpen(issue)"
+                            (closed)="onMessagePanelClose(issue)" >
+          <mat-expansion-panel-header >
+            <mat-panel-title >
+
+        <div id="titleForNew" *ngIf="issue.messages.length==0">
+          <div *ngIf="!issue.showNewTextInput">
+            <mat-icon mat-list-icon>add_comment</mat-icon>
+            Write a message
+          </div>
+          <!-- <button mat-button (click)="issue.showNewTextInput=true" *ngIf="!issue.showNewTextInput" >
+          <mat-icon mat-list-icon>add_comment</mat-icon>
+          Write a message</button>  -->
+        </div>
+
+
+        <div id="titleForExisting" *ngIf="issue.messages.length>0">
+      
+          <mat-icon *ngIf="checkNewMessages(issue)" 
+          matBadgePosition="before"
+          matBadge="{{issue.messages.length}}" 
+          matBadgeColor="warn" [matBadgeHidden]="hidden" >mark_email_unread</mat-icon>
+
+          <mat-icon *ngIf="!checkNewMessages(issue)" 
+          matBadgePosition="before"
+          matBadge="{{issue.messages.length}}" 
+          matBadgeColor="primary" [matBadgeHidden]="hidden" >mail</mat-icon>
+
+          <!-- <mat-icon *ngIf="!checkNewMessages(issue)"
+          matBadgePosition="before"
+           mat-list-icon>mark_email_unread</mat-icon> -->
+                      <!-- <mat-icon mat-list-icon>insert_comment</mat-icon> -->
+                      <!-- {{issue.isOpen?'Hide ':'Show '}} {{issue.messages.length}} messages
+                      <mat-icon *ngIf="checkNewMessages(issue)" mat-list-icon>mark_email_unread</mat-icon>
+        
+         -->
+                    </div>
+
             </mat-panel-title>
             <mat-panel-description>
               <!-- <span>Show Discussion</span> -->
             </mat-panel-description>
           </mat-expansion-panel-header>
      
-          <p *ngFor="let message of issue.messages">
-            {{message.user.userName}}: {{message.description}}
-          </p>
 
+          <ng-container *ngIf="issue.messages.length==0">
+
+          
+            <mat-form-field style="width: 100%;" *ngIf="issue.showNewTextInput">
+              <mat-label>Comments</mat-label>
+              <textarea style="overflow:hidden;"
+                        placeholder="Write here your comments or message"
+                        matInput
+                        cdkTextareaAutosize
+                        required
+                        #autosize="cdkTextareaAutosize"
+                        cdkAutosizeMinRows="2"
+                        cdkAutosizeMaxRows="5"></textarea>
+                        <!-- <span matPrefix>Stella: &nbsp;</span> -->
+                      
+                        <mat-icon matTooltip="Save" matSuffix style="color:green; cursor: pointer;">done</mat-icon>
+                        <mat-icon matTooltip="Cancel" (click)="issue.showNewTextInput=false; accordion.closeAll()" matSuffix 
+                        style="color: red; cursor: pointer;">clear</mat-icon>
+                        <!-- <mat-icon matSuffix>mode_edit</mat-icon> -->
+            </mat-form-field>
+          </ng-container>
+
+
+          <div *ngFor="let message of issue.messages; let j=index">
+
+            <!-- <mat-icon *ngIf="!message.isRead" mat-list-icon>mark_email_unread</mat-icon> -->
+            <div *ngIf="!message.showTextInput" class="readOnlyMessage">
+              <span>
+                {{message.userName}}: 
+              </span>
+              <span  *ngIf="message.isRead" (click)="message.showTextInput=true" style="cursor: pointer;">
+              {{message.description}}
+            </span>
+  
+            <span (click)="message.isRead=true" class="readMessage" *ngIf="!message.isRead">
+                Read Message 
+              <mat-icon style="position:relative;top: 7px; " *ngIf="!message.isRead" mat-list-icon>remove_red_eye</mat-icon>
+            </span>  
+
+            </div>
+
+
+          <mat-form-field style="width: 100%;" *ngIf="message.showTextInput">
+            <mat-label>Comments</mat-label>
+            <textarea style="overflow:hidden;"
+                      placeholder="Write here your comments or message"
+                      matInput
+                      cdkTextareaAutosize
+                      required
+                      #autosize="cdkTextareaAutosize"
+                      cdkAutosizeMinRows="2"
+                      [value]="message.description"
+                      cdkAutosizeMaxRows="5"></textarea>
+                      <mat-icon matTooltip="Save" matSuffix style="color:green; cursor: pointer;">done</mat-icon>
+                      <mat-icon matTooltip="Cancel" (click)="message.showTextInput=false" matSuffix style="color: red; cursor: pointer;">clear</mat-icon>
+                      <!-- <mat-icon matSuffix>mode_edit</mat-icon> -->
+          </mat-form-field>
+         
+
+           
+        </div>
+        <div *ngIf="issue.messages.length>0" style="margin-top:10px;">
+          <button mat-stroked-button 
+          (click)="issue.showNewTextInput=true" 
+          *ngIf="!issue.showNewTextInput && issue.messages[issue.messages.length-1].isRead"
+          color="primary">
+            <mat-icon mat-list-icon>add_comment</mat-icon>
+            Write a message
+          </button>
+          <mat-form-field style="width: 100%;" *ngIf="issue.showNewTextInput">
+            <mat-label>Comments</mat-label>
+            <textarea style="overflow:hidden;"
+                      placeholder="Write here your comments or message"
+                      matInput
+                      cdkTextareaAutosize
+                      required
+                      #autosize="cdkTextareaAutosize"
+                      cdkAutosizeMinRows="2"
+                      cdkAutosizeMaxRows="5"></textarea>
+                      <!-- <span matPrefix>Stella: &nbsp;</span> -->
+                    
+                      <mat-icon matTooltip="Save" matSuffix style="color:green; cursor: pointer;">done</mat-icon>
+                      <mat-icon matTooltip="Cancel" (click)="issue.showNewTextInput=false; accordion.closeAll()" matSuffix 
+                      style="color: red; cursor: pointer;">clear</mat-icon>
+                      <!-- <mat-icon matSuffix>mode_edit</mat-icon> -->
+          </mat-form-field>
+        </div>
         </mat-expansion-panel>
+       
       </mat-accordion>
 
-
+     
     </mat-card-actions>
   </mat-card>
 </div>
 
+<!-- <span class="material-icons">
+  mark_email_unread
+  </span>
+  <span class="material-icons">
+    create
+    </span>
+    <span class="material-icons">
+      add_comment
+      </span> -->
 
-<div id="tbl">
+<div style="display: none;" id="tbl">
     <table style="width: 100%;" mat-table [dataSource]="dataSourceIssues" matSort class="mat-elevation-z8">
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>

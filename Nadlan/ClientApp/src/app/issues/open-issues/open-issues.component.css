@@ -1,5 +1,6 @@
 .example-card {
     /* max-width: 400px; */
+    margin: 5px;
   }
   
   .example-header-image {
@@ -20,3 +21,28 @@
   {
     background-color: #17a2b8;
   }
+  .readMessage
+  {
+    background-color: antiquewhite;
+    border-radius: 21px;
+    padding: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: black;
+  }
+
+.readOnlyMessage
+  {
+    color: gray;
+    font-style: italic;
+  }
+
+  ::ng-deep .mat-form-field-suffix
+  {
+    display: contents;
+  }
+::ng-deep .mat-content
+{
+  padding-top: 12px;
+  padding-left: 12px;
+}
