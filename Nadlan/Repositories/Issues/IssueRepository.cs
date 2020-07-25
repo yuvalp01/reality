@@ -20,22 +20,6 @@ namespace Nadlan.Repositories.Issues
         }
 
 
-
-        //public Task<List<Message>> GetAllmessagesAsync(bool isOnlyOpen)
-        //{
-        //    Func<Message, bool> filter = isOnlyOpen ?
-        //        _issueFilter.GetItemsOfOpenIssues() :
-        //        _issueFilter.GetItemsOfIssues();
-
-        //    var messages = Task.Run(() =>
-        //    _context.Messages
-        //    //.Include(a=>a.Issue)
-        //   .Where(filter)
-        //   .ToList());
-        //    return messages;
-        //}
-
-
         public Task<List<Issue>> GetAllIssuesAsync(bool isOnlyOpen)
         {
             Func<Issue, bool> filter = isOnlyOpen ?
@@ -45,6 +29,7 @@ namespace Nadlan.Repositories.Issues
             var issues = Task.Run(() =>
             _context.Issues
             .Include(a=>a.Messages)
+            .OrderBy(a=>a.Priority).ThenBy(a=>a.DateOpen)
            .Where(filter)
            .ToList());
             return issues;
@@ -59,27 +44,6 @@ namespace Nadlan.Repositories.Issues
             return issue;
         }
 
-        public Task<Message> GetMessageByIdAsync(int id)
-        {
-            var messages = Task.Run(() =>
-              _context.Messages.Find(id)
-            );
-            return messages;
-        }
-
-        public Task<ICollection<Message>> GetMassagesByIssueIdAsync(int issueId)
-        {
-            var filter = _issueFilter.GetAllIssues();
-            var issues = Task.Run(() =>
-             _context.Issues
-             .Where(filter)
-             //.Where(a => a.IssueId == issueId)             
-             .Where(a => a.Id == issueId)
-             .Select(a=>a.Messages)
-             .FirstOrDefault());
-          
-            return issues;
-        }
 
         public async Task CreateIssueAsync(Issue issue)
         {
@@ -87,11 +51,6 @@ namespace Nadlan.Repositories.Issues
             await _context.SaveChangesAsync();
         }
 
-        public async Task CreateMessageAsync(Message message)
-        {
-            _context.Messages.Add(message);
-            await _context.SaveChangesAsync();
-        }
 
 
         public async Task SoftDeleteIssueAsync(int id)
@@ -104,28 +63,11 @@ namespace Nadlan.Repositories.Issues
         }
 
 
-        public async Task SoftDeletMessageAsync(int id)
-        {
-            var message = _context.Messages.Find(id);
-            message.IsDeleted = true;
-            _context.Update(message);
-            await _context.SaveChangesAsync();
-        }
-
         public async Task UpdateIssueAsync(Issue issue)
         {
             _context.Issues.Update(issue);
             await _context.SaveChangesAsync();
         }
-        public async Task UpdateMessageAsync(Message message)
-        {
-            _context.Messages.Update(message);
-            await _context.SaveChangesAsync();
-        }
 
-        Task<List<Message>> IIssueRepository.GetMassagesByIssueIdAsync(int issueId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

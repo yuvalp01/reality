@@ -1,28 +1,27 @@
-﻿using Nadlan.Models.Security;
+﻿using Nadlan.Models.Issues;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Nadlan.Models
 {
-    public class Message_
+    [Table("messages")]
+    public class Message
     {
         public int Id { get; set; }
+
+        //public string TableName { get; set; }
         public string Description { get; set; }
         public DateTime DateStamp { get; set; }
 
-        public int UserId { get; set; }
-        public AppUser User { get; set; }
-        public TypeMessage TypeMessage { get; set; }
-        public int ItemId { get; set; }
+        //public Guid UserId { get; set; }
+        public string UserName { get; set; }
+        public bool IsRead { get; set; }
+        public int IssueId { get; set; }
+        [JsonIgnore]
+        public virtual Issue Issue { get; set; }
+
         public bool IsDeleted { get; set; }
 
-    }
-   public enum TypeMessage
-    {
-        Issue = 10,
-        Investor = 20,
-        //Apartment = 30
     }
 }

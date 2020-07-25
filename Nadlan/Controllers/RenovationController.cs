@@ -86,17 +86,6 @@ namespace Nadlan.Controllers
             return Ok(newBalance);
         }
 
-        //[HttpPut("revertPayment")]
-        //public async Task<IActionResult> RevertPayment([FromBody] int paymentId)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-        //    decimal newBalance = await _repositoryWraper.RenovationPaymentRepository.RevertPaymentAsync(paymentId);
-
-        //    return Ok(newBalance);
-        //}
 
         [HttpPut("confirmPayment")]
         public async Task<IActionResult> ConfirmPayment([FromBody] int paymentId)
@@ -200,6 +189,25 @@ namespace Nadlan.Controllers
 
             return Ok(renovationLines);
         }
+
+        [HttpGet("lines_/{renovationProjectId}")]
+        public async Task<IActionResult> GetRenovationLines_([FromRoute] int renovationProjectId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var renovationLines = await _repositoryWraper.RenovationLineRepository
+                 .GetLinesByProjectIdAsync(renovationProjectId);
+
+            if (renovationLines == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(renovationLines);
+        }
+
 
         [HttpPut("line")]
         public async Task<IActionResult> UpdateLine([FromBody] RenovationLine line)

@@ -23,6 +23,21 @@ namespace Nadlan.Repositories.Renovation
             return lines;
         }
 
+        public Task<List<RenovationLine>> GetLinesByProjectIdAsync(int projectId)
+        {
+
+            var issues = Task.Run(() =>
+            Context.RenovationLines
+            .Include(a => a.Messages)
+            .OrderBy(a => a.Category)
+            .Where(a=>a.RenovationProjectId == projectId)
+            .ToList());
+            return issues;
+        }
+
+
+
+
         public async Task CreateAsync(RenovationLine renovationLine)
         {
             Create(renovationLine);
@@ -45,19 +60,6 @@ namespace Nadlan.Repositories.Renovation
             await SaveAsync();
         }
 
-        public Task<List<RenovationProject>> GetAllRenovationProjectsAsync()
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<List<RenovationPayment>> GetPaymentsAsync(int projectId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<RenovationPayment> GetPaymentByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

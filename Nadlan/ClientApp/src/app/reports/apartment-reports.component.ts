@@ -115,7 +115,8 @@ export class ApartmentReportsComponent implements OnInit {
     }
   }
   onChange(e) {
-    this.reportsService.getIncomeReport(this.apartmentId, this.selectedYear).subscribe(result => this.incomeReport = result, error => console.error(error));
+    this.reportsService.getIncomeReport(this.apartmentId, this.selectedYear)
+      .subscribe(result => this.incomeReport = result, error => console.error(error));
   }
 
   public isPositive(value: number): boolean {

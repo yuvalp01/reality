@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Nadlan.Models;
 using Nadlan.Models.Issues;
 using Nadlan.Repositories;
 using System.Threading.Tasks;
@@ -14,22 +15,7 @@ namespace Nadlan.Controllers
         //private readonly NadlanConext _context;
         private RepositoryWrapper _repositoryWraper;
         private readonly IMapper _mapper;
-        //private NadlanConext _dbContext;
-        //private static IssueRepository _issueRepository;
-        //static IssuesController()
-        //{
-        //    //_dbContext = new InMemoryDbContextFactory().GetMockNadlanDbContext();
-        //    _repositoryWraper = new RepositoryWrapper(_dbContext);
-        //    //_dbContext.Issues.AddRange(MockIssues.GetAllIssues());
-        //    //_dbContext.SaveChanges();
-        //}
-        //private void LoadTestData(NadlanConext context)
-        //{
-        //        context.Issues.AddRange(MockIssues.GetAllIssues());
-        //        context.Messages.AddRange(MockIssues.GetAllMessages());
-        //        context.SaveChanges();
 
-        //}
         public IssuesController(NadlanConext context, IMapper mapper)
         {
 
@@ -54,17 +40,6 @@ namespace Nadlan.Controllers
             return Ok(issues);
         }
 
-        //[HttpGet("getMessages/{isOpenOnly}")]
-        //public async Task<IActionResult> GetMessages([FromRoute] bool isOpenOnly)
-        //{
-        //    if (!ModelState.IsValid) return BadRequest(ModelState);
-
-        //    var issues = await _repositoryWraper.IssueRepository
-        //        .GetAllmessagesAsync(isOpenOnly);
-        //    if (issues == null) return NotFound();
-
-        //    return Ok(issues);
-        //}
 
         [HttpGet("issue/{id}")]
         public async Task<IActionResult> GetIssueById([FromRoute] int id)
@@ -80,7 +55,7 @@ namespace Nadlan.Controllers
         public async Task<IActionResult> GetMessageById([FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            var message = await _repositoryWraper.IssueRepository
+            var message = await _repositoryWraper.MessagesRepository
                  .GetMessageByIdAsync(id);
             if (message == null) return NotFound();
 
@@ -91,7 +66,7 @@ namespace Nadlan.Controllers
         public async Task<IActionResult> GetMessagesByIssueId([FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            var messages = await _repositoryWraper.IssueRepository
+            var messages = await _repositoryWraper.MessagesRepository
                  .GetMassagesByIssueIdAsync(id);
             if (messages == null) return NotFound();
 
@@ -113,7 +88,7 @@ namespace Nadlan.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             if (message == null) return NotFound();
-            await _repositoryWraper.IssueRepository.CreateMessageAsync(message);
+            await _repositoryWraper.MessagesRepository.CreateMessageAsync(message);
             return NoContent();
         }
 
@@ -129,7 +104,7 @@ namespace Nadlan.Controllers
         public async Task<IActionResult> DeleteMessage([FromBody] int issueItemId)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            await _repositoryWraper.IssueRepository.SoftDeletMessageAsync(issueItemId);
+            await _repositoryWraper.MessagesRepository.SoftDeletMessageAsync(issueItemId);
             return NoContent();
         }
 
@@ -146,7 +121,7 @@ namespace Nadlan.Controllers
         public async Task<IActionResult> AddMessage([FromBody] Message message)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            await _repositoryWraper.IssueRepository.CreateMessageAsync(message);
+            await _repositoryWraper.MessagesRepository.CreateMessageAsync(message);
             return Ok();
         }
 
@@ -154,3 +129,19 @@ namespace Nadlan.Controllers
 }
 
 
+//private NadlanConext _dbContext;
+//private static IssueRepository _issueRepository;
+//static IssuesController()
+//{
+//    //_dbContext = new InMemoryDbContextFactory().GetMockNadlanDbContext();
+//    _repositoryWraper = new RepositoryWrapper(_dbContext);
+//    //_dbContext.Issues.AddRange(MockIssues.GetAllIssues());
+//    //_dbContext.SaveChanges();
+//}
+//private void LoadTestData(NadlanConext context)
+//{
+//        context.Issues.AddRange(MockIssues.GetAllIssues());
+//        context.Messages.AddRange(MockIssues.GetAllMessages());
+//        context.SaveChanges();
+
+//}

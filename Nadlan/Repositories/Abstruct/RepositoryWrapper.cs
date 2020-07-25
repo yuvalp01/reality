@@ -1,5 +1,6 @@
 ﻿using Nadlan.Repositories.ApartmentReports;
 using Nadlan.Repositories.Issues;
+using Nadlan.Repositories.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace Nadlan.Repositories
         private ApartmentReportRepositoryNew _apartmentReport;
         private InvestorReportRepository _investorReport;
         private IssueRepository _issueRepository;
+        private MessagesRepository _messagesRepository;
 
 
         public RepositoryWrapper(NadlanConext conext)
@@ -78,7 +80,17 @@ namespace Nadlan.Repositories
                 return _issueRepository;
             }
         }
-
+        public MessagesRepository MessagesRepository
+        {
+            get
+            {
+                if (_messagesRepository == null)
+                {
+                    _messagesRepository = new MessagesRepository(_conext);
+                }
+                return _messagesRepository;
+            }
+        }
 
 
 

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nadlan.Repositories;
 
 namespace Nadlan.Migrations
 {
     [DbContext(typeof(NadlanConext))]
-    partial class NadlanConextModelSnapshot : ModelSnapshot
+    [Migration("20200721044120_capitaltables")]
+    partial class capitaltables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,9 +151,11 @@ namespace Nadlan.Migrations
                     b.ToTable("issues");
                 });
 
-            modelBuilder.Entity("Nadlan.Models.Message", b =>
+            modelBuilder.Entity("Nadlan.Models.Issues.Message", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("DateStamp");
 
@@ -424,13 +428,8 @@ namespace Nadlan.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Nadlan.Models.Message", b =>
+            modelBuilder.Entity("Nadlan.Models.Issues.Message", b =>
                 {
-                    b.HasOne("Nadlan.Models.Renovation.RenovationLine")
-                        .WithMany("Messages")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Nadlan.Models.Issues.Issue", "Issue")
                         .WithMany("Messages")
                         .HasForeignKey("IssueId")

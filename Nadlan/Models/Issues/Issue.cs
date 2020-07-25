@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Nadlan.Models.Issues
 {
+    [Table("issues")]
     public class Issue
     {
         public int Id { get; set; }

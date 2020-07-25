@@ -36,7 +36,6 @@
 
   <ItemGroup>
     <Compile Remove="MockData\MockContext.cs" />
-    <Compile Remove="Models\Message.cs" />
     <Compile Remove="Repositories\ApartmentReports\ApartmentReportRepository.cs" />
     <Compile Remove="Repositories\ApartmentReports\ApartmentReportRepositoryNew_old.cs" />
     <Compile Remove="Repositories\ApartmentRepository.cs" />
