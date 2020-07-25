@@ -209,6 +209,7 @@ namespace Nadlan.Repositories
         public async Task<decimal> IncreaseTransactionAmountAsync(int transactionId, decimal additionalAmount)
         {
             var transaction = Context.Transactions.FirstOrDefault(a => a.Id == transactionId);
+            transaction.Date = DateTime.Now;
             decimal currentAmount = transaction.Amount;
             transaction.Amount = currentAmount + additionalAmount;
             Update(transaction);
