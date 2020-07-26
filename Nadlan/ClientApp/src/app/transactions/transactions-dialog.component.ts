@@ -29,6 +29,8 @@ export class TransactionsDialogComponent {
     //}
     let transactions = data.transactions as ITransaction[]
     this.total = transactions.reduce((sum, trans) => sum + trans.amount, 0)
+    //Round
+    this.total = Math.round(this.total*100)/100;
     // let sum = transactions.reduce((total, item)=>total + item.amount,0)
   }
 

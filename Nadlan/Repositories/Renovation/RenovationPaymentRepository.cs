@@ -18,6 +18,8 @@ namespace Nadlan.Repositories.Renovation
                 .Include(a => a.RenovationProject)
                 .Where(a => a.IsDeleted == false)
                 .Where(a => a.RenovationProjectId == projectId)
+                .OrderByDescending(a=>a.DatePayment==null)
+                .ThenByDescending(a=>a.DatePayment)
                 .ToListAsync();
         }
         public Task<RenovationPayment> GetPaymentByIdAsync(int id)
