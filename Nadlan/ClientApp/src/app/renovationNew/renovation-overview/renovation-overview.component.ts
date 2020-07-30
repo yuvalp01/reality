@@ -58,13 +58,13 @@ export class RenovationOverviewComponent implements OnInit {
     this.renovationService.getRenovationProject(projectId)
       .subscribe(result => {
         this.project = result;
-        if (projectId == 1) {
+        //if (projectId == 1) {
           this.loadTransaction(this.project.transactionId);
-        }
-        else {
-          this.paymentTransaction = null;
-          this.transactionAmount = 0;
-        }
+        //}
+        //else {
+        //  this.paymentTransaction = null;
+        //  this.transactionAmount = 0;
+        //}
       }, error => console.error(error));
 
   }

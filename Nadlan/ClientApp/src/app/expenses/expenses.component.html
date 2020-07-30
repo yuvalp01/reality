@@ -25,8 +25,7 @@
 
   </div>
   <div *ngIf="dataSourceAssistant.data.length==0" style="margin-left: 50%;;">
-    <mat-spinner 
-    diameter="40"></mat-spinner>
+    <mat-spinner diameter="40"></mat-spinner>
   </div>
   <table mat-table [dataSource]="dataSourceAssistant" matSort class="mat-elevation-z8">
     <ng-container matColumnDef="id">
@@ -87,25 +86,25 @@
         <mat-icon matTooltip="Personal Administration" *ngIf="transaction.accountId==16">face</mat-icon>
         <mat-icon matTooltip="New Tenant Miscellaneous" *ngIf="transaction.accountId==18">person_search</mat-icon>
 
-        
-        <!--<mat-icon>face</mat-icon>
-  <mat-icon>directions_walk</mat-icon>
-  <mat-icon>emoji_people</mat-icon>-->
-        <!--<mat-icon>compare_arrows</mat-icon>
-  <mat-icon>swap_horiz</mat-icon>
-  <mat-icon>swap_vertical_circle</mat-icon>
-  <mat-icon> import_export</mat-icon>
-  <mat-icon>repeat</mat-icon>
-  <mat-icon>shuffle</mat-icon>
-  <mat-icon> 360</mat-icon>
-  <mat-icon>refresh</mat-icon>
-  <mat-icon>sync</mat-icon>
-  <mat-icon>account_balance</mat-icon>-->
-        <!--<span *ngIf="transaction.accountId==1" matTooltip="Rent">
-    <mat-icon>attach_money payment</mat-icon>
-    <mat-icon>home</mat-icon>
 
-  </span>-->
+        <!--<mat-icon>face</mat-icon>
+        <mat-icon>directions_walk</mat-icon>
+        <mat-icon>emoji_people</mat-icon>-->
+        <!--<mat-icon>compare_arrows</mat-icon>
+        <mat-icon>swap_horiz</mat-icon>
+        <mat-icon>swap_vertical_circle</mat-icon>
+        <mat-icon> import_export</mat-icon>
+        <mat-icon>repeat</mat-icon>
+        <mat-icon>shuffle</mat-icon>
+        <mat-icon> 360</mat-icon>
+        <mat-icon>refresh</mat-icon>
+        <mat-icon>sync</mat-icon>
+        <mat-icon>account_balance</mat-icon>-->
+        <!--<span *ngIf="transaction.accountId==1" matTooltip="Rent">
+          <mat-icon>attach_money payment</mat-icon>
+          <mat-icon>home</mat-icon>
+
+        </span>-->
         {{transaction.comments}}
 
         <span style="color:lightgray">({{transaction.accountId}})</span>
