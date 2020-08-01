@@ -29,6 +29,7 @@ export class PaymentFormComponent implements OnInit {
   formIcon: string = 'monetization_on';
   renovationPaymentForm: FormGroup;
   renovationPayment: IRenovationPayment;
+  clicked: boolean = false;
 
   @Output() refreshEmitter = new EventEmitter();
 
@@ -111,7 +112,7 @@ export class PaymentFormComponent implements OnInit {
         if (t.datePayment) {
           t.datePayment = this.utilitiesService.fixUtcDate(t.datePayment);
         }
-
+        this.clicked = true;
         switch (this.data.actionType) {
           case 'add':
             this.renovationService.addRenovationPayment(t)

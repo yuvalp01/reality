@@ -110,7 +110,7 @@ formControlName="checkCriteriaMet">Criteria met?</mat-checkbox>
       </fieldset>
 
     <fieldset>
-      <button mat-flat-button color="primary" [disabled]="this.renovationPaymentForm.invalid" type="submit" name="submit">Save</button>
+      <button mat-flat-button color="primary" [disabled]="this.renovationPaymentForm.invalid || clicked" type="submit" name="submit">Save</button>
     </fieldset>
   </form>
 </div>
