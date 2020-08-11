@@ -29,7 +29,7 @@ namespace Nadlan.Repositories.Issues
             var issues = Task.Run(() =>
             _context.Issues
             .Include(a=>a.Messages)
-            .OrderBy(a=>a.Priority).ThenBy(a=>a.DateOpen)
+            .OrderByDescending(a=>a.DateOpen).ThenBy(a=>a.Priority)
            .Where(filter)
            .ToList());
             return issues;

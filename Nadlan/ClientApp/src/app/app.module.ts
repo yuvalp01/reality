@@ -66,7 +66,7 @@ import { AppRoutingModule } from './app.routing.module';
     WelcomepageComponent,
     TransactionFormComponent,
     LoginComponent,
-    HasClaimDirective,
+    // HasClaimDirective,
     RenovationOverviewComponent,
     PaymentFormComponent,
 

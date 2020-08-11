@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { IssuesService } from '../issues.service';
 import { IIssue, IMessage } from '../../models';
 import { MatTableDataSource, MatSort } from '@angular/material';
+import { MessagesService } from '../meassages.service';
 
 @Component({
   selector: 'app-open-issues',
@@ -11,7 +12,8 @@ import { MatTableDataSource, MatSort } from '@angular/material';
 export class OpenIssuesComponent implements OnInit {
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  constructor(private issuesService: IssuesService) { }
+  constructor(private issuesService: IssuesService,
+    private messagesService: MessagesService) { }
 
   dataSourceIssues = new MatTableDataSource<IIssue>();
   issues: IIssue[];
@@ -30,6 +32,15 @@ export class OpenIssuesComponent implements OnInit {
     //   this.messages = result;
     // });
   }
+  saveMessage(message: IMessage) {
+    debugger
+    this.messagesService.updateMessage(message).subscribe({
+      next: result => {
+
+      },
+      error: err => console.error(err)
+    });
+  }
 
   checkNewMessages(issue: IIssue) {
     return issue.messages.some(a => !a.isRead);
@@ -38,22 +49,18 @@ export class OpenIssuesComponent implements OnInit {
     return issue.messages.filter(a => !a.isRead).length;
   }
 
-onMessagePanelOpen(issue )
-{
+  onMessagePanelOpen(issue) {
     issue.isOpen = true;
-    if(issue.messages.length==0)
-    {
-      issue.showNewTextInput=true;
+    if (issue.messages.length == 0) {
+      issue.showNewTextInput = true;
     }
-}
-onMessagePanelClose(issue )
-{
+  }
+  onMessagePanelClose(issue) {
     issue.isOpen = false;
-    if(issue.messages.length==0)
-    {
-      issue.showNewTextInput=false;
+    if (issue.messages.length == 0) {
+      issue.showNewTextInput = false;
     }
-}
+  }
 
   openDiscussion() {
     console.log('sdf');

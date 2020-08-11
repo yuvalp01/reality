@@ -12,19 +12,13 @@ namespace Nadlan.Controllers
     [ApiController]
     public class IssuesController : ControllerBase
     {
-        //private readonly NadlanConext _context;
         private RepositoryWrapper _repositoryWraper;
         private readonly IMapper _mapper;
 
         public IssuesController(NadlanConext context, IMapper mapper)
         {
-
-            //LoadTestData(context);
-            //TODO: bring back
             _repositoryWraper = new RepositoryWrapper(context);
             _mapper = mapper;
-
-
         }
 
 
@@ -51,30 +45,30 @@ namespace Nadlan.Controllers
 
             return Ok(payment);
         }
-        [HttpGet("message/{id}")]
-        public async Task<IActionResult> GetMessageById([FromRoute] int id)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            var message = await _repositoryWraper.MessagesRepository
-                 .GetMessageByIdAsync(id);
-            if (message == null) return NotFound();
+        //[HttpGet("message/{id}")]
+        //public async Task<IActionResult> GetMessageById([FromRoute] int id)
+        //{
+        //    if (!ModelState.IsValid) return BadRequest(ModelState);
+        //    var message = await _repositoryWraper.MessagesRepository
+        //         .GetMessageByIdAsync(id);
+        //    if (message == null) return NotFound();
 
-            return Ok(message);
-        }
+        //    return Ok(message);
+        //}
 
-        [HttpGet("messages/{id}")]
-        public async Task<IActionResult> GetMessagesByIssueId([FromRoute] int id)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            var messages = await _repositoryWraper.MessagesRepository
-                 .GetMassagesByIssueIdAsync(id);
-            if (messages == null) return NotFound();
+        //[HttpGet("messages/{id}")]
+        //public async Task<IActionResult> GetMessagesByIssueId([FromRoute] int id)
+        //{
+        //    if (!ModelState.IsValid) return BadRequest(ModelState);
+        //    var messages = await _repositoryWraper.MessagesRepository
+        //         .GetMassagesByIssueIdAsync(id);
+        //    if (messages == null) return NotFound();
 
-            return Ok(messages);
-        }
+        //    return Ok(messages);
+        //}
 
 
-        [HttpPut("issue")]
+        [HttpPut]
         public async Task<IActionResult> UpdateIssue([FromBody] Issue issue)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -83,33 +77,33 @@ namespace Nadlan.Controllers
             return NoContent();
         }
 
-        [HttpPut("message")]
-        public async Task<IActionResult> UpdateMessage([FromBody] Message message)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            if (message == null) return NotFound();
-            await _repositoryWraper.MessagesRepository.CreateMessageAsync(message);
-            return NoContent();
-        }
+        //[HttpPut("message")]
+        //public async Task<IActionResult> UpdateMessage([FromBody] Message message)
+        //{
+        //    if (!ModelState.IsValid) return BadRequest(ModelState);
+        //    if (message == null) return NotFound();
+        //    await _repositoryWraper.MessagesRepository.CreateMessageAsync(message);
+        //    return NoContent();
+        //}
 
 
-        [HttpDelete("issue")]
-        public async Task<IActionResult> DeleteIssue([FromBody] int issueId)
+        [HttpDelete("{issueId}")]
+        public async Task<IActionResult> DeleteIssue([FromRoute] int issueId)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             await _repositoryWraper.IssueRepository.SoftDeleteIssueAsync(issueId);
             return NoContent();
         }
-        [HttpDelete("message")]
-        public async Task<IActionResult> DeleteMessage([FromBody] int issueItemId)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            await _repositoryWraper.MessagesRepository.SoftDeletMessageAsync(issueItemId);
-            return NoContent();
-        }
+        //[HttpDelete("message")]
+        //public async Task<IActionResult> DeleteMessage([FromBody] int issueItemId)
+        //{
+        //    if (!ModelState.IsValid) return BadRequest(ModelState);
+        //    await _repositoryWraper.MessagesRepository.SoftDeletMessageAsync(issueItemId);
+        //    return NoContent();
+        //}
 
 
-        [HttpPost("issue")]
+        [HttpPost]
         public async Task<IActionResult> AddIssue([FromBody] Issue issue)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -117,31 +111,15 @@ namespace Nadlan.Controllers
             return Ok();
         }
 
-        [HttpPost("message")]
-        public async Task<IActionResult> AddMessage([FromBody] Message message)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            await _repositoryWraper.MessagesRepository.CreateMessageAsync(message);
-            return Ok();
-        }
+        //[HttpPost("message")]
+        //public async Task<IActionResult> AddMessage([FromBody] Message message)
+        //{
+        //    if (!ModelState.IsValid) return BadRequest(ModelState);
+        //    await _repositoryWraper.MessagesRepository.CreateMessageAsync(message);
+        //    return Ok();
+        //}
 
     }
 }
 
 
-//private NadlanConext _dbContext;
-//private static IssueRepository _issueRepository;
-//static IssuesController()
-//{
-//    //_dbContext = new InMemoryDbContextFactory().GetMockNadlanDbContext();
-//    _repositoryWraper = new RepositoryWrapper(_dbContext);
-//    //_dbContext.Issues.AddRange(MockIssues.GetAllIssues());
-//    //_dbContext.SaveChanges();
-//}
-//private void LoadTestData(NadlanConext context)
-//{
-//        context.Issues.AddRange(MockIssues.GetAllIssues());
-//        context.Messages.AddRange(MockIssues.GetAllMessages());
-//        context.SaveChanges();
-
-//}

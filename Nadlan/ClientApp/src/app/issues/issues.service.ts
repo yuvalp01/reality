@@ -8,21 +8,23 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class IssuesService {
 
+  controller = 'api/issues';
+  options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
   constructor(private httpClient: HttpClient,
     @Inject('BASE_URL') private baseUrl: String) { }
 
 
   getOpenIssues(): Observable<IIssue[]> {
-    return this.httpClient.get<IIssue[]>(this.baseUrl + 'api/issues/true');
-  }
-  getOpenIssuesWithMessages(): Observable<IMessage[]> {
-    return this.httpClient.get<IMessage[]>(this.baseUrl + 'api/issues/getMessages/true');
-  }
+    return this.httpClient.get<IIssue[]>(`${this.baseUrl}${this.controller}/false`);
 
-
-  addNewMessage(message: IMessage): Observable<IMessage> {
-    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return this.httpClient.post<IMessage>(`${this.baseUrl}/api/messages`, message, options);
   }
-
+  addNewIssue(issue: IIssue): Observable<{}> {
+    return this.httpClient.post<IIssue>(`${this.baseUrl}${this.controller}`, issue, this.options);
+  }
+  updateIssue(issue: IIssue): Observable<{}> {
+    return this.httpClient.put<IIssue>(`${this.baseUrl}${this.controller}`, issue, this.options);
+  }
+  delete(id: number) {
+    return this.httpClient.delete<IIssue>(`${this.baseUrl}${this.controller}/${id}`, this.options);
+  }
 }

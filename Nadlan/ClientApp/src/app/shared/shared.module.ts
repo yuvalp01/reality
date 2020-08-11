@@ -4,11 +4,16 @@ import { ApartmentReportsComponent } from '../reports/apartment-reports.componen
 import { MyOwnCustomMaterialModule } from './cusotom-material';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MinusSignToParens } from './minusSignToParens';
+import { HasClaimDirective } from '../security/has-claim.directive';
 
 
 
 @NgModule({
-  declarations: [ApartmentReportsComponent, MinusSignToParens],
+  declarations: [
+    MinusSignToParens,
+    ApartmentReportsComponent, 
+    HasClaimDirective
+  ],
   imports: [
     CommonModule,
     MyOwnCustomMaterialModule,
@@ -23,6 +28,7 @@ import { MinusSignToParens } from './minusSignToParens';
     FormsModule,
     MinusSignToParens,
     ApartmentReportsComponent,
+    HasClaimDirective
     ],
 })
 export class SharedModule { }

@@ -121,7 +121,7 @@
                       cdkAutosizeMinRows="2"
                       [value]="message.description"
                       cdkAutosizeMaxRows="5"></textarea>
-                      <mat-icon matTooltip="Save" matSuffix style="color:green; cursor: pointer;">done</mat-icon>
+                      <mat-icon matTooltip="Save"  matSuffix style="color:green; cursor: pointer;">done</mat-icon>
                       <mat-icon matTooltip="Cancel" (click)="message.showTextInput=false" matSuffix style="color: red; cursor: pointer;">clear</mat-icon>
                       <!-- <mat-icon matSuffix>mode_edit</mat-icon> -->
           </mat-form-field>
@@ -149,7 +149,7 @@
                       cdkAutosizeMaxRows="5"></textarea>
                       <!-- <span matPrefix>Stella: &nbsp;</span> -->
                     
-                      <mat-icon matTooltip="Save" matSuffix style="color:green; cursor: pointer;">done</mat-icon>
+                      <mat-icon matTooltip="Save" (click)="saveMessage(message)" matSuffix style="color:green; cursor: pointer;">done</mat-icon>
                       <mat-icon matTooltip="Cancel" (click)="issue.showNewTextInput=false; accordion.closeAll()" matSuffix 
                       style="color: red; cursor: pointer;">clear</mat-icon>
                       <!-- <mat-icon matSuffix>mode_edit</mat-icon> -->
