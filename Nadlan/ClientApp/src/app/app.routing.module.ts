@@ -17,7 +17,7 @@ import { RenovationOverviewComponent } from './renovationNew/renovation-overview
   imports: [
     RouterModule.forRoot([
       { path: '', component: LoginComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
+      // { path: 'counter', component: CounterComponent },
       { path: 'add-apartment', component: AddApartmentForm },
       { path: 'fetch-accounts', component: AccountListComponent },
       {

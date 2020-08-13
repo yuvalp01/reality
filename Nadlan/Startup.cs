@@ -76,7 +76,7 @@ namespace Nadlan
                     ClockSkew = TimeSpan.FromMinutes(jwtSettings.MinutesToExpiration)
                 };
             });
-
+            //services.AddAuthorization();
             //services.AddAuthorization(cnf =>
             //{
             //    cnf.AddPolicy("CanViewTransactions", p =>

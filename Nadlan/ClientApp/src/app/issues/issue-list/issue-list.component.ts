@@ -52,6 +52,7 @@ export class IssueListComponent implements OnInit {
       })
     }
   }
+
   openMessages(id: number) {
     console.log(id);
   }

@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl(`/reports/1/rented`);
         break;
       case 'stella':
-        this.router.navigateByUrl(`/expenses`);
+        this.router.navigateByUrl(`/issue-list`);
         break;
       case 'ohad':
         this.router.navigateByUrl(`/investor-reports/101`);

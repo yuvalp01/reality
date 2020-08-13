@@ -86,7 +86,7 @@ export class IssueFormComponent implements OnInit {
     if(!dateIn)return null;
     ///fix UTC issue:
     let date = new Date(dateIn);
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + 12);
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + 3);
     ///
   }
 }
