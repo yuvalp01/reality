@@ -11,7 +11,7 @@
   [hideToggle]='false'>
     <mat-expansion-panel-header  
     [ngClass]="{'priority-high':item.priority==1, 'priority-mid':item.priority==2,'priority-low':item.priority==3}">
-      <mat-panel-title 
+      <mat-panel-title  style="cursor: pointer;"
       [ngClass]="{'priority-high':item.priority==1, 'priority-mid':item.priority==2,'priority-low':item.priority==3}">
           {{item.title}}
           <mat-icon *ngIf="item.description">article</mat-icon>

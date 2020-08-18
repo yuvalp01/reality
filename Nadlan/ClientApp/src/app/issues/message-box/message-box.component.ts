@@ -4,7 +4,7 @@ import { IMessage } from 'src/app/models';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
 import { SecurityService } from 'src/app/security/security.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormGroupDirective } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
@@ -23,8 +23,8 @@ export class MessageBoxComponent implements OnInit {
   messageForm: FormGroup;
   newMessage: string;
   currentUser: string = 'unknown';
-  tableName:string;
-  parentId:number;
+  tableName: string;
+  parentId: number;
   ngOnInit() {
     this.messageForm = this.formBuilder.group({
       content: ['', Validators.required]
@@ -40,8 +40,7 @@ export class MessageBoxComponent implements OnInit {
   }
   loadMessages() {
     this.messageService.getMessages(this.tableName, this.parentId).subscribe({
-      next: result => 
-      {
+      next: result => {
         this.messages = result;
       },
       error: err => console.error(err)
@@ -49,25 +48,23 @@ export class MessageBoxComponent implements OnInit {
   }
 
 
-  isUnreadByUser(message:IMessage)
-  {
-    let differentUser = message.userName!= this.currentUser;
+  isUnreadByUser(message: IMessage) {
+    let differentUser = message.userName != this.currentUser;
     let isUnread = !message.isRead;
-    return isUnread&& differentUser;
+    return isUnread && differentUser;
   }
 
 
-  markAsRead(message:IMessage)
-  {
-    message.isRead=true
-        this.messageService.markAsRead(message).subscribe({
-     // next: result => this.messages = result,
+  markAsRead(message: IMessage) {
+    message.isRead = true
+    this.messageService.markAsRead(message).subscribe({
+      // next: result => this.messages = result,
       error: err => console.error(err)
     })
   }
 
 
-  save() {
+  save(formDirective: FormGroupDirective) {
     if (this.messageForm.valid) {
       if (this.messageForm.dirty) {
 
@@ -79,10 +76,12 @@ export class MessageBoxComponent implements OnInit {
         message.userName = this.currentUser;
         message.isRead = false;
         this.messageService.addNewMessage(message).subscribe({
-          next: result => 
-          {
+          next: result => {
             this.loadMessages();
+            formDirective.resetForm();
             this.messageForm.reset();
+            // this.messageForm.clearValidators();
+            // this.messageForm.updateValueAndValidity();
           },
           error: err => console.error(err)
         });

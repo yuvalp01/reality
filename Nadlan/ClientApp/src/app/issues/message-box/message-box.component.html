@@ -16,7 +16,7 @@
 </p>
 
 
-<form [formGroup]="messageForm" (ngSubmit)="save()">
+<form [formGroup]="messageForm" #formDirective="ngForm"  (ngSubmit)="save(formDirective)">
     <fieldset> 
     <mat-form-field appearance="outline" style="width: 100%">
       <mat-label>Add Message</mat-label>
