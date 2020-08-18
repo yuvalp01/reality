@@ -10,7 +10,7 @@ using Nadlan.Repositories;
 namespace Nadlan.Migrations
 {
     [DbContext(typeof(NadlanConext))]
-    [Migration("20200816105742_init")]
+    [Migration("20200818134529_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -162,6 +162,8 @@ namespace Nadlan.Migrations
                     b.Property<bool>("IsRead");
 
                     b.Property<int>("ParentId");
+
+                    b.Property<string>("TableName");
 
                     b.Property<string>("UserName");
 

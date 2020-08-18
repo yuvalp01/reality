@@ -51,6 +51,7 @@ namespace Nadlan.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TableName = table.Column<string>(nullable: true),
                     Content = table.Column<string>(nullable: true),
                     DateStamp = table.Column<DateTime>(nullable: false),
                     UserName = table.Column<string>(nullable: true),
