@@ -7,11 +7,12 @@ import { IssueListComponent } from './issue-list/issue-list.component';
 import { IssueFormComponent } from './issue-form/issue-form.component';
 import { AuthGuard } from '../security/auth.guard';
 import { AppRoutingModule } from '../app.routing.module';
+import { MessageBoxComponent } from './message-box/message-box.component';
 
 
 
 @NgModule({
-  declarations: [IssueListComponent, IssueFormComponent],
+  declarations: [IssueListComponent, IssueFormComponent, MessageBoxComponent],
   imports: [
     CommonModule,
     MyOwnCustomMaterialModule,
@@ -28,6 +29,6 @@ import { AppRoutingModule } from '../app.routing.module';
       // { path: 'open-issues', component: OpenIssuesComponent },
     ])
   ],
-  entryComponents: [IssueFormComponent]
+  entryComponents: [IssueFormComponent,MessageBoxComponent]
 })
 export class IssuesModule { }

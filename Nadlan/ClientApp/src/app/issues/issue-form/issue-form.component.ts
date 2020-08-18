@@ -28,7 +28,6 @@ export class IssueFormComponent implements OnInit {
   @Output() refreshEmitter = new EventEmitter();
 
   ngOnInit() {
-
     this.apartmentService.getApartments().subscribe({
       next: result => this.apartments = result,
       error: err => console.error(err)
@@ -42,6 +41,7 @@ export class IssueFormComponent implements OnInit {
       dateOpen: [new Date(), Validators.required],
       dateClose: null,
     });
+    
     if (this.data) {
       this.loadItem(this.data as IIssue);
     }
@@ -53,10 +53,7 @@ export class IssueFormComponent implements OnInit {
   save() {
     if (this.issueForm.valid) {
       if (this.issueForm.dirty) {
-
-
         // const t: ITransaction = { ...this.transaction, ...this.transactionFormGroup.value }
-
         var issue = Object.assign({}, this.issueForm.value);
         issue.dateOpen = this.fixUtcDate(issue.dateOpen);
         issue.dateClose = this.fixUtcDate(issue.dateClose);

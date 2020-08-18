@@ -1,0 +1,45 @@
+<div style="width: 300px;">
+<p *ngFor="let message of messages">
+ <span style="color:grey; font-style: italic;"> {{message.userName}}:
+</span> 
+
+<span  *ngIf="!isUnreadByUser(message)" style="cursor: pointer;">
+  {{message.content}}
+</span>
+
+
+<span (click)="markAsRead(message)" class="readMessage" *ngIf="isUnreadByUser(message)">
+  Read Message 
+<mat-icon style="position:relative;top: 7px; " *ngIf="isUnreadByUser(message)" mat-list-icon>remove_red_eye</mat-icon>
+</span>  
+
+</p>
+
+
+<form [formGroup]="messageForm" (ngSubmit)="save()">
+    <fieldset> 
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Add Message</mat-label>
+      <textarea 
+                formControlName="content"
+                matInput
+                required
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="3"
+                cdkAutosizeMaxRows="5">
+
+                </textarea>
+                <button
+                type="submit"
+                name="submit"
+                 matSuffix 
+                 mat-mini-fab 
+                style="background-color:green;">
+                    <mat-icon>done</mat-icon>
+
+                  </button>
+            </mat-form-field>
+  </fieldset>
+</form>
+</div>

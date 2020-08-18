@@ -14,8 +14,8 @@ namespace Nadlan.Models.Renovation
         public RenovationProject RenovationProject { get; set; }
         public int RenovationProjectId { get; set; }
         public bool IsCompleted { get; set; }
-        [ForeignKey("Id")]
-        public virtual ICollection<Message> Messages { get; set; }
+        //[ForeignKey("Id")]
+        //public virtual ICollection<Message> Messages { get; set; }
     }
 
     public enum RenovationCategory

@@ -5,6 +5,7 @@ namespace Nadlan.Models
     [Table("accounts")]
     public class Account
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
         public string Name { get; set; }
         public bool IsIncome { get; set; }
@@ -13,7 +14,7 @@ namespace Nadlan.Models
         public int DisplayOrder { get; set; }
 
     }
-    [Table("accountTypes", Schema = "nadlan")]
+    [Table("accountTypes")]
     public class AccountType
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

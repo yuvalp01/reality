@@ -28,7 +28,7 @@ namespace Nadlan.Repositories.Renovation
 
             var issues = Task.Run(() =>
             Context.RenovationLines
-            .Include(a => a.Messages)
+            //.Include(a => a.Messages)
             .OrderBy(a => a.Category)
             .Where(a=>a.RenovationProjectId == projectId)
             .ToList());

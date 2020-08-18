@@ -12,8 +12,8 @@ export class MessagesService {
   constructor(private httpClient: HttpClient,
     @Inject('BASE_URL') private baseUrl: String) { }
 
-  getOpenIssuesWithMessages(): Observable<IMessage[]> {
-    return this.httpClient.get<IMessage[]>(`${this.baseUrl}${this.controller}/true`);
+  getMessages(tableName:string,parentId:number): Observable<IMessage[]> {
+    return this.httpClient.get<IMessage[]>(`${this.baseUrl}${this.controller}/byParent/${tableName}/${parentId}`);
   }
 
   addNewMessage(message: IMessage): Observable<IMessage> {
@@ -22,5 +22,7 @@ export class MessagesService {
   updateMessage(message: IMessage): Observable<{}> {
     return this.httpClient.put<IMessage>(`${this.baseUrl}${this.controller}`, message, this.options);
   }
-
+  markAsRead(message: IMessage): Observable<{}> {
+    return this.httpClient.put<IMessage>(`${this.baseUrl}${this.controller}/markAsRead`, message, this.options);
+  }
 }

@@ -1,0 +1,9 @@
+.readMessage
+{
+  background-color: antiquewhite;
+  border-radius: 21px;
+  padding: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  color: black;
+}

@@ -1,29 +1,35 @@
 <h3>Open Issues</h3>
 
-
-
-<button  *hasClaim="['admin']" mat-mini-fab (click)="openIssueForm()" title="Add New">
+<!-- <message-box></message-box> -->
+<!-- *hasClaim="['admin']" -->
+<button *hasClaim="['admin']"  mat-mini-fab (click)="openIssueForm()" title="Add New">
   <mat-icon>add</mat-icon>
 </button>
 
 <mat-accordion *ngFor="let item of openIssues">
   <mat-expansion-panel 
   [hideToggle]='false'>
-    <mat-expansion-panel-header 
+    <mat-expansion-panel-header  
     [ngClass]="{'priority-high':item.priority==1, 'priority-mid':item.priority==2,'priority-low':item.priority==3}">
       <mat-panel-title 
       [ngClass]="{'priority-high':item.priority==1, 'priority-mid':item.priority==2,'priority-low':item.priority==3}">
           {{item.title}}
+          <mat-icon *ngIf="item.description">article</mat-icon>
       </mat-panel-title>
       <mat-panel-description matTooltip="Creation date" [ngClass]="{'priority-high':item.priority==1, 'priority-mid':item.priority==2,'priority-low':item.priority==3}">
           {{item.dateOpen | date:'dd-MM-yyyy'}}
-        
+          <mat-icon *ngIf="item.hasUnread">mark_email_unread</mat-icon>
       </mat-panel-description>
    
     </mat-expansion-panel-header>
     <p> {{item.description}}</p>
     
-    <mat-icon *hasClaim="['admin']" style="cursor: pointer;" (click)="openMessages(item.id)">mail</mat-icon>
+    <mat-icon *ngIf="!item.hasUnread" style="cursor: pointer;"
+     (click)="openMessages(item.id)">mail</mat-icon>
+     <mat-icon *ngIf="item.hasUnread" style="cursor: pointer;"
+     (click)="openMessages(item.id)">
+      mark_email_unread
+     </mat-icon>
     <ng-container *hasClaim="['admin']">
     <mat-icon style="cursor: pointer;" (click)="delete(item.id)">delete</mat-icon>
     <mat-icon style="cursor: pointer;" (click)="openIssueForm(item)">edit</mat-icon>
@@ -53,75 +59,3 @@ Closed Issues
   </mat-expansion-panel>
 </mat-accordion>
 
-
-
-
-<!-- <mat-accordion *ngFor="let item of issues">
-    <mat-expansion-panel 
-    #mep="matExpansionPanel"
-    [hideToggle]='false' 
-    [disabled]="!item.description">
-      <mat-expansion-panel-header 
-      [ngClass]="{'priority-high':item.priority==1, 'priority-mid':item.priority==2,'priority-low':item.priority==3}">
-        <mat-panel-title 
-        [ngClass]="{'priority-high':item.priority==1, 'priority-mid':item.priority==2,'priority-low':item.priority==3}">
-            {{item.title}} {{item.priority}}
-        </mat-panel-title>
-        <mat-panel-description [ngClass]="{'priority-high':item.priority==1, 'priority-mid':item.priority==2,'priority-low':item.priority==3}">
-            {{item.dateOpen | date:'dd-MM-yyyy'}}
-          
-        </mat-panel-description>
-        <button (click)="mep.expanded = !mep.expanded">Toggle</button>
-        <mat-icon (click)="delete(item.id)">delete</mat-icon>
-      </mat-expansion-panel-header>
-     
-      <p> {{item.description}}</p>
-    </mat-expansion-panel>
-  </mat-accordion> -->
-
-
-  <!-- <mat-expansion-panel #matExpansionPanel
-  (opened)="panelOpenState = true"
-  (closed)="panelOpenState = false">
-    <mat-expansion-panel-header (click)="expandPanel(matExpansionPanel, $event)">
-      <mat-panel-title>title</mat-panel-title>
-      
-      <mat-icon *ngIf="!panelOpenState">add</mat-icon>
-      <mat-icon *ngIf="panelOpenState">remove</mat-icon>
-      <mat-icon (click)="delete(item.id)">delete</mat-icon>
-    </mat-expansion-panel-header>
-  
-    <mat-panel-description>
-  
-    </mat-panel-description> 
-  </mat-expansion-panel>
-   <mat-accordion>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            This is the expansion title
-          </mat-panel-title>
-          <mat-panel-description>
-            This is a summary of the content
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <p>This is the primary content of the panel.</p>
-      </mat-expansion-panel>
-      <mat-expansion-panel (opened)="panelOpenState = true" [disabled]="true"
-                           (closed)="panelOpenState = false">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Self aware panel
-          </mat-panel-title>
-          <mat-panel-description>
-            Currently I am {{panelOpenState ? 'open' : 'closed'}}
-            <mat-panel-description>
-              <mat-icon *ngIf="!panelOpenState">add</mat-icon>
-              <mat-icon *ngIf="panelOpenState">remove</mat-icon>
-            </mat-panel-description> 
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <p>I'm visible because I am open</p>
-      </mat-expansion-panel>
-    </mat-accordion> -->
-  

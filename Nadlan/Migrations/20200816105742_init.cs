@@ -4,13 +4,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Nadlan.Migrations
 {
-    public partial class newInitial : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.EnsureSchema(
-                name: "nadlan");
-
             migrationBuilder.EnsureSchema(
                 name: "renovation");
 
@@ -18,11 +15,22 @@ namespace Nadlan.Migrations
                 name: "secure");
 
             migrationBuilder.CreateTable(
+                name: "accountTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_accountTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "apartments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(nullable: false),
                     Address = table.Column<string>(nullable: true),
                     Status = table.Column<short>(nullable: false),
                     PurchaseDate = table.Column<DateTime>(nullable: false),
@@ -38,30 +46,34 @@ namespace Nadlan.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "stakeholders",
+                name: "messages",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Content = table.Column<string>(nullable: true),
+                    DateStamp = table.Column<DateTime>(nullable: false),
+                    UserName = table.Column<string>(nullable: true),
+                    IsRead = table.Column<bool>(nullable: false),
+                    ParentId = table.Column<int>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_messages", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "stakeholders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Type = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_stakeholders", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "accountTypes",
-                schema: "nadlan",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_accountTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -91,6 +103,52 @@ namespace Nadlan.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_users", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "accounts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    IsIncome = table.Column<bool>(nullable: false),
+                    AccountTypeId = table.Column<int>(nullable: false),
+                    DisplayOrder = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_accounts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_accounts_accountTypes_AccountTypeId",
+                        column: x => x.AccountTypeId,
+                        principalTable: "accountTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "issues",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Title = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Priority = table.Column<int>(nullable: false),
+                    DateOpen = table.Column<DateTime>(nullable: false),
+                    DateClose = table.Column<DateTime>(nullable: true),
+                    ApartmentId = table.Column<int>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_issues", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_issues_apartments_ApartmentId",
+                        column: x => x.ApartmentId,
+                        principalTable: "apartments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -177,83 +235,6 @@ namespace Nadlan.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "accounts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    IsIncome = table.Column<bool>(nullable: false),
-                    AccountTypeId = table.Column<int>(nullable: false),
-                    DisplayOrder = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_accounts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_accounts_accountTypes_AccountTypeId",
-                        column: x => x.AccountTypeId,
-                        principalSchema: "nadlan",
-                        principalTable: "accountTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "renovationPayments",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Title = table.Column<string>(nullable: true),
-                    DatePayment = table.Column<DateTime>(nullable: true),
-                    Amount = table.Column<decimal>(nullable: false),
-                    Criteria = table.Column<string>(nullable: true),
-                    Comments = table.Column<string>(nullable: true),
-                    CheckIdWriten = table.Column<bool>(nullable: false),
-                    CheckInvoiceScanned = table.Column<bool>(nullable: false),
-                    IsConfirmed = table.Column<bool>(nullable: false),
-                    RenovationProjectId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_renovationPayments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_renovationPayments_projects_RenovationProjectId",
-                        column: x => x.RenovationProjectId,
-                        principalSchema: "renovation",
-                        principalTable: "projects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Lines",
-                schema: "renovation",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Title = table.Column<string>(nullable: true),
-                    Category = table.Column<int>(nullable: false),
-                    Comments = table.Column<string>(nullable: true),
-                    Cost = table.Column<decimal>(nullable: false),
-                    RenovationProjectId = table.Column<int>(nullable: false),
-                    IsCompleted = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Lines", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Lines_projects_RenovationProjectId",
-                        column: x => x.RenovationProjectId,
-                        principalSchema: "renovation",
-                        principalTable: "projects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "expectedTransactions",
                 columns: table => new
                 {
@@ -317,6 +298,60 @@ namespace Nadlan.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "lines",
+                schema: "renovation",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Title = table.Column<string>(nullable: true),
+                    Category = table.Column<int>(nullable: false),
+                    Comments = table.Column<string>(nullable: true),
+                    Cost = table.Column<decimal>(nullable: false),
+                    RenovationProjectId = table.Column<int>(nullable: false),
+                    IsCompleted = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_lines", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_lines_projects_RenovationProjectId",
+                        column: x => x.RenovationProjectId,
+                        principalSchema: "renovation",
+                        principalTable: "projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "payments",
+                schema: "renovation",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Title = table.Column<string>(nullable: true),
+                    DatePayment = table.Column<DateTime>(nullable: true),
+                    Amount = table.Column<decimal>(nullable: false),
+                    Criteria = table.Column<string>(nullable: true),
+                    Comments = table.Column<string>(nullable: true),
+                    IsConfirmed = table.Column<bool>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    RenovationProjectId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_payments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_payments_projects_RenovationProjectId",
+                        column: x => x.RenovationProjectId,
+                        principalSchema: "renovation",
+                        principalTable: "projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "expenses",
                 columns: table => new
                 {
@@ -357,6 +392,11 @@ namespace Nadlan.Migrations
                 column: "TransactionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_issues_ApartmentId",
+                table: "issues",
+                column: "ApartmentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_personalTransactions_ApartmentId",
                 table: "personalTransactions",
                 column: "ApartmentId");
@@ -377,11 +417,6 @@ namespace Nadlan.Migrations
                 column: "StakeholderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_renovationPayments_RenovationProjectId",
-                table: "renovationPayments",
-                column: "RenovationProjectId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_transactions_AccountId",
                 table: "transactions",
                 column: "AccountId");
@@ -392,9 +427,15 @@ namespace Nadlan.Migrations
                 column: "ApartmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Lines_RenovationProjectId",
+                name: "IX_lines_RenovationProjectId",
                 schema: "renovation",
-                table: "Lines",
+                table: "lines",
+                column: "RenovationProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payments_RenovationProjectId",
+                schema: "renovation",
+                table: "payments",
                 column: "RenovationProjectId");
 
             migrationBuilder.CreateIndex(
@@ -413,16 +454,23 @@ namespace Nadlan.Migrations
                 name: "expenses");
 
             migrationBuilder.DropTable(
+                name: "issues");
+
+            migrationBuilder.DropTable(
+                name: "messages");
+
+            migrationBuilder.DropTable(
                 name: "personalTransactions");
 
             migrationBuilder.DropTable(
                 name: "portfolios");
 
             migrationBuilder.DropTable(
-                name: "renovationPayments");
+                name: "lines",
+                schema: "renovation");
 
             migrationBuilder.DropTable(
-                name: "Lines",
+                name: "payments",
                 schema: "renovation");
 
             migrationBuilder.DropTable(
@@ -450,8 +498,7 @@ namespace Nadlan.Migrations
                 name: "apartments");
 
             migrationBuilder.DropTable(
-                name: "accountTypes",
-                schema: "nadlan");
+                name: "accountTypes");
         }
     }
 }

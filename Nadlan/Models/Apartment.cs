@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Nadlan.Models
@@ -6,6 +7,7 @@ namespace Nadlan.Models
     [Table("apartments")]
     public class Apartment
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
         public string Address { get; set; }
         public short Status { get; set; }

@@ -7,7 +7,7 @@ namespace Nadlan.Repositories.Messages
     public interface IMessageRepository
     {
  
-        Task<ICollection<Message>> GetMassagesByIssueIdAsync(int issueId);
+        Task<List<Message>> GetMassagesByParentIdAsync(string tableName, int parentId);
         Task UpdateMessageAsync(Message message);
         Task CreateMessageAsync(Message message);
         Task SoftDeletMessageAsync(int id);

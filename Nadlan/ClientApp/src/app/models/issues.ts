@@ -13,11 +13,11 @@ export interface IIssue {
 }
 export interface IMessage {
   id: number;
-  description: string;
-  priority: number;
-  userName: string;
+  content: string;
   dateStemp: Date;
-  issue : IIssue;
+  userName: string;
+  parentId : number;
+  tableName: string;
   isRead: boolean;
   isDeleted: boolean;
 }

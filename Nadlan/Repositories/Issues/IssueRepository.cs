@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Nadlan.BusinessLogic;
+﻿using Nadlan.BusinessLogic;
 using Nadlan.Models.Issues;
 using System;
 using System.Collections.Generic;
@@ -19,21 +18,81 @@ namespace Nadlan.Repositories.Issues
 
         }
 
-
-        public Task<List<Issue>> GetAllIssuesAsync(bool isOnlyOpen)
+        public async  Task<List<Issue>> GetAllIssuesAsync(bool isOnlyOpen)
         {
             Func<Issue, bool> filter = isOnlyOpen ?
                 _issueFilter.GetOpenIssues() :
                 _issueFilter.GetAllIssues();
 
-            var issues = Task.Run(() =>
-            _context.Issues
-            .Include(a=>a.Messages)
-            .OrderByDescending(a=>a.DateOpen).ThenBy(a=>a.Priority)
-           .Where(filter)
-           .ToList());
-            return issues;
+            var issues = await Task.Run(() =>
+               _context.Issues
+               .OrderByDescending(a => a.DateOpen).ThenBy(a => a.Priority)
+               .Where(filter)
+               .ToList());
+
+            var messages = await Task.Run(() =>
+               _context.Messages
+               .Where(a => a.TableName == "issues")
+               .Where(a => a.IsDeleted == false)
+               .ToList());
+
+              foreach (var issue in issues)
+              {
+                  issue.Messages = messages.Where(a => a.ParentId == issue.Id).ToList();
+              }
+
+            return  issues;
         }
+
+
+        public List<Issue> GetAllIssuesAsync()
+        {
+            var messages = _context.Messages
+                .Where(a => a.TableName == "issues")
+                .Where(a => a.IsDeleted == false);
+            var issues = _context.Issues
+                .Where(a => a.IsDeleted == false);
+            foreach (var issue in issues)
+            {
+                issue.Messages = messages.Where(a => a.ParentId == issue.Id).ToList();
+            }
+            //var messages = from i in _context.Issues
+            //             join m in _context.Messages
+            //             on i.Id equals m.ParentId
+            //             select  new {Issue=i,Messages=m};
+            //var xxx = messages.ToList();
+
+            //List<Issue> issues = new List<Issue>();
+            //foreach (var item in xxx)
+            //{
+            //    Issue issue = new Issue();
+            //    issue = item.Issue;
+            //    issue.Messages = xxx.FindAll(a=>a.Messages.ParentId==item.Issue.Id)
+            //}
+            return issues.ToList();
+
+            //var issues = _context.Issues
+            //    .Where(a => a.IsDeleted == false)
+            //    .OrderByDescending(a => a.DateOpen)
+            //    .ThenBy(a => a.Priority).ToListAsync();             
+            //return issues;
+        }
+
+
+        //public Task<List<Issue>> GetAllIssuesAsync(bool isOnlyOpen)
+        //{
+        //    Func<Issue, bool> filter = isOnlyOpen ?
+        //        _issueFilter.GetOpenIssues() :
+        //        _issueFilter.GetAllIssues();
+
+        //    var issues = Task.Run(() =>
+        //    _context.Issues
+        //    .Include(a => a.Messages)
+        //    .OrderByDescending(a => a.DateOpen).ThenBy(a => a.Priority)
+        //   .Where(filter)
+        //   .ToList());
+        //    return issues;
+        //}
 
 
         public Task<Issue> GetIssueByIdAsync(int id)

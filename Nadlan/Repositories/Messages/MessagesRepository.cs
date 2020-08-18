@@ -1,4 +1,4 @@
-﻿using Nadlan.BusinessLogic;
+﻿using Microsoft.EntityFrameworkCore;
 using Nadlan.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ namespace Nadlan.Repositories.Messages
 {
     public class MessagesRepository : IMessageRepository
     {
-        private IssueFilter _issueFilter;
+        //private IssueFilter _issueFilter;
         private NadlanConext _context;
         public MessagesRepository(NadlanConext context)
         {
@@ -23,33 +23,19 @@ namespace Nadlan.Repositories.Messages
               _context.Messages.Find(id)
             );
             return messages;
+
+
         }
 
-        public Task<ICollection<Message>> GetMassagesByIssueIdAsync(int issueId)
+        public Task<List<Message>> GetMassagesByParentIdAsync(string tableName, int parentId)
         {
-            var filter = _issueFilter.GetAllIssues();
-            var issues = Task.Run(() =>
-             _context.Issues
-             //.Where(filter)
-             //.Where(a => a.IssueId == issueId)             
-             .Where(a => a.Id == issueId)   
-             //.Select(a => a.Messages.Where(m=>m.TableName=="issues"))
-             .Select(a => a.Messages)
-             .FirstOrDefault());
-
-            return issues;
-        }
-
-        public Task<ICollection<Message>> GetMassagesByRenovationLineIdAsync(int renovationLineId)
-        {
-            var messages = Task.Run(() =>
-             _context.RenovationLines          
-             .Where(a => a.Id == renovationLineId)
-             .Select(a => a.Messages)
-             .FirstOrDefault());
+            var messages = _context.Messages
+                .Where(a => a.IsDeleted == false)
+                .Where(a => a.ParentId == parentId)
+                .Where(a => a.TableName == tableName)
+                .ToListAsync();
             return messages;
         }
-
 
 
 
@@ -57,6 +43,21 @@ namespace Nadlan.Repositories.Messages
         {
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();
+
+        }
+
+        public async Task MarkAsRead(Message message)
+        {
+            var messageToUpdate = await _context.Messages.FindAsync(message.Id);
+            messageToUpdate.IsRead = true;
+                 //.Where(a => a.ParentId == message.ParentId)
+                 //.Where(a => a.TableName == message.TableName)
+                 //.Where(a => a.UserName.ToLower() == userName.ToLower())
+                 //.ForEachAsync(a => a.IsRead = true);
+
+            //_context.Messages.Add(message);
+            await _context.SaveChangesAsync();
+
         }
 
 
@@ -76,3 +77,4 @@ namespace Nadlan.Repositories.Messages
 
     }
 }
+

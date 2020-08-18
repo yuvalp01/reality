@@ -27,9 +27,10 @@ namespace Nadlan.Controllers
         public async Task<IActionResult> GetIssues([FromRoute] bool isOpenOnly)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-
             var issues = await _repositoryWraper.IssueRepository
                 .GetAllIssuesAsync(isOpenOnly);
+            //var issues = await _repositoryWraper.IssueRepository
+            //    .GetAllIssuesAsync();
             if (issues == null) return NotFound();
             //var json = JsonConvert.SerializeObject(issues);
             return Ok(issues);

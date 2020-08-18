@@ -10,8 +10,8 @@ using Nadlan.Repositories;
 namespace Nadlan.Migrations
 {
     [DbContext(typeof(NadlanConext))]
-    [Migration("20200613090501_removechecks")]
-    partial class removechecks
+    [Migration("20200816135243_tablename")]
+    partial class tablename
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,9 +23,7 @@ namespace Nadlan.Migrations
 
             modelBuilder.Entity("Nadlan.Models.Account", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("Id");
 
                     b.Property<int>("AccountTypeId");
 
@@ -50,14 +48,12 @@ namespace Nadlan.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("accountTypes","nadlan");
+                    b.ToTable("accountTypes");
                 });
 
             modelBuilder.Entity("Nadlan.Models.Apartment", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("Id");
 
                     b.Property<string>("Address");
 
@@ -122,6 +118,58 @@ namespace Nadlan.Migrations
                     b.HasIndex("TransactionId");
 
                     b.ToTable("expenses");
+                });
+
+            modelBuilder.Entity("Nadlan.Models.Issues.Issue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ApartmentId");
+
+                    b.Property<DateTime?>("DateClose");
+
+                    b.Property<DateTime>("DateOpen");
+
+                    b.Property<string>("Description");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<int>("Priority");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApartmentId");
+
+                    b.ToTable("issues");
+                });
+
+            modelBuilder.Entity("Nadlan.Models.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Content");
+
+                    b.Property<DateTime>("DateStamp");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<bool>("IsRead");
+
+                    b.Property<int>("ParentId");
+
+                    b.Property<string>("TableName");
+
+                    b.Property<string>("UserName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("messages");
                 });
 
             modelBuilder.Entity("Nadlan.Models.PersonalTransaction", b =>
@@ -194,7 +242,7 @@ namespace Nadlan.Migrations
 
                     b.HasIndex("RenovationProjectId");
 
-                    b.ToTable("Lines","renovation");
+                    b.ToTable("lines","renovation");
                 });
 
             modelBuilder.Entity("Nadlan.Models.Renovation.RenovationPayment", b =>
@@ -291,9 +339,7 @@ namespace Nadlan.Migrations
 
             modelBuilder.Entity("Nadlan.Models.Stakeholder", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("Id");
 
                     b.Property<string>("Name");
 
@@ -365,6 +411,14 @@ namespace Nadlan.Migrations
                     b.HasOne("Nadlan.Models.Transaction", "Transaction")
                         .WithMany()
                         .HasForeignKey("TransactionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Nadlan.Models.Issues.Issue", b =>
+                {
+                    b.HasOne("Nadlan.Models.Apartment", "Apartment")
+                        .WithMany()
+                        .HasForeignKey("ApartmentId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
