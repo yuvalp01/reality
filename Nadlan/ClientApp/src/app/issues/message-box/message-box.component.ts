@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, NgZone, ViewChild, Inject, ElementRef } from '@angular/core';
 import { MessagesService } from '../meassages.service';
 import { IMessage } from 'src/app/models';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
@@ -25,6 +25,7 @@ export class MessageBoxComponent implements OnInit {
   currentUser: string = 'unknown';
   tableName: string;
   parentId: number;
+  @ViewChild('name', { static: true }) inputRef: ElementRef;
   ngOnInit() {
     this.messageForm = this.formBuilder.group({
       content: ['', Validators.required]
@@ -55,12 +56,21 @@ export class MessageBoxComponent implements OnInit {
   }
 
 
-  markAsRead(message: IMessage) {
+  markAsRead(message: IMessage, formDirective: FormGroupDirective) {
+    //formDirective.resetForm();
     message.isRead = true
     this.messageService.markAsRead(message).subscribe({
-      // next: result => this.messages = result,
+      next: result => {
+        formDirective.resetForm();
+        this.inputRef.nativeElement.focus();
+      },
       error: err => console.error(err)
     })
+
+    // this.inputRef.nativeElement.reset();
+    // this.inputRef.nativeElement.resetForm();
+
+
   }
 
 
@@ -89,6 +99,7 @@ export class MessageBoxComponent implements OnInit {
     }
 
   }
+
 
 
   @ViewChild('autosize', { static: false }) autosize: CdkTextareaAutosize;
