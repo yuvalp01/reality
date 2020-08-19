@@ -7,7 +7,7 @@
 </button>
 
 <mat-accordion *ngFor="let item of openIssues">
-  <mat-expansion-panel 
+  <mat-expansion-panel (opened)="onPanelOpened(item)"
   [hideToggle]='false'>
     <mat-expansion-panel-header  
     [ngClass]="{'priority-high':item.priority==1, 'priority-mid':item.priority==2,'priority-low':item.priority==3}">

@@ -23,7 +23,7 @@ export class IssueFormComponent implements OnInit {
     private apartmentService: ApartmentService) { }
 
   issueForm: FormGroup;
- // issueId: number = 1;
+  // issueId: number = 1;
   apartments: IApartment[];
   @Output() refreshEmitter = new EventEmitter();
 
@@ -40,9 +40,11 @@ export class IssueFormComponent implements OnInit {
       apartmentId: 0,
       dateOpen: [new Date(), Validators.required],
       dateClose: null,
-      isNew:[true]
+      isNew: [true]
     });
-    
+    this.issueForm.valueChanges.subscribe(val => {
+      this.issueForm.controls['isNew'].patchValue(true);
+    })
     if (this.data) {
       this.loadItem(this.data as IIssue);
     }
@@ -55,17 +57,17 @@ export class IssueFormComponent implements OnInit {
     if (this.issueForm.valid) {
       if (this.issueForm.dirty) {
         // const t: ITransaction = { ...this.transaction, ...this.transactionFormGroup.value }
-        var issue:IIssue = Object.assign({}, this.issueForm.value);
+        var issue: IIssue = Object.assign({}, this.issueForm.value);
         issue.dateOpen = this.fixUtcDate(issue.dateOpen);
         issue.dateClose = this.fixUtcDate(issue.dateClose);
-       // issue.isNew = true;
+        // issue.isNew = true;
         if (this.data) {
           this.issueService.updateIssue(issue).subscribe({
             next: () => this.afterSave('Updated'),
             error: err => console.error(err)
           })
         }
-        else{
+        else {
           this.issueService.addNewIssue(issue).subscribe({
             next: () => this.afterSave('Added'),
             error: err => console.error(err)
@@ -74,15 +76,15 @@ export class IssueFormComponent implements OnInit {
       }
     }
   }
-  afterSave(action:string) {
+  afterSave(action: string) {
     this.dialogRef.close();
     let snackBarRef = this.snackBar.open(`Issue`, action, { duration: 2000 });
     this.refreshEmitter.emit();
   }
 
-  
+
   public fixUtcDate(dateIn) {
-    if(!dateIn)return null;
+    if (!dateIn) return null;
     ///fix UTC issue:
     let date = new Date(dateIn);
     return new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + 3);

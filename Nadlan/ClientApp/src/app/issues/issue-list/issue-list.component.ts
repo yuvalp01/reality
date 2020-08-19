@@ -30,12 +30,15 @@ export class IssueListComponent implements OnInit {
     }
     this.loadList();
   }
-
+  onPanelOpened(item:IIssue)
+  {
+    if(this.currentUser.toLowerCase()!='yuval')
+    {
+      item.isNew = false;
+      this.issueService.updateIssue(item).subscribe();
+    }
+  }
   openIssueForm(item: IIssue) {
-    // if (item && item.isNew) {
-    //   item.isNew = false;
-    //   this.issueService.updateIssue(item).subscribe();
-    // }
     let dialogLocal = this.dialog.open(IssueFormComponent, {
       height: 'auto',
       width: 'auto',
