@@ -139,6 +139,7 @@ namespace Nadlan.Migrations
                     DateOpen = table.Column<DateTime>(nullable: false),
                     DateClose = table.Column<DateTime>(nullable: true),
                     ApartmentId = table.Column<int>(nullable: false),
+                    IsNew = table.Column<bool>(nullable: false, defaultValue: true),
                     IsDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>

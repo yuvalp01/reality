@@ -6,8 +6,9 @@ export interface IIssue {
   description: string;
   priority: number;
   dateOpen: Date;
-  dateClose : Date;
+  dateClose: Date;
   aprtment: IApartment;
+  isNew: boolean;
   isDeleted: boolean;
   messages: IMessage[]
 }
@@ -16,7 +17,7 @@ export interface IMessage {
   content: string;
   dateStemp: Date;
   userName: string;
-  parentId : number;
+  parentId: number;
   tableName: string;
   isRead: boolean;
   isDeleted: boolean;

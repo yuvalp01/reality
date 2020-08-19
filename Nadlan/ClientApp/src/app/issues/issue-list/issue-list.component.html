@@ -16,9 +16,11 @@
           {{item.title}}
           <mat-icon *ngIf="item.description">article</mat-icon>
       </mat-panel-title>
-      <mat-panel-description matTooltip="Creation date" [ngClass]="{'priority-high':item.priority==1, 'priority-mid':item.priority==2,'priority-low':item.priority==3}">
-          {{item.dateOpen | date:'dd-MM-yyyy'}}
+      <mat-panel-description [ngClass]="{'priority-high':item.priority==1, 'priority-mid':item.priority==2,'priority-low':item.priority==3}">
+        <span  matTooltip="Creation date" >  {{item.dateOpen | date:'dd-MM-yyyy'}}</span>
+          <mat-icon *ngIf="item.isNew" matTooltip="New or updated">fiber_new</mat-icon>
           <mat-icon *ngIf="item.hasUnread">mark_email_unread</mat-icon>
+          
       </mat-panel-description>
    
     </mat-expansion-panel-header>

@@ -134,6 +134,10 @@ namespace Nadlan.Migrations
 
                     b.Property<bool>("IsDeleted");
 
+                    b.Property<bool>("IsNew")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
+
                     b.Property<int>("Priority");
 
                     b.Property<string>("Title");

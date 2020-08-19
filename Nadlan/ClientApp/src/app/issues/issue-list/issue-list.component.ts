@@ -32,6 +32,10 @@ export class IssueListComponent implements OnInit {
   }
 
   openIssueForm(item: IIssue) {
+    // if (item && item.isNew) {
+    //   item.isNew = false;
+    //   this.issueService.updateIssue(item).subscribe();
+    // }
     let dialogLocal = this.dialog.open(IssueFormComponent, {
       height: 'auto',
       width: 'auto',
@@ -52,46 +56,44 @@ export class IssueListComponent implements OnInit {
   }
   checkNewMessages() {
     this.openIssues.forEach(issue => {
-      if(issue.messages.length==0)
-      {
+      if (issue.messages.length == 0) {
         issue['hasUnread'] = false;
       }
-      else
-      { 
-   // let otherUserMessages = issue.messages.filter(a => a.userName.toLowerCase() != this.currentUser);
-      let unread = issue.messages.filter(a => a.userName.toLowerCase() != this.currentUser && !a.isRead);
-    //  let unread = issue.messages.some(a => !a.isRead && a.userName != this.currentUser);
-      if (unread.length>0) issue['hasUnread'] = true;
-      else issue['hasUnread'] = false;
+      else {
+        // let otherUserMessages = issue.messages.filter(a => a.userName.toLowerCase() != this.currentUser);
+        let unread = issue.messages.filter(a => a.userName.toLowerCase() != this.currentUser && !a.isRead);
+        //  let unread = issue.messages.some(a => !a.isRead && a.userName != this.currentUser);
+        if (unread.length > 0) issue['hasUnread'] = true;
+        else issue['hasUnread'] = false;
       }
     });
   }
 
 
-delete (id: number) {
-  if (confirm("Are you sure you want to delete?")) {
-    this.issueService.delete(id).subscribe({
-      next: () => {
-        this.snackBar.open(`Issue id ${id}`, 'Deleted', { duration: 2000 });
-        this.loadList();
-      },
-      error: (err) => console.error(err)
-    })
+  delete(id: number) {
+    if (confirm("Are you sure you want to delete?")) {
+      this.issueService.delete(id).subscribe({
+        next: () => {
+          this.snackBar.open(`Issue id ${id}`, 'Deleted', { duration: 2000 });
+          this.loadList();
+        },
+        error: (err) => console.error(err)
+      })
+    }
   }
-}
 
 
 
-openMessages(id: number) {
+  openMessages(id: number) {
 
-  let dialogLocal = this.dialog.open(MessageBoxComponent, {
-    height: 'auto',
-    width: 'auto',
-    data: { tableName: 'issues', id: id }
-  });
-  dialogLocal.afterClosed().subscribe(()=>this.loadList())
-  // dialogLocal.componentInstance.refreshEmitter.subscribe(() => this.loadList())
-}
+    let dialogLocal = this.dialog.open(MessageBoxComponent, {
+      height: 'auto',
+      width: 'auto',
+      data: { tableName: 'issues', id: id }
+    });
+    dialogLocal.afterClosed().subscribe(() => this.loadList())
+    // dialogLocal.componentInstance.refreshEmitter.subscribe(() => this.loadList())
+  }
 
 
 

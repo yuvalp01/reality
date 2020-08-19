@@ -40,6 +40,7 @@ export class IssueFormComponent implements OnInit {
       apartmentId: 0,
       dateOpen: [new Date(), Validators.required],
       dateClose: null,
+      isNew:[true]
     });
     
     if (this.data) {
@@ -54,9 +55,10 @@ export class IssueFormComponent implements OnInit {
     if (this.issueForm.valid) {
       if (this.issueForm.dirty) {
         // const t: ITransaction = { ...this.transaction, ...this.transactionFormGroup.value }
-        var issue = Object.assign({}, this.issueForm.value);
+        var issue:IIssue = Object.assign({}, this.issueForm.value);
         issue.dateOpen = this.fixUtcDate(issue.dateOpen);
         issue.dateClose = this.fixUtcDate(issue.dateClose);
+       // issue.isNew = true;
         if (this.data) {
           this.issueService.updateIssue(issue).subscribe({
             next: () => this.afterSave('Updated'),
