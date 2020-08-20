@@ -29,10 +29,10 @@ namespace Nadlan.Controllers
         }
         //[Authorize(Policy = "CanViewTransactions")]
         // GET: api/Transactions
-        [HttpGet]
-        public async Task<IEnumerable<TransactionDto>> GetTransactions()
+        [HttpGet("list/{monthsBack}")]
+        public async Task<IEnumerable<TransactionDto>> GetTransactions(int monthsBack)
         {
-            var transactions = await _repositoryWraper.Transaction.GetAllAsync();
+            var transactions = await _repositoryWraper.Transaction.GetAllAsync(monthsBack);
 
             var transactionsDto = _mapper.Map<List<Transaction>, IEnumerable<TransactionDto>>(transactions);
             return transactionsDto;

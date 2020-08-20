@@ -11,8 +11,8 @@ export class TransactionService {
     @Inject('BASE_URL') private baseUrl: String) {
   }
 
-  getTransactions(): Observable<ITransaction[]> {
-    return this.httpClient.get<ITransaction[]>(this.baseUrl + 'api/transactions');
+  getTransactions(monthsBack:number): Observable<ITransaction[]> {
+    return this.httpClient.get<ITransaction[]>(`${this.baseUrl}api/transactions/list/${monthsBack}`);
 
     //let options = new HttpHeaders().set('Authorization', 'Bearer ' + this.securityService.securityObject.bearerToken);
     //return this.httpClient.get<ITransaction[]>(this.baseUrl + 'api/transactions', { headers: options });

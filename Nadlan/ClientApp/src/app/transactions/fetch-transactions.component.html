@@ -48,6 +48,9 @@
 </mat-button-toggle-group>
 </div>
 </div>
+<p *ngIf="monthsBack>0">This list shows only {{monthsBack}} months back.
+  <button (click)="loadAllList()" style="padding: 0;" mat-button color="primary">Show a complete list</button>
+</p>
 <div *ngIf="dataSource.data.length==0" style="margin-left: 50%;;">
   <mat-spinner 
   diameter="40"></mat-spinner>

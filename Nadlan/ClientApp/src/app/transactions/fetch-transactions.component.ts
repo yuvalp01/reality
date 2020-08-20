@@ -14,8 +14,6 @@ import { element } from 'protractor';
 export class TransactionListComponent implements OnInit {
   displayedColumns: string[] = ['id', 'date', 'apartmentId', 'isPurchaseCost', 'accountId', 'amount', 'comments', 'actions'];
   dataSource = new MatTableDataSource<ITransaction>();
-  // showConfirmedOnly: boolean = true;
-  //allData: ITransaction[];
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   selectedApartment: string = "";
   securityObject: AppUserAuth = null;
@@ -26,20 +24,24 @@ export class TransactionListComponent implements OnInit {
   selectedApartmentStatus: number = 0;
   readonly sharedApartments:number[] = [1,3,4,20];
   sum: number = 0;
+  monthsBack:number=3;
   constructor(
     private transactionService: TransactionService,
     private dialog: MatDialog,
-    //private securityService: SecurityService
   ) {
-    //this.securityObject = this.securityService.securityObject;
+
   }
   ngOnInit(): void {
     this.refreshData();
   }
-
+  loadAllList()
+  {
+    this.monthsBack = 0;
+    this.refreshData();
+  }
   refreshData() {
     //refresh tables
-    this.transactionService.getTransactions().subscribe(result => {
+    this.transactionService.getTransactions(this.monthsBack).subscribe(result => {
       // this.allData = result as ITransaction[];
       //  this.filterIsConfirmed();
       //this.dataSource.data = this.allData;
@@ -113,30 +115,7 @@ export class TransactionListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLocaleLowerCase();
 
   }
-  // hideShowUnconfirmed(val: any) {
-  //   this.sum = 0;
-  //   this.showUnconfirmedOnly = val.checked;
-  //   //Workaround to trigger the filter predicate:
-  //   this.selectedApartment = 'w' + this.selectedApartment;
-  //   //
-  //   this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
-  //   this.selectedApartment = this.selectedApartment.substring(1, 100);
-  // }
-  // hideShowNotCovered(val: any) {
-  //   this.sum = 0;
-  //   this.showNotCoveredOnly = val.checked;
-  //   //Workaround to trigger the filter predicate:
-  //   this.selectedApartment = 'w' + this.selectedApartment;
-  //   //
-  //   this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
-  //   this.selectedApartment = this.selectedApartment.substring(1, 100);
-  // }
 
-  //hideShowPurchaseCost(val: any) {
-  //  this.arrangeFilter();
-  //  this.ShowPurchaseCostOnly = val.checked;
-  //  //Workaround to trigger the filter predicate:
-  //}
   refreshFilter() {
     this.sum = 0;
     //Workaround to trigger the filter predicate:
@@ -144,17 +123,6 @@ export class TransactionListComponent implements OnInit {
     this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
     this.selectedApartment = this.selectedApartment.substring(1, 100);
   }
-
-  // arrangeFilter() {
-  //   this.sum = 0;
-  //   //Workaround to trigger the filter predicate:
-  //   this.selectedApartment = 'w' + this.selectedApartment;   //
-  //   this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
-  //   this.selectedApartment = this.selectedApartment.substring(1, 100);
-  // }
-
-
-
 
   openForm(_transactionId: number) {
     let dialogRef = this.dialog.open(TransactionFormComponent, {
@@ -199,15 +167,6 @@ export class TransactionListComponent implements OnInit {
   //  // this.dataSource.filter = this.selectedApartment.trim().toLocaleLowerCase();
 
   //}
-
-  //showUnconfirmed() {
-  //  //this.dataSource.data = this.allData.filter(a => !a.isConfirmed);
-  //}
-  //showAll() {
-  //  //this.dataSource.data = this.allData;
-  //}
-
-
 
   //filterIsConfirmed() {
   //  //if (this.showConfirmedOnly) {

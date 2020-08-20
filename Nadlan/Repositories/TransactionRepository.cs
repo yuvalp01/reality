@@ -16,19 +16,29 @@ namespace Nadlan.Repositories
         }
 
 
-        public override async Task<List<Transaction>> GetAllAsync()
+        public async Task<List<Transaction>> GetAllAsync(int monthsBack)
         {
             var transactions = Context.Transactions.OrderByDescending(a => a.Id)
                 .Include(a => a.Account)
                 .Include(a => a.Apartment)
                 .Where(a => !a.IsDeleted);
+            if (monthsBack>0)
+            {
+                return await transactions
+                    .Where(a=>a.Date>DateTime.Today.AddMonths(-monthsBack))
+                    .ToListAsync();
+            }
+            else
+            {
+                return await transactions.ToListAsync();
+            }
 
             //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
             //{
             //    transactions = transactions.Where(a=> a.Id>1000);
             //}
 
-            return await transactions.ToListAsync();
+
 
         }
         public async Task<List<TransactionDto>> GetAllExpensesAsync(int monthsBack)
