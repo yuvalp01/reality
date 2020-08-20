@@ -31,11 +31,24 @@ namespace Nadlan.Repositories
             return await transactions.ToListAsync();
 
         }
-        public async Task<List<TransactionDto>> GetAllExpensesAsync()
+        public async Task<List<TransactionDto>> GetAllExpensesAsync(int monthsBack)
         {
-            return await Context.Expenses.Join(
+            Func<Transaction, bool> basicPredicate = t => !t.IsDeleted;
+            Func<Transaction, bool> predicate;
+            if (monthsBack!=0)
+            {
+                predicate = t =>
+                basicPredicate(t) && t.Date > DateTime.Today.AddMonths(-monthsBack);
+            }
+            else
+            {
+                predicate = basicPredicate;
+            }
+
+
+            var expenses = Context.Expenses.Join(
                 Context.Transactions
-                .Where(a => !a.IsDeleted),
+                .Where(a => predicate(a)),
                 expense => expense.TransactionId,
                 transaction => transaction.Id,
                 (expense, transaction) => new TransactionDto
@@ -52,8 +65,18 @@ namespace Nadlan.Repositories
                     IsPurchaseCost = transaction.IsPurchaseCost,
                     IsConfirmed = transaction.IsConfirmed
                 }
-                ).OrderByDescending(a => a.Date).ThenByDescending(a => a.Id).ToListAsync();
-            //return await Context.Expenses.OrderByDescending(a => a.Id).Include(a => a.Transaction).ToListAsync();
+                ).OrderByDescending(a => a.Date).ThenByDescending(a => a.Id);//.Take(count);
+            //IQueryable<TransactionDto> expensesList;
+            //if (count==0)
+            //{
+            //    return await expenses.ToListAsync();
+            //}
+            //else
+            //{
+            //    return await expenses.Take(count).ToListAsync();
+            //}
+
+            return await expenses.ToListAsync();
         }
 
         public async Task<TransactionDto> GetExpenseByIdAsync(int transactionId)
@@ -117,7 +140,7 @@ namespace Nadlan.Repositories
             await SaveAsync();
         }
 
-        internal async Task SoftDelete(int transactionId)
+        public async Task SoftDeleteTransactionAsync(int transactionId)
         {
             var originalTransaction = Context.Transactions.FindAsync(transactionId);
             originalTransaction.Result.IsDeleted = true;
@@ -222,13 +245,13 @@ namespace Nadlan.Repositories
             Update(transaction);
             await SaveAsync();
         }
-        [Obsolete]
-        public async Task DeleteTransactionAsync(Transaction transaction)
-        {
-            throw new NotImplementedException("delete only direcly in db with boolean flag");
-            Delete(transaction);
-            await SaveAsync();
-        }
+        //[Obsolete]
+        //public async Task DeleteTransactionAsync(Transaction transaction)
+        //{
+        //    throw new NotImplementedException("delete only direcly in db with boolean flag");
+        //    Delete(transaction);
+        //    await SaveAsync();
+        //}
 
         public Task<Transaction> GetByIdAsync(int id)
         {
@@ -258,15 +281,15 @@ namespace Nadlan.Repositories
         {
             List<int> apartmentsIds = Context.Portfolios
                 .Where(a => a.StakeholderId == stakeholderId)
-                .Select(a=>a.ApartmentId)
+                .Select(a => a.ApartmentId)
                 .ToList();
 
-           return Context.Transactions
-                        .Where(a=>a.IsDeleted==false)
-                        .Where(a => apartmentsIds.Contains(a.ApartmentId))
-                        .Where(a=>a.PersonalTransactionId==0)
-                        .ToListAsync();
-            
+            return Context.Transactions
+                         .Where(a => a.IsDeleted == false)
+                         .Where(a => apartmentsIds.Contains(a.ApartmentId))
+                         .Where(a => a.PersonalTransactionId == 0)
+                         .ToListAsync();
+
 
         }
 

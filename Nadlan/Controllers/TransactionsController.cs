@@ -112,40 +112,40 @@ namespace Nadlan.Controllers
             return Ok(transaction);
         }
 
-        // GET: api/Transactions/5
-        [HttpGet("GetExpenses")]
-        public async Task<IActionResult> GetExpenses()
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //// GET: api/Transactions/5
+        //[HttpGet("GetExpenses")]
+        //public async Task<IActionResult> GetExpenses()
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            var transaction = await _repositoryWraper.Transaction.GetAllExpensesAsync();
-            if (transaction == null)
-            {
-                return NotFound();
-            }
+        //    var transaction = await _repositoryWraper.Transaction.GetAllExpensesAsync();
+        //    if (transaction == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return Ok(transaction);
-        }
-        // GET: api/Transactions/5
-        [HttpGet("GetExpenses/{transactionId}")]
-        public async Task<IActionResult> GetExpense([FromRoute] int transactionId)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //    return Ok(transaction);
+        //}
+        //// GET: api/Transactions/5
+        //[HttpGet("GetExpenses/{transactionId}")]
+        //public async Task<IActionResult> GetExpense([FromRoute] int transactionId)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            var transaction = await _repositoryWraper.Transaction.GetExpenseByIdAsync(transactionId);
-            if (transaction == null)
-            {
-                return NotFound();
-            }
+        //    var transaction = await _repositoryWraper.Transaction.GetExpenseByIdAsync(transactionId);
+        //    if (transaction == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return Ok(transaction);
-        }
+        //    return Ok(transaction);
+        //}
 
 
         // POST: api/Transactions
@@ -243,7 +243,7 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
-            await _repositoryWraper.Transaction.SoftDelete(id);
+            await _repositoryWraper.Transaction.SoftDeleteTransactionAsync(id);
             return Ok();
 
         }

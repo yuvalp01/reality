@@ -22,7 +22,9 @@
       <mat-label>Search</mat-label>
       <input type="text" matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="selectedApartment" name="selectedApartment">
     </mat-form-field>
-
+    <p *ngIf="monthsBack>0">This list shows only {{monthsBack}} months back.
+      <button (click)="loadAllList()" style="padding: 0;" mat-button color="primary">Show a complete list</button>
+    </p>
   </div>
   <div *ngIf="dataSourceAssistant.data.length==0" style="margin-left: 50%;;">
     <mat-spinner diameter="40"></mat-spinner>

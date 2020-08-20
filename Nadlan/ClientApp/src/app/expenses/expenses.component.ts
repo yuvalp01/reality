@@ -15,29 +15,32 @@ import { ExcelService } from '../services/excel.service';
 })
 export class ExpensesComponent implements OnInit {
   displayedColumnsAssistant: string[] = ['date', 'isPurchaseCost', 'apartmentId', 'amount', 'comments', 'hours', 'actions'];
-  //dataSourceExpenses = new MatTableDataSource<ITransaction>();
   dataSourceAssistant = new MatTableDataSource<ITransaction>();
   selectedApartment: any;
   assistantBalance: number = 0;
   visibleAccountsHours: number[] = [4, 6, 11, 16,18, 200];
   visibleAccountsExpenses: number[] = [1, 4, 6, 17,18, 11, 8, 16, 198, 200, 201];
-
-  role: number;
+  //role: number;
+  monthsBack:number = 3;
+  //showFullList:boolean = false;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   constructor(
     private expensesService: ExpensesService,
     private transactionService: TransactionService,
     private excelService: ExcelService,
-    //private reportsService: ReportService,
     private dialog: MatDialog) {
   }
   ngOnInit(): void {
-    //this.role = +window.sessionStorage.getItem("role");
+    this.refreshData();
+  }
+  loadAllList()
+  {
+    this.monthsBack = 0;
     this.refreshData();
   }
   refreshData() {
     //refresh tables
-    this.expensesService.getExpenses().subscribe(result => {
+    this.expensesService.getExpenses(this.monthsBack).subscribe(result => {
       let assistantAccount = result as ITransaction[];
       this.dataSourceAssistant.data = assistantAccount;
       this.dataSourceAssistant.sort = this.sort;

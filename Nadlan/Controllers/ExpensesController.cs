@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Nadlan.Models;
 using Nadlan.Repositories;
 using Nadlan.ViewModels;
+using System;
 using System.Threading.Tasks;
 
 namespace Nadlan.Controllers
@@ -24,15 +25,14 @@ namespace Nadlan.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet()]
-        public async Task<IActionResult> GetExpenses()
+        [HttpGet("list/{monthsBack}")]
+        public async Task<IActionResult> GetExpenses(int monthsBack)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            var transaction = await _repositoryWraper.Transaction.GetAllExpensesAsync();
+            var transaction = await _repositoryWraper.Transaction.GetAllExpensesAsync(monthsBack);
             if (transaction == null)
             {
                 return NotFound();
@@ -111,7 +111,7 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
-            await _repositoryWraper.Transaction.SoftDelete(id);
+            await _repositoryWraper.Transaction.SoftDeleteTransactionAsync(id);
             return CreatedAtAction("SoftDeleteExpense", id);
         }
 

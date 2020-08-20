@@ -18,8 +18,8 @@ export class ExpensesService {
 
   
 
-  getExpenses(): Observable<ITransaction[]> {
-    let url = `${this.baseUrl + this.controller}`;
+  getExpenses(monthsBack:number): Observable<ITransaction[]> {
+    let url = `${this.baseUrl + this.controller}/list/${monthsBack}`;
     return this.httpClient.get<ITransaction[]>(url);
   }
 
