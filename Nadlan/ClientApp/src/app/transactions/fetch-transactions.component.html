@@ -103,10 +103,16 @@
       <ng-container matColumnDef="comments">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>
         <td mat-cell *matCellDef="let transaction">
+          <ng-container *hasClaim="['ad_min']" >
+          <mat-icon *ngIf="!transaction.hasUnread" style="cursor: pointer;"
+          (click)="openMessages(transaction.id)">mail</mat-icon>
+        </ng-container>
+
           <mat-icon *ngIf="transaction.hasUnread" style="cursor: pointer;"
           (click)="openMessages(transaction.id)">
            mark_email_unread
           </mat-icon>
+
           {{transaction.comments}}
         
         </td>

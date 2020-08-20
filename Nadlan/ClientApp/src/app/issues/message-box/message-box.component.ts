@@ -80,7 +80,7 @@ export class MessageBoxComponent implements OnInit {
 
         let message = {} as IMessage;
         message.parentId = this.parentId;
-        message.tableName = 'issues';
+        message.tableName = this.tableName;
         message.content = this.messageForm.get('content').value;
         message.dateStemp = new Date();
         message.userName = this.currentUser;
