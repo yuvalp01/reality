@@ -5,6 +5,8 @@ import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { TransactionFormComponent } from './transaction-form/transaction-form.component';
 import { AppUserAuth } from '../security/app.user.auth';
 import { element } from 'protractor';
+import { MessageBoxComponent } from '../issues/message-box/message-box.component';
+import { SecurityService } from '../security/security.service';
 
 
 @Component({
@@ -25,13 +27,19 @@ export class TransactionListComponent implements OnInit {
   readonly sharedApartments:number[] = [1,3,4,20];
   sum: number = 0;
   monthsBack:number=3;
+  currentUser: string = 'unknown';
+
   constructor(
     private transactionService: TransactionService,
+    private securityService: SecurityService,
     private dialog: MatDialog,
   ) {
 
   }
   ngOnInit(): void {
+    if (this.securityService.securityObject.userName != '') {
+      this.currentUser = this.securityService.securityObject.userName;
+    }
     this.refreshData();
   }
   loadAllList()
@@ -42,9 +50,7 @@ export class TransactionListComponent implements OnInit {
   refreshData() {
     //refresh tables
     this.transactionService.getTransactions(this.monthsBack).subscribe(result => {
-      // this.allData = result as ITransaction[];
-      //  this.filterIsConfirmed();
-      //this.dataSource.data = this.allData;
+
       this.dataSource.data = result as ITransaction[];
       this.dataSource.sort = this.sort;
 
@@ -107,6 +113,7 @@ export class TransactionListComponent implements OnInit {
         return false;
 
       };
+      this.checkNewMessages();
     }, error => console.error(error));
   }
 
@@ -151,7 +158,29 @@ export class TransactionListComponent implements OnInit {
     });
   }
 
+  openMessages(id: number) {
 
+    let dialogLocal = this.dialog.open(MessageBoxComponent, {
+      height: 'auto',
+      width: 'auto',
+      data: { tableName: 'transactions', id: id }
+    });
+   // dialogLocal.afterClosed().subscribe(() => this.loadList())
+    // dialogLocal.componentInstance.refreshEmitter.subscribe(() => this.loadList())
+  }
+
+  checkNewMessages() {
+    this.dataSource.data.forEach(trans => {
+      if (trans.messages.length == 0) {
+        trans['hasUnread'] = false;
+      }
+      else {
+        let unread = trans.messages.filter(a => a.userName.toLowerCase() != this.currentUser && !a.isRead);
+        if (unread.length > 0) trans['hasUnread'] = true;
+        else trans['hasUnread'] = false;
+      }
+    });
+  }
 
   public isPositive(value: number): boolean {
     if (value >= 0) {

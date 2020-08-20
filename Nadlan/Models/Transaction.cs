@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Nadlan.Models
@@ -19,14 +20,18 @@ namespace Nadlan.Models
         public int AccountId { get; set; }
         public Account Account { get; set; }
 
-        //public bool IsCoveredByInvestor { get; set; }
         public int PersonalTransactionId { get; set; }
-
 
         //public int PaidById { get; set; }
         //public Stakeholder PaidBy { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        [NotMapped]
+        public List<Message> Messages { get; set; }
+        //[NotMapped]
+        //public bool HasUnreadMessages { get; set; }
+
 
         [NotMapped]
         public decimal Hours { get; set; }

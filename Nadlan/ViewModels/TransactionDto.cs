@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Nadlan.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,8 +22,9 @@ namespace Nadlan.ViewModels
         public int AccountId { get; set; }
         public string AccountName { get; set; }
         public decimal Hours { get; set; }
-        //public bool IsCoveredByInvestor { get; set; }
         public int PersonalTransactionId { get; set; }
+        public List<Message> Messages { get; set; }
+        //public bool HasUnreadMessages { get; set; }
 
 
     }

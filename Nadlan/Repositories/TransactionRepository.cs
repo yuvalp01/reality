@@ -18,19 +18,29 @@ namespace Nadlan.Repositories
 
         public async Task<List<Transaction>> GetAllAsync(int monthsBack)
         {
-            var transactions = Context.Transactions.OrderByDescending(a => a.Id)
+            var transactionList = Context.Transactions.OrderByDescending(a => a.Id)
                 .Include(a => a.Account)
                 .Include(a => a.Apartment)
                 .Where(a => !a.IsDeleted);
             if (monthsBack>0)
             {
-                return await transactions
+                var transactions =  await transactionList
                     .Where(a=>a.Date>DateTime.Today.AddMonths(-monthsBack))
                     .ToListAsync();
+                var messages = await Context.Messages
+                    .Where(a => a.IsDeleted == false)
+                    .Where(a => a.TableName == "transactions")
+                    .ToListAsync();
+                foreach (var trans in transactions)
+                {
+                    trans.Messages = messages.Where(a => a.ParentId == trans.Id).ToList();
+                    //trans.HasUnreadMessages = trans.Messages.TrueForAll(a=>a.IsRead)
+                }
+                return transactions;
             }
             else
             {
-                return await transactions.ToListAsync();
+                return await transactionList.ToListAsync();
             }
 
             //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")

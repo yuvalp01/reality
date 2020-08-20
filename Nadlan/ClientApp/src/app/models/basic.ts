@@ -1,3 +1,4 @@
+import { IMessage } from ".";
 
 export interface ITransaction {
   id: number;
@@ -13,8 +14,10 @@ export interface ITransaction {
   isBusinessExpense: boolean;
   isConfirmed: boolean;
   hours: number;
-  //isCoveredByInvestor: boolean;
   personalTransactionId: number;
+  messages:IMessage[];
+  //hasUnreadMessages:boolean;
+
 }
 
 
