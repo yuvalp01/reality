@@ -37,7 +37,16 @@
 
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
-      <td data-id="{{transaction.id}}" mat-cell *matCellDef="let transaction">{{transaction.date | date:'dd-MM-yyyy'}}</td>
+      <td data-id="{{transaction.id}}" mat-cell *matCellDef="let transaction">
+        <ng-container *hasClaim="['admin']" >
+          <mat-icon style="cursor: pointer;"
+          (click)="openMessages(transaction.id)">add</mat-icon>
+        </ng-container>
+        <span>
+          {{transaction.date | date:'dd-MM-yyyy'}}
+        </span>
+        
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="isPurchaseCost">
@@ -73,8 +82,16 @@
     <ng-container matColumnDef="comments">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>
       <td mat-cell *matCellDef="let transaction">
-        <!--shopping_basket-->
-        <!--<mat-icon matTooltip="Maintenance cost" *ngIf="!transaction.isPurchaseCost">format_paint</mat-icon>-->
+
+        <ng-container id="messages">         
+          <mat-icon *ngIf="transaction.hasMessages && !transaction.hasUnread" style="cursor: pointer;"
+          (click)="openMessages(transaction)">mail</mat-icon>
+          <mat-icon *ngIf="transaction.hasUnread" style="cursor: pointer;"
+          (click)="openMessages(transaction)">
+           mark_email_unread
+          </mat-icon>
+        </ng-container>
+        
         <mat-icon matTooltip="Maintenance" *ngIf="transaction.accountId==4">build</mat-icon>
         <mat-icon matTooltip="Renovation (miscellaneous)" *ngIf="transaction.accountId==6">format_paint</mat-icon>
         <mat-icon matTooltip="Renovation (contractor)" style="color:blue" *ngIf="transaction.accountId==17">format_paint</mat-icon>

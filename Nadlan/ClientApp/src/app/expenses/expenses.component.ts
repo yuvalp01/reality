@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ITransaction } from '../models';
+import { ITransaction, IMessage } from '../models';
 import { ExpensesService } from '../services/expenses.service';
 import { MatDialog, MatSort, MatTableDataSource } from '@angular/material';
 import { AddExpenseComponent } from '../expenses/expenses-form.component';
 import { TransactionService } from '../services/transaction.service';
 import { ExcelService } from '../services/excel.service';
+import { MessageBoxComponent } from '../issues/message-box/message-box.component';
+import { SecurityService } from '../security/security.service';
 
 
 
@@ -18,23 +20,25 @@ export class ExpensesComponent implements OnInit {
   dataSourceAssistant = new MatTableDataSource<ITransaction>();
   selectedApartment: any;
   assistantBalance: number = 0;
-  visibleAccountsHours: number[] = [4, 6, 11, 16,18, 200];
-  visibleAccountsExpenses: number[] = [1, 4, 6, 17,18, 11, 8, 16, 198, 200, 201];
-  //role: number;
-  monthsBack:number = 3;
-  //showFullList:boolean = false;
+  visibleAccountsHours: number[] = [4, 6, 11, 16, 18, 200];
+  visibleAccountsExpenses: number[] = [1, 4, 6, 17, 18, 11, 8, 16, 198, 200, 201];
+  monthsBack: number = 3;
+  currentUser: string = 'unknown';
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   constructor(
     private expensesService: ExpensesService,
+    private securityService: SecurityService,
     private transactionService: TransactionService,
     private excelService: ExcelService,
     private dialog: MatDialog) {
   }
   ngOnInit(): void {
+    if (this.securityService.securityObject.userName != '') {
+      this.currentUser = this.securityService.securityObject.userName;
+    }
     this.refreshData();
   }
-  loadAllList()
-  {
+  loadAllList() {
     this.monthsBack = 0;
     this.refreshData();
   }
@@ -44,7 +48,7 @@ export class ExpensesComponent implements OnInit {
       let assistantAccount = result as ITransaction[];
       this.dataSourceAssistant.data = assistantAccount;
       this.dataSourceAssistant.sort = this.sort;
-
+      this.checkNewMessages();
     }, error => console.error(error));
     //Refresh balance
     this.expensesService.getExpensesBalance().subscribe(
@@ -96,9 +100,6 @@ export class ExpensesComponent implements OnInit {
         _type = 'hours';
         _visibleAccounts = this.visibleAccountsHours;
       }
-
-      //let _type: string = _expense.hours == 0 ? 'expenses' : 'hours'
-
       let dialogRef = this.dialog.open(AddExpenseComponent, {
         height: '600px',
         width: '500px',
@@ -117,21 +118,33 @@ export class ExpensesComponent implements OnInit {
 
   }
 
+  openMessages(message: IMessage) {
 
+    let dialogLocal = this.dialog.open(MessageBoxComponent, {
+      height: 'auto',
+      width: 'auto',
+      data: { tableName: 'transactions', id: message.id }
+    });
+    // dialogLocal.afterClosed().subscribe(() => this.loadList())
+     dialogLocal.componentInstance.readEmitter.subscribe(() => {
+       message['hasUnread']=false;
+      })
+  }
 
   ngAfterViewInit(): void {
     this.dataSourceAssistant.sort = this.sort;
-    //this.dataSourceExpenses.sort = this.sort;
   }
 
-  //doFilter(value: string) {
-  //  this.dataSourceAssistant.filter = value.trim().toLocaleLowerCase();
-  //}
-
-  //filter() {
-  //  this.dataSourceAssistant.filter = this.selectedApartment.trim().toLocaleLowerCase();
-
-  //}
+  checkNewMessages() {
+    this.dataSourceAssistant.data.forEach(trans => {
+      if (trans.messages.length > 0) {
+        trans['hasMessages'] = true;
+        let unread = trans.messages.filter(a => a.userName.toLowerCase() != this.currentUser && !a.isRead);
+        if (unread.length > 0) trans['hasUnread'] = true;
+        else trans['hasUnread'] = false;
+      }
+    });
+  }
 
   public isPositive(value: number): boolean {
     if (value >= 0) {
@@ -160,17 +173,17 @@ export class ExpensesComponent implements OnInit {
   exportAsXLSX(): void {
 
     //this.dataSourceAssistant.data.forEach(a => delete a.stakeholderId);
-   var xxxx= this.filterByString(this.dataSourceAssistant.data,'bouboulinas')
+    var xxxx = this.filterByString(this.dataSourceAssistant.data, 'bouboulinas')
 
 
 
     this.excelService.exportAsExcelFile(xxxx, 'Transactions');
-   // this.excelService.exportAsExcelFile(this.dataSourceAssistant.data, 'Transactions');
+    // this.excelService.exportAsExcelFile(this.dataSourceAssistant.data, 'Transactions');
   }
 
   filterByString(data, s) {
     return data.filter(e => e.apartmentId.includes(s) || e.comments.includes(s));
-      //.sort((a, b) => a.id.includes(s) && !b.id.includes(s) ? -1 : b.id.includes(s) && !a.id.includes(s) ? 1 : 0);
+    //.sort((a, b) => a.id.includes(s) && !b.id.includes(s) ? -1 : b.id.includes(s) && !a.id.includes(s) ? 1 : 0);
   }
 }
 

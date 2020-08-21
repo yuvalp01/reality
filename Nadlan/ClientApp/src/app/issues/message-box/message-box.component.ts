@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, ViewChild, Inject, ElementRef } from '@angular/core';
+import { Component, OnInit, NgZone, ViewChild, Inject, ElementRef, Output, EventEmitter } from '@angular/core';
 import { MessagesService } from '../meassages.service';
 import { IMessage } from 'src/app/models';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
@@ -6,6 +6,7 @@ import { take } from 'rxjs/operators';
 import { SecurityService } from 'src/app/security/security.service';
 import { FormGroup, FormBuilder, Validators, FormGroupDirective } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+
 
 @Component({
   selector: 'message-box',
@@ -25,6 +26,7 @@ export class MessageBoxComponent implements OnInit {
   currentUser: string = 'unknown';
   tableName: string;
   parentId: number;
+  @Output() readEmitter = new EventEmitter();
   @ViewChild('name', { static: true }) inputRef: ElementRef;
   ngOnInit() {
     this.messageForm = this.formBuilder.group({
@@ -63,13 +65,10 @@ export class MessageBoxComponent implements OnInit {
       next: result => {
         formDirective.resetForm();
         this.inputRef.nativeElement.focus();
+        this.readEmitter.emit(true)
       },
       error: err => console.error(err)
     })
-
-    // this.inputRef.nativeElement.reset();
-    // this.inputRef.nativeElement.resetForm();
-
 
   }
 

@@ -47,9 +47,6 @@ namespace Nadlan.Repositories
             //{
             //    transactions = transactions.Where(a=> a.Id>1000);
             //}
-
-
-
         }
         public async Task<List<TransactionDto>> GetAllExpensesAsync(int monthsBack)
         {
@@ -66,7 +63,7 @@ namespace Nadlan.Repositories
             }
 
 
-            var expenses = Context.Expenses.Join(
+            var expensesList = Context.Expenses.Join(
                 Context.Transactions
                 .Where(a => predicate(a)),
                 expense => expense.TransactionId,
@@ -85,18 +82,31 @@ namespace Nadlan.Repositories
                     IsPurchaseCost = transaction.IsPurchaseCost,
                     IsConfirmed = transaction.IsConfirmed
                 }
-                ).OrderByDescending(a => a.Date).ThenByDescending(a => a.Id);//.Take(count);
-            //IQueryable<TransactionDto> expensesList;
-            //if (count==0)
-            //{
-            //    return await expenses.ToListAsync();
-            //}
-            //else
-            //{
-            //    return await expenses.Take(count).ToListAsync();
-            //}
+                ).OrderByDescending(a => a.Date).ThenByDescending(a => a.Id);
 
-            return await expenses.ToListAsync();
+
+            if (monthsBack != 0)
+            {
+                var expenses = await expensesList
+                    .Where(a => a.Date > DateTime.Today.AddMonths(-monthsBack))
+                    .ToListAsync();
+
+                var messages = await Context.Messages
+                     .Where(a => a.IsDeleted == false)
+                     .Where(a => a.TableName == "transactions")
+                     .ToListAsync();
+                foreach (var expense in expenses)
+                {
+                    expense.Messages = messages.Where(a => a.ParentId == expense.Id).ToList();
+                }
+                return expenses;
+            }
+            else
+            {
+                return await expensesList.ToListAsync();
+            }
+
+        
         }
 
         public async Task<TransactionDto> GetExpenseByIdAsync(int transactionId)

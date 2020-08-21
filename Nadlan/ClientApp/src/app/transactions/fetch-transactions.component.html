@@ -96,14 +96,12 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Account</th>
         <td mat-cell *matCellDef="let transaction">{{transaction.accountName}}</td>
       </ng-container>
-      <!--<ng-container matColumnDef="isPurchaseCost">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>IsPurchaseCost</th>
-    <td mat-cell *matCellDef="let transaction">{{transaction.isPurchaseCost}}</td>
-  </ng-container>-->
+
       <ng-container matColumnDef="comments">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>
         <td mat-cell *matCellDef="let transaction">
-          <ng-container *hasClaim="['ad_min']" >
+      <!-- <ng-container id="messages">
+          <ng-container *hasClaim="['admin']" >
           <mat-icon *ngIf="!transaction.hasUnread" style="cursor: pointer;"
           (click)="openMessages(transaction.id)">mail</mat-icon>
         </ng-container>
@@ -112,9 +110,8 @@
           (click)="openMessages(transaction.id)">
            mark_email_unread
           </mat-icon>
-
+        </ng-container> -->
           {{transaction.comments}}
-        
         </td>
       </ng-container>
       <ng-container matColumnDef="actions">
