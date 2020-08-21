@@ -40,7 +40,7 @@
       <td data-id="{{transaction.id}}" mat-cell *matCellDef="let transaction">
         <ng-container *hasClaim="['admin']" >
           <mat-icon style="cursor: pointer;"
-          (click)="openMessages(transaction)">message</mat-icon>
+          (click)="openMessages(transaction)">add_comment</mat-icon>
         </ng-container>
         <span>
           {{transaction.date | date:'dd-MM-yyyy'}}
