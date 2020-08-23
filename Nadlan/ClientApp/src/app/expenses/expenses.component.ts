@@ -126,8 +126,9 @@ export class ExpensesComponent implements OnInit {
       data: { tableName: 'transactions', id: message.id }
     });
     // dialogLocal.afterClosed().subscribe(() => this.loadList())
-     dialogLocal.componentInstance.readEmitter.subscribe(() => {
-       message['hasUnread']=false;
+     dialogLocal.componentInstance.readEmitter.subscribe((status) => {
+       if(status=='read') message['unreadByMe']=false;
+       if(status=='new') message['unreadByOthers']=true;
       })
   }
 
@@ -135,16 +136,36 @@ export class ExpensesComponent implements OnInit {
     this.dataSourceAssistant.sort = this.sort;
   }
 
+
   checkNewMessages() {
     this.dataSourceAssistant.data.forEach(trans => {
       if (trans.messages.length > 0) {
         trans['hasMessages'] = true;
-        let unread = trans.messages.filter(a => a.userName.toLowerCase() != this.currentUser && !a.isRead);
-        if (unread.length > 0) trans['hasUnread'] = true;
-        else trans['hasUnread'] = false;
+
+        let unread = trans.messages.filter(a => !a.isRead);
+        let unreadByMy = unread.filter(a => a.userName.toLowerCase() != this.currentUser);
+        let unreadByOthers = unread.filter(a => a.userName.toLowerCase() == this.currentUser);
+        if (unreadByMy.length > 0) trans['unreadByMe'] = true;
+        else if (unreadByOthers.length > 0) trans['unreadByOthers'] = true;
+        else {
+          trans['unreadByMe'] = false;
+          trans['unreadByOthers'] = false;
+        }
       }
     });
   }
+
+
+  // checkNewMessages_() {
+  //   this.dataSourceAssistant.data.forEach(trans => {
+  //     if (trans.messages.length > 0) {
+  //       trans['hasMessages'] = true;
+  //       let unread = trans.messages.filter(a => a.userName.toLowerCase() != this.currentUser && !a.isRead);
+  //       if (unread.length > 0) trans['hasUnread'] = true;
+  //       else trans['hasUnread'] = false;
+  //     }
+  //   });
+  // }
 
   public isPositive(value: number): boolean {
     if (value >= 0) {

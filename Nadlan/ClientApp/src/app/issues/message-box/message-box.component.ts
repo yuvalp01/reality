@@ -65,7 +65,7 @@ export class MessageBoxComponent implements OnInit {
       next: result => {
         formDirective.resetForm();
         this.inputRef.nativeElement.focus();
-        this.readEmitter.emit(true)
+        this.readEmitter.emit('read')
       },
       error: err => console.error(err)
     })
@@ -89,6 +89,7 @@ export class MessageBoxComponent implements OnInit {
             this.loadMessages();
             formDirective.resetForm();
             this.messageForm.reset();
+            this.readEmitter.emit('new')
             // this.messageForm.clearValidators();
             // this.messageForm.updateValueAndValidity();
           },

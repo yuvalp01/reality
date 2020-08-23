@@ -57,20 +57,45 @@ export class IssueListComponent implements OnInit {
       error: err => console.error(err)
     });
   }
+  // checkNewMessages_() {
+  //   this.openIssues.forEach(issue => {
+  //     if (issue.messages.length == 0) {
+  //       issue['hasUnread'] = false;
+  //     }
+  //     else {
+  //       // let otherUserMessages = issue.messages.filter(a => a.userName.toLowerCase() != this.currentUser);
+  //       let unread = issue.messages.filter(a => !a.isRead);
+  //       let unreadByMy = unread.filter(a => a.userName.toLowerCase() != this.currentUser);
+  //       let unreadByOthers = unread.filter(a => a.userName.toLowerCase() == this.currentUser);
+  //       if (unread.length > 0) issue['hasUnread'] = true;
+  //       else issue['hasUnread'] = false;
+
+  //       //  let unread = issue.messages.some(a => !a.isRead && a.userName != this.currentUser);
+  //       // if (unread.length > 0) issue['hasUnread'] = true;
+  //       // else issue['hasUnread'] = false;
+  //     }
+  //   });
+  // }
+
   checkNewMessages() {
     this.openIssues.forEach(issue => {
-      if (issue.messages.length == 0) {
-        issue['hasUnread'] = false;
-      }
-      else {
-        // let otherUserMessages = issue.messages.filter(a => a.userName.toLowerCase() != this.currentUser);
-        let unread = issue.messages.filter(a => a.userName.toLowerCase() != this.currentUser && !a.isRead);
-        //  let unread = issue.messages.some(a => !a.isRead && a.userName != this.currentUser);
-        if (unread.length > 0) issue['hasUnread'] = true;
-        else issue['hasUnread'] = false;
+      if (issue.messages.length > 0) {
+        issue['hasMessages'] = true;
+
+        let unread = issue.messages.filter(a => !a.isRead);
+        let unreadByMy = unread.filter(a => a.userName.toLowerCase() != this.currentUser);
+        let unreadByOthers = unread.filter(a => a.userName.toLowerCase() == this.currentUser);
+        if (unreadByMy.length > 0) issue['unreadByMe'] = true;
+        else if (unreadByOthers.length > 0) issue['unreadByOthers'] = true;
+        else {
+          issue['unreadByMe'] = false;
+          issue['unreadByOthers'] = false;
+        }
       }
     });
   }
+
+
 
 
   delete(id: number) {

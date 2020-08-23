@@ -84,12 +84,23 @@
       <td mat-cell *matCellDef="let transaction">
 
         <ng-container id="messages">         
-          <mat-icon *ngIf="transaction.hasMessages && !transaction.hasUnread" style="cursor: pointer;"
-          (click)="openMessages(transaction)">mail</mat-icon>
-          <mat-icon *ngIf="transaction.hasUnread" style="cursor: pointer;"
+          <mat-icon *ngIf="transaction.hasMessages && !transaction.unreadByMe && !transaction.unreadByOthers" style="cursor: pointer;"
+          (click)="openMessages(transaction)">mail_outline</mat-icon>
+          <mat-icon *ngIf="transaction.unreadByMe" style="cursor: pointer;"
           (click)="openMessages(transaction)">
            mark_email_unread
           </mat-icon>
+          <mat-icon matTooltip="Message sent" *ngIf="transaction.unreadByOthers" style="cursor: pointer;"
+          (click)="openMessages(transaction)">
+          forward_to_inbox
+          </mat-icon>
+          <!-- <mat-icon *ngIf="!item.unreadByOthers && !item.unreadByMe" style="cursor: pointer;"
+          (click)="openMessages(item.id)">mail_outline</mat-icon> -->
+          <!-- <mat-icon *ngIf="item.isNew" matTooltip="New or updated">fiber_new</mat-icon>
+          <mat-icon *ngIf="item.unreadByMe" matTooltip="New message">mark_email_unread</mat-icon>
+          <mat-icon *ngIf="item.unreadByOthers" matTooltip="Message pending">forward_to_inbox</mat-icon>
+           -->
+
         </ng-container>
         
         <mat-icon matTooltip="Maintenance" *ngIf="transaction.accountId==4">build</mat-icon>

@@ -19,18 +19,25 @@
       <mat-panel-description [ngClass]="{'priority-high':item.priority==1, 'priority-mid':item.priority==2,'priority-low':item.priority==3}">
         <span  matTooltip="Creation date" >  {{item.dateOpen | date:'dd-MM-yyyy'}}</span>
           <mat-icon *ngIf="item.isNew" matTooltip="New or updated">fiber_new</mat-icon>
-          <mat-icon *ngIf="item.hasUnread">mark_email_unread</mat-icon>
+          <mat-icon *ngIf="item.unreadByMe" matTooltip="New message">mark_email_unread</mat-icon>
+          <mat-icon *ngIf="item.unreadByOthers" matTooltip="Message sent">forward_to_inbox</mat-icon>
           
       </mat-panel-description>
    
     </mat-expansion-panel-header>
     <p> {{item.description}}</p>
     
-    <mat-icon *ngIf="!item.hasUnread" style="cursor: pointer;"
-     (click)="openMessages(item.id)">mail</mat-icon>
-     <mat-icon *ngIf="item.hasUnread" style="cursor: pointer;"
+    <mat-icon *ngIf="!item.unreadByOthers && !item.unreadByMe" style="cursor: pointer;"
+     matTooltip="Wtite a message" 
+     (click)="openMessages(item.id)">mail_outline</mat-icon>
+     <mat-icon *ngIf="item.unreadByMe" style="cursor: pointer;"
      (click)="openMessages(item.id)">
       mark_email_unread
+     </mat-icon>
+     <mat-icon *ngIf="item.unreadByOthers" style="cursor: pointer;"
+     matTooltip="Wtite a message" 
+     (click)="openMessages(item.id)">
+     forward_to_inbox
      </mat-icon>
     <ng-container *hasClaim="['admin']">
     <mat-icon style="cursor: pointer;" (click)="delete(item.id)">delete</mat-icon>
