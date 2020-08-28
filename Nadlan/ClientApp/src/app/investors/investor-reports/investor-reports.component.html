@@ -60,7 +60,7 @@
             <mat-divider></mat-divider>
             <mat-list-item>
               <mat-icon mat-list-icon>business_center</mat-icon>
-              <span matTooltip=" Virtual Account Balance + Pending Profits">Total Balace</span>
+              <span matTooltip=" Virtual Account Balance + Pending Profits + Pending Expenses">Total Balace</span>
               <span [ngClass]="{
           positive: isPositive(investorReportOverview.totalBalace),
           negative: !isPositive(investorReportOverview.totalBalace)}">{{investorReportOverview.totalBalace| currency:'EUR' : number:'1.0-0'}}</span>

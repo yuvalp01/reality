@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Nadlan.Models;
+using Microsoft.Extensions.Configuration;
 using Nadlan.Models.Issues;
 using Nadlan.Repositories;
 using System.Threading.Tasks;
@@ -15,11 +15,13 @@ namespace Nadlan.Controllers
     {
         private RepositoryWrapper _repositoryWraper;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-        public IssuesController(NadlanConext context, IMapper mapper)
+        public IssuesController(NadlanConext context, IMapper mapper, IConfiguration configuration)
         {
             _repositoryWraper = new RepositoryWrapper(context);
             _mapper = mapper;
+            _configuration = configuration;
         }
 
 
@@ -72,6 +74,8 @@ namespace Nadlan.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             await _repositoryWraper.IssueRepository.CreateIssueAsync(issue);
+            Emails emails = new Emails(_configuration);
+            emails.SendEmail("issue");
             return Ok();
         }
 
