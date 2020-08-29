@@ -16,8 +16,15 @@
     <!--<mat-slide-toggle [(ngModel)]="showPercentage">Show only my part ({{percentage*100}}%)</mat-slide-toggle>-->
   </ng-container>
   <mat-tab-group dynamicHeight="false">
-    <mat-tab label="Summary">
-
+    <mat-tab>
+      <ng-template mat-tab-label>
+          <span>Summary</span>
+          <mat-icon *ngIf="purchaseReport && math.abs(purchaseReport.investment+purchaseReport.totalCost)>1"
+           style="color: red" 
+           matTooltip="Investment not equal expenses">warning</mat-icon>
+      </ng-template>
+  <!-- </mat-tab>
+    <mat-tab label="Summary"> -->
       <mat-card *ngIf="apartmentInfo">
         <mat-card-title>Investment Summary - {{apartmentInfo.address}}</mat-card-title>
         <mat-list *ngIf="summaryReport">

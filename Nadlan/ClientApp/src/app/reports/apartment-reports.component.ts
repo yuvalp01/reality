@@ -25,7 +25,7 @@ export class ApartmentReportsComponent implements OnInit {
   dataSource = new MatTableDataSource<ITransaction>();
   isIgnoreChanges: boolean = true;
   @Output() myEvent = new EventEmitter();
-  //role: number;
+  math = Math;
 
   //simulation params:
   rentMonthsInYear: number = 11;
