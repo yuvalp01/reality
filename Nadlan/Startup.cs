@@ -98,7 +98,7 @@ namespace Nadlan
             //services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
 
-
+            services.AddHttpClient();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {

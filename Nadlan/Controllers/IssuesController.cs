@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Nadlan.Models.Issues;
 using Nadlan.Repositories;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Nadlan.Controllers
@@ -16,12 +17,17 @@ namespace Nadlan.Controllers
         private RepositoryWrapper _repositoryWraper;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public IssuesController(NadlanConext context, IMapper mapper, IConfiguration configuration)
+        public IssuesController(NadlanConext context, 
+                                IMapper mapper,
+                                IConfiguration configuration,
+                                IHttpClientFactory httpClientFactory)
         {
             _repositoryWraper = new RepositoryWrapper(context);
             _mapper = mapper;
             _configuration = configuration;
+            _httpClientFactory = httpClientFactory;
         }
 
 
@@ -74,8 +80,10 @@ namespace Nadlan.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             await _repositoryWraper.IssueRepository.CreateIssueAsync(issue);
-            Emails emails = new Emails(_configuration);
-            emails.SendEmail("issue");
+            Notifications emails = new Notifications(_configuration, _httpClientFactory);
+            string assistentEmail = _configuration.GetValue<string>("Email:assistentEmail");
+            await emails.Send(assistentEmail, "issue");
+            //emails.SendEmail("issue");
             return Ok();
         }
 
