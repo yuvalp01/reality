@@ -1,10 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using SendGrid;
-using SendGrid.Helpers.Mail;
-using System;
-using System.Net;
 using System.Net.Http;
-using System.Net.Mail;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -28,7 +23,7 @@ namespace Nadlan
             bool useEmailNotification = _configuration.GetValue<bool>("Email:UseEmailNotification");
             if (useEmailNotification)
             {
-            string LOGIC_APP_URL = _configuration.GetValue<string>("Email:LOGIC_APP_URL");
+                string LOGIC_APP_URL = _configuration.GetValue<string>("Email:LOGIC_APP_URL");
                 string title = type == "message" ? "You have a new message!" : "A new issue has been created";
                 string body = type == "message" ? "You have a new message" : "A new issue has been created.";
                 // requires using System.Net.Http;
@@ -126,28 +121,28 @@ namespace Nadlan
 
 
 
-    //public void SendEmail(Message message)
-    //{
-    //    MailAddress SENDER = new  MailAddress ("yuvalp01@gmail.com","Message Notification");
-    //    using (var email = new MailMessage())
-    //    {
-    //        email.IsBodyHtml = true;
-    //        email.From = SENDER;
-    //        email.To.Add(new MailAddress("yp1976@gmail.com", "The Other"));
-    //        email.Subject = $"You have a new message";
-    //        email.Body = $"You have a new message, please check <a href='http://nadlanapp.azurewebsites.net'>here</a> ";
-    //        using (SmtpClient client = new SmtpClient())
-    //        {
-    //            client.EnableSsl = true;
-    //            client.UseDefaultCredentials = false;
-    //            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-    //            client.Host = "smtp.gmail.com"; ;
-    //            client.Port = 587;
-    //            //client.Credentials = new NetworkCredential("yuvalp01@gmail.com", "hvwtkbwagreznayt");
-    //            client.Credentials = new NetworkCredential("yuvalp01@gmail.com", "hvwtkbwagreznayt");
-    //            client.Send(email);
-    //        }
-    //    }
+//public void SendEmail(Message message)
+//{
+//    MailAddress SENDER = new  MailAddress ("yuvalp01@gmail.com","Message Notification");
+//    using (var email = new MailMessage())
+//    {
+//        email.IsBodyHtml = true;
+//        email.From = SENDER;
+//        email.To.Add(new MailAddress("yp1976@gmail.com", "The Other"));
+//        email.Subject = $"You have a new message";
+//        email.Body = $"You have a new message, please check <a href='http://nadlanapp.azurewebsites.net'>here</a> ";
+//        using (SmtpClient client = new SmtpClient())
+//        {
+//            client.EnableSsl = true;
+//            client.UseDefaultCredentials = false;
+//            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+//            client.Host = "smtp.gmail.com"; ;
+//            client.Port = 587;
+//            //client.Credentials = new NetworkCredential("yuvalp01@gmail.com", "hvwtkbwagreznayt");
+//            client.Credentials = new NetworkCredential("yuvalp01@gmail.com", "hvwtkbwagreznayt");
+//            client.Send(email);
+//        }
+//    }
 
 //    //}
 //}
