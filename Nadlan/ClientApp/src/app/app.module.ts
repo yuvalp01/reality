@@ -36,6 +36,8 @@ import { HasClaimDirective } from './security/has-claim.directive';
 import { RenovationOverviewComponent } from './renovationNew/renovation-overview/renovation-overview.component';
 import { PaymentFormComponent } from './renovationNew/payment-form/payment-form.component';
 import { AppRoutingModule } from './app.routing.module';
+import { ContractListComponent } from './contracts/contract-list/contract-list.component';
+import { ContractFormComponent } from './contracts/contract-form/contract-form.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,8 @@ import { AppRoutingModule } from './app.routing.module';
     LoginComponent,
     RenovationOverviewComponent,
     PaymentFormComponent,
+    ContractListComponent,
+    ContractFormComponent,
 
   ],
   imports: [
@@ -87,6 +91,7 @@ import { AppRoutingModule } from './app.routing.module';
     TransactionsDialogComponent,
      TransactionFormComponent, 
      AddExpenseComponent,
+     ContractFormComponent,
     PaymentFormComponent]
 })
 export class AppModule { }

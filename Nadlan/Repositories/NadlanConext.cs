@@ -17,7 +17,6 @@ namespace Nadlan.Repositories
         public DbSet<Account> Accounts { get; set; }
         public DbSet<AccountType> AccountTypes { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
-        //public DbSet<Product> Products { get; set; }
         public DbSet<Portfolio> Portfolios { get; set; }
         public DbSet<ExpectedTransaction> ExpectedTransactions { get; set; }
         public DbSet<PersonalTransaction> PersonalTransactions { get; set; }
@@ -30,6 +29,7 @@ namespace Nadlan.Repositories
         public DbSet<RenovationPayment> RenovationPayments { get; set; }
         public DbSet<Issue> Issues { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Contract> Contracts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

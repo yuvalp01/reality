@@ -18,6 +18,7 @@ namespace Nadlan.Repositories
         private InvestorReportRepository _investorReport;
         private IssueRepository _issueRepository;
         private MessagesRepository _messagesRepository;
+        private ContractRepository _contractRepository;
 
 
         public RepositoryWrapper(NadlanConext conext)
@@ -89,6 +90,17 @@ namespace Nadlan.Repositories
                     _messagesRepository = new MessagesRepository(_conext);
                 }
                 return _messagesRepository;
+            }
+        }
+        public ContractRepository ContractRepository
+        {
+            get
+            {
+                if (_contractRepository == null)
+                {
+                    _contractRepository = new ContractRepository(_conext);
+                }
+                return _contractRepository;
             }
         }
 

@@ -23,7 +23,6 @@ export class IssueFormComponent implements OnInit {
     private apartmentService: ApartmentService) { }
 
   issueForm: FormGroup;
-  // issueId: number = 1;
   apartments: IApartment[];
   @Output() refreshEmitter = new EventEmitter();
 

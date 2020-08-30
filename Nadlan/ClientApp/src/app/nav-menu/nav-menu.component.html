@@ -39,10 +39,9 @@
                 <a class="nav-link text-dark" [routerLink]='["/personal-admin","101"]'>Personal Transactions</a>
               </li>
             </ng-container>
-
-            <!-- <li *hasClaim="['admin']" class="nav-item" [routerLinkActive]='["link-active"]'>
-              <a class="nav-link text-dark" [routerLink]='["/open-issues"]'>Open Issues</a>
-            </li> -->
+            <li *hasClaim="['admin']" class="nav-item" [routerLinkActive]='["link-active"]'>
+              <a class="nav-link text-dark" [routerLink]='["/contract-list"]'>Contracts</a>
+            </li>
             <li *hasClaim="['admin','stella']" class="nav-item" [routerLinkActive]='["link-active"]'>
               <a class="nav-link text-dark" [routerLink]='["/issue-list"]'>Open Issues</a>
             </li>

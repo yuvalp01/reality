@@ -33,6 +33,24 @@ export interface IApartment {
 
 }
 
+
+export interface IContract {
+  id: number;
+  apartment: IApartment;
+  tenant: string;
+  tenantPhone: string;
+  tenantEmail: string;
+  dateStart: Date;
+  dateEnd: Date;
+  paymentDay: number;
+  price: number;
+  penaltyPerDay: number;
+  deposit: number;
+  link: string;
+  isElectriciyChanged: boolean;
+  conditions: string;
+}
+
 export interface IAccount {
   id: number;
   name: string;

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nadlan.Repositories;
 
 namespace Nadlan.Migrations
 {
     [DbContext(typeof(NadlanConext))]
-    partial class NadlanConextModelSnapshot : ModelSnapshot
+    [Migration("20200830060143_addcontracts")]
+    partial class addcontracts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,13 +86,11 @@ namespace Nadlan.Migrations
 
                     b.Property<string>("Conditions");
 
-                    b.Property<DateTime?>("DateEnd");
+                    b.Property<DateTime>("DateEnd");
 
-                    b.Property<DateTime?>("DateStart");
+                    b.Property<DateTime>("DateStart");
 
                     b.Property<decimal>("Deposit");
-
-                    b.Property<bool>("IsDeleted");
 
                     b.Property<bool>("IsElectriciyChanged");
 
@@ -98,7 +98,7 @@ namespace Nadlan.Migrations
 
                     b.Property<int>("PaymentDay");
 
-                    b.Property<decimal>("PenaltyPerDay");
+                    b.Property<decimal>("PeneltyPerDay");
 
                     b.Property<decimal>("Price");
 
