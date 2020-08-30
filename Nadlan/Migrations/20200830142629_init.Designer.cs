@@ -10,7 +10,7 @@ using Nadlan.Repositories;
 namespace Nadlan.Migrations
 {
     [DbContext(typeof(NadlanConext))]
-    [Migration("20200830141402_init")]
+    [Migration("20200830142629_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,47 +74,6 @@ namespace Nadlan.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("apartments");
-                });
-
-            modelBuilder.Entity("Nadlan.Models.Contract", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ApartmentId");
-
-                    b.Property<string>("Conditions");
-
-                    b.Property<DateTime?>("DateEnd");
-
-                    b.Property<DateTime?>("DateStart");
-
-                    b.Property<decimal>("Deposit");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<bool>("IsElectriciyChanged");
-
-                    b.Property<string>("Link");
-
-                    b.Property<int>("PaymentDay");
-
-                    b.Property<decimal>("PenaltyPerDay");
-
-                    b.Property<decimal>("Price");
-
-                    b.Property<string>("Tenant");
-
-                    b.Property<string>("TenantEmail");
-
-                    b.Property<string>("TenantPhone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApartmentId");
-
-                    b.ToTable("contracts");
                 });
 
             modelBuilder.Entity("Nadlan.Models.ExpectedTransaction", b =>
@@ -435,14 +394,6 @@ namespace Nadlan.Migrations
                     b.HasOne("Nadlan.Models.AccountType", "AccountType")
                         .WithMany()
                         .HasForeignKey("AccountTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Nadlan.Models.Contract", b =>
-                {
-                    b.HasOne("Nadlan.Models.Apartment", "Apartment")
-                        .WithMany()
-                        .HasForeignKey("ApartmentId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
