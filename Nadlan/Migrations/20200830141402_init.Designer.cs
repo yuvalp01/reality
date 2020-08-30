@@ -10,8 +10,8 @@ using Nadlan.Repositories;
 namespace Nadlan.Migrations
 {
     [DbContext(typeof(NadlanConext))]
-    [Migration("20200830061311_adddeleteflag")]
-    partial class adddeleteflag
+    [Migration("20200830141402_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -86,9 +86,9 @@ namespace Nadlan.Migrations
 
                     b.Property<string>("Conditions");
 
-                    b.Property<DateTime>("DateEnd");
+                    b.Property<DateTime?>("DateEnd");
 
-                    b.Property<DateTime>("DateStart");
+                    b.Property<DateTime?>("DateStart");
 
                     b.Property<decimal>("Deposit");
 
@@ -100,7 +100,7 @@ namespace Nadlan.Migrations
 
                     b.Property<int>("PaymentDay");
 
-                    b.Property<decimal>("PeneltyPerDay");
+                    b.Property<decimal>("PenaltyPerDay");
 
                     b.Property<decimal>("Price");
 
