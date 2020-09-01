@@ -10,6 +10,7 @@ import { LoginComponent } from './security/login/login.component';
 import { AuthGuard } from './security/auth.guard';
 import { RenovationOverviewComponent } from './renovationNew/renovation-overview/renovation-overview.component';
 import { ContractListComponent } from './contracts/contract-list/contract-list.component';
+import { ContractPaymentsComponent } from './contracts/contract-payments/contract-payments.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { ContractListComponent } from './contracts/contract-list/contract-list.c
         data: {claimType:['stella','admin']}
      },
       { path: 'login', component: LoginComponent },
+      { path: 'contract-payments/:contractId', component: ContractPaymentsComponent },
 
     ])
   ],

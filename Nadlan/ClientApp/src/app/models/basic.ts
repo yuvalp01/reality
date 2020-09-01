@@ -49,6 +49,7 @@ export interface IContract {
   link: string;
   isElectriciyChanged: boolean;
   conditions: string;
+  isPaymentConfirmed: boolean;
 }
 
 export interface IAccount {
@@ -80,3 +81,9 @@ export interface IAppUser
   userName: string
 }
 
+export interface IFilter
+{
+  accountId:number;
+  apartmentId:number;
+  monthsBack:number;
+}

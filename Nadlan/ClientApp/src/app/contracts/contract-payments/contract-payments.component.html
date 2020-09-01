@@ -1,0 +1,75 @@
+<div class="frame" style="width: 80%; margin-left: 10%; margin-right: 10%;text-align: center;">
+  <a [routerLink]='["/contract-list"]'>
+  <mat-icon  matTooltip="Back to contracts">arrow_back_ios</mat-icon>
+</a>
+  <mat-card class="example-card" *ngIf="contract">
+    <mat-card-header style="text-align: center; display:block">
+
+     
+
+      <mat-card-title>{{contract.apartment.address}} - {{contract.tenant}}</mat-card-title>
+      <mat-card-subtitle>
+
+        Rent: {{contract.price | currency:'EUR' : number:'1.0-0'}}.   Payment due on:   {{getCurrentDueDate(contract.paymentDay)| date:'dd/MM/yyyy'}}
+      </mat-card-subtitle>
+
+    </mat-card-header>
+    <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
+    <mat-card-content>
+      <p>
+        <mat-button-toggle-group [(ngModel)]="accountId" #group="matButtonToggleGroup" (change)="filterByAccount()">
+          <mat-button-toggle value="1">Rent</mat-button-toggle>
+          <mat-button-toggle value="2">Management</mat-button-toggle>
+          <mat-button-toggle value="50">Tax</mat-button-toggle>
+        </mat-button-toggle-group>
+      </p>
+      <transaction-list *ngIf="dataSource.data"
+       [dataSource]="dataSource.data" 
+       [displayedColumns]="['date','amount', 'accountId','comments']"
+       style="display: inline-table;"></transaction-list>
+      <!-- <p *ngFor="let item of dataSource.data">
+
+        {{item.date | date:'dd/MM/yyyy'}}... {{item.amount}}...{{item.accountName}}...{{item.apartmentAddress}}
+        </p> -->
+    </mat-card-content>
+    <mat-card-actions>
+      <button (click)="openTransaction()" mat-button>
+        RECEIVE PAYMENT
+      </button>
+      <!-- <button mat-button>SHARE</button> -->
+    </mat-card-actions>
+  </mat-card>
+
+<!-- <a class="nav-link text-dark" [routerLink]='["/contract-list"]'>
+<mat-icon  matTooltip="Back to contracts">arrow_back_ios</mat-icon>
+</a> -->
+</div>
+<!-- <button [routerLink]='["/contract-list"]'>
+  <mat-icon>arrow_back_ios</mat-icon>
+</button> -->
+<!-- <div *ngIf="contract">
+    {{contract.apartment.address}} -  {{contract.tenant}}
+</div>
+
+<div *ngIf="contract">
+   Rent: {{contract.price | currency:'EUR' : number:'1.0-0'}}
+</div>
+<div *ngIf="contract">
+  Payment due on:   {{getCurrentDueDate(contract.paymentDay)| date:'dd/MM/yyyy'}}
+</div>
+<mat-button-toggle-group [(ngModel)]="accountId" #group="matButtonToggleGroup" (change)="filterByAccount()">
+    <mat-button-toggle value="1">Rent</mat-button-toggle>
+    <mat-button-toggle value="2">Management</mat-button-toggle>
+    <mat-button-toggle value="50">Tax</mat-button-toggle>
+  </mat-button-toggle-group>
+  {{accountId}}
+  <br/>
+
+<p *ngFor="let item of dataSource.data">
+
+{{item.date | date:'dd/MM/yyyy'}}... {{item.amount}}...{{item.accountName}}...{{item.apartmentAddress}}
+</p>
+<br/>
+<button (click)="openTransaction()">
+    Receive Payment
+</button> -->

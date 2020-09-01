@@ -23,6 +23,7 @@ namespace Nadlan.Models
         public string Link { get; set; }
         public string Conditions { get; set; }
         public bool IsElectriciyChanged { get; set; }
+        public bool IsPaymentConfirmed { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

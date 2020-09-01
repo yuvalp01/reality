@@ -26,7 +26,9 @@ namespace Nadlan.Repositories.Messages
 
         public Task<Contract> GetByIdAsync(int id)
         {
-            return _context.Contracts.FindAsync(id);
+            return _context.Contracts
+                .Include(a=>a.Apartment)
+                .FirstOrDefaultAsync(a=>a.Id==id);
         }
 
         public async Task CreateAsync(Contract  contract)

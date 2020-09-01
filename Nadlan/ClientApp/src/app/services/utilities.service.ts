@@ -20,4 +20,10 @@ export class UtilitiesService {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + 3);
     ///
   }
+  public isPositive(value: number): boolean {
+    if (value >= 0) {
+      return true;
+    }
+    return false;
+  }
 }

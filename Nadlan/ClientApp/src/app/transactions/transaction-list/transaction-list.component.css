@@ -1,0 +1,15 @@
+tr.mat-header-row
+{
+    height: auto;
+}
+tr.mat-row
+{
+    height: auto;
+}
+.mat-row:nth-child(odd) {
+    background-color: white;
+  }
+/* #transactions-popup tr.mat-header-row {
+    height: auto;
+    background-color: #376cad4a;
+  } */

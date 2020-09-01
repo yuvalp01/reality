@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ITransaction } from '../models';
+import { ITransaction, IFilter } from '../models';
 
 @Injectable()
 export class TransactionService {
@@ -9,6 +9,15 @@ export class TransactionService {
 
   constructor(private httpClient: HttpClient,
     @Inject('BASE_URL') private baseUrl: String) {
+  }
+
+
+  getTransactions_(filter:IFilter): Observable<ITransaction[]> {
+    let params = new URLSearchParams();
+    for(let key in filter){
+        params.set(key, filter[key]) 
+    }
+    return this.httpClient.get<ITransaction[]>(`${this.baseUrl}api/transactions?${params}`);
   }
 
   getTransactions(monthsBack:number): Observable<ITransaction[]> {

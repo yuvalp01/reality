@@ -9,11 +9,36 @@ using System.Threading.Tasks;
 
 namespace Nadlan.Repositories
 {
+    public class Filter
+    {
+        public int? AccountId { get; set; }
+        public int? ApartmentId { get; set; }
+        public int? MonthsBack { get; set; }
+    }
+
     public class TransactionRepository : Repository<Transaction>, ITransactionRepository
     {
         public TransactionRepository(NadlanConext context) : base(context)
         {
         }
+
+
+        public Task<List<Transaction>> GetAllAsync(Filter filter)
+        {
+            var query = Context.Transactions.OrderByDescending(a => a.Id)
+                                    .Include(a => a.Account)
+                                    .Include(a => a.Apartment)
+                                    .Where(a => !a.IsDeleted);
+            //Conditionaly filter accounts:
+            query = query.Where(a => filter.AccountId == null ? true : a.AccountId == filter.AccountId);
+            //Conditionaly filter apartments:
+            query = query.Where(a => filter.ApartmentId == null ? true : a.ApartmentId == filter.ApartmentId);
+            //Conditionaly filter months back:
+            query = query.Where(a => filter.MonthsBack == null ? true : a.Date > DateTime.Today.AddMonths(-(int)filter.MonthsBack));
+
+            return query.ToListAsync();
+        }
+
 
 
         public async Task<List<Transaction>> GetAllAsync(int monthsBack)

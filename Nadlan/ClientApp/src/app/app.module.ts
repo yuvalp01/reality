@@ -12,6 +12,7 @@ import { AccountService } from './services/account.service';
 import { AccountListComponent } from './fetch-data/fetch-accounts.component';
 import { TransactionService } from './services/transaction.service';
 import { TransactionListComponent } from './transactions/fetch-transactions.component';
+import { TransactionListComponent_ } from './transactions/transaction-list/transaction-list.component';
 import { AddApartmentForm } from './forms/add-apartment.component';
 import { ReportService } from './services/reports.service';
 import { ReportsComponent } from './reports/reports.component';
@@ -30,14 +31,13 @@ import { SharedModule } from './shared/shared.module';
 import { WelcomepageComponent } from './welcomepage/welcomepage.component';
 import { TransactionFormComponent } from './transactions/transaction-form/transaction-form.component';
 import { LoginComponent } from './security/login/login.component';
-import { AuthGuard } from './security/auth.guard';
 import { HttpInterceptorModule } from './security/http-interceptor';
-import { HasClaimDirective } from './security/has-claim.directive';
 import { RenovationOverviewComponent } from './renovationNew/renovation-overview/renovation-overview.component';
 import { PaymentFormComponent } from './renovationNew/payment-form/payment-form.component';
 import { AppRoutingModule } from './app.routing.module';
 import { ContractListComponent } from './contracts/contract-list/contract-list.component';
 import { ContractFormComponent } from './contracts/contract-form/contract-form.component';
+import { ContractPaymentsComponent } from './contracts/contract-payments/contract-payments.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +49,7 @@ import { ContractFormComponent } from './contracts/contract-form/contract-form.c
     AddApartmentForm,
     AccountListComponent,
     TransactionListComponent,
+    TransactionListComponent_,
     ReportsComponent,
     TransactionsDialogComponent,
     ExpensesComponent,
@@ -60,6 +61,7 @@ import { ContractFormComponent } from './contracts/contract-form/contract-form.c
     PaymentFormComponent,
     ContractListComponent,
     ContractFormComponent,
+    ContractPaymentsComponent,
 
   ],
   imports: [

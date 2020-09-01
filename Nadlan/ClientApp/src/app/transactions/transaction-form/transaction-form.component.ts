@@ -31,7 +31,8 @@ export class TransactionFormComponent implements OnInit {
   apartments: IApartment[];
   transaction: ITransaction;
   @Output() refreshEmitter = new EventEmitter();
-  disableCoveredSwitch: boolean = false;
+  // disableCoveredSwitch: boolean = false;
+  // @ViewChild('group',{static:false}) group;
 
   switchIsCovered() {
     if (this.transactionFormGroup.controls.personalTransactionId.value == 0) {
@@ -44,7 +45,7 @@ export class TransactionFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadData();
+    
     this.transactionFormGroup = this.formBuilder.group({
       accountId: [0, Validators.min(-2)],
       apartmentId: [0, Validators.min(-2)],
@@ -52,11 +53,11 @@ export class TransactionFormComponent implements OnInit {
       date: [null, Validators.required],
       isPurchaseCost: [false],
       isBusinessExpense: [false],
-      //isCoveredByInvestor: [false],
       isConfirmed: [false],
-      personalTransactionId: [null],
+      personalTransactionId: [null,Validators.required],
       comments: [''],
     });
+    this.loadData();
   }
 
   loadData() {
@@ -67,6 +68,14 @@ export class TransactionFormComponent implements OnInit {
       });
     if (this.data.transactionId == 0) {
       this.title = "Add new";
+      if(this.data.expected)
+      {
+        this.loadTrans(this.data.expected);
+        // this.transactionFormGroup.controls['personalTransactionId'].setValidators(Validators.required);
+        // this.transactionFormGroup.controls['personalTransactionId'].updateValueAndValidity();
+
+       // this.transactionFormGroup.markAsDirty();
+      }
     }
     else {
       this.title = "Edit";
@@ -90,9 +99,13 @@ export class TransactionFormComponent implements OnInit {
   loadTrans(result: ITransaction) {
     this.transaction = result;
     this.transactionFormGroup.patchValue(this.transaction);
-    if (this.transactionFormGroup.controls.personalTransactionId.value > 0) {
-      this.disableCoveredSwitch = true;
-    }
+    // let ytt= this.group.value;
+    // let xxx = this.group.accountId;
+    // let yyy = this.group.nativeElement.value;
+    //this.transactionFormGroup.controls.personalTransactionId.patchValue(this.transaction.personalTransactionId);
+    // if (this.transactionFormGroup.controls.personalTransactionId.value > 0) {
+    //   this.disableCoveredSwitch = true;
+    // }
   }
 
 
@@ -140,6 +153,7 @@ export class TransactionFormComponent implements OnInit {
     }
     let snackBarRef = this.snackBar.open(`Transaction`, action, { duration: 2000 });
     this.refreshEmitter.emit();
+
   }
 
 

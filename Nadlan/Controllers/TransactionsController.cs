@@ -27,6 +27,18 @@ namespace Nadlan.Controllers
             _context = context;
             _mapper = mapper;
         }
+
+
+        // GET: api/Transactions
+        [HttpGet]
+        public async Task<IEnumerable<TransactionDto>> GetTransactions([FromQuery] Filter filter)
+        {
+            var transactions = await _repositoryWraper.Transaction.GetAllAsync(filter);
+
+            var transactionsDto = _mapper.Map<List<Transaction>, IEnumerable<TransactionDto>>(transactions);
+            return transactionsDto;
+        }
+
         //[Authorize(Policy = "CanViewTransactions")]
         // GET: api/Transactions
         [HttpGet("list/{monthsBack}")]
@@ -112,40 +124,7 @@ namespace Nadlan.Controllers
             return Ok(transaction);
         }
 
-        //// GET: api/Transactions/5
-        //[HttpGet("GetExpenses")]
-        //public async Task<IActionResult> GetExpenses()
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
 
-        //    var transaction = await _repositoryWraper.Transaction.GetAllExpensesAsync();
-        //    if (transaction == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(transaction);
-        //}
-        //// GET: api/Transactions/5
-        //[HttpGet("GetExpenses/{transactionId}")]
-        //public async Task<IActionResult> GetExpense([FromRoute] int transactionId)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    var transaction = await _repositoryWraper.Transaction.GetExpenseByIdAsync(transactionId);
-        //    if (transaction == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(transaction);
-        //}
 
 
         // POST: api/Transactions
