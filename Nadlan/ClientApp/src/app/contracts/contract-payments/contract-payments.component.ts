@@ -25,7 +25,7 @@ export class ContractPaymentsComponent implements OnInit {
     private route: ActivatedRoute) {
     this.contractId = +this.route.snapshot.paramMap.get('contractId');
     this.filter = {} as IFilter;
-    this.filter.monthsBack = 6;
+    this.filter.monthsBack = 2;
   }
 
   ngOnInit() {
@@ -132,6 +132,14 @@ export class ContractPaymentsComponent implements OnInit {
     return dueDate;
   }
 
-
+  confirmPayment()
+  {
+    this.contract.isPaymentConfirmed = true;
+    this.contractService.update(this.contract).subscribe(
+      {
+        next: () => {},
+        error: err => console.error(err)
+      });
+  }
 
 }

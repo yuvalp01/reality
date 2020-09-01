@@ -39,9 +39,7 @@
                 <a class="nav-link text-dark" [routerLink]='["/personal-admin","101"]'>Personal Transactions</a>
               </li>
             </ng-container>
-            <li *hasClaim="['admin']" class="nav-item" [routerLinkActive]='["link-active"]'>
-              <a class="nav-link text-dark" [routerLink]='["/contract-list"]'>Contracts</a>
-            </li>
+
             <li *hasClaim="['admin','stella']" class="nav-item" [routerLinkActive]='["link-active"]'>
               <a class="nav-link text-dark" [routerLink]='["/issue-list"]'>Open Issues</a>
             </li>
@@ -54,6 +52,9 @@
                 <button *hasClaim="['stella','admin']" [routerLink]='["/renovation-overview",1]' class="nav-link text-dark" mat-menu-item>Mavromichali</button>
                 <button *hasClaim="['stella','admin']" [routerLink]='["/renovation-overview",2]' class="nav-link text-dark" mat-menu-item>Makedonias</button>
               </mat-menu>
+            </li>
+            <li *hasClaim="['admin', 'stella']" class="nav-item" [routerLinkActive]='["link-active"]'>
+              <a class="nav-link text-dark" [routerLink]='["/contract-list"]'>Contracts</a>
             </li>
           </ng-container>
 

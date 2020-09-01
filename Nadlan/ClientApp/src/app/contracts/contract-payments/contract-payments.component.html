@@ -1,13 +1,13 @@
-<div class="frame" style="width: 80%; margin-left: 10%; margin-right: 10%;text-align: center;">
+<div class="frame">
   <a [routerLink]='["/contract-list"]'>
   <mat-icon  matTooltip="Back to contracts">arrow_back_ios</mat-icon>
 </a>
   <mat-card class="example-card" *ngIf="contract">
     <mat-card-header style="text-align: center; display:block">
 
-     
-
-      <mat-card-title>{{contract.apartment.address}} - {{contract.tenant}}</mat-card-title>
+      <mat-card-title>{{contract.apartment.address}} - {{contract.tenant}}
+        <mat-icon *ngIf="contract.isPaymentConfirmed" style="color: green;">done</mat-icon>
+      </mat-card-title>
       <mat-card-subtitle>
 
         Rent: {{contract.price | currency:'EUR' : number:'1.0-0'}}.   Payment due on:   {{getCurrentDueDate(contract.paymentDay)| date:'dd/MM/yyyy'}}
@@ -36,7 +36,7 @@
       <button (click)="openTransaction()" mat-button>
         RECEIVE PAYMENT
       </button>
-      <!-- <button mat-button>SHARE</button> -->
+      <button *ngIf="!contract.isPaymentConfirmed" (click)="confirmPayment()" mat-button>CONFIRM</button>
     </mat-card-actions>
   </mat-card>
 

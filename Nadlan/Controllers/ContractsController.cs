@@ -63,6 +63,13 @@ namespace Nadlan.Controllers
             await _repositoryWraper.ContractRepository.UpdateAsync(contract);
             return NoContent();
         }
+        [HttpPut("cancelAll")]
+        public async Task<IActionResult> CancelAllConfirmations()
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            await _repositoryWraper.ContractRepository.CancelAllConfirmations();
+            return NoContent();
+        }
 
         [HttpDelete]
         public async Task<IActionResult> DeleteMessage([FromBody] int id)

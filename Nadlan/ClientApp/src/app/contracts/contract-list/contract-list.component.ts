@@ -4,6 +4,8 @@ import { MatTableDataSource, MatDialog, MatSnackBar } from '@angular/material';
 import { IContract, ITransaction } from 'src/app/models';
 import { ContractFormComponent } from '../contract-form/contract-form.component';
 import { TransactionFormComponent } from 'src/app/transactions/transaction-form/transaction-form.component';
+import { SecurityService } from 'src/app/security/security.service';
+import { error } from 'console';
 
 @Component({
   selector: 'app-contract-list',
@@ -13,20 +15,26 @@ import { TransactionFormComponent } from 'src/app/transactions/transaction-form/
 export class ContractListComponent implements OnInit {
 
   constructor(private contractService: ContractService,
+    private securityService: SecurityService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog) { }
   dataSource = new MatTableDataSource<IContract>();
+  isAdmin: boolean = false;
   displayedColumns: string[] = [
-   'apartment',
-   'tenant', 
-   'price', 
-   'dateStart', 
-   'dateEnd', 
-   'isElectriciyChanged',
-   'isPaymentConfirmed',
-   'actions'
+    'apartment',
+    'tenant',
+    'price',
+    'dateStart',
+    'dateEnd',
+    'isElectriciyChanged',
+    'isPaymentConfirmed',
+    'actions'
   ]
   ngOnInit() {
+    this.isAdmin = this.securityService.hasClaim('admin');
+    if (!this.isAdmin) {
+      this.displayedColumns.splice(6, 1);
+    }
     this.loadItems();
   }
 
@@ -61,16 +69,15 @@ export class ContractListComponent implements OnInit {
     let dialogLocal = this.dialog.open(TransactionFormComponent, {
       height: 'auto',
       width: 'auto',
-      data: { transactionId: 0, expected:expectedTran }
+      data: { transactionId: 0, expected: expectedTran }
     });
     dialogLocal.afterClosed().subscribe(() => this.loadItems())
   }
 
 
-  buildTransaction(contract:IContract):ITransaction
-  {
+  buildTransaction(contract: IContract): ITransaction {
     const expectedTran = {} as ITransaction;
-    expectedTran.id = 0;  
+    expectedTran.id = 0;
     expectedTran.accountId = 1;
     expectedTran.apartmentId = contract.apartment.id;
     expectedTran.date = new Date();
@@ -81,7 +88,7 @@ export class ContractListComponent implements OnInit {
     expectedTran.amount = contract.price;
     expectedTran.personalTransactionId = 0;
     return expectedTran;
-    
+
   }
 
   complete(event: any, item: IContract) {
@@ -91,5 +98,17 @@ export class ContractListComponent implements OnInit {
         next: () => this.loadItems(),
         error: err => console.error(err)
       });
+  }
+  cancelAllConfirmations() {
+
+    this.contractService.cancelAllPaymentConfirmations().subscribe({
+      next: () => this.loadItems(),
+      error: (err) => console.error(err)
+    });
+    // let contracts = this.dataSource.data as IContract[];
+    // contracts.map(a => a.isPaymentConfirmed = false);
+  }
+  styleConfirmed(row): boolean {
+    return this.isAdmin && row.isPaymentConfirmed;
   }
 }

@@ -17,9 +17,9 @@ namespace Nadlan.Repositories.Messages
         public Task<List<Contract>> GetAllAsync()
         {
             var contracts = _context.Contracts
-                .Include(a=>a.Apartment)
+                .Include(a => a.Apartment)
                 .Where(a => a.IsDeleted == false)
-                .OrderBy(a=>a.Apartment.Id)
+                .OrderBy(a => a.Apartment.Id)
                 .ToListAsync();
             return contracts;
         }
@@ -27,11 +27,11 @@ namespace Nadlan.Repositories.Messages
         public Task<Contract> GetByIdAsync(int id)
         {
             return _context.Contracts
-                .Include(a=>a.Apartment)
-                .FirstOrDefaultAsync(a=>a.Id==id);
+                .Include(a => a.Apartment)
+                .FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        public async Task CreateAsync(Contract  contract)
+        public async Task CreateAsync(Contract contract)
         {
             _context.Contracts.Add(contract);
             await _context.SaveChangesAsync();
@@ -43,9 +43,14 @@ namespace Nadlan.Repositories.Messages
             await _context.SaveChangesAsync();
 
         }
+
+        public Task CancelAllConfirmations()
+        {
+            return _context.Database.ExecuteSqlCommandAsync("update contracts set IsPaymentConfirmed=0");
+        }
         public async Task SoftDeleteAsync(int id)
         {
-            var contractToDelete =  _context.Contracts.Find(id);
+            var contractToDelete = _context.Contracts.Find(id);
             contractToDelete.IsDeleted = true;
             //_context.Update(contractToDelete);
             await _context.SaveChangesAsync();

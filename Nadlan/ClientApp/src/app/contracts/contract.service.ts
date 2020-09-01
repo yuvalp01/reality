@@ -29,4 +29,8 @@ export class ContractService {
   delete(id:number):Observable<{}>{
     return this.httpClient.delete<IContract>(`${this.baseUrl}${this.controller}/${id}`,this.options);
   }
+
+  cancelAllPaymentConfirmations():Observable<{}>{
+    return this.httpClient.put<IContract>(`${this.baseUrl}${this.controller}/cancelAll`,null,this.options);
+  }
 }
