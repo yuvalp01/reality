@@ -18,7 +18,7 @@ import { ReportService } from './services/reports.service';
 import { ReportsComponent } from './reports/reports.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyOwnCustomMaterialModule } from './shared/cusotom-material';
-import { MAT_DATE_LOCALE, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DATE_LOCALE, MatDialogRef, MAT_DIALOG_DATA, DateAdapter, MAT_DATE_FORMATS } from '@angular/material';
 import { TransactionsDialogComponent } from './transactions/transactions-dialog.component';
 import { RenovationService } from './services/renovation.service';
 import { ExcelService } from './services/excel.service';
@@ -38,7 +38,7 @@ import { AppRoutingModule } from './app.routing.module';
 import { ContractListComponent } from './contracts/contract-list/contract-list.component';
 import { ContractFormComponent } from './contracts/contract-form/contract-form.component';
 import { ContractPaymentsComponent } from './contracts/contract-payments/contract-payments.component';
-
+import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 @NgModule({
   declarations: [
     AppComponent,
@@ -86,6 +86,8 @@ import { ContractPaymentsComponent } from './contracts/contract-payments/contrac
     RenovationService,
     ExcelService,
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
     { provide: MAT_DIALOG_DATA, useValue: {} },
     { provide: MatDialogRef, useValue: {} }],
   bootstrap: [AppComponent],
