@@ -34,15 +34,15 @@ export class TransactionFormComponent implements OnInit {
   // disableCoveredSwitch: boolean = false;
   // @ViewChild('group',{static:false}) group;
 
-  switchIsCovered() {
-    if (this.transactionFormGroup.controls.personalTransactionId.value == 0) {
-      this.transactionFormGroup.patchValue({ personalTransactionId: -1 });
-    }
-    else {
-      this.transactionFormGroup.patchValue({ personalTransactionId: 0 });
-    }
-    this.transactionFormGroup.controls.personalTransactionId.markAsDirty();
-  }
+  // switchIsCovered() {
+  //   if (this.transactionFormGroup.controls.personalTransactionId.value == 0) {
+  //     this.transactionFormGroup.patchValue({ personalTransactionId: -1 });
+  //   }
+  //   else {
+  //     this.transactionFormGroup.patchValue({ personalTransactionId: 0 });
+  //   }
+  //   this.transactionFormGroup.controls.personalTransactionId.markAsDirty();
+  // }
 
   ngOnInit() {
     
@@ -71,10 +71,7 @@ export class TransactionFormComponent implements OnInit {
       if(this.data.expected)
       {
         this.loadTrans(this.data.expected);
-        // this.transactionFormGroup.controls['personalTransactionId'].setValidators(Validators.required);
-        // this.transactionFormGroup.controls['personalTransactionId'].updateValueAndValidity();
-
-       // this.transactionFormGroup.markAsDirty();
+        this.transactionFormGroup.markAsDirty();
       }
     }
     else {
@@ -99,13 +96,7 @@ export class TransactionFormComponent implements OnInit {
   loadTrans(result: ITransaction) {
     this.transaction = result;
     this.transactionFormGroup.patchValue(this.transaction);
-    // let ytt= this.group.value;
-    // let xxx = this.group.accountId;
-    // let yyy = this.group.nativeElement.value;
-    //this.transactionFormGroup.controls.personalTransactionId.patchValue(this.transaction.personalTransactionId);
-    // if (this.transactionFormGroup.controls.personalTransactionId.value > 0) {
-    //   this.disableCoveredSwitch = true;
-    // }
+
   }
 
 

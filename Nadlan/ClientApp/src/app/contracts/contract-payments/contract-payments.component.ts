@@ -40,7 +40,7 @@ export class ContractPaymentsComponent implements OnInit {
   }
 
   filterByAccount() {
-   // this.accountId = +this.xxx;
+    // this.accountId = +this.xxx;
     this.dataSource.data = this.allTransactions.filter(a => a.accountId == this.accountId);
   }
 
@@ -57,15 +57,15 @@ export class ContractPaymentsComponent implements OnInit {
 
   openTransaction() {
     let expectedTran = this.buildTransaction(this.contract);
-    
+
     let dialogLocal = this.dialog.open(TransactionFormComponent, {
       height: 'auto',
       width: 'auto',
       data: { transactionId: 0, expected: expectedTran }
     });
-    dialogLocal.componentInstance.refreshEmitter.subscribe(() =>{
-       this.loadTransactions();
-       dialogLocal.close();
+    dialogLocal.componentInstance.refreshEmitter.subscribe(() => {
+      this.loadTransactions();
+      dialogLocal.close();
     });
 
   }
@@ -91,30 +91,35 @@ export class ContractPaymentsComponent implements OnInit {
   }
 
   buildAccountSpecificProperties() {
-    let sharedOwnershipAppartments:number[] =  [1,3,4,20];
+    let sharedOwnershipAppartments: number[] = [1,2,3, 4, 20];
 
     switch (+this.accountId) {
       case 1:
         {
           this.expectedTran.comments = `${this.contract.tenant} rent`;
           this.expectedTran.amount = this.contract.price;
- //         this.expectedTran.personalTransactionId = -1;
+          this.expectedTran.personalTransactionId = -1;
+          if (sharedOwnershipAppartments.includes(this.expectedTran.apartmentId)) {
+            this.expectedTran.personalTransactionId = -2;
+          }
           break;
         }
       case 2:
         {
           this.expectedTran.comments = ``;
-          this.expectedTran.amount = this.contract.price*0.1;
-          // if(sharedOwnershipAppartments.includes(this.expectedTran.apartmentId))
-          // {
-          //   this.expectedTran.personalTransactionId = -2;
-          // }
+          this.expectedTran.amount = this.contract.price * 0.1;
+          this.expectedTran.personalTransactionId = 0;
+          if(sharedOwnershipAppartments.includes(this.expectedTran.apartmentId))
+          {
+            this.expectedTran.personalTransactionId = -2;
+          }
           break;
         }
       case 50:
         {
-          this.expectedTran.comments = `Estimated income tax (15%)`;
-          this.expectedTran.amount = this.contract.price*0.15;
+          this.expectedTran.comments = `15% income tax`;
+          this.expectedTran.amount = this.contract.price * 0.15;
+          this.expectedTran.personalTransactionId = -4;
           break;
         }
       default:
@@ -125,19 +130,17 @@ export class ContractPaymentsComponent implements OnInit {
 
   }
 
-  getCurrentDueDate(dueDay:number):Date
-  {
-    let dueDate:Date = new Date();
+  getCurrentDueDate(dueDay: number): Date {
+    let dueDate: Date = new Date();
     dueDate.setDate(dueDay);
     return dueDate;
   }
 
-  confirmPayment()
-  {
+  confirmPayment() {
     this.contract.isPaymentConfirmed = true;
     this.contractService.update(this.contract).subscribe(
       {
-        next: () => {},
+        next: () => { },
         error: err => console.error(err)
       });
   }

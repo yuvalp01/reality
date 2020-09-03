@@ -26,5 +26,15 @@ namespace Nadlan.Models
         Distribution = 20,
         Moneyback = 30
     }
+
+    public enum NonPersonalTrasactionId
+    {
+        NotCoveredYet = 0,
+        CoveredWithCreditCard = -1,
+        CoveredByFunds = -2,
+        NotRelevant = -3,
+        ExpectedPayment = -4
+    }
+
 }
 

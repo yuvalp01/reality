@@ -11,38 +11,41 @@
       </mat-form-field>
     </fieldset>
     <fieldset>
-      <mat-form-field style="width: 25%" appearance="outline" class="example-full-width">
+      <mat-form-field style="width: 30%" appearance="outline" class="example-full-width">
         <mat-label>Amount (€)</mat-label>
         <input matInput formControlName="amount" type="text" required placeholder="Amount (€)">
         <!--<input matInput formControlName="personalTransactionId" type="text" placeholder="Personal Transaction Id">-->
 
       </mat-form-field>
-      <mat-checkbox style="width: 25%; padding-left: 25px" formControlName="isConfirmed">
+      <mat-checkbox style="width: 30%; padding-left: 25px" formControlName="isConfirmed">
         Confirmed?
       </mat-checkbox>
-      <mat-checkbox style="width: 25%; padding-left: 25px" formControlName="isBusinessExpense">
+      <mat-checkbox style="width: 30%; padding-left: 25px" formControlName="isBusinessExpense">
         Business?
       </mat-checkbox>
-      <input class="flex-container-child" matInput
-             formControlName="personalTransactionId"
-             value="{{group.value}}"
-             type="text" required>
-      <!--<mat-form-field style="width: 20%; background-color:rebeccapurple" appearance="outline" class="example-full-width">
-    <mat-label>test</mat-label>  
-  </mat-form-field>-->
-      <!--<div class="flex-container">
-    <div class="flex-container-child">2</div>
-    <input class="flex-container-child" style="width:50px; background-color:antiquewhite" type="text">
-    <div class="flex-container-child">3</div>
-  </div>-->
-      <!--<input style="width: 25%;padding-left: 25px; background-color:rebeccapurple"
-  matInput value="-4" type="text"
-  required placeholder="personal TransactionId">-->
-      <!--<mat-slide-toggle formControlName="isConfirmed">Confirmed</mat-slide-toggle>-->
 
     </fieldset>
     <fieldset>
-      <mat-button-toggle-group formControlName="personalTransactionId"
+      <mat-form-field  style="width: 50%" appearance="outline">
+        <mat-label>Transaction Type</mat-label>
+        <mat-select [disabled]="transactionFormGroup.controls.personalTransactionId.value>0" formControlName="personalTransactionId" >
+          <mat-option  [value]="0">Not covered yet</mat-option>
+          <mat-option  [value]="-1">Via bank account</mat-option>
+          <mat-option  [value]="-2">Project funds</mat-option>
+          <mat-option  [value]="-4">Future payment</mat-option>
+          <mat-option  [value]="-3">Not relevant</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field  style="width: 50%" appearance="outline">
+        <mat-label>Personal Transaction ID</mat-label>
+      <input matInput
+      formControlName="personalTransactionId"
+      [value]="transactionFormGroup.controls.personalTransactionId.value"
+      type="text" required>
+    </mat-form-field>
+
+    </fieldset>
+      <!-- <mat-button-toggle-group formControlName="personalTransactionId"
                                #group="matButtonToggleGroup"
                                value="{{transactionFormGroup.controls.personalTransactionId.value}}">
         <mat-button-toggle value="0" >
@@ -58,11 +61,11 @@
           Not relevant
         </mat-button-toggle>
 
-      </mat-button-toggle-group>
-      <!--<span class="example-selected-value">Selected value: {{group.value}}</span>-->
+      </mat-button-toggle-group> -->
+      <!--<span class="example-selected-value">Selected value: {{group.value}}</span>
 
 
-    </fieldset>
+    </fieldset>-->
     <fieldset>
       <mat-form-field style="width: 100%" appearance="outline">
         <mat-label>Apartment</mat-label>
