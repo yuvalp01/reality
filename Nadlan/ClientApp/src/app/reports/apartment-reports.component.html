@@ -84,6 +84,7 @@
     <mat-tab label="Income Report">
       <mat-card>
         <mat-card-title>Income Report</mat-card-title>
+     
         <mat-card-subtitle>
           <form #yearForm="ngForm">
             <mat-form-field style="width: 100%" appearance="outline">
@@ -97,8 +98,6 @@
             </mat-form-field>
           </form>
         </mat-card-subtitle>
-        <mat-card-content>
-
 
           <mat-accordion id="report" *ngIf="incomeReport">
             <mat-expansion-panel disabled="true" style="cursor:pointer" (click)="showTrans(1, 'Rent', false)">
@@ -125,14 +124,21 @@
                   </mat-list-item>
                 </mat-panel-description>
               </mat-expansion-panel-header>
+            <mat-card-content>
               <mat-list>
-                <mat-list-item  class="accounts" (click)="showTrans(account.accountId, account.name, false)" style="color:#3764ad" *ngFor="let account of incomeReport?.accountsSum" id="{{account.accountId}}">
+                <mat-list-item 
+                class="accounts" 
+                (click)="showTrans(account.accountId, account.name, false)" 
+                style="color:#3764ad" 
+                *ngFor="let account of incomeReport?.accountsSum" 
+                id="{{account.accountId}}">
                   <mat-icon mat-list-icon>business_center</mat-icon><!--#8a5050-->
                   <span>{{account.name}}</span>
                   <span>{{account.total*percentage*percentage   | currency:'EUR' : number:'1.0-1'}}</span>
                 </mat-list-item>
                 <mat-divider></mat-divider>
               </mat-list>
+            </mat-card-content>
             </mat-expansion-panel>
             <mat-divider></mat-divider>
             <mat-expansion-panel disabled="true">
@@ -152,7 +158,7 @@
 
           </mat-accordion>
 
-        </mat-card-content>
+      
       </mat-card>
 
     </mat-tab>
