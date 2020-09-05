@@ -9,6 +9,7 @@ export interface IIssue {
   dateClose: Date;
   aprtment: IApartment;
   isNew: boolean;
+  createdBy:string;
   isDeleted: boolean;
   messages: IMessage[]
 }

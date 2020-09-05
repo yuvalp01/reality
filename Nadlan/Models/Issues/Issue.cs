@@ -18,6 +18,7 @@ namespace Nadlan.Models.Issues
         public Apartment Apartment { get; set; }
 
         public bool IsNew { get; set; }
+        public string CreatedBy { get; set; }
         public bool IsDeleted { get; set; }
         [NotMapped]
         public virtual ICollection<Message> Messages { get; set; }

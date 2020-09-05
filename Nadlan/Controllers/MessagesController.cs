@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Nadlan.Models;
 using Nadlan.Models.Issues;
 using Nadlan.Repositories;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Nadlan.Controllers
@@ -15,11 +17,22 @@ namespace Nadlan.Controllers
     {
         private RepositoryWrapper _repositoryWraper;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public MessagesController(NadlanConext context, IMapper mapper)
+
+
+        public MessagesController(
+            NadlanConext context,
+            IMapper mapper,
+            IConfiguration configuration,
+            IHttpClientFactory httpClientFactory
+            )
         {
             _repositoryWraper = new RepositoryWrapper(context);
             _mapper = mapper;
+            _configuration = configuration;
+            _httpClientFactory = httpClientFactory;
         }
 
         [HttpGet("byParent/{tableName}/{parentId}")]
@@ -49,18 +62,12 @@ namespace Nadlan.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             await _repositoryWraper.MessagesRepository.CreateMessageAsync(message);
+            Notifications notifications = new Notifications(_configuration, _httpClientFactory);
+            await notifications.Send(message.UserName, "message");
             return Ok();
         }
 
 
-        //[HttpPut]
-        //public async Task<IActionResult> UpdateMessage([FromBody] Message message)
-        //{
-        //    if (!ModelState.IsValid) return BadRequest(ModelState);
-        //    if (message == null) return NotFound();
-        //    await _repositoryWraper.MessagesRepository.CreateMessageAsync(message);
-        //    return NoContent();
-        //}
         [HttpPut("markAsRead")]
         public async Task<IActionResult> MarkAsRead([FromBody] Message message)
         {
@@ -77,7 +84,14 @@ namespace Nadlan.Controllers
             return NoContent();
         }
 
-
+        //[HttpPut]
+        //public async Task<IActionResult> UpdateMessage([FromBody] Message message)
+        //{
+        //    if (!ModelState.IsValid) return BadRequest(ModelState);
+        //    if (message == null) return NotFound();
+        //    await _repositoryWraper.MessagesRepository.CreateMessageAsync(message);
+        //    return NoContent();
+        //}
 
 
     }

@@ -5,6 +5,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { IApartment } from 'src/app/models';
 import { ApartmentService } from 'src/app/services/apartment.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+import { SecurityService } from 'src/app/security/security.service';
 
 
 @Component({
@@ -16,15 +17,19 @@ export class IssueFormComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private securityService:SecurityService,
     public dialogRef: MatDialogRef<IssueFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private snackBar: MatSnackBar,
     private issueService: IssuesService,
-    private apartmentService: ApartmentService) { }
+    private apartmentService: ApartmentService) { 
+    this.userName = securityService.securityObject.userName;
+    }
 
   issueForm: FormGroup;
   apartments: IApartment[];
   @Output() refreshEmitter = new EventEmitter();
+  userName:string;
 
   ngOnInit() {
     this.apartmentService.getApartments().subscribe({
@@ -56,7 +61,8 @@ export class IssueFormComponent implements OnInit {
     if (this.issueForm.valid) {
       if (this.issueForm.dirty) {
         // const t: ITransaction = { ...this.transaction, ...this.transactionFormGroup.value }
-        var issue: IIssue = Object.assign({}, this.issueForm.value);
+        let issue: IIssue = Object.assign({}, this.issueForm.value);
+        issue.createdBy = this.userName;
         issue.dateOpen = this.fixUtcDate(issue.dateOpen);
         issue.dateClose = this.fixUtcDate(issue.dateClose);
         // issue.isNew = true;

@@ -80,9 +80,9 @@ namespace Nadlan.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             await _repositoryWraper.IssueRepository.CreateIssueAsync(issue);
-            Notifications emails = new Notifications(_configuration, _httpClientFactory);
-            string assistentEmail = _configuration.GetValue<string>("Email:assistentEmail");
-            await emails.Send(assistentEmail, "issue");
+            Notifications notifications = new Notifications(_configuration, _httpClientFactory);
+            //string assistentEmail = _configuration.GetValue<string>("Email:assistentEmail");
+            await notifications.Send(issue.CreatedBy, "issue");
             //emails.SendEmail("issue");
             return Ok();
         }

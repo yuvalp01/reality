@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -11,36 +12,63 @@ namespace Nadlan
     {
         private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
-
+        //private readonly string LOGIC_APP_URL;
         public Notifications(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _configuration = configuration;
+            //LOGIC_APP_URL = _configuration.GetValue<string>("Email:LOGIC_APP_URL");
             _httpClient = httpClientFactory.CreateClient();
         }
 
-        public async Task Send(string to, string type)
+        public async Task Send(string userName, string type)
         {
-            bool useEmailNotification = _configuration.GetValue<bool>("Email:UseEmailNotification");
-            if (useEmailNotification)
+            try
             {
-                string LOGIC_APP_URL = _configuration.GetValue<string>("Email:LOGIC_APP_URL");
-                string title = type == "message" ? "You have a new message!" : "A new issue has been created";
-                string body = type == "message" ? "You have a new message" : "A new issue has been created.";
-                // requires using System.Net.Http;
-                //var client = new HttpClient();
-                // requires using System.Text.Json;
-                var jsonData = JsonSerializer.Serialize(new
+                bool useEmailNotification = _configuration.GetValue<bool>("Email:UseEmailNotification");
+                if (useEmailNotification)
                 {
-                    email = to,
-                    due = body,
-                    task = title
-                });
+                    string LOGIC_APP_URL = _configuration.GetValue<string>("Email:LOGIC_APP_URL");
+                    string URL = _configuration.GetValue<string>("Email:URL");
+                    string notificationUrl;
+                    string body;
+                    string assistentEmail = _configuration.GetValue<string>("Email:assistentEmail");
+                    string managerEmail = _configuration.GetValue<string>("Email:managerEmail");
+                    string sendTo = userName.ToLower() == "stella" ? managerEmail : assistentEmail;
 
-                HttpResponseMessage result = await _httpClient.PostAsync(
-                    LOGIC_APP_URL,
-                    new StringContent(jsonData, Encoding.UTF8, "application/json"));
-                var statusCode = result.StatusCode.ToString();
+                    string subject;
+                    if (type=="issue")
+                    {
+                        subject = "A new issue has been created";
+                        body = "A new issue has been created.";
+                        notificationUrl = $"<a href='{URL}/issue-list'>here</a>.";
+                    }
+                    else
+                    {
+                        subject = "You have a new message";
+                        body = "You have a new message";
+                        notificationUrl = $"<a href='{URL}'>here</a>.";
+                    }
+                   
+                    var jsonData = JsonSerializer.Serialize(new
+                    {
+                        email = sendTo,
+                        content = body,
+                        subject = subject,
+                        url = notificationUrl
+
+                    });
+
+                    HttpResponseMessage result = await _httpClient.PostAsync(
+                        LOGIC_APP_URL,
+                        new StringContent(jsonData, Encoding.UTF8, "application/json"));
+                    var statusCode = result.StatusCode.ToString();
+                }
             }
+            catch (Exception ex)
+            {
+                //TODO - log
+            }
+           
         }
 
 
