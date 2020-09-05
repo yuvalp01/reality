@@ -40,6 +40,19 @@ namespace Nadlan.BusinessLogic
             return distributionPredicate;
         }
 
+        public Func<Transaction, bool> GetAllBonusesFilter()
+        {
+            Func<Transaction, bool> bonusFilter = t =>
+            !t.IsDeleted &&
+            t.AccountId == 300; 
+            return bonusFilter;
+        }
+
+
+
+
+
+
         public  Func<Transaction, bool> GetGrossIncomeFilter()
         {
             Func<Transaction, bool> basic = GetProfitRemoveDistributionFilter();

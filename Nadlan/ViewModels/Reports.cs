@@ -15,6 +15,7 @@ namespace Nadlan.ViewModels.Reports
         public decimal PredictedROI { get; set; }
         [Obsolete]
         public decimal InitialRemainder { get; set; }
+        //This is actually "Pending Profits"
         public decimal Balance { get; set; }
         public decimal Distributed { get; set; }
 

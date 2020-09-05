@@ -11,9 +11,6 @@
               (click)="showHidePercentage()">pie_chart</mat-icon>
     <span class="align-icon" *ngIf="showPercentage">Showing only your part ({{percentage*100}}%)</span>
     <span class="align-icon" *ngIf="!showPercentage">Showing full value (100%)</span>
-
-
-    <!--<mat-slide-toggle [(ngModel)]="showPercentage">Show only my part ({{percentage*100}}%)</mat-slide-toggle>-->
   </ng-container>
   <mat-tab-group dynamicHeight="false">
     <mat-tab>
@@ -23,8 +20,6 @@
            style="color: red" 
            matTooltip="Investment not equal expenses">warning</mat-icon>
       </ng-template>
-  <!-- </mat-tab>
-    <mat-tab label="Summary"> -->
       <mat-card *ngIf="apartmentInfo">
         <mat-card-title>Investment Summary - {{apartmentInfo.address}}</mat-card-title>
         <mat-list *ngIf="summaryReport">
@@ -40,45 +35,47 @@
             <span [ngClass]="'positive'">{{summaryReport.netIncome*percentage| currency:'EUR' : number:'1.0-0'}}</span>
           </mat-list-item>
 
-          <!--<mat-list-item>
-    <mat-icon mat-list-icon>business_center</mat-icon>
-    <span matTooltip="For details see 'Purchase Report' tab" style="width:260px">Initial Remainder</span>
-    <span [ngClass]="'positive'">{{summaryReport.initialRemainder*percentage | currency:'EUR' : number:'1.0-0'}}</span>
-  </mat-list-item>-->
-
-          <mat-list-item style="cursor:pointer; color:#2222c7" (click)="showTrans(100, 'Distributed', false)" matTooltip="Distributed = Distributed to personal account (available for withdrawal at any moment)">
+          <mat-list-item style="cursor:pointer; color:#2222c7" (click)="showTrans(100, 'Distributed', false)">
             <mat-icon mat-list-icon>business_center</mat-icon>
-            <span style="width:260px;">Distributed</span>
+            <span matTooltip="Distributed = Distributed to personal account (available for withdrawal at any moment)"
+            style="width:260px;">Distributed</span>
             <span>{{summaryReport.distributed*percentage | currency:'EUR' : number:'1.0-0'}}</span>
           </mat-list-item>
           <mat-divider></mat-divider>
 
-          <mat-list-item matTooltip="Profits that are available for distribution but still hasn't beed distributed (will be distributed at the end of the year)">
+          <mat-list-item>
             <mat-icon mat-list-icon>business_center</mat-icon>
-            <span style="width:260px">Pending Profits</span>
-            <span attr.data-amount="{{summaryReport.balance*percentage }}"
+            <span style="width:260px">Current Balance</span>
+            <span matTooltip="Profits that are available for distribution but still hasn't beed distributed (will be distributed at the end of the year)"
+                  attr.data-amount="{{summaryReport.balance*percentage }}"
                   style="font-weight:bold"
                   [ngClass]="{
                     positive: isPositive(summaryReport.balance*percentage),
                     negative: !isPositive(summaryReport.balance*percentage)
-                  }"
-                  
-                  >{{summaryReport.balance*percentage| currency:'EUR' : number:'1.0-0'}}</span>
+                  }">
+                  {{summaryReport.balance*percentage| currency:'EUR' : number:'1.0-0'}}
+                </span>
           </mat-list-item>
           <!--*ngIf="apartmentId!=20"-->
           <div>
             <mat-divider></mat-divider>
-            <mat-list-item matTooltip="Conservative: Take into consideration all expenses and taxes and assume 11 month a year">
+            <mat-list-item >
               <mat-icon mat-list-icon>business_center</mat-icon>
-              <span style="width:260px">Predicted Net ROI (rent)</span>
+              <span matTooltip="Conservative: Take into consideration all expenses and taxes and assume 11 month a year" 
+              style="width:260px">Predicted Net ROI (rent)</span>
               <span>{{summaryReport.predictedROI|percent:'1.0'}} </span>
             </mat-list-item>
 
-            <!--<mat-divider></mat-divider>-->
             <mat-list-item>
               <mat-icon mat-list-icon>business_center</mat-icon>
               <span style="width:260px">Annual ROI up-to-date (rent)</span>
               <span>{{summaryReport.roi|percent:'1.1'}} </span>
+            </mat-list-item>
+
+            <mat-list-item>
+              <mat-icon mat-list-icon>business_center</mat-icon>
+              <span style="width:260px">Annual ROI for investor (after bonus)</span>
+              <span>{{getRoiForInvestor(summaryReport.roi)|percent:'1.1'}} </span>
             </mat-list-item>
           </div>
         </mat-list>

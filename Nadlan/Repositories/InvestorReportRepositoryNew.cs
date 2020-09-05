@@ -77,14 +77,15 @@ namespace Nadlan.Repositories
                 portfolioLineReport.PurchaseDate = apartment.PurchaseDate;
                 portfolioLineReport.Ownership = portfolioLine.Percentage;
                 portfolioLineReport.Investment = GetTotalInvestment(portfolioLine) * portfolioLine.Percentage;
-                //decimal profit = GetPendingProfit(portfolioLine) * portfolioLine.Percentage;
-                //decimal profitFromFullOwnershipApartment = 0;
+
+                //In a partenership apartments all expenses included in the apartment funds
                 if (partnershipApartments.Contains(portfolioLine.ApartmentId))
                 {               
                     portfolioLineReport.PendingProfits = GetPendingProfit(portfolioLine) * portfolioLine.Percentage;
                     portfolioLineReport.Distributed = GetGeneralDistributionPerInvestor(portfolioLine) * -1 * portfolioLine.Percentage;
                     portfolioLineReport.PendingExpenses = 0;
                 }
+                //In full ownership apartments there is no need in distribution because it's 100% ownership and it's already in their bank account
                 else
                 {
                     portfolioLineReport.PendingProfits = 0;
@@ -92,9 +93,6 @@ namespace Nadlan.Repositories
                     portfolioLineReport.PendingExpenses = GetPendingExpenses(portfolioLine);
                 }
 
-                //portfolioLineReport.PendingProfits = profit;// GetPendingProfit(portfolioLine) * portfolioLine.Percentage;
-                //portfolioLineReport.Distributed = profitFromFullOwnershipApartment + 
-                //    GetGeneralDistributionPerInvestor(portfolioLine) * -1 * portfolioLine.Percentage;
                 ValidateWithPersonalTransactions(portfolioLineReport, portfolioLine);
                 portfolioReportLines.Add(portfolioLineReport);
             }

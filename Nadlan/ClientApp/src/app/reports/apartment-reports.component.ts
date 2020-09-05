@@ -111,13 +111,21 @@ export class ApartmentReportsComponent implements OnInit {
       this.percentage = this.investorPercentage;
     }
     else {
-      this.percentage = 1;;       
+      this.percentage = 1;;
     }
   }
   onChange(e) {
     this.reportsService.getIncomeReport(this.apartmentId, this.selectedYear)
       .subscribe(result => this.incomeReport = result, error => console.error(error));
   }
+
+  getRoiForInvestor(roi: number) {
+    if (roi<0.03) return roi; 
+    let bonus = (roi - 0.03) / 2;
+    return 0.03 + bonus;
+
+  }
+
 
   public isPositive(value: number): boolean {
     if (value >= 0) {
