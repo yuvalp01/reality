@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Nadlan.Repositories.ApartmentReports
 {
-    public class GeneralInfoReportRepository : ApartmentReportRepositoryNew
+    public class GeneralInfoReportRepository : ApartmentReportRepository
     {
         public GeneralInfoReportRepository(NadlanConext conext):base( conext)
         {

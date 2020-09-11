@@ -12,7 +12,7 @@
     <span class="align-icon" *ngIf="showPercentage">Showing only your part ({{percentage*100}}%)</span>
     <span class="align-icon" *ngIf="!showPercentage">Showing full value (100%)</span>
   </ng-container>
-  <mat-tab-group dynamicHeight="false">
+  <mat-tab-group #tabGroup dynamicHeight="false">
     <mat-tab>
       <ng-template mat-tab-label>
           <span>Summary</span>
@@ -25,28 +25,55 @@
         <mat-list *ngIf="summaryReport">
           <mat-list-item>
             <mat-icon mat-list-icon>business_center</mat-icon>
-            <span style="width:260px">Investment</span>
+            <span class="lineTitle">Investment</span>
             <span [ngClass]="'positive'">{{summaryReport.investment *percentage | currency:'EUR' : number:'1.0-0'}}</span>
           </mat-list-item>
-          <!--<mat-divider></mat-divider>-->
+
+          
+
           <mat-list-item>
             <mat-icon mat-list-icon>business_center</mat-icon>
-            <span matTooltip="For details see 'Income Report' tab" style="width:260px">Net Income up-to-date</span>
-            <span [ngClass]="'positive'">{{summaryReport.netIncome*percentage| currency:'EUR' : number:'1.0-0'}}</span>
+            <span style="cursor: pointer;"  (click)="tabGroup.selectedIndex=1" 
+            matTooltip="For details see 'Income Report' tab"
+            class="lineTitle">Net income for investor</span>
+            <span
+            (click)="tabGroup.selectedIndex=1" 
+            [ngClass]="{
+              positive: isPositive(summaryReport.netForInvestor*percentage),
+              negative: !isPositive(summaryReport.netForInvestor*percentage)
+            }">
+            {{summaryReport.netForInvestor| currency:'EUR' : number:'1.0-0' | minusSignToParens}} 
+          </span>
           </mat-list-item>
+
+
+<!-- 
+          <mat-list-item>
+            <mat-icon mat-list-icon>business_center</mat-icon>
+            <span  (click)="tabGroup.selectedIndex=1" 
+            matTooltip="For details see 'Income Report' tab" 
+            class="lineTitle">Net Income up-to-date</span>
+            <span [ngClass]="'positive'">{{summaryReport.netIncome*percentage| currency:'EUR' : number:'1.0-0'}}</span>
+         
+          </mat-list-item> -->
 
           <mat-list-item style="cursor:pointer; color:#2222c7" (click)="showTrans(100, 'Distributed', false)">
             <mat-icon mat-list-icon>business_center</mat-icon>
             <span matTooltip="Distributed = Distributed to personal account (available for withdrawal at any moment)"
-            style="width:260px;">Distributed</span>
+            class="lineTitle">Distributed</span>
             <span>{{summaryReport.distributed*percentage | currency:'EUR' : number:'1.0-0'}}</span>
           </mat-list-item>
           <mat-divider></mat-divider>
 
-          <mat-list-item>
+          <mat-list-item >
             <mat-icon mat-list-icon>business_center</mat-icon>
-            <span style="width:260px">Current Balance</span>
-            <span matTooltip="Profits that are available for distribution but still hasn't beed distributed (will be distributed at the end of the year)"
+            <span *ngIf="this.investorPercentage<1"
+            matTooltip="Profits that are available for distribution but still hasn't beed distributed (will be distributed at the end of the year)"
+            class="lineTitle">Current Balance</span>
+            <span *ngIf="this.investorPercentage==1"
+            matTooltip="You have a full ownership on this apartment hence 'Balance' equal to 'Net Income for Investor'"
+            class="lineTitle">Current Balance</span>
+            <span 
                   attr.data-amount="{{summaryReport.balance*percentage }}"
                   style="font-weight:bold"
                   [ngClass]="{
@@ -61,22 +88,38 @@
             <mat-divider></mat-divider>
             <mat-list-item >
               <mat-icon mat-list-icon>business_center</mat-icon>
-              <span matTooltip="Conservative: Take into consideration all expenses and taxes and assume 11 month a year" 
-              style="width:260px">Predicted Net ROI (rent)</span>
-              <span>{{summaryReport.predictedROI|percent:'1.0'}} </span>
+              <span 
+              matTooltip="Conservative: Take into consideration all expenses and taxes and assume 11 month a year" 
+              class="lineTitle">Predicted Net ROI (rent)</span>
+              <span>{{summaryReport.predictedROI|percent:'1.1'}} </span>
             </mat-list-item>
 
             <mat-list-item>
               <mat-icon mat-list-icon>business_center</mat-icon>
-              <span style="width:260px">Annual ROI up-to-date (rent)</span>
-              <span>{{summaryReport.roi|percent:'1.1'}} </span>
+              <span class="lineTitle">Annual ROI (rent)</span>
+              <span>{{summaryReport.roi|percent:'1.1-2'}} </span>
             </mat-list-item>
 
             <mat-list-item>
               <mat-icon mat-list-icon>business_center</mat-icon>
-              <span style="width:260px">Annual ROI for investor (after bonus)</span>
-              <span>{{getRoiForInvestor(summaryReport.roi)|percent:'1.1'}} </span>
+              <span class="lineTitle">Annual ROI for investor (after bonus)</span>
+              <!-- <span>{{getRoiForInvestor(summaryReport.roi)|percent:'1.1'}} </span> -->
+              <span>{{summaryReport.roiForInvestor|percent:'1.1-2'}} </span>
+
+
+              
             </mat-list-item>
+            <!-- <mat-list-item>
+              <mat-icon mat-list-icon>business_center</mat-icon>
+              <span class="lineTitle">Bonus</span>
+              <span
+              [ngClass]="{
+                positive: isPositive(summaryReport.bonus*percentage),
+                negative: !isPositive(summaryReport.bonus*percentage)
+              }">
+                {{summaryReport.bonus| currency:'EUR' : number:'1.0-0' | minusSignToParens}} </span>
+            </mat-list-item> -->
+
           </div>
         </mat-list>
       </mat-card>
@@ -107,7 +150,8 @@
                   <span>Gross Income</span>
                 </mat-panel-title>
                 <mat-panel-description>
-                  <span [ngClass]="'positive'">{{incomeReport.grossIncome*percentage  | currency:'EUR' : number:'1.0-0'| minusSignToParens}}</span>
+                  <span 
+                  [ngClass]="'positive'">{{incomeReport.grossIncome*percentage  | currency:'EUR' : number:'1.0-0'| minusSignToParens}}</span>
                 </mat-panel-description>
               </mat-expansion-panel-header>
             </mat-expansion-panel>
@@ -136,7 +180,7 @@
                   <span>{{account.name}}</span>
                   <span>{{account.total*percentage*percentage   | currency:'EUR' : number:'1.0-1'}}</span>
                 </mat-list-item>
-                <mat-divider></mat-divider>
+
               </mat-list>
             </mat-card-content>
             </mat-expansion-panel>
@@ -155,7 +199,35 @@
                 </mat-panel-description>
               </mat-expansion-panel-header>
             </mat-expansion-panel>
-
+            <mat-expansion-panel disabled="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon mat-list-icon>business_center</mat-icon>
+                  <span matTootip="Bonus to entrepreneur">Bonus</span>
+                </mat-panel-title>
+                <mat-panel-description>
+                  <span [ngClass]="{
+          positive: isPositive(incomeReport.bonus),
+          negative: !isPositive(incomeReport.bonus)
+        }">{{incomeReport.bonus*percentage  | currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+            <mat-divider></mat-divider>
+            <mat-expansion-panel disabled="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon mat-list-icon>business_center</mat-icon>
+                  <span matTootip="NetForInvestor">Net for Investor</span>
+                </mat-panel-title>
+                <mat-panel-description>
+                  <span style="font-weight:bold" [ngClass]="{
+          positive: isPositive(incomeReport.netForInvestor),
+          negative: !isPositive(incomeReport.netForInvestor)
+        }">{{incomeReport.netForInvestor*percentage  | currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
           </mat-accordion>
 
       
@@ -260,34 +332,34 @@
         <mat-list *ngIf="apartmentInfo">
           <mat-list-item>
             <mat-icon mat-list-icon>home</mat-icon>
-            <span style="width:260px">Investment</span>
+            <span class="lineTitle">Investment</span>
             <span>{{apartmentInfo.address}}</span>
           </mat-list-item>
 
           <mat-list-item>
             <mat-icon mat-list-icon>date_range</mat-icon>
-            <span style="width:260px">Date Purchased</span>
+            <span class="lineTitle">Date Purchased</span>
             <span>{{apartmentInfo.purchaseDate | date:'yyyy-MM-dd'}}</span>
           </mat-list-item>
 
           <mat-list-item *ngIf="apartmentId!=20">
             <mat-icon mat-list-icon>home</mat-icon>
-            <span style="width:260px">Floor</span>
+            <span class="lineTitle">Floor</span>
             <span>{{apartmentInfo.floor}}</span>
           </mat-list-item>
           <mat-list-item>
             <mat-icon mat-list-icon>home</mat-icon>
-            <span style="width:260px">Size</span>
+            <span class="lineTitle">Size</span>
             <span>{{apartmentInfo.size}}</span>
           </mat-list-item>
           <mat-list-item>
             <mat-icon mat-list-icon>money</mat-icon>
-            <span style="width:260px;">Current Rent</span>
+            <span class="lineTitle">Current Rent</span>
             <span>{{apartmentInfo.currentRent| currency:'EUR' : number:'1.0-0'}}</span>
           </mat-list-item>
           <mat-list-item>
             <mat-icon mat-list-icon>business_center</mat-icon>
-            <span style="width:260px;">Status</span>
+            <span class="lineTitle">Status</span>
             <span>{{apartmentInfo.status}}</span>
           </mat-list-item>
 
@@ -299,18 +371,18 @@
         <mat-list *ngIf="apartmentInfo && purchaseReport">
           <mat-list-item>
             <mat-icon mat-list-icon>business_center</mat-icon>
-            <span style="width:260px">Investment</span>
+            <span class="lineTitle">Investment</span>
             <span>{{purchaseReport.investment| currency:'EUR' : number:'1.0-0'}}</span>
           </mat-list-item>
 
           <mat-list-item>
             <mat-icon mat-list-icon>money</mat-icon>
-            <span style="width:260px;">Current Rent</span>
+            <span class="lineTitle">Current Rent</span>
             <span>{{apartmentInfo.currentRent| currency:'EUR' : number:'1.0-0'}}</span>
           </mat-list-item>
           <mat-list-item>
             <mat-icon mat-list-icon>money</mat-icon>
-            <span style="width:260px">Annual Raw Income</span>
+            <span class="lineTitle">Annual Raw Income</span>
             <span>{{apartmentInfo.currentRent*rentMonthsInYear | currency:'EUR' : number:'1.0-0'}}</span>
           </mat-list-item>
           <mat-divider></mat-divider>
@@ -322,14 +394,14 @@
 
           <mat-list-item>
             <mat-icon mat-list-icon>settings_applications</mat-icon>
-            <span style="width:260px">Rent months per year</span>
+            <span class="lineTitle">Rent months per year</span>
             <input type="number" min="10" max="12" onkeydown="return false" style="width:40px; border:none" [(ngModel)]="rentMonthsInYear" />
           </mat-list-item>
 
 
           <mat-list-item>
             <mat-icon mat-list-icon>settings_applications</mat-icon>
-            <span style="width:260px">ROI expected by buyer</span>
+            <span class="lineTitle">ROI expected by buyer</span>
             <input type="number" min="0.03" max="0.06" step="0.01" onkeydown="return false" style="width:50px; border:none" [(ngModel)]="buyerExpectedRerutn" />
 
           </mat-list-item>
@@ -340,7 +412,7 @@
 
           <!--<mat-list-item>
             <mat-icon mat-list-icon>business_center</mat-icon>
-            <span style="width:260px">Raw ROI</span>
+            <span class="lineTitle">Raw ROI</span>
             <span>{{apartmentInfo.currentRent*rentMonthsInYear/purchaseReport.investment | percent}}</span>
           </mat-list-item>-->
           <mat-list-item>
@@ -350,17 +422,17 @@
               wi
             </mat-icon>
             wi
-            <span style="width:260px;">Price for {{buyerExpectedRerutn | percent}}</span>
+            <span class="lineTitle">Price for {{buyerExpectedRerutn | percent}}</span>
             <span>{{(apartmentInfo.currentRent*rentMonthsInYear/buyerExpectedRerutn)  | currency:'EUR' : number:'1.0-0'}}</span>
           </mat-list-item>
           <mat-list-item matTooltip="Based on 10% sale cost">
             <mat-icon mat-list-icon>trending_up</mat-icon>
-            <span style="width:260px;">Estimated Profit on Sale</span>
+            <span class="lineTitle">Estimated Profit on Sale</span>
             <span>{{((apartmentInfo.currentRent*rentMonthsInYear/buyerExpectedRerutn)*0.9)- purchaseReport.investment  | currency:'EUR' : number:'1.0-0'}}</span>
           </mat-list-item>
           <mat-list-item matTooltip="Based on 10% sale cost">
             <mat-icon mat-list-icon>trending_up</mat-icon>
-            <span style="width:260px;">Estimated ROI on Sale [TODO: calc per year]</span>
+            <span class="lineTitle">Estimated ROI on Sale [TODO: calc per year]</span>
             <span>{{((((apartmentInfo.currentRent*rentMonthsInYear/buyerExpectedRerutn)*0.9)/ purchaseReport.investment)-1) | percent:'1.1'}}</span>
           </mat-list-item>
 

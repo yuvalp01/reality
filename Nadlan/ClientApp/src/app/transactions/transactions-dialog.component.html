@@ -18,8 +18,8 @@
       <td mat-cell *matCellDef="let transaction">
         <mat-icon matTooltip="Paid directly via bank account" *ngIf="transaction.personalTransactionId==-1">credit_card</mat-icon>
         <mat-icon matTooltip="Project funds" *ngIf="transaction.personalTransactionId==-2">published_with_changes</mat-icon>
-        <mat-icon matTooltip="Paid in cash - already covered by investor(ref: {{transaction.personalTransactionId}})" *ngIf="transaction.personalTransactionId>0">money</mat-icon>
-        <mat-icon matTooltip="Paid in cash - still not convered by investor" *ngIf="transaction.personalTransactionId==0">hourglass_full</mat-icon>
+        <mat-icon matTooltip="Paid on behalf - already covered by investor(ref: {{transaction.personalTransactionId}})" *ngIf="transaction.personalTransactionId>0">money</mat-icon>
+        <mat-icon matTooltip="Paid on behalf - still not convered by investor" *ngIf="transaction.personalTransactionId==0">hourglass_full</mat-icon>
         <mat-icon matTooltip="Expected future payment" *ngIf="transaction.personalTransactionId==-4">update</mat-icon>
        <!-- <mat-icon>published_with_changes</mat-icon>
        <mat-icon>update</mat-icon> -->

@@ -119,12 +119,12 @@ export class ApartmentReportsComponent implements OnInit {
       .subscribe(result => this.incomeReport = result, error => console.error(error));
   }
 
-  getRoiForInvestor(roi: number) {
-    if (roi<0.03) return roi; 
-    let bonus = (roi - 0.03) / 2;
-    return 0.03 + bonus;
+  // getRoiForInvestor(roi: number) {
+  //   if (roi<0.03) return roi; 
+  //   let bonus = (roi - 0.03) / 2;
+  //   return 0.03 + bonus;
 
-  }
+  // }
 
 
   public isPositive(value: number): boolean {

@@ -9,7 +9,7 @@ namespace Nadlan.Repositories
     public class ApartmentReportsRepositoryWrapper
     {
         NadlanConext _context;
-        ApartmentReportRepositoryNew _genral;
+        ApartmentReportRepository _genral;
         GeneralInfoReportRepository _genralView;
         SummaryReportRepository _summary;
         PurchaseReportRepository _purchase;
@@ -20,13 +20,13 @@ namespace Nadlan.Repositories
         {
             _context = conext;
         }
-        public ApartmentReportRepositoryNew General_
+        public ApartmentReportRepository General_
         {
             get
             {
                 if (_genral == null)
                 {
-                    _genral = new ApartmentReportRepositoryNew(_context);
+                    _genral = new ApartmentReportRepository(_context);
                 }
                 return _genral;
             }

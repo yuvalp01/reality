@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Nadlan.Repositories.ApartmentReports
 {
-    public class PurchaseReportRepository : ApartmentReportRepositoryNew
+    public class PurchaseReportRepository : ApartmentReportRepository
     {
         private PurchaseFilters purchaseFilters = new PurchaseFilters();
 

@@ -3,6 +3,7 @@ export interface ISummaryReport {
   investment: number,
   netIncome: number,
   roi: number,
+  roiForInvestor:number,
   predictedROI: number;
   initialRemainder: number,
   balance: number,
@@ -16,6 +17,8 @@ export interface IIncomeReport {
   tax:number,
   netIncome: number,
   //forDistribution: number,
+  bonus: number,
+  netForInvestor: number,
   accountsSum: IAccountsSum,
 }
 

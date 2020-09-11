@@ -10,7 +10,7 @@ namespace Nadlan.Repositories
     {
         TransactionRepository Transaction { get; }
         AccountRepository Account { get; }
-        ApartmentReportRepositoryNew ApartmentReport { get; }
+        ApartmentReportRepository ApartmentReport { get; }
         //GeneralInfoReportRepository GeneralInfoReportRepo { get; }
         //SummaryReportRepository SummaryReportRepo { get; }
         //PurchaseReportRepository PurchaseReportRepo { get; }

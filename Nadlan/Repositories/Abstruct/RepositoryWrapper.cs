@@ -14,7 +14,7 @@ namespace Nadlan.Repositories
         private TransactionRepository _transaction;
         private PersonalTransactionRepository _personalTransaction;
         private AccountRepository _account;
-        private ApartmentReportRepositoryNew _apartmentReport;
+        private ApartmentReportRepository _apartmentReport;
         private InvestorReportRepository _investorReport;
         private IssueRepository _issueRepository;
         private MessagesRepository _messagesRepository;
@@ -59,13 +59,13 @@ namespace Nadlan.Repositories
                 return _account;
             }
         }
-        public ApartmentReportRepositoryNew ApartmentReport
+        public ApartmentReportRepository ApartmentReport
         {
             get
             {
                 if (_apartmentReport == null)
                 {
-                    _apartmentReport = new ApartmentReportRepositoryNew(_conext);
+                    _apartmentReport = new ApartmentReportRepository(_conext);
                 }
                 return _apartmentReport;
             }

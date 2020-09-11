@@ -1,15 +1,17 @@
 ﻿using Nadlan.BusinessLogic;
 using Nadlan.Models;
 using Nadlan.ViewModels.Reports;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Nadlan.Repositories.ApartmentReports
 {
-    public class IncomeReportRepository : ApartmentReportRepositoryNew
+    public class IncomeReportRepository : ApartmentReportRepository
     {
         private NonPurchaseFilters nonPurchaseFilters = new NonPurchaseFilters();
+        private PurchaseFilters purchaseFilters = new PurchaseFilters();
 
         public IncomeReportRepository(NadlanConext conext) : base(conext)
         {
@@ -19,18 +21,24 @@ namespace Nadlan.Repositories.ApartmentReports
             var allNonPurchase = GetAllNonPurchase(apartmentId);
             var grossIncome = GetGrossIncome(allNonPurchase, year);
             var expenses = GetAllExpenses(allNonPurchase, year);
-            var netIncome = GetNetIncome(allNonPurchase, year);
+            var netIncome = GetNetIncome(allNonPurchase, year).Sum(a=>a.Amount);
+            var bonus = GetBonus(netIncome,apartmentId);
             var accountSummary = GetAccountSummaryNonPurchase(allNonPurchase, year);
             IncomeReport summaryReport = new IncomeReport
             {
                 GrossIncome = await Task.FromResult(grossIncome.Sum(b => b.Amount)),
                 Expenses = await Task.FromResult(expenses.Sum(b => b.Amount)),
-                NetIncome = await Task.FromResult(netIncome.Sum(b => b.Amount)),
-                AccountsSum = await Task.FromResult(accountSummary.ToList())
-
+                NetIncome = netIncome,
+                Bonus = -bonus,
+                NetForInvestor= netIncome - bonus,
+                AccountsSum = await Task.FromResult(accountSummary.ToList()),
+                
+                
             };
             return summaryReport;
         }
+
+
         protected IEnumerable<Transaction> GetGrossIncome(IEnumerable<Transaction> transactions, int year)
         {
             var basic = nonPurchaseFilters.GetGrossIncomeFilter();

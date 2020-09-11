@@ -1,7 +1,6 @@
 ﻿using Nadlan.BusinessLogic;
 using Nadlan.Models;
 using Nadlan.ViewModels.Reports;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Nadlan.Repositories.ApartmentReports
 {
-    public class SummaryReportRepository : ApartmentReportRepositoryNew
+    public class SummaryReportRepository : ApartmentReportRepository
     {
         private PurchaseFilters purchaseFilters = new PurchaseFilters();
         private NonPurchaseFilters nonPurchaseFilters = new NonPurchaseFilters();
@@ -25,42 +24,41 @@ namespace Nadlan.Repositories.ApartmentReports
             var allPurchase = GetAllPurchase(apartmentId);
 
             var investment = GetInvestment(allPurchase);
-            var netIncome = GetNetIncome(allNonPurchase, 0);//all years
+            // decimal netIncome = GetNetIncome(allNonPurchase, 0).Sum(a => a.Amount);//all years
             var distributed = GetAllDistributions(allNonPurchase);
-
-            //var netIncome = GetNetIncome(apartmentId,0);//all years
-            //var investment = GetInvestment(allPurchase);
+            // decimal bonus = GetBonus(netIncome,apartmentId);
             //var totalCost = GetTotalCost(apartmentId);
-            //var distributed = GetAllDistributions(apartmentId);
 
             SummaryReport summaryReport = new SummaryReport
             {
                 Investment = await Task.FromResult(investment.Sum(a => a.Amount)),
-                NetIncome = await Task.FromResult(netIncome.Sum(a => a.Amount)),
+                NetIncome = GetNetIncome(allNonPurchase, 0).Sum(a => a.Amount),//all years
                 Distributed = await Task.FromResult(distributed.Sum(a => a.Amount)),
+                // Bonus = -bonus,
             };
-            //summaryReport.InitialRemainder = summaryReport.Investment + await Task.FromResult(totalCost.Sum(a => a.Amount));
-            summaryReport.Balance = summaryReport.NetIncome + summaryReport.Distributed;
-            //summaryReport.Balance = summaryReport.InitialRemainder + await Task.FromResult(accumulated.Sum(a => a.Amount));
-            //summaryReport.Balance = summaryReport.InitialRemainder + summaryReport.NetIncome;
-
             Apartment apartment = Context.Apartments.Where(a => a.Id == apartmentId).First();
-
             summaryReport.ROI = CalcROI(apartment, summaryReport);
-            summaryReport.PredictedROI = CalcPredictedROI(apartmentId, summaryReport.Investment);
+            summaryReport.RoiForInvestor = summaryReport.ROI;
+            //Leipzig - no bonus
+            if (apartment.Id != 20)
+            {
+                const decimal threshold = (decimal)0.03;
+                //less than threshold - no bonus
+                if (summaryReport.ROI > threshold)
+                {
+                    decimal bonusROI = (summaryReport.ROI - threshold)/2;
+                    summaryReport.RoiForInvestor = threshold+ bonusROI;
+                    summaryReport.Bonus = bonusROI * summaryReport.Investment;
+                }
+            }
 
+            summaryReport.PredictedROI = CalcPredictedROI(apartmentId, summaryReport.Investment);
+            summaryReport.NetForInvestor = summaryReport.NetIncome - summaryReport.Bonus;
+            summaryReport.Balance = summaryReport.NetIncome - summaryReport.Bonus + summaryReport.Distributed;
 
             return summaryReport;
         }
 
-        //private IEnumerable<Transaction> GetAllDistributions(int apartmentId)
-        //{
-        //    var basic = nonPurchaseFilters.GetAllDistributionsFilter();
-        //    return Context.Transactions
-        //          .Include(a => a.Account)
-        //          .Where(basic)
-        //          .Where(a => a.ApartmentId==apartmentId);
-        //}
         private IEnumerable<Transaction> GetAllDistributions(IEnumerable<Transaction> transactions)
         {
             var basic = nonPurchaseFilters.GetAllDistributionsFilter();
@@ -92,22 +90,7 @@ namespace Nadlan.Repositories.ApartmentReports
             return predictedRoi;
         }
 
-        private decimal CalcROI(Apartment apartment, SummaryReport summaryReport)
-        {
-            if (apartment.PurchaseDate > DateTime.Now)
-            {
-                return 0;
-            }
-            DateTime zeroTime = new DateTime(1, 1, 1);
-            TimeSpan span = DateTime.Today - apartment.PurchaseDate;
-            decimal years_dec = ((zeroTime + span).Year - 1) + ((zeroTime + span).Month - 1) / 12m;
-            decimal roi = 0;
-            if (summaryReport.Investment > 0 && years_dec > 0)
-            {
-                roi = (summaryReport.NetIncome / summaryReport.Investment) / years_dec;
-            }
-            return roi;
-        }
+
 
 
     }

@@ -2,7 +2,10 @@
 mat-card {
   height:650px ;
 }
-
+.lineTitle
+{
+  width: 300px;
+}
 .mat-tab-header {
   background-color: antiquewhite !important;
 }

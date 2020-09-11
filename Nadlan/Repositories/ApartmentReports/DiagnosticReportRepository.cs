@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace Nadlan.Repositories.ApartmentReports
 {
 
-    public class DiagnosticReportRepository : ApartmentReportRepositoryNew
+    public class DiagnosticReportRepository : ApartmentReportRepository
     {
         const decimal ANNUAL_COSTS = 100 + 350;
 

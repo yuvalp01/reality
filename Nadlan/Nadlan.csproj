@@ -40,7 +40,6 @@
     <Compile Remove="Repositories\ApartmentReports\ApartmentReportRepositoryNew_old.cs" />
     <Compile Remove="Repositories\ApartmentRepository.cs" />
     <Compile Remove="Repositories\INadlanConext.cs" />
-    <Compile Remove="Repositories\InvestorReportRepository.cs" />
     <Compile Remove="Repositories\Issues\IMockIssueRepository.cs" />
     <Compile Remove="Repositories\RenovationRepository.cs" />
     <Compile Remove="Repositories\Renovation\RenovationItemRepository.cs" />
