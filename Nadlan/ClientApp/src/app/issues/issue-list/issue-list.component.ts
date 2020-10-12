@@ -47,6 +47,7 @@ export class IssueListComponent implements OnInit {
     dialogLocal.componentInstance.refreshEmitter.subscribe(() => this.loadList())
   }
   loadList() {
+    this.openIssues = [];
     this.issueService.getOpenIssues().subscribe({
       next: result => {
         this.closedIssues = result.filter(a => a.dateClose != null);

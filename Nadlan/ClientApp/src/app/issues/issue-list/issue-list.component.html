@@ -1,11 +1,19 @@
-<h3>Open Issues</h3>
+<h3>Open Issues
+  <!-- <mat-icon (click)="loadList()" matTooltip="Refresh" style="cursor: pointer;padding-left: 5px;">refresh</mat-icon> -->
+</h3>
 
 <!-- <message-box></message-box> -->
 <!-- *hasClaim="['admin']" -->
-<button *hasClaim="['admin']"  mat-mini-fab (click)="openIssueForm(null)" title="Add New">
+<button *hasClaim="['admin']"  mat-mini-fab (click)="openIssueForm(null)" matTooltip="Add New">
   <mat-icon>add</mat-icon>
 </button>
 
+<button mat-mini-fab (click)="loadList()" matTooltip="Refresh"  color="primary" >
+  <mat-icon>refresh</mat-icon>
+</button>
+<div *ngIf="openIssues.length==0" style="margin-left: 50%;;">
+  <mat-spinner diameter="40"></mat-spinner>
+</div>
 <mat-accordion *ngFor="let item of openIssues">
   <mat-expansion-panel (opened)="onPanelOpened(item)"
   [hideToggle]='false'>

@@ -43,6 +43,7 @@ export class ExpensesComponent implements OnInit {
     this.refreshData();
   }
   refreshData() {
+    this.dataSourceAssistant.data = [];
     //refresh tables
     this.expensesService.getExpenses(this.monthsBack).subscribe(result => {
       let assistantAccount = result as ITransaction[];
@@ -51,6 +52,7 @@ export class ExpensesComponent implements OnInit {
       this.checkNewMessages();
     }, error => console.error(error));
     //Refresh balance
+    this.assistantBalance = 0;
     this.expensesService.getExpensesBalance().subscribe(
       result => {
         this.assistantBalance = result
