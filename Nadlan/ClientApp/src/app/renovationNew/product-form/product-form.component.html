@@ -1,0 +1,62 @@
+
+<div class="container">
+    <form [formGroup]="productForm" (ngSubmit)="save()">
+      
+      <h3>
+        <!-- <mat-icon color="accent">{{formIcon}}</mat-icon> -->
+        {{formTitle}}</h3>
+      <fieldset>
+        <mat-form-field style="width: 100%" appearance="fill">
+          <mat-label>Name</mat-label>
+          <input  formControlName="name" matInput  />
+        </mat-form-field>
+      </fieldset>
+      <fieldset>
+        <mat-form-field appearance="fill"  style="width: 100%">
+          <mat-label>Description</mat-label>
+          <textarea 
+          cdkAutosizeMinRows="2"
+          cdkAutosizeMaxRows="5"
+          formControlName="description"
+          cdkTextareaAutosize
+          #autosize="cdkTextareaAutosize"
+          matInput
+          placeholder="Description"></textarea>
+        </mat-form-field>
+      </fieldset>
+      <fieldset>
+        <mat-form-field style="width: 100%" appearance="fill">
+          <mat-label>Price</mat-label>
+          <input formControlName="price" matInput />
+        </mat-form-field>
+      </fieldset>
+      <fieldset>
+        <mat-form-field style="width: 100%" appearance="fill">
+          <mat-label>Link</mat-label>
+          <input formControlName="link" matInput />
+        </mat-form-field>
+      </fieldset>
+      <fieldset>
+        <mat-form-field style="width: 100%" appearance="fill">
+          <mat-label>Serial Number</mat-label>
+          <input formControlName="serialNumber" matInput />
+        </mat-form-field>
+      </fieldset>
+      <fieldset>
+        <mat-form-field style="width: 100%" appearance="fill">
+          <mat-label>Photo Url</mat-label>
+          <input formControlName="photoUrl" matInput  placeholder="A link to a photo in the Drive folder"/>
+        </mat-form-field>
+      </fieldset>
+      <fieldset>
+        <mat-form-field style="width: 100%" appearance="fill">
+          <mat-label>Store</mat-label>
+          <input formControlName="store" matInput />
+        </mat-form-field>
+      </fieldset>
+      <fieldset>
+        <button mat-flat-button color="primary" [disabled]="this.productForm.invalid || clicked" type="submit" name="submit">Save</button>
+      </fieldset>
+    </form>
+  </div>
+  

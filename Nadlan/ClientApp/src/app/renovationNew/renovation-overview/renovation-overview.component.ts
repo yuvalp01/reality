@@ -82,7 +82,7 @@ export class RenovationOverviewComponent implements OnInit {
 
 
   loadLines(projectId: number) {
-    this.renovationService.getRenovationLinesNew(projectId)
+    this.renovationService.getRenovationLines(projectId)
       .subscribe(result => {
         let lines = result
         this.totalCost = lines.reduce((total, line) => total + line.cost, 0);

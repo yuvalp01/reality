@@ -137,34 +137,6 @@ export class PaymentFormComponent implements OnInit {
             break;
 
         }
-
-        // if (t.id) {
-        //   if(t.datePayment)
-        //   {
-        //     this.renovationService.makePayment(t)
-        //     .subscribe({
-        //       next: result => this.onSaveComplete('Paid'),
-        //       error: err => console.error(err)
-        //     });
-
-        //   }
-        //   else
-        //   {
-        //     this.renovationService.updateRenovationPayment(t)
-        //     .subscribe({
-        //       next: result => this.onSaveComplete('Updated'),
-        //       error: err => console.error(err)
-        //     });
-        //   }
-
-        // }
-        // else {
-        //   this.renovationService.addRenovationPayment(t)
-        //     .subscribe({
-        //       next: result => this.onSaveComplete('Added'),
-        //       error: err => console.error(err)
-        //     });
-        //}
       }
       else {
         //no change

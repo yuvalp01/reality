@@ -1,13 +1,16 @@
-import { Injectable, Inject} from '@angular/core';
-import { ILine, IItemDto, IRenovationLine, IRenovationProject, IRenovationPayment } from '../models';
+import { Injectable, Inject } from '@angular/core';
+import { IRenovationLine, IRenovationProject, IRenovationPayment, IRenovationProduct } from '../models';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 
 @Injectable()
-export class RenovationService
-{
-  constructor(private httpClient: HttpClient, @Inject('BASE_URL') private baseUrl:string)  {
+export class RenovationService {
+
+  options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+  controller = 'api/renovation';
+
+  constructor(private httpClient: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
 
   }
 
@@ -17,8 +20,7 @@ export class RenovationService
   getRenovationProject(projectId): Observable<IRenovationProject> {
     return this.httpClient.get<IRenovationProject>(`${this.baseUrl}/api/renovation/project/${projectId}`);
   }
-  //renovationLines: ILine[];
-  getRenovationLinesNew(projectId): Observable<IRenovationLine[]> {
+  getRenovationLines(projectId): Observable<IRenovationLine[]> {
     return this.httpClient.get<IRenovationLine[]>(`${this.baseUrl}/api/renovation/lines/${projectId}`);
   }
 
@@ -32,52 +34,55 @@ export class RenovationService
 
 
   updateRenovationPayment(payment: IRenovationPayment): Observable<IRenovationPayment> {
-    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return this.httpClient.put<IRenovationPayment>(`${this.baseUrl}/api/renovation/payment`,payment,options);
+    // const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    return this.httpClient.put<IRenovationPayment>(`${this.baseUrl}/api/renovation/payment`, payment, this.options);
   }
 
   makePayment(payment: IRenovationPayment): Observable<number> {
-    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return this.httpClient.put<number>(`${this.baseUrl}/api/renovation/makePayment`,payment,options);
+    // const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    return this.httpClient.put<number>(`${this.baseUrl}/api/renovation/makePayment`, payment, this.options);
   }
-  // revertPayment(payment: number): Observable<number> {
-  //   const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-  //   return this.httpClient.put<number>(`${this.baseUrl}/api/renovation/revertPayment`,payment,options);
-  // }
 
   cancelPayment(paymentId: number): Observable<number> {
-    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return this.httpClient.put<number>(`${this.baseUrl}/api/renovation/cancelPayment`,paymentId,options);
+    // const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    return this.httpClient.put<number>(`${this.baseUrl}/api/renovation/cancelPayment`, paymentId, this.options);
   }
 
   confirmPayment(paymentId: number): Observable<IRenovationPayment> {
-    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return this.httpClient.put<IRenovationPayment>(`${this.baseUrl}/api/renovation/confirmPayment`,paymentId,options);
+    // const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    return this.httpClient.put<IRenovationPayment>(`${this.baseUrl}/api/renovation/confirmPayment`, paymentId, this.options);
   }
 
-  updateLine(line:IRenovationLine): Observable<IRenovationLine> {
-    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return this.httpClient.put<IRenovationLine>(`${this.baseUrl}/api/renovation/line`, line, options);
+  updateLine(line: IRenovationLine): Observable<IRenovationLine> {
+    return this.httpClient.put<IRenovationLine>(`${this.baseUrl}/api/renovation/line`, line, this.options);
   }
-
-
   addRenovationPayment(payment: IRenovationPayment): Observable<IRenovationPayment> {
-    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return this.httpClient.post<IRenovationPayment>(`${this.baseUrl}/api/renovation/payment`,payment, options);
+    return this.httpClient.post<IRenovationPayment>(`${this.baseUrl}/api/renovation/payment`, payment, this.options);
   }
-
-
   deletePayment(paymentId: number): Observable<number> {
-   const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-   return this.httpClient.put<number>(`${this.baseUrl}/api/renovation/deletePayment`,paymentId,options);
+    return this.httpClient.put<number>(`${this.baseUrl}/api/renovation/deletePayment`, paymentId, this.options);
   }
 
-  //getRenovationLines(apartmentId):Observable<ILine[]> {
-  //  return this.httpClient.get<ILine[]>(`${this.baseUrl}/api/renovation/renovationLines/${apartmentId}`);
-  //}
 
-  //getRenovationItems(apartmentId): Observable<IItemDto[]> {
-  //  return this.httpClient.get<IItemDto[]>(`${this.baseUrl}/api/renovation/renovationItems/${apartmentId}`);
-  //}
+
+
+
+
+  getProducts(): Observable<IRenovationProduct[]> {
+    return this.httpClient.get<IRenovationProduct[]>(`${this.baseUrl}/${this.controller}/products`)
+  }
+  getProductById(id: number):Observable<IRenovationProduct> {
+    return this.httpClient.get<IRenovationProduct>(`${this.baseUrl}/${this.controller}/products/${id}`);
+  }
+  deleteProduct(id: number):Observable<{}> {
+    return this.httpClient.delete<IRenovationProduct>(`${this.baseUrl}/${this.controller}/products/${id}`, this.options);
+  }
+
+  addProduct(product: IRenovationProduct): Observable<IRenovationProduct> {
+    return this.httpClient.post<IRenovationProduct>(`${this.baseUrl}/${this.controller}/products`,product, this.options);
+  }
+  updateProduct(product: IRenovationProduct): Observable<IRenovationProduct> {
+    return this.httpClient.put<IRenovationProduct>(`${this.baseUrl}/${this.controller}/products`, product, this.options);
+  }
 
 }

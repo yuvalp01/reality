@@ -11,6 +11,7 @@ import { AuthGuard } from './security/auth.guard';
 import { RenovationOverviewComponent } from './renovationNew/renovation-overview/renovation-overview.component';
 import { ContractListComponent } from './contracts/contract-list/contract-list.component';
 import { ContractPaymentsComponent } from './contracts/contract-payments/contract-payments.component';
+import { ProductsComponent } from './renovationNew/products/products.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,11 @@ import { ContractPaymentsComponent } from './contracts/contract-payments/contrac
         path: 'renovation-overview/:projectId', component: RenovationOverviewComponent,
         canActivate: [AuthGuard],
         data: { claimType: ['stella', 'admin'] }
+      },
+      {
+        path: 'products', component: ProductsComponent,
+        canActivate: [AuthGuard],
+        data: { claimType: ['admin'] }
       },
       { path: 'contract-list', component: ContractListComponent,
         canActivate: [AuthGuard],

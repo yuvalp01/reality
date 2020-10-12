@@ -39,6 +39,8 @@ import { ContractListComponent } from './contracts/contract-list/contract-list.c
 import { ContractFormComponent } from './contracts/contract-form/contract-form.component';
 import { ContractPaymentsComponent } from './contracts/contract-payments/contract-payments.component';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import { ProductsComponent } from './renovationNew/products/products.component';
+import { ProductFormComponent } from './renovationNew/product-form/product-form.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -62,6 +64,8 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-mome
     ContractListComponent,
     ContractFormComponent,
     ContractPaymentsComponent,
+    ProductsComponent,
+    ProductFormComponent,
 
   ],
   imports: [
@@ -96,6 +100,7 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-mome
      TransactionFormComponent, 
      AddExpenseComponent,
      ContractFormComponent,
+     ProductFormComponent,
     PaymentFormComponent]
 })
 export class AppModule { }
