@@ -51,7 +51,7 @@ namespace Nadlan.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             await _repositoryWraper.ContractRepository.CreateAsync(contract);
             return Ok();
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
 

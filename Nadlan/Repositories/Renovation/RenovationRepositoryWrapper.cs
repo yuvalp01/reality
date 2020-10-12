@@ -11,6 +11,7 @@ namespace Nadlan.Repositories
         NadlanConext _context;
         RenovationPaymentRepository _payment;
         RenovationLineRepository _line;
+        RenovationProductRepository _product;
         public RenovationRepositoryWrapper(NadlanConext conext)
         {
             _context = conext;
@@ -36,6 +37,17 @@ namespace Nadlan.Repositories
                     _payment = new RenovationPaymentRepository(_context);
                 }
                 return _payment;
+            }
+        }
+        public RenovationProductRepository RenovationProductRepository
+        {
+            get
+            {
+                if (_product == null)
+                {
+                    _product = new RenovationProductRepository(_context);
+                }
+                return _product;
             }
         }
 

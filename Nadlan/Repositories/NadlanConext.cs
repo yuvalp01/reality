@@ -27,6 +27,7 @@ namespace Nadlan.Repositories
         public DbSet<RenovationProject> RenovationProjects { get; set; }
         public DbSet<RenovationLine> RenovationLines { get; set; }
         public DbSet<RenovationPayment> RenovationPayments { get; set; }
+        public DbSet<RenovationProduct> RenovationProducts { get; set; }
         public DbSet<Issue> Issues { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Contract> Contracts { get; set; }

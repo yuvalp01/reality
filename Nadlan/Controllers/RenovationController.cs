@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Nadlan.Models.Renovation;
 using Nadlan.Repositories;
 using Nadlan.Repositories.Renovation;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Nadlan.Controllers
@@ -42,34 +43,79 @@ namespace Nadlan.Controllers
         [HttpGet("payment/{id}")]
         public async Task<IActionResult> GetRenovationPaymentById([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var payment = await _repositoryWraper.RenovationPaymentRepository
                  .GetPaymentByIdAsync(id);
-            if (payment == null)
-            {
-                return NotFound();
-            }
-
+            if (payment == null) return NotFound();
             return Ok(payment);
         }
+        [HttpGet("products")]
+        public async Task<IActionResult> GetRenovationProducts()
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var products = await _repositoryWraper.RenovationProductRepository.GetAllAsync();
+            if (products == null) return NotFound();
+            return Ok(products);
+            //     .GetPaymentByIdAsync(id);
+            //var payment = new List<RenovationProduct>();
+            //payment.Add(new RenovationProduct
+            //{
+            //    Id = 1,
+            //    Description = "test description",
+            //    Link = "https://www.google.com",
+            //    Name = "test",
+            //    PhotoUrl = "url",
+            //    Price = 12,
+            //    SerialNumber = "345sd345fdsf",
+            //    Store = "IKEA"
+
+            //});
+            //if (payment == null) return NotFound();
+            //return Ok(payment);
+        }
+        [HttpGet("products/{id}")]
+        public async Task<IActionResult> GetRenovationProductsById([FromRoute] int id)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var products = await _repositoryWraper.RenovationProductRepository.GetByIdAsync(id);
+            if (products == null) return NotFound();
+            return Ok(products);
+        }
+        [HttpPost("products")]
+        public async Task<IActionResult> AddfProduct([FromBody] RenovationProduct product)
+        { 
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            await _repositoryWraper.RenovationProductRepository.CreateAsync(product);
+            if (product == null)return NotFound();
+            return Ok();
+        }
+        [HttpPut("products")]
+        public async Task<IActionResult> UpdateProduct([FromBody] RenovationProduct product)
+        {
+
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            await _repositoryWraper.RenovationProductRepository.UpdateAsync(product);
+            if (product == null) return NotFound();
+
+            return NoContent();
+        }
+
+        [HttpDelete("products/{id}")]
+        public async Task<IActionResult> DeleteProduct([FromBody] int id)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            await _repositoryWraper.RenovationProductRepository.SoftDeleteAsync(id);
+            return NoContent();
+        }
+
 
         [HttpPut("payment")]
         public async Task<IActionResult> UpdatePayment([FromBody] RenovationPayment payment)
         {
 
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             await _repositoryWraper.RenovationPaymentRepository.UpdateAsync(payment);
-            if (payment == null)
-            {
-                return NotFound();
-            }
+            if (payment == null) return NotFound();
 
             return NoContent();
         }
@@ -102,10 +148,7 @@ namespace Nadlan.Controllers
         [HttpPut("deletePayment")]
         public async Task<IActionResult> DeletePayment([FromBody] int paymentId)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var newBalance = await _repositoryWraper.RenovationPaymentRepository.SoftDeleteAsync(paymentId);
             return Ok(newBalance);
         }
