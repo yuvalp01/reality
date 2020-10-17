@@ -41,6 +41,7 @@ import { ContractPaymentsComponent } from './contracts/contract-payments/contrac
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import { ProductsComponent } from './renovationNew/products/products.component';
 import { ProductFormComponent } from './renovationNew/product-form/product-form.component';
+import { DriveLinkGenComponent } from './shared/drive-link-gen/drive-link-gen.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -66,6 +67,7 @@ import { ProductFormComponent } from './renovationNew/product-form/product-form.
     ContractPaymentsComponent,
     ProductsComponent,
     ProductFormComponent,
+    DriveLinkGenComponent,
 
   ],
   imports: [

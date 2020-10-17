@@ -1,5 +1,4 @@
-<img style="width: 100px;" 
-src="https://drive.google.com/uc?export=view&id=1Y5lRkdI7mddW8ae990nXnMo9ciOXbTNB">
+
 <button mat-mini-fab (click)="openForm(0)">
     <mat-icon>add</mat-icon>
   </button>
@@ -27,13 +26,13 @@ src="https://drive.google.com/uc?export=view&id=1Y5lRkdI7mddW8ae990nXnMo9ciOXbTN
       <ng-container matColumnDef="photoUrl">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>photoUrl</th>
         <td mat-cell *matCellDef="let item">
-            <img [src]="item.photoUrl">
+            <img *ngIf="item.photoUrl" style="width: 80px;" [src]="item.photoUrl">
         </td>
       </ng-container>
       <ng-container matColumnDef="link">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>link</th>
         <td mat-cell *matCellDef="let item">
-          <a [href]="item.link">Link</a>
+          <a [href]="item.link"  target="_blank">Link</a>
     </td>
       </ng-container>
       <ng-container matColumnDef="serialNumber">

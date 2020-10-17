@@ -3,12 +3,11 @@
     <form [formGroup]="productForm" (ngSubmit)="save()">
       
       <h3>
-        <!-- <mat-icon color="accent">{{formIcon}}</mat-icon> -->
         {{formTitle}}</h3>
       <fieldset>
         <mat-form-field style="width: 100%" appearance="fill">
           <mat-label>Name</mat-label>
-          <input  formControlName="name" matInput  />
+          <input #firstField  formControlName="name" matInput  />
         </mat-form-field>
       </fieldset>
       <fieldset>
@@ -32,6 +31,41 @@
       </fieldset>
       <fieldset>
         <mat-form-field style="width: 100%" appearance="fill">
+          <mat-label>Photo Url</mat-label>
+          <!-- <a matTooltip="Open drive folder"
+          target="_blank" 
+          href="https://drive.google.com/drive/folders/14ZoDWIwCZx5ksTyJCsxvauPKPpGfomVr">
+          <mat-icon>link</mat-icon></a> -->
+          
+         <input style="display: none;"
+          formControlName="photoUrl" matInput 
+           placeholder="A link to a photo in the Drive folder"/>
+           <a matSuffix matTooltip="Open drive folder"
+           target="_blank" 
+           href="https://drive.google.com/drive/folders/14ZoDWIwCZx5ksTyJCsxvauPKPpGfomVr">
+           <mat-icon>link</mat-icon></a>
+              <!-- 
+             <img *ngIf="productForm.controls.photoUrl"  style="width: 20px;" src="{{createDriveLink(productForm.controls.photoUrl.value)}}">
+              -->
+             <drive-link-gen  [originalLink]= "productForm.controls.photoUrl.value" 
+             (linkGeneratedEvent)="updatePhotoUrl($event)">
+
+             </drive-link-gen>
+
+      <!-- <span>
+         {{driveLinkGen.generatedLink}}
+       </span> -->
+            </mat-form-field>
+
+      </fieldset>
+      <fieldset>
+        <mat-form-field style="width: 100%" appearance="fill">
+          <mat-label>Store</mat-label>
+          <input formControlName="store" matInput />
+        </mat-form-field>
+      </fieldset>
+      <fieldset>
+        <mat-form-field style="width: 100%" appearance="fill">
           <mat-label>Link</mat-label>
           <input formControlName="link" matInput />
         </mat-form-field>
@@ -42,18 +76,8 @@
           <input formControlName="serialNumber" matInput />
         </mat-form-field>
       </fieldset>
-      <fieldset>
-        <mat-form-field style="width: 100%" appearance="fill">
-          <mat-label>Photo Url</mat-label>
-          <input formControlName="photoUrl" matInput  placeholder="A link to a photo in the Drive folder"/>
-        </mat-form-field>
-      </fieldset>
-      <fieldset>
-        <mat-form-field style="width: 100%" appearance="fill">
-          <mat-label>Store</mat-label>
-          <input formControlName="store" matInput />
-        </mat-form-field>
-      </fieldset>
+
+
       <fieldset>
         <button mat-flat-button color="primary" [disabled]="this.productForm.invalid || clicked" type="submit" name="submit">Save</button>
       </fieldset>

@@ -1,0 +1,11 @@
+
+
+<div *ngIf="isSearching" style="margin-left: 50%;;">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+<img style="cursor: pointer;" matTooltip="Click to edit link" (click)="isShowInput=!isShowInput" 
+ style="width: 40px;"
+  src="{{generatedLink}}">
+  <input matInput *ngIf="isShowInput"  (blur)="createDriveLink()"
+[(ngModel)]="originalLink" placeholder="A link to a photo in the Drive folder"/>
+  <!-- <button *ngIf="isShowInput"   mat-flat-button color="primary" (click)="createDriveLink()" >Generate</button> -->

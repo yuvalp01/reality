@@ -1,10 +1,12 @@
-import { Component, OnInit, NgZone, Inject, ViewChild, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, NgZone, Inject, ViewChild, EventEmitter, Output, ElementRef } from '@angular/core';
 import { RenovationService } from 'src/app/services/renovation.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
+import { MatSnackBar, MAT_DIALOG_DATA, MatDialogRef, _countGroupLabelsBeforeOption } from '@angular/material';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
 import { IRenovationProduct } from 'src/app/models';
+import { staticViewQueryIds } from '@angular/compiler';
+// import { DriveLinkGenComponent } from 'src/app/shared/drive-link-gen/drive-link-gen.component';
 
 @Component({
   selector: 'app-product-form',
@@ -18,11 +20,25 @@ export class ProductFormComponent implements OnInit {
     private _ngZone: NgZone,
     private snackBar: MatSnackBar,
     private renovationService: RenovationService,
+    private dialogRef:MatDialogRef<ProductFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
   formTitle: string;
   productForm: FormGroup;
   product: IRenovationProduct;
   @Output() refreshEmitter = new EventEmitter();
+
+  // @ViewChild('driveLinkGen',{static:false}) driveLinkGen: DriveLinkGenComponent;
+
+
+  updatePhotoUrl(yyy:string)
+  {
+    this.productForm.controls.photoUrl.patchValue(yyy);
+    this.productForm.markAsDirty();
+  }
+
+  @ViewChild('firstField',{static:false}) firstField: ElementRef;
+
+
   ngOnInit() {
     this.productForm = this.formBuilder.group({
       id:0,
@@ -33,7 +49,7 @@ export class ProductFormComponent implements OnInit {
       link: [null],
       serialNumber: [null],
       photoUrl: null,
-
+      isDeleted:false,
     });
     //add new
     if (this.data==0) {
@@ -85,6 +101,15 @@ export class ProductFormComponent implements OnInit {
   onSaveComplete(_action: string) {
     let snackBarRef = this.snackBar.open(`Product`, _action, { duration: 2000 });
     this.refreshEmitter.emit();
+    if(_action=="Updated")
+    {
+      this.dialogRef.close();
+    }
+    else{
+      this.productForm.reset();
+      this.firstField.nativeElement.focus();
+    }
+   
   }
 
 
