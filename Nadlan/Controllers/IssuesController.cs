@@ -19,7 +19,7 @@ namespace Nadlan.Controllers
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public IssuesController(NadlanConext context, 
+        public IssuesController(NadlanConext context,
                                 IMapper mapper,
                                 IConfiguration configuration,
                                 IHttpClientFactory httpClientFactory)
@@ -81,9 +81,10 @@ namespace Nadlan.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             await _repositoryWraper.IssueRepository.CreateIssueAsync(issue);
             Notifications notifications = new Notifications(_configuration, _httpClientFactory);
-            //string assistentEmail = _configuration.GetValue<string>("Email:assistentEmail");
-            await notifications.Send(issue.CreatedBy, "issue");
-            //emails.SendEmail("issue");
+            if (issue.Priority < 3)
+            {
+                await notifications.Send(issue.CreatedBy, "issue");
+            }
             return Ok();
         }
 

@@ -49,7 +49,7 @@ import { ProductsComponent } from './renovationNew/products/products.component';
       {
         path: 'products', component: ProductsComponent,
         canActivate: [AuthGuard],
-        data: { claimType: ['admin'] }
+        data: { claimType: ['stella','admin'] }
       },
       { path: 'contract-list', component: ContractListComponent,
         canActivate: [AuthGuard],
