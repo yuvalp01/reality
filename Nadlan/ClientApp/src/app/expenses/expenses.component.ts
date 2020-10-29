@@ -21,7 +21,7 @@ export class ExpensesComponent implements OnInit {
   selectedApartment: any;
   assistantBalance: number = 0;
   visibleAccountsHours: number[] = [4, 6, 11, 16, 18, 200];
-  visibleAccountsExpenses: number[] = [1, 4, 6, 18, 11, 8, 16, 198, 200, 201];
+  visibleAccountsExpenses: number[] = [1, 4, 6, 18, 11, 8, 16, 19, 198, 200, 201];
   monthsBack: number = 3;
   currentUser: string = 'unknown';
   @ViewChild(MatSort, { static: true }) sort: MatSort;
