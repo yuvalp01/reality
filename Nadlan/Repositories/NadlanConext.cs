@@ -31,6 +31,8 @@ namespace Nadlan.Repositories
         public DbSet<Issue> Issues { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Contract> Contracts { get; set; }
+        public DbSet<Lesson> Lessons { get; set; }
+        public DbSet<Event> Events { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -40,7 +42,25 @@ namespace Nadlan.Repositories
             modelBuilder.Entity<Issue>()
                 .Property(a => a.IsNew)
                 .HasDefaultValue(true);
+            modelBuilder.Entity<Event>()
+                .Property(a => a.Id)
+                .HasDefaultValueSql("NEWID()");
+            modelBuilder.Entity<Event>()
+                .Property(a => a.Date)
+                .HasDefaultValueSql("GETDATE()");
+            modelBuilder.Entity<Event>()
+                .Property(a => a.DateCreated)
+                .HasDefaultValueSql("GETDATE()");
 
+            modelBuilder.Entity<Lesson>()
+                .Property(a => a.Id)
+                .HasDefaultValueSql("NEWID()");
+            modelBuilder.Entity<Lesson>()
+                .Property(a => a.Date)
+                .HasDefaultValueSql("GETDATE()");
+            modelBuilder.Entity<Lesson>()
+                .Property(a => a.DateCreated)
+                .HasDefaultValueSql("GETDATE()");
             //modelBuilder.Entity<Item>()
             //    .Property(a => a.Quantity)
             //    .HasDefaultValue(1);

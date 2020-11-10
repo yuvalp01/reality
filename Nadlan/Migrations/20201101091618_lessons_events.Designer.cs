@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nadlan.Repositories;
 
 namespace Nadlan.Migrations
 {
     [DbContext(typeof(NadlanConext))]
-    partial class NadlanConextModelSnapshot : ModelSnapshot
+    [Migration("20201101091618_lessons_events")]
+    partial class lessons_events
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,9 +127,7 @@ namespace Nadlan.Migrations
 
                     b.Property<int>("ApartmentId");
 
-                    b.Property<DateTime>("Date")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("GETDATE()");
+                    b.Property<DateTime>("Date");
 
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
@@ -496,9 +496,7 @@ namespace Nadlan.Migrations
 
                     b.Property<int>("CategoryId");
 
-                    b.Property<DateTime>("Date")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("GETDATE()");
+                    b.Property<DateTime>("Date");
 
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
