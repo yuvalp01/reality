@@ -1,6 +1,14 @@
 
-<div *ngIf="investorReportOverview">
-  <h2 style="text-align: center;    font-style: italic;">{{investorReportOverview.name}}</h2>
+<div >
+  <h2 style="text-align: center;    font-style: italic;">
+    <span *ngIf="investorReportOverview">
+      {{investorReportOverview.name}}
+    </span>
+  <span  *ngIf="!investorReportOverview">
+Loading...
+  </span>
+  
+  </h2>
   <mat-tab-group dynamicHeight="false" [selectedIndex]="selectedTab">
 
     <mat-tab label="Overview">

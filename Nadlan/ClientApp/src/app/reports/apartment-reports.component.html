@@ -42,7 +42,7 @@
               positive: isPositive(summaryReport.netForInvestor*percentage),
               negative: !isPositive(summaryReport.netForInvestor*percentage)
             }">
-            {{summaryReport.netForInvestor| currency:'EUR' : number:'1.0-0' | minusSignToParens}} 
+            {{summaryReport.netForInvestor * percentage| currency:'EUR' : number:'1.0-0' | minusSignToParens}} 
           </span>
           </mat-list-item>
 

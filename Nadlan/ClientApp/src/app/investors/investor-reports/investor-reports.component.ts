@@ -43,6 +43,7 @@ export class InvestorReportComponent implements OnInit {
   }
 
   refreshData(stakeholderId: number) {
+    this.investorReportOverview = null;
     this.personalTransService.getInvestorReport(stakeholderId)
       .subscribe(result => this.investorReportOverview = result, error => console.error(error));
     this.loadAllStakeholders();

@@ -18,7 +18,6 @@ export class ApartmentReportsComponent implements OnInit {
   purchaseReport: IPurchaseReport;
   summaryReport: ISummaryReport;
   apartmentInfo: IApartment;
-  //transactions: ITransaction[];
   years: number[] = [2018, 2019, 2020];
   selectedYear: number = 0;
   @Input() apartmentId: number = 0;
@@ -33,7 +32,7 @@ export class ApartmentReportsComponent implements OnInit {
 
   @Input() investorPercentage: number = null;
   percentage: number = 1;
-  showPercentage: boolean = false;
+  showPercentage: boolean = true;
 
   constructor(private reportsService: ReportService,
     private transactionService: TransactionService,
@@ -43,12 +42,11 @@ export class ApartmentReportsComponent implements OnInit {
   }
   ngOnInit(): void {
 
-    //this.role = +window.sessionStorage.getItem("role");
-
     //when open as a dialog
     if (this.data.apartmentId) {
       this.apartmentId = +this.data.apartmentId;
       this.investorPercentage = +this.data.investorPercentage;
+      this.percentage = this.investorPercentage;
       this.loadApartmentReports(this.apartmentId);
       this.isIgnoreChanges = false;
 
