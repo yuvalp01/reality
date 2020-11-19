@@ -556,7 +556,7 @@
                 positive: isPositive(summaryReport.netIncome*percentage),
                 negative: !isPositive(summaryReport.netIncome*percentage)
               }"
-              >{{summaryReport.bonusSoFar| currency:'EUR' : number:'1.0-0' | minusSignToParens}} </span>            
+              >{{summaryReport.bonusSoFar* percentage| currency:'EUR' : number:'1.0-0' | minusSignToParens}} </span>            
             </mat-list-item>
             <mat-divider></mat-divider>
 
