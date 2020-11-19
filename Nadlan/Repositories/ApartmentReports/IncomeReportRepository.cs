@@ -76,6 +76,7 @@ namespace Nadlan.Repositories.ApartmentReports
             Func<Transaction, bool> basic = GetAllValidTransactionsForReports(apartmentId);
             Func<Transaction, bool> expensesFilter = t =>
                         basic(t) &&
+                        t.IsPurchaseCost==false &&
                         t.AccountId != 1 &&//Except for rent
                         t.AccountId != 100 &&//Except for distribution
                         t.AccountId != 300 &&//Except for bonus
