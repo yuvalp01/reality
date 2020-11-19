@@ -6,6 +6,16 @@ namespace Nadlan.BusinessLogic
     public class SpecialFilters
     {
 
+        public Func<Transaction, bool> GetValidTransactionsForReportsFilter()
+        {
+            Func<Transaction, bool> predicate = t =>
+                  t.IsDeleted == false &&
+                  t.IsBusinessExpense == false &&
+                  t.Account.AccountTypeId == 0; 
+            return predicate;
+        }
+
+
         public Func<Transaction, bool> GetAllDepositFilter()
         {
             Func<Transaction, bool> basicPredicate = t =>

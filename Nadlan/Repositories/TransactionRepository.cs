@@ -39,18 +39,16 @@ namespace Nadlan.Repositories
             return query.ToListAsync();
         }
 
-
-
         public async Task<List<Transaction>> GetAllAsync(int monthsBack)
         {
             var transactionList = Context.Transactions.OrderByDescending(a => a.Id)
                 .Include(a => a.Account)
                 .Include(a => a.Apartment)
                 .Where(a => !a.IsDeleted);
-            if (monthsBack>0)
+            if (monthsBack > 0)
             {
-                var transactions =  await transactionList
-                    .Where(a=>a.Date>DateTime.Today.AddMonths(-monthsBack))
+                var transactions = await transactionList
+                    .Where(a => a.Date > DateTime.Today.AddMonths(-monthsBack))
                     .ToListAsync();
                 var messages = await Context.Messages
                     .Where(a => a.IsDeleted == false)
@@ -77,7 +75,7 @@ namespace Nadlan.Repositories
         {
             Func<Transaction, bool> basicPredicate = t => !t.IsDeleted;
             Func<Transaction, bool> predicate;
-            if (monthsBack!=0)
+            if (monthsBack != 0)
             {
                 predicate = t =>
                 basicPredicate(t) && t.Date > DateTime.Today.AddMonths(-monthsBack);
@@ -131,7 +129,7 @@ namespace Nadlan.Repositories
                 return await expensesList.ToListAsync();
             }
 
-        
+
         }
 
         public async Task<TransactionDto> GetExpenseByIdAsync(int transactionId)
@@ -239,8 +237,8 @@ namespace Nadlan.Repositories
         public async Task CreateTransactionAsync(Transaction transaction)
         {
             Account account = await Context.Accounts.FirstAsync(a => a.Id == transaction.AccountId);
-            //Only for normal accouts - depends on the account isIncome property
-            if (account.AccountTypeId == 0)
+            //Only for normal accouts or bonus - depends on the account isIncome property
+            if (account.AccountTypeId == 0 || account.AccountTypeId == 3)
             {
                 transaction.Amount = !account.IsIncome ? transaction.Amount * -1 : transaction.Amount;
             }

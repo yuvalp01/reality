@@ -1,4 +1,5 @@
-﻿using Nadlan.BusinessLogic;
+﻿using Microsoft.EntityFrameworkCore;
+using Nadlan.BusinessLogic;
 using Nadlan.Models;
 using Nadlan.ViewModels.Reports;
 using System;
@@ -18,58 +19,99 @@ namespace Nadlan.Repositories.ApartmentReports
         }
         public async Task<IncomeReport> GetIncomeReport(int apartmentId, int year)
         {
-            var allNonPurchase = GetAllNonPurchase(apartmentId);
-            var grossIncome = GetGrossIncome(allNonPurchase, year);
-            var expenses = GetAllExpenses(allNonPurchase, year);
-            var netIncome = GetNetIncome(allNonPurchase, year).Sum(a=>a.Amount);
-            var bonus = GetBonus(netIncome,apartmentId);
-            var accountSummary = GetAccountSummaryNonPurchase(allNonPurchase, year);
-            IncomeReport summaryReport = new IncomeReport
+
+            IncomeReport incomeReport = new IncomeReport();
+            incomeReport.AccountsSum = GetAccountSummaryNonPurchase(apartmentId, year);
+            incomeReport.GrossIncome = GetAccountSum(apartmentId, 1, year);
+            incomeReport.NetIncome = GetNetIncome(apartmentId, year);
+            //summaryReport.BonusPaid = GetAccountSum(apartmentId, 300, year);
+            incomeReport.Expenses = GetAllExpenses(apartmentId, year);
+            decimal investment = GetAccountSum(apartmentId, 13);
+            DateTime purchaseDate = Context.Apartments.Where(a => a.Id == apartmentId).First().PurchaseDate;
+
+
+            if (apartmentId != 20)
             {
-                GrossIncome = await Task.FromResult(grossIncome.Sum(b => b.Amount)),
-                Expenses = await Task.FromResult(expenses.Sum(b => b.Amount)),
-                NetIncome = netIncome,
-                Bonus = -bonus,
-                NetForInvestor= netIncome - bonus,
-                AccountsSum = await Task.FromResult(accountSummary.ToList()),
-                
-                
-            };
-            return summaryReport;
+                if (year == 0)
+                {
+                    incomeReport.Bonus = -1* await Task.FromResult(CalcBonus(investment, incomeReport.NetIncome, purchaseDate, DateTime.Now));
+                    incomeReport.NetForInvestor = incomeReport.NetIncome - incomeReport.Bonus;
+                }
+                //Do not calculate bonus so far if it's for specific year
+                else
+                {
+                    decimal bonusPaid = GetAccountSum(apartmentId, 300, year);
+                    incomeReport.NetForInvestor = incomeReport.NetIncome + bonusPaid;
+                    incomeReport.Bonus = bonusPaid;
+                }
+            }
+
+
+
+            return incomeReport;
         }
 
 
-        protected IEnumerable<Transaction> GetGrossIncome(IEnumerable<Transaction> transactions, int year)
+        protected decimal CalcBonus(decimal investment, decimal netIncome, DateTime purchaseDate, DateTime currentTime)
         {
-            var basic = nonPurchaseFilters.GetGrossIncomeFilter();
-            //if (year != 0) basic = t => basic(t) && t.Date.Year == year;
-            var result = transactions.Where(basic);
+            const double THRESHOLD = 0.03;
+            const decimal PERCENTAGE = (decimal)0.5;
+            decimal years = GetAgeInYears(purchaseDate);
+            decimal thresholdAccumulated = CalcAccumulatedThreshold(THRESHOLD, years);
+            decimal roiAccumulated = CalcAccumulatedRoi(purchaseDate, currentTime, investment, netIncome);
+            //less than threshold - no bonus     
+            if (roiAccumulated <= thresholdAccumulated) return 0;
+
+            decimal bonusPercentage = (roiAccumulated - thresholdAccumulated) * PERCENTAGE;
+            decimal roiForInvestor = (roiAccumulated - bonusPercentage) / years;
+            return bonusPercentage * investment;
+        }
+
+
+
+
+
+        protected decimal GetAllExpenses(int apartmentId, int year)
+        {
+            Func<Transaction, bool> basic = GetAllValidTransactionsForReports(apartmentId);
+            Func<Transaction, bool> expensesFilter = t =>
+                        basic(t) &&
+                        t.AccountId != 1 &&//Except for rent
+                        t.AccountId != 100 &&//Except for distribution
+                        t.AccountId != 300 &&//Except for bonus
+                        t.Account.AccountTypeId == 0;
+
+            Func<Transaction, bool> filter;
             if (year != 0)
             {
-                return result.Where(a => a.Date.Year == year);
+                filter = b =>
+                         expensesFilter(b) &&
+                         b.Date.Year == year;
             }
-
-            return result;
-        }
-        protected IEnumerable<Transaction> GetAllExpenses(IEnumerable<Transaction> transactions, int year)
-        {
-            var basic = nonPurchaseFilters.GetAllExpensesFilter();
-            var result = transactions.Where(basic);
-            if (year != 0) return result.Where(a => a.Date.Year == year);
-            return result;
-        }
-        protected IEnumerable<AccountSummary> GetAccountSummaryNonPurchase(IEnumerable<Transaction> transactions, int year)
-        {
-            var basic = nonPurchaseFilters.GetAllExpensesFilter();
-            var initResult = transactions.Where(basic);
-            if (year!=0)
+            else
             {
-                initResult = initResult.Where(a => a.Date.Year == year);
+                filter = expensesFilter;
             }
-            //if (year != 0) basic = t => basic(t) && t.Date.Year == year;
 
-            var accountSummary = initResult
+            var result = Context.Transactions
+                .Include(a => a.Account)
+                .Where(filter)
+                .Sum(a => a.Amount);
+            // if (year != 0) return result.Where(a => a.Date.Year == year);
+            return result;
+        }
+
+
+
+
+        protected List<AccountSummary> GetAccountSummaryNonPurchase(int apartmentId, int year)
+        {
+            //      var basic = nonPurchaseFilters.GetAllExpensesFilter();
+            var basic = GetRegularTransactionsFilter(apartmentId, year, false);
+            var accountSummary = Context.Transactions
+                .Include(a => a.Account)
                 .Where(basic)
+                .Where(a => a.AccountId != 1)
                 .GroupBy(g => new { g.AccountId, g.Account.Name })
                 .OrderBy(a => a.Sum(s => s.Amount))
                 .Select(a => new AccountSummary
@@ -78,11 +120,50 @@ namespace Nadlan.Repositories.ApartmentReports
                     Name = a.Key.Name,
                     Total = a.Sum(s => s.Amount)
                 });
-            return accountSummary;
+            return accountSummary.ToList();
         }
 
     }
 }
+
+
+//public Func<Transaction, bool> GetAllExpensesFilter(int apartmentId, int year)
+//{
+
+//    //       !t.IsDeleted &&
+//    //!t.IsPurchaseCost &&
+//    //!t.IsBusinessExpense &&
+//    //t.Account.AccountTypeId == 0;
+
+//    Func<Transaction, bool> basic = GetAllValidTransactionsForReports(apartmentId);
+//    Func<Transaction, bool> expensesFilter = t =>
+//                basic(t) &&
+//                t.AccountId != 1 &&//Except for rent
+//                t.AccountId != 100 &&//Except for distribution
+//                t.AccountId != 300;//Except for bonus
+
+//    return expensesFilter;
+//}
+
+//protected IEnumerable<Transaction> GetGrossIncome_(IEnumerable<Transaction> transactions, int year)
+//{
+//    var basic = nonPurchaseFilters.GetGrossIncomeFilter();
+//    //if (year != 0) basic = t => basic(t) && t.Date.Year == year;
+//    var result = transactions.Where(basic);
+//    if (year != 0)
+//    {
+//        return result.Where(a => a.Date.Year == year);
+//    }
+
+//    return result;
+//}
+//protected IEnumerable<Transaction> GetAllExpenses_(IEnumerable<Transaction> transactions, int year)
+//{
+//    var basic = nonPurchaseFilters.GetAllExpensesFilter();
+//    var result = transactions.Where(basic);
+//    if (year != 0) return result.Where(a => a.Date.Year == year);
+//    return result;
+//}
 
 
 //protected IEnumerable<AccountSummary> GetAccountSummaryNonPurchase(int apartmetId, int year)

@@ -8,6 +8,17 @@ export interface ISummaryReport {
   initialRemainder: number,
   balance: number,
   distributed: number,
+  bonusExpected: number,
+  bonusPaid: number,
+  years:number,
+  roiAccumulated:number,
+  thresholdAccumulated:number,
+  bonusSoFar:number,
+  bonusPercentage:number,
+  netForInvestor: number,
+
+
+
 }
 
 
@@ -17,9 +28,11 @@ export interface IIncomeReport {
   tax:number,
   netIncome: number,
   //forDistribution: number,
-  bonus: number,
   netForInvestor: number,
   accountsSum: IAccountsSum,
+  bonusExpected: number,
+  bonusPaid: number,
+  bonus: number,
 }
 
 export interface IPurchaseReport {

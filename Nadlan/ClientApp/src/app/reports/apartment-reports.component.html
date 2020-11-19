@@ -1,4 +1,3 @@
-<!--<p *ngFor="let trans of transactions">{{trans.amount}}</p>-->
 <div>
   <span *ngIf="this.investorPercentage==1">
     You have full ownership on this apartment
@@ -13,16 +12,22 @@
     <span class="align-icon" *ngIf="!showPercentage">Showing full value (100%)</span>
   </ng-container>
   <mat-tab-group #tabGroup dynamicHeight="false">
-    <mat-tab>
+    <mat-tab label="Summary">
       <ng-template mat-tab-label>
-          <span>Summary</span>
+          <span *ngIf="summaryReport && apartmentInfo">Summary</span>
+          <span *ngIf="!(summaryReport && apartmentInfo)"> Loading...</span>
           <mat-icon *ngIf="purchaseReport && math.abs(purchaseReport.investment+purchaseReport.totalCost)>1"
            style="color: red" 
            matTooltip="Investment not equal expenses">warning</mat-icon>
       </ng-template>
-      <mat-card *ngIf="apartmentInfo">
-        <mat-card-title>Investment Summary - {{apartmentInfo.address}}</mat-card-title>
-        <mat-list *ngIf="summaryReport">
+      <mat-card *ngIf="summaryReport">
+        <mat-card-title>
+
+        <span *ngIf="summaryReport && apartmentInfo"> Investment Summary - {{apartmentInfo.address}}</span>
+        <span *ngIf="!(summaryReport && apartmentInfo)">Loading...</span>
+        
+        </mat-card-title>
+        <mat-list *ngIf="summaryReport" >
           <mat-list-item>
             <mat-icon mat-list-icon>business_center</mat-icon>
             <span class="lineTitle">Investment</span>
@@ -31,9 +36,107 @@
 
           
 
+          <mat-list-item style="cursor: pointer;"   (click)="tabGroup.selectedIndex=2" >
+            <mat-icon mat-list-icon>business_center</mat-icon>
+            <span matTooltip="For details see 'Income Report' tab"
+            class="lineTitle">Net income for investor</span>
+            <span
+            [ngClass]="{
+              positive: isPositive(summaryReport.netForInvestor*percentage),
+              negative: !isPositive(summaryReport.netForInvestor*percentage)
+            }">
+            {{summaryReport.netForInvestor * percentage| currency:'EUR' : number:'1.0-0' | minusSignToParens}} 
+          </span>
+          </mat-list-item>
+
+
+          <div>
+
+            <mat-list-item>
+              <mat-icon mat-list-icon>business_center</mat-icon>
+              <span class="lineTitle">Annual ROI for investor (after bonus)</span>
+              <span>{{summaryReport.roiForInvestor|percent:'1.1-2'}} </span>            
+            </mat-list-item>
+            
+            <mat-list-item>
+              <mat-icon mat-list-icon>business_center</mat-icon>
+              <span class="lineTitle">Years since purchase</span>
+              <span>{{summaryReport.years|number:'1.0-3'}} </span>            
+            </mat-list-item>
+
+          </div>
+        </mat-list>
+      </mat-card>
+    </mat-tab>
+    <mat-tab label="Detailed">
+      <ng-template mat-tab-label>
+        
+          <span *ngIf="summaryReport && apartmentInfo">Detailed</span>
+          <span *ngIf="!(summaryReport && apartmentInfo)"> Loading...</span>
+          <mat-icon *ngIf="purchaseReport && math.abs(purchaseReport.investment+purchaseReport.totalCost)>1"
+           style="color: red" 
+           matTooltip="Investment not equal expenses">warning</mat-icon>
+      </ng-template>
+      <mat-card *ngIf="apartmentInfo">
+        <mat-card-title>More Details - {{apartmentInfo.address}}</mat-card-title>
+        <mat-list *ngIf="summaryReport">
           <mat-list-item>
             <mat-icon mat-list-icon>business_center</mat-icon>
-            <span style="cursor: pointer;"  (click)="tabGroup.selectedIndex=1" 
+            <span class="lineTitle">Investment</span>
+            <span [ngClass]="'positive'">{{summaryReport.investment *percentage | currency:'EUR' : number:'1.0-0'}}</span>
+          </mat-list-item>
+
+
+          <mat-list-item style="cursor: pointer;"  (click)="tabGroup.selectedIndex=2" >
+            <mat-icon mat-list-icon>business_center</mat-icon>
+            <span 
+            matTooltip="For details see 'Income Report' tab"
+            class="lineTitle">Net income</span>
+            <span
+            [ngClass]="{
+              positive: isPositive(summaryReport.netIncome*percentage),
+              negative: !isPositive(summaryReport.netIncome*percentage)
+            }">
+            {{summaryReport.netIncome * percentage| currency:'EUR' : number:'1.0-0' | minusSignToParens}} 
+          </span>
+          </mat-list-item>
+
+
+          <mat-list-item style="cursor: pointer;"   (click)="showTrans(300, 'Bonus Paid', false)">
+            <mat-icon mat-list-icon>business_center</mat-icon>
+            <span 
+            matTooltip="Bonus retained from previous years"
+            class="lineTitle">Bonus (paid)</span>
+            <span
+            (click)="tabGroup.selectedIndex=1" 
+            [ngClass]="{
+              positive: isPositive(summaryReport.bonusPaid*percentage),
+              negative: !isPositive(summaryReport.bonusPaid*percentage)
+            }">
+            {{summaryReport.bonusPaid * percentage| currency:'EUR' : number:'1.0-0' | minusSignToParens}} 
+          </span>
+          </mat-list-item>
+
+          <mat-list-item  style="cursor: pointer;"  (click)="tabGroup.selectedIndex=5" >
+            <mat-icon mat-list-icon>business_center</mat-icon>
+            <span 
+            matTooltip="Bonus expected for the current year"
+            class="lineTitle">Bonus (pending)</span>
+            <span
+            
+            [ngClass]="{
+              positive: isPositive(summaryReport.bonusExpected*percentage),
+              negative: !isPositive(summaryReport.bonusExpected*percentage)
+            }">
+            {{(summaryReport.bonusExpected) * percentage| currency:'EUR' : number:'1.0-0' | minusSignToParens}} 
+          </span>
+          </mat-list-item>
+
+          <mat-divider></mat-divider>
+
+          <mat-list-item>
+            <mat-icon mat-list-icon>business_center</mat-icon>
+            <span style="cursor: pointer;"  (click)="tabGroup.selectedIndex=2" 
             matTooltip="For details see 'Income Report' tab"
             class="lineTitle">Net income for investor</span>
             <span
@@ -47,21 +150,23 @@
           </mat-list-item>
 
 
-<!-- 
-          <mat-list-item>
+          <mat-list-item style="cursor:pointer;" 
+          (click)="showTrans(100, 'Distributed', false)">
             <mat-icon mat-list-icon>business_center</mat-icon>
-            <span  (click)="tabGroup.selectedIndex=1" 
-            matTooltip="For details see 'Income Report' tab" 
-            class="lineTitle">Net Income up-to-date</span>
-            <span [ngClass]="'positive'">{{summaryReport.netIncome*percentage| currency:'EUR' : number:'1.0-0'}}</span>
-         
-          </mat-list-item> -->
+            <span
+             matTooltip="Distributed = Distributed to personal account (available for withdrawal at any moment)"
+            
+            >Distributed</span>
+            <span
+            (click)="tabGroup.selectedIndex=1" 
+            [ngClass]="{
+              positive: isPositive(summaryReport.distributed*percentage),
+              negative: !isPositive(summaryReport.distributed*percentage)
+            }">
 
-          <mat-list-item style="cursor:pointer; color:#2222c7" (click)="showTrans(100, 'Distributed', false)">
-            <mat-icon mat-list-icon>business_center</mat-icon>
-            <span matTooltip="Distributed = Distributed to personal account (available for withdrawal at any moment)"
-            class="lineTitle">Distributed</span>
-            <span>{{summaryReport.distributed*percentage | currency:'EUR' : number:'1.0-0'}}</span>
+              {{summaryReport.distributed*percentage | currency:'EUR' : number:'1.0-0' | minusSignToParens}}
+            
+            </span>
           </mat-list-item>
           <mat-divider></mat-divider>
 
@@ -83,10 +188,9 @@
                   {{summaryReport.balance*percentage| currency:'EUR' : number:'1.0-0'}}
                 </span>
           </mat-list-item>
-          <!--*ngIf="apartmentId!=20"-->
+
           <div>
-            <mat-divider></mat-divider>
-            <mat-list-item >
+                        <mat-list-item >
               <mat-icon mat-list-icon>business_center</mat-icon>
               <span 
               matTooltip="Conservative: Take into consideration all expenses and taxes and assume 11 month a year" 
@@ -100,34 +204,20 @@
               <span>{{summaryReport.roi|percent:'1.1-2'}} </span>
             </mat-list-item>
 
-            <mat-list-item>
-              <mat-icon mat-list-icon>business_center</mat-icon>
-              <span class="lineTitle">Annual ROI for investor (after bonus)</span>
-              <!-- <span>{{getRoiForInvestor(summaryReport.roi)|percent:'1.1'}} </span> -->
-              <span>{{summaryReport.roiForInvestor|percent:'1.1-2'}} </span>
-
-
-              
-            </mat-list-item>
-            <!-- <mat-list-item>
-              <mat-icon mat-list-icon>business_center</mat-icon>
-              <span class="lineTitle">Bonus</span>
-              <span
-              [ngClass]="{
-                positive: isPositive(summaryReport.bonus*percentage),
-                negative: !isPositive(summaryReport.bonus*percentage)
-              }">
-                {{summaryReport.bonus| currency:'EUR' : number:'1.0-0' | minusSignToParens}} </span>
-            </mat-list-item> -->
 
           </div>
         </mat-list>
       </mat-card>
     </mat-tab>
     <mat-tab label="Income Report">
+      <ng-template mat-tab-label>
+        <span *ngIf="incomeReport">Income Report</span>
+        <span *ngIf="!incomeReport"> Loading...</span>
+      </ng-template>
       <mat-card>
-        <mat-card-title>Income Report</mat-card-title>
-     
+        <mat-card-title *ngIf="incomeReport">Income Report - {{apartmentInfo.address}}</mat-card-title>
+        <mat-card-title *ngIf="!incomeReport">Loading...</mat-card-title>
+       
         <mat-card-subtitle>
           <form #yearForm="ngForm">
             <mat-form-field style="width: 100%" appearance="outline">
@@ -199,17 +289,40 @@
                 </mat-panel-description>
               </mat-expansion-panel-header>
             </mat-expansion-panel>
-            <mat-expansion-panel disabled="true">
+            <!-- <mat-expansion-panel disabled="true" style="cursor: pointer;"  (click)="showTrans(300, 'Bonus Paid', false)">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon mat-list-icon>business_center</mat-icon>
+                  <span matTootip="Bonus to entrepreneur">Bonus (paid)</span>
+                </mat-panel-title>
+                <mat-panel-description>
+
+                  <span [ngClass]="{
+          positive: isPositive(incomeReport.bonusPaid),
+          negative: !isPositive(incomeReport.bonusPaid)
+        }">{{incomeReport.bonusPaid*percentage  | currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel> -->
+            <mat-expansion-panel disabled="true" style="cursor: pointer;" (click)="tabGroup.selectedIndex=5" >
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   <mat-icon mat-list-icon>business_center</mat-icon>
                   <span matTootip="Bonus to entrepreneur">Bonus</span>
                 </mat-panel-title>
                 <mat-panel-description>
-                  <span [ngClass]="{
-          positive: isPositive(incomeReport.bonus),
-          negative: !isPositive(incomeReport.bonus)
-        }">{{incomeReport.bonus*percentage  | currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
+              
+                  <span  [ngClass]="{
+                    positive: isPositive(incomeReport.bonus),
+                    negative: !isPositive(incomeReport.bonus)
+                  }">{{incomeReport.bonus*percentage  | currency:'EUR' : number:'1.0-0' | minusSignToParens}}
+                </span>
+
+                <span *ngIf="false"  [ngClass]="{
+                    positive: isPositive(summaryReport.bonusPaid),
+                    negative: !isPositive(summaryReport.bonusPaid)
+                  }">{{summaryReport.bonusPaid*percentage  | currency:'EUR' : number:'1.0-0' | minusSignToParens}}
+                </span>
                 </mat-panel-description>
               </mat-expansion-panel-header>
             </mat-expansion-panel>
@@ -221,10 +334,19 @@
                   <span matTootip="NetForInvestor">Net for Investor</span>
                 </mat-panel-title>
                 <mat-panel-description>
-                  <span style="font-weight:bold" [ngClass]="{
-          positive: isPositive(incomeReport.netForInvestor),
-          negative: !isPositive(incomeReport.netForInvestor)
-        }">{{incomeReport.netForInvestor*percentage  | currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
+
+                  <span *ngIf="selectedYear==0" style="font-weight:bold" [ngClass]="{
+                    positive: isPositive(summaryReport.netForInvestor),
+                    negative: !isPositive(summaryReport.netForInvestor)
+                  }">{{summaryReport.netForInvestor*percentage  | currency:'EUR' : number:'1.0-0' | minusSignToParens}}
+                      </span>
+
+
+                  <span  *ngIf="selectedYear>0" style="font-weight:bold" [ngClass]="{
+                positive: isPositive(incomeReport.netForInvestor),
+                negative: !isPositive(incomeReport.netForInvestor)
+              }">{{incomeReport.netForInvestor*percentage  | currency:'EUR' : number:'1.0-0' | minusSignToParens}}
+                  </span>
                 </mat-panel-description>
               </mat-expansion-panel-header>
             </mat-expansion-panel>
@@ -235,8 +357,14 @@
 
     </mat-tab>
     <mat-tab label="Purchase Report">
+
+      <ng-template mat-tab-label>
+        <span *ngIf="purchaseReport">Purchase Report</span>
+        <span *ngIf="!purchaseReport"> Loading...</span>
+      </ng-template>
       <mat-card>
-        <mat-card-title>Purchase Report</mat-card-title>
+        <mat-card-title *ngIf="purchaseReport">Purchase Report - {{apartmentInfo.address}}</mat-card-title>
+        <mat-card-title *ngIf="!purchaseReport">Loading...</mat-card-title>
 
         <mat-card-content>
 
@@ -306,29 +434,21 @@
                 </mat-panel-description>
               </mat-expansion-panel-header>
             </mat-expansion-panel>
-            <!--<mat-divider></mat-divider>
-    <mat-expansion-panel disabled="true">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <mat-icon mat-list-icon>business_center</mat-icon>
-          <span>Remanider</span>
-        </mat-panel-title>
-        <mat-panel-description>
-          <span style="font-weight:bold" [ngClass]="{
-    positive: isPositive(purchaseReport.remainder),
-    negative: !isPositive(purchaseReport.remainder)
-  }">{{purchaseReport.remainder *percentage | currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-    </mat-expansion-panel>-->
+
           </mat-accordion>
         </mat-card-content>
       </mat-card>
     </mat-tab>
     <mat-tab label="General Info">
-      <mat-card>
 
-        <mat-card-title>General Info</mat-card-title>
+
+      <ng-template mat-tab-label>
+        <span *ngIf="apartmentInfo">General Info</span>
+        <span *ngIf="!apartmentInfo"> Loading...</span>
+      </ng-template>
+      <mat-card>
+        <mat-card-title *ngIf="apartmentInfo">General Info</mat-card-title>
+        <mat-card-title *ngIf="!apartmentInfo">Loading...</mat-card-title>
         <mat-list *ngIf="apartmentInfo">
           <mat-list-item>
             <mat-icon mat-list-icon>home</mat-icon>
@@ -366,6 +486,89 @@
         </mat-list>
       </mat-card>
     </mat-tab>
+    <mat-tab label="Bonus Calculation">
+      <ng-template mat-tab-label>
+          <span *ngIf="summaryReport && apartmentInfo">Bonus Calculation</span>
+          <span *ngIf="!(summaryReport && apartmentInfo)"> Loading...</span>
+      </ng-template>
+      <mat-card *ngIf="summaryReport">
+        <mat-card-title>
+
+        <span *ngIf="summaryReport && apartmentInfo"> Bonus Calculation - {{apartmentInfo.address}}</span>
+        <span *ngIf="!(summaryReport && apartmentInfo)">Loading...</span>
+        
+        </mat-card-title>
+        <mat-list *ngIf="summaryReport" >
+          <mat-list-item>
+            <mat-icon mat-list-icon>business_center</mat-icon>
+            <span class="lineTitle">Investment</span>
+            <span [ngClass]="'positive'">{{summaryReport.investment *percentage | currency:'EUR' : number:'1.0-0'}}</span>
+          </mat-list-item>
+
+          
+
+          <mat-list-item>
+            <mat-icon mat-list-icon>business_center</mat-icon>
+            <span style="cursor: pointer;"  (click)="tabGroup.selectedIndex=1" 
+            matTooltip="For details see 'Income Report' tab"
+            class="lineTitle">Net income</span>
+            <span
+            (click)="tabGroup.selectedIndex=1" 
+            [ngClass]="{
+              positive: isPositive(summaryReport.netIncome*percentage),
+              negative: !isPositive(summaryReport.netIncome*percentage)
+            }">
+            {{summaryReport.netIncome * percentage| currency:'EUR' : number:'1.0-0' | minusSignToParens}} 
+          </span>
+          </mat-list-item>
+
+
+          <div>
+            <mat-divider></mat-divider>
+
+            <mat-list-item>
+              <mat-icon mat-list-icon>business_center</mat-icon>
+              <span class="lineTitle">Cumulative ROI</span>
+              <span>{{summaryReport.roiAccumulated|percent:'1.1-3'}} </span>            
+            </mat-list-item>
+
+            <mat-list-item>
+              <mat-icon mat-list-icon>business_center</mat-icon>
+              <span class="lineTitle">Cumulative Threshold</span>
+              <span>{{summaryReport.thresholdAccumulated|percent:'1.1-3'}} </span>            
+            </mat-list-item>
+
+
+            <mat-list-item>
+              <mat-icon mat-list-icon>business_center</mat-icon>
+              <span class="lineTitle">Bonus Percentage</span>
+              <span>
+              {{summaryReport.bonusPercentage|percent:'1.1-3'}} </span>            
+            </mat-list-item>
+
+            <mat-divider></mat-divider>
+            
+            <mat-list-item>
+              <mat-icon mat-list-icon>business_center</mat-icon>
+              <span class="lineTitle">Bonus up-to-date</span>
+              <span
+              [ngClass]="{
+                positive: isPositive(summaryReport.netIncome*percentage),
+                negative: !isPositive(summaryReport.netIncome*percentage)
+              }"
+              >{{summaryReport.bonusSoFar| currency:'EUR' : number:'1.0-0' | minusSignToParens}} </span>            
+            </mat-list-item>
+            <mat-divider></mat-divider>
+
+          </div>
+        </mat-list>
+      </mat-card>
+    </mat-tab>
+    
+
+
+
+
     <mat-tab *ngIf="false"  label="Appraisal">
       <mat-card>
         <mat-list *ngIf="apartmentInfo && purchaseReport">
@@ -387,11 +590,6 @@
           </mat-list-item>
           <mat-divider></mat-divider>
           <h3 matSubheader>Assumptions</h3>
-
-          <!--<input style="width:20px" [(ngModel)]="rentMonthsInYear" />
-          <input style="width:20px" [(ngModel)]="buyerExpectedRerutn" />-->
-
-
           <mat-list-item>
             <mat-icon mat-list-icon>settings_applications</mat-icon>
             <span class="lineTitle">Rent months per year</span>
@@ -409,12 +607,6 @@
           <mat-divider></mat-divider>
           <h3 matSubheader>Prediction</h3>
 
-
-          <!--<mat-list-item>
-            <mat-icon mat-list-icon>business_center</mat-icon>
-            <span class="lineTitle">Raw ROI</span>
-            <span>{{apartmentInfo.currentRent*rentMonthsInYear/purchaseReport.investment | percent}}</span>
-          </mat-list-item>-->
           <mat-list-item>
             wi
             <mat-icon mat-list-icon>
@@ -435,10 +627,6 @@
             <span class="lineTitle">Estimated ROI on Sale [TODO: calc per year]</span>
             <span>{{((((apartmentInfo.currentRent*rentMonthsInYear/buyerExpectedRerutn)*0.9)/ purchaseReport.investment)-1) | percent:'1.1'}}</span>
           </mat-list-item>
-
-
-          <!--<mat-divider></mat-divider>-->
-
 
 
         </mat-list>

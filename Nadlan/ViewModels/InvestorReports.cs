@@ -13,6 +13,7 @@ namespace Nadlan.ViewModels.Reports
         public decimal CashBalance { get; set; }
         public decimal TotalPendingProfits { get; set; }
         public decimal TotalPendingExpenses { get; set; }
+        public decimal TotalPendingBonus { get; set; }
         //public decimal ProfitsSoFar { get; set; }
         public decimal TotalBalace { get; set; }
         public List<PortfolioReport> PortfolioLines { get; set; }
@@ -30,23 +31,13 @@ namespace Nadlan.ViewModels.Reports
         public decimal Ownership { get; set; }
         public decimal PendingProfits { get; set; }
         public decimal PendingExpenses { get; set; }
-        [Obsolete]
-        public decimal MinimalProfitUpToDate { get; set; }
+        public decimal PendingBonus { get; set; }
+        //[Obsolete]
+        //public decimal MinimalProfitUpToDate { get; set; }
         //[Obsolete]
         public decimal Distributed { get; set; }
 
 
     }
-
-    //public class PortfolioLineReport
-    //{
-    //    public string ApartmentName { get; set; }
-    //    public decimal MinimalProfitUpToDate { get; set; }
-    //}
-
-
-
-
-
 
 }

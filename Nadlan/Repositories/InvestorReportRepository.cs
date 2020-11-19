@@ -85,12 +85,15 @@ namespace Nadlan.Repositories
                     portfolioLineReport.Distributed = GetGeneralDistributionPerInvestor(portfolioLine) * -1 * portfolioLine.Percentage;
                     portfolioLineReport.PendingExpenses = 0;
                 }
-                //In full ownership apartments there is no need in distribution because it's 100% ownership and it's already in their bank account
+                //In full ownership apartments there is no need in distribution because it's 100% ownership
+                //and it's already in their bank account
+                //On the other hand, they need to pay expenses and pending bonus
                 else
                 {
                     portfolioLineReport.PendingProfits = 0;
                     portfolioLineReport.Distributed = GetPendingProfit(portfolioLine) * portfolioLine.Percentage;
                     portfolioLineReport.PendingExpenses = GetPendingExpenses(portfolioLine);
+                    //portfolioLineReport.PendingBonus = GetPendingBonus(portfolioLine);
                 }
 
                 ValidateWithPersonalTransactions(portfolioLineReport, portfolioLine);
@@ -98,6 +101,7 @@ namespace Nadlan.Repositories
             }
             return portfolioReportLines;
         }
+
 
         private decimal GetPendingExpenses(Portfolio portfolioLine)
         {
@@ -125,11 +129,12 @@ namespace Nadlan.Repositories
         }
         private decimal GetGeneralDistributionPerInvestor(Portfolio portfolioLine)
         {
-            var distributionPredicate = nonPurchaseFilters.GetAllDistributionsFilter();
+            //var distributionPredicate = nonPurchaseFilters.GetAllDistributionsFilter();
 
             var distributed = Context.Transactions
                 .Include(a => a.Account)
-                .Where(distributionPredicate)
+                .Where(a=>a.IsDeleted==false)
+                .Where(a=>a.AccountId==100)
                 .Where(a => a.ApartmentId == portfolioLine.ApartmentId)
                 .AsQueryable();
             return distributed.Sum(a => a.Amount);

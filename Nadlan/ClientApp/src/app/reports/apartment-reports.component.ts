@@ -73,6 +73,10 @@ export class ApartmentReportsComponent implements OnInit {
 
   loadApartmentReports(apartmentId: number) {
     if (apartmentId) {
+      this.summaryReport = null; //Object.assign({});
+      this.purchaseReport = null;
+      this.incomeReport = null;
+      this.apartmentInfo = null;
       this.reportsService.getPurchaseReport(apartmentId).subscribe(result => this.purchaseReport = result, error => console.error(error));
       this.reportsService.getSummaryReport(apartmentId).subscribe(result => this.summaryReport = result, error => console.error(error));
       this.reportsService.getIncomeReport(apartmentId, this.selectedYear).subscribe(result => this.incomeReport = result, error => console.error(error));
