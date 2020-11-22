@@ -56,7 +56,19 @@ namespace Nadlan.Controllers
 
             return Ok(investorReportOverview);
         }
-        
+
+        [HttpGet("GetPortfolio/{accountId}")]
+        public async Task<IActionResult> GetPortfolio([FromRoute]  int accountId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            List<PortfolioReport> investorReportOverview =  _investorReportWraper.GetPortfolio(accountId);
+
+            return Ok(investorReportOverview);
+        }
 
         [HttpGet("GetPersonalBalance/{stakeholderId}")]
         public async Task<IActionResult> GetPersonalBalance([FromRoute]  int stakeholderId)

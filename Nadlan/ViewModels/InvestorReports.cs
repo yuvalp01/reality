@@ -7,6 +7,7 @@ namespace Nadlan.ViewModels.Reports
     {
         public string Name { get; set; }
         public decimal TotalInvestment { get; set; }
+        public decimal TotalNetProfit { get; set; }
         /// <summary>
         /// If positive, this sum is yours and can be transferred to your bank account at any time
         /// </summary>
@@ -17,8 +18,8 @@ namespace Nadlan.ViewModels.Reports
         //public decimal ProfitsSoFar { get; set; }
         public decimal TotalBalace { get; set; }
         public List<PortfolioReport> PortfolioLines { get; set; }
-        [Obsolete]
-        public decimal MinimalProfitUpToDate { get; set; }
+        //[Obsolete]
+        //public decimal MinimalProfitUpToDate { get; set; }
         //[Obsolete]
         public decimal TotalDistribution { get; set; }
     }
@@ -32,6 +33,11 @@ namespace Nadlan.ViewModels.Reports
         public decimal PendingProfits { get; set; }
         public decimal PendingExpenses { get; set; }
         public decimal PendingBonus { get; set; }
+        /// <summary>
+        /// PendingProfits - PendingExpenses - PendingBonus
+        /// </summary>
+        //public decimal NetPendingProfit { get; set; }
+        public decimal NetProfit { get; set; }
         //[Obsolete]
         //public decimal MinimalProfitUpToDate { get; set; }
         //[Obsolete]

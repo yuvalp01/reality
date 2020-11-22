@@ -24,7 +24,6 @@ namespace Nadlan.Repositories.ApartmentReports
             incomeReport.AccountsSum = GetAccountSummaryNonPurchase(apartmentId, year);
             incomeReport.GrossIncome = GetAccountSum(apartmentId, 1, year);
             incomeReport.NetIncome = GetNetIncome(apartmentId, year);
-            //summaryReport.BonusPaid = GetAccountSum(apartmentId, 300, year);
             incomeReport.Expenses = GetAllExpenses(apartmentId, year);
             decimal investment = GetAccountSum(apartmentId, 13);
             DateTime purchaseDate = Context.Apartments.Where(a => a.Id == apartmentId).First().PurchaseDate;
@@ -49,22 +48,6 @@ namespace Nadlan.Repositories.ApartmentReports
 
 
             return incomeReport;
-        }
-
-
-        protected decimal CalcBonus(decimal investment, decimal netIncome, DateTime purchaseDate, DateTime currentTime)
-        {
-            const double THRESHOLD = 0.03;
-            const decimal PERCENTAGE = (decimal)0.5;
-            decimal years = GetAgeInYears(purchaseDate);
-            decimal thresholdAccumulated = CalcAccumulatedThreshold(THRESHOLD, years);
-            decimal roiAccumulated = CalcAccumulatedRoi(purchaseDate, currentTime, investment, netIncome);
-            //less than threshold - no bonus     
-            if (roiAccumulated <= thresholdAccumulated) return 0;
-
-            decimal bonusPercentage = (roiAccumulated - thresholdAccumulated) * PERCENTAGE;
-            decimal roiForInvestor = (roiAccumulated - bonusPercentage) / years;
-            return bonusPercentage * investment;
         }
 
 
@@ -107,7 +90,6 @@ namespace Nadlan.Repositories.ApartmentReports
 
         protected List<AccountSummary> GetAccountSummaryNonPurchase(int apartmentId, int year)
         {
-            //      var basic = nonPurchaseFilters.GetAllExpensesFilter();
             var basic = GetRegularTransactionsFilter(apartmentId, year, false);
             var accountSummary = Context.Transactions
                 .Include(a => a.Account)
@@ -128,6 +110,7 @@ namespace Nadlan.Repositories.ApartmentReports
 }
 
 
+
 //public Func<Transaction, bool> GetAllExpensesFilter(int apartmentId, int year)
 //{
 
@@ -146,100 +129,3 @@ namespace Nadlan.Repositories.ApartmentReports
 //    return expensesFilter;
 //}
 
-//protected IEnumerable<Transaction> GetGrossIncome_(IEnumerable<Transaction> transactions, int year)
-//{
-//    var basic = nonPurchaseFilters.GetGrossIncomeFilter();
-//    //if (year != 0) basic = t => basic(t) && t.Date.Year == year;
-//    var result = transactions.Where(basic);
-//    if (year != 0)
-//    {
-//        return result.Where(a => a.Date.Year == year);
-//    }
-
-//    return result;
-//}
-//protected IEnumerable<Transaction> GetAllExpenses_(IEnumerable<Transaction> transactions, int year)
-//{
-//    var basic = nonPurchaseFilters.GetAllExpensesFilter();
-//    var result = transactions.Where(basic);
-//    if (year != 0) return result.Where(a => a.Date.Year == year);
-//    return result;
-//}
-
-
-//protected IEnumerable<AccountSummary> GetAccountSummaryNonPurchase(int apartmetId, int year)
-//{
-//    var basic = nonPurchaseFilters.GetAllExpensesFilter();
-//    Func<Transaction, bool> second = t => t.Date.Year == year;
-//    //if (year != 0) basic = t => basic(t) && second(t);
-
-//    var accountSummary = Context.Transactions
-//        .Include(a => a.Account)
-//        .Where(basic)
-//        .GroupBy(g => new { g.AccountId, g.Account.Name, g.Date })
-//        .OrderBy(a => a.Sum(s => s.Amount))
-//        .Select(a => new AccountSummary
-//        {
-//            AccountId = a.Key.AccountId,
-//            Name = a.Key.Name,
-//            Total = a.Sum(s => s.Amount)
-//        });
-
-//    return accountSummary;
-//}
-
-
-
-//protected IEnumerable<Transaction> GetGrossIncome(int apartmetId, int year)
-//{
-//    var basic = nonPurchaseFilters.GetGrossIncomeFilter();
-//    var result = Context.Transactions
-//         .Include(a => a.Account)
-//         .Where(basic)
-//         .Where(a => a.ApartmentId == apartmetId);
-//    if (year!=0)
-//    {
-//        result.Where(a => a.Date.Year == year);
-//    }
-//    return result;
-//}
-
-
-
-
-
-//protected IEnumerable<Transaction> GetAllExpenses(int apartmetId, int year)
-//{
-//    var basic = nonPurchaseFilters.GetAllExpensesFilter();
-//    if (year != 0) basic = t => basic(t) && t.Date.Year == year;
-
-//    return Context.Transactions
-//         .Include(a => a.Account)
-//         .Where(basic)
-//         .Where(a => a.ApartmentId == apartmetId);
-//}
-
-
-
-
-//protected IEnumerable<Transaction> GetGrossIncome(int apartmetId, int year)
-//{
-//    var basic = nonPurchaseFilters.GetGrossIncomeFilter();
-//    Expression<Func<Transaction, bool>> expr1 = t =>
-//   basic(t) &&
-//   //t.Date.Year == 2020 &&
-//   t.AccountId == 1;//Rent
-
-//    // var xxxx = basic = t => basic(t) && t.Date.Year == year;
-//    Expression<Func<Transaction, bool>> expr2 = t => t.Date.Year == year;
-
-//    var body = Expression.AndAlso(expr1.Body, expr2.Body);
-//    var lambda = Expression.Lambda<Func<Transaction, bool>>(body);
-
-//    var yyyy = Expression.And(expr1.Body, expr2.Body); 
-//    var result =  Context.Transactions
-//         .Include(a => a.Account)
-//         .Where(lambda)
-//         .Where(a => a.ApartmentId == apartmetId);
-//    return result;
-//}

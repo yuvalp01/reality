@@ -54,6 +54,9 @@ export interface IAccountsSum {
 export interface IInvestorReportOverview {
   name: string,
   totalInvestment: number,
+  totalNetProfit: number,
+
+
   cashBalance: number,
   totalPendingProfits: number,
   totalPendingExpenses: number,
@@ -69,6 +72,9 @@ export interface IPortfolioReport {
   apartment: string,
   purchaseDate: Date,
   investment: number,
+  netProfit: number,
+
+
   pendingProfits: number,
   pendingExpenses: number, 
   ownership: number,

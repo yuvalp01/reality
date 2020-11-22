@@ -15,12 +15,13 @@ namespace Nadlan.ViewModels.Reports
         public decimal ROI { get; set; }
         public decimal RoiForInvestor { get; set; }
         public decimal PredictedROI { get; set; }
-        //[Obsolete]
-        //public decimal InitialRemainder { get; set; }
+
         //This is actually "Pending Profits"
         public decimal Balance { get; set; }
         public decimal Distributed { get; set; }
+        [Obsolete]
         public decimal BonusExpected { get; set; }
+        [Obsolete]
         public decimal BonusPaid { get; set; }
        
         public decimal NetForInvestor { get; set; }
@@ -39,8 +40,8 @@ namespace Nadlan.ViewModels.Reports
         public decimal TotalCost { get; set; }
         public decimal RenovationCost { get; set; }
         public decimal ExpensesNoRenovation { get; set; }
-        [Obsolete]
-        public decimal Remainder{ get; set; }
+        //[Obsolete]
+        //public decimal Remainder{ get; set; }
         public IEnumerable<AccountSummary> AccountsSum { get; set; }
     }
 
@@ -51,7 +52,9 @@ namespace Nadlan.ViewModels.Reports
         [Obsolete]
         public decimal Tax { get; set; }
         public decimal NetIncome { get; set; }
+        [Obsolete]
         public decimal BonusExpected { get; set; }
+        [Obsolete]
         public decimal BonusPaid { get; set; }
         public decimal Bonus { get; set; }
         public decimal NetForInvestor { get; set; }

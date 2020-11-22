@@ -10,8 +10,7 @@ namespace Nadlan.Repositories.ApartmentReports
 {
     public class SummaryReportRepository : ApartmentReportRepository
     {
-        //private PurchaseFilters purchaseFilters = new PurchaseFilters();
-        //private NonPurchaseFilters nonPurchaseFilters = new NonPurchaseFilters();
+
         private SpecialFilters specialFilters = new SpecialFilters();
 
         public SummaryReportRepository(NadlanConext conext) : base(conext)
@@ -19,20 +18,13 @@ namespace Nadlan.Repositories.ApartmentReports
 
         }
 
-
-
-
-
         public async Task<SummaryReport> GetSummaryReport(int apartmentId)
         {
-
-            var predicate = GetAllValidTransactionsForReports(apartmentId);
-
             SummaryReport summaryReport = new SummaryReport();
 
-            summaryReport.Investment = GetAccountSum(apartmentId, 13);// Context.Transactions.Where(predicate).Where(a => a.AccountId == 13).Sum(a => a.Amount);
+            summaryReport.Investment = GetAccountSum(apartmentId, 13);
             summaryReport.Distributed = GetAccountSum(apartmentId, 100);
-            summaryReport.BonusPaid = GetAccountSum(apartmentId, 300);
+            //summaryReport.BonusPaid = GetAccountSum(apartmentId, 300);
             summaryReport.NetIncome = await Task.FromResult(GetNetIncome(apartmentId, 0));
 
             Apartment apartment = Context.Apartments.Where(a => a.Id == apartmentId).First();
@@ -43,40 +35,23 @@ namespace Nadlan.Repositories.ApartmentReports
             {
                 summaryReport.ROI = summaryReport.RoiAccumulated / summaryReport.Years;
             }
-            //summaryReport.ROI = CalcROI(apartment, summaryReport);
             summaryReport.RoiForInvestor = summaryReport.ROI;
-
-
 
             //Leipzig - no bonus
             if (apartment.Id != 20)
             {
-                //summaryReport.BonusPaid = await Task.FromResult(bonusPaidLine.Sum(a => a.Amount));
                 const double THRESHOLD = 0.03;
                 //Use compound interest
                 summaryReport.ThresholdAccumulated = CalcAccumulatedThreshold(THRESHOLD, summaryReport.Years);
 
-
-                //if (summaryReport.Years > 1)
-                //{
-                //    summaryReport.ThresholdAccumulated = (decimal)Math.Pow((1 + THRESHOLD), (double)summaryReport.Years) - 1;
-                //}
-                //else
-                //{
-                //    summaryReport.ThresholdAccumulated = (decimal)THRESHOLD * summaryReport.Years;
-                //}
                 //less than threshold - no bonus         
                 if (summaryReport.RoiAccumulated > summaryReport.ThresholdAccumulated)
                 {
-                    // decimal bonusROI_ = (summaryReport.ROI - summaryReport.ThresholdAccumulated) / 2;
                     summaryReport.BonusPercentage = (summaryReport.RoiAccumulated - summaryReport.ThresholdAccumulated) / 2;
-
-                    //summaryReport.RoiForInvestor = (summaryReport.ThresholdAccumulated + bonusROI)/summaryReport.Years;
                     summaryReport.RoiForInvestor = (summaryReport.RoiAccumulated - summaryReport.BonusPercentage) / summaryReport.Years;
                     summaryReport.BonusSoFar = summaryReport.BonusPercentage * summaryReport.Investment;
-                    summaryReport.BonusExpected = -1 * (summaryReport.BonusSoFar + summaryReport.BonusPaid);
+                    //summaryReport.BonusExpected = -1 * (summaryReport.BonusSoFar + summaryReport.BonusPaid);
                 }
-
             }
 
             summaryReport.PredictedROI = CalcPredictedROI(apartmentId, summaryReport.Investment);
@@ -85,10 +60,6 @@ namespace Nadlan.Repositories.ApartmentReports
 
             return summaryReport;
         }
-
-
-
-
 
 
 
@@ -124,6 +95,29 @@ namespace Nadlan.Repositories.ApartmentReports
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//if (summaryReport.Years > 1)
+//{
+//    summaryReport.ThresholdAccumulated = (decimal)Math.Pow((1 + THRESHOLD), (double)summaryReport.Years) - 1;
+//}
+//else
+//{
+//    summaryReport.ThresholdAccumulated = (decimal)THRESHOLD * summaryReport.Years;
+//}
 
 
 ////if (year != 0) basic = t => basic(t) && t.Date.Year == year;

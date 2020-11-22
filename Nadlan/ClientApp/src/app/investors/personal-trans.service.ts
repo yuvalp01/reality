@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IPersonalTransaction, IStakeholder, IInvestorReportOverview } from '../models';
+import { IPersonalTransaction, IStakeholder, IInvestorReportOverview, IPortfolioReport } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -55,5 +55,12 @@ export class PersonalTransService {
     let url = this.baseUrl + `api/reports/GetInvestorReport/${investorAcountId}`;
     return this.httpClient.get<IInvestorReportOverview>(url);
   }
+
+  getPortfoio(investorAcountId: number): Observable<IPortfolioReport[]> {
+
+    let url = this.baseUrl + `api/reports/GetPortfolio/${investorAcountId}`;
+    return this.httpClient.get<IPortfolioReport[]>(url);
+  }
+
 
 }

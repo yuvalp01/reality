@@ -1,5 +1,5 @@
 import { Component, OnInit, SimpleChanges, Output } from "@angular/core";
-import { IInvestorReportOverview, IStakeholder, IPersonalTransaction, ITransaction } from "../../models";
+import { IInvestorReportOverview, IStakeholder, IPersonalTransaction, ITransaction, IPortfolioReport } from "../../models";
 import { PersonalTransService } from "../personal-trans.service";
 import { ActivatedRoute } from "@angular/router";
 import { MatTableDataSource, MatDialog } from "@angular/material";
@@ -26,8 +26,18 @@ export class InvestorReportComponent implements OnInit {
     private dialog: MatDialog) { }
   @Output() stakeholderId: number;
   investorReportOverview: IInvestorReportOverview;
+  portfolioReport: IPortfolioReport[];
   stakeholders: IStakeholder[];
-  portfolioColumns = ['apartment', 'purchaseDate', 'investment', 'distributed', 'pendingProfits', 'profitsSoFar', 'ownership'];//'minimalProfitUpToDate', 'distributed'
+  portfolioColumns = ['apartment', 
+  'purchaseDate', 
+  'investment',
+  //  'distributed',
+  //  'pendingProfits',
+  //   'pendingExpenses',
+  //    'profitsSoFar',
+  //    'pendingBonus',
+     'netProfit',
+      'ownership'];
   selectedTab: number;
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -46,6 +56,10 @@ export class InvestorReportComponent implements OnInit {
     this.investorReportOverview = null;
     this.personalTransService.getInvestorReport(stakeholderId)
       .subscribe(result => this.investorReportOverview = result, error => console.error(error));
+
+    this.personalTransService.getPortfoio(stakeholderId)
+      .subscribe(result => this.portfolioReport = result, error => console.error(error));
+      
     this.loadAllStakeholders();
   }
 
