@@ -20,7 +20,7 @@ namespace Nadlan.Models.Renovation
         public string Link { get; set; }
         public string SerialNumber { get; set; }
         public bool IsDeleted { get; set; }
-
+        public string ItemType { get; set; }
     }
 
 

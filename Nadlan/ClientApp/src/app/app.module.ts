@@ -42,6 +42,7 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-mome
 import { ProductsComponent } from './renovationNew/products/products.component';
 import { ProductFormComponent } from './renovationNew/product-form/product-form.component';
 import { DriveLinkGenComponent } from './shared/drive-link-gen/drive-link-gen.component';
+import { PlanningComponent } from './renovationNew/planning/planning.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -68,6 +69,7 @@ import { DriveLinkGenComponent } from './shared/drive-link-gen/drive-link-gen.co
     ProductsComponent,
     ProductFormComponent,
     DriveLinkGenComponent,
+    PlanningComponent,
 
   ],
   imports: [

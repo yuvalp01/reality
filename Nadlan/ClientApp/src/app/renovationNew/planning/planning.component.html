@@ -1,0 +1,165 @@
+<mat-drawer-container class="example-container" [hasBackdrop]="false">
+    <!-- <mat-drawer #drawer [mode]="mode.value">I'm a drawer</mat-drawer> -->
+    <mat-drawer #drawer mode="side">
+
+        <div id="filter">
+            <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+                <mat-button-toggle (change)="filterType($event.value)" value="work">Work</mat-button-toggle>
+                <mat-button-toggle (change)="filterType($event.value)" value="basic">Basic Products</mat-button-toggle>
+                <mat-button-toggle (change)="filterType($event.value)" value="furniture">Furniture</mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+        <div *ngFor="let product of products">
+            <mat-checkbox disabled [checked]="product.selected">
+                <span [ngClass]="{'selected':product.selected}" (click)="addItem(product)">
+                    {{product.name}}
+                </span>
+
+            </mat-checkbox>
+
+        </div>
+    </mat-drawer>
+    <mat-drawer-content>
+
+        <button mat-raised-button (click)="drawer.toggle()">Show renovation products</button>
+        <span>Total Cost: {{getSum()}}</span>
+
+
+
+
+        <div id="contracts" style="width:100%">
+            <div *ngIf="dataSource.data.length==0" style="margin-left: 50%;;">
+                <mat-spinner diameter="40"></mat-spinner>
+            </div>
+
+            <table mat-table [dataSource]="dataSource" matSort style="width: 100%;" class="mat-elevation-z8">
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                    <td mat-cell *matCellDef="let item">{{item.id}}</td>
+                </ng-container>
+                <ng-container matColumnDef="title">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>title</th>
+                    <td mat-cell *matCellDef="let item">{{item.title}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="units">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>units</th>
+                    <td mat-cell *matCellDef="let item">{{item.units}}</td>
+                </ng-container>
+                <ng-container matColumnDef="cost">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>cost</th>
+                    <td mat-cell *matCellDef="let item">
+
+                        <span *ngIf="!item.isEditMode"> {{item.cost}} </span>
+                        <input *ngIf="item.isEditMode" style="width: 50px; border-radius:10px;" [(ngModel)]="item.cost"
+                            [value]="item.cost" type="number" />
+
+
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="comments">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>comments</th>
+                    <td mat-cell *matCellDef="let item">
+
+                        <span *ngIf="!item.isEditMode">
+                            {{item.comments}}
+                        </span>
+
+                        <mat-form-field *ngIf="item.isEditMode" style="width: 100%;" floatLabel="never">
+                            <textarea matInput (blur)="saveLine(item); item.isEditMode=false" placeholder="Comments"
+                                [value]="item.comments" [(ngModel)]="item.comments"></textarea>
+                        </mat-form-field>
+
+                    </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let item">
+                        <div>
+                            <!-- <button (click)="item.isEditMode=!item.isEditMode" mat-button color="primary">
+                          Edit         </button> -->
+
+                            <mat-icon *ngIf="!item.isEditMode" (click)="item.isEditMode=true" style="cursor: pointer;">
+                                edit
+                            </mat-icon>
+                            <mat-icon *ngIf="item.isEditMode" (click)="saveLine(item)" style="cursor: pointer;">
+                                save
+                            </mat-icon>
+
+
+
+                            <button (click)="removeLine(item.id)" mat-button color="warn">Delete</button>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns">
+                </tr>
+
+            </table>
+
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- 
+
+        <div *ngFor="let line of lines; let i = index">
+            <div class="item">
+
+                <div  
+                style="display: table-row; padding: 10px;">
+                <div matTooltip="Click to edit" style="cursor: pointer;" (click)="line.isEditMode=!line.isEditMode">
+                    {{line.title}}
+                    <mat-icon *ngIf="line.isEditMode"
+                     (click)="saveLine(line);" style="cursor: pointer;">save
+                    </mat-icon> 
+                    <mat-icon (click)="removeLine(line.id)" style="cursor: pointer;">cancel</mat-icon>
+                </div>
+                   price: 
+                    <span *ngIf="!line.isEditMode"> {{line.cost}} </span>
+                    <input *ngIf="line.isEditMode" style="width: 60px; border-radius:10px;" [(ngModel)]="line.cost"
+                        [value]="line.cost" type="number" />
+                    <span *ngIf="!line.isEditMode">{{line.units}}</span>
+                    <input *ngIf="line.isEditMode" style="width: 35px; border-radius:10px;" [(ngModel)]="line.units"
+                        [value]="line.units" type="number" />
+                </div>
+
+                <div style="font-style: italic;" *ngIf="!line.isEditMode">
+                    {{line.comments}}
+                </div>
+                <div>
+
+                    <mat-form-field *ngIf="line.isEditMode" style="width: 100%;" floatLabel="never">
+                        <textarea matInput (blur)="saveLine(line); line.isEditMode=false" placeholder="Comments"
+                            [value]="line.comments" [(ngModel)]="line.comments"></textarea>
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+
+        </div>
+
+ -->
+
+
+    </mat-drawer-content>
+</mat-drawer-container>

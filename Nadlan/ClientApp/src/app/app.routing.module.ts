@@ -12,6 +12,7 @@ import { RenovationOverviewComponent } from './renovationNew/renovation-overview
 import { ContractListComponent } from './contracts/contract-list/contract-list.component';
 import { ContractPaymentsComponent } from './contracts/contract-payments/contract-payments.component';
 import { ProductsComponent } from './renovationNew/products/products.component';
+import { PlanningComponent } from './renovationNew/planning/planning.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,11 @@ import { ProductsComponent } from './renovationNew/products/products.component';
         path: 'products', component: ProductsComponent,
         canActivate: [AuthGuard],
         data: { claimType: ['stella','admin'] }
+      },
+      {
+        path: 'planning', component: PlanningComponent,
+        canActivate: [AuthGuard],
+        data: { claimType: ['admin'] }
       },
       { path: 'contract-list', component: ContractListComponent,
         canActivate: [AuthGuard],

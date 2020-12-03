@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nadlan.Repositories;
 
 namespace Nadlan.Migrations
 {
     [DbContext(typeof(NadlanConext))]
-    partial class NadlanConextModelSnapshot : ModelSnapshot
+    [Migration("20201202105504_productid")]
+    partial class productid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -349,8 +351,6 @@ namespace Nadlan.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
-
                     b.HasIndex("RenovationProjectId");
 
                     b.ToTable("lines","renovation");
@@ -598,11 +598,6 @@ namespace Nadlan.Migrations
 
             modelBuilder.Entity("Nadlan.Models.Renovation.RenovationLine", b =>
                 {
-                    b.HasOne("Nadlan.Models.Renovation.RenovationProduct", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Nadlan.Models.Renovation.RenovationProject", "RenovationProject")
                         .WithMany()
                         .HasForeignKey("RenovationProjectId")

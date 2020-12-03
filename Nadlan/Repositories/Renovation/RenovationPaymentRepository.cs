@@ -132,7 +132,9 @@ namespace Nadlan.Repositories.Renovation
         }
         public Task<RenovationProject> GetRenovationProjectAsync(int projectId)
         {
-            return  Context.RenovationProjects.FindAsync(projectId);
+            return  Context.RenovationProjects
+                .Include(a=>a.Apartment)
+                .FirstOrDefaultAsync(a=>a.Id==projectId);
         }
     }
 }

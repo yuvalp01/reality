@@ -44,3 +44,33 @@
   margin-left: 10px;
   padding-top: 3px;
 }
+
+.text-input
+{
+  width: 100%;
+  border-color: gainsboro;
+  border-style: solid;
+  border-radius: 5px;
+}
+
+.mat-column-actions
+{
+
+  width: 100px !important;
+}
+mat-drawer-content {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%;
+}
+.mat-drawer-container
+{
+  background-color: transparent;
+  border: none;
+}
+.selected
+{
+    color: gray;
+}

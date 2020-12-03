@@ -11,11 +11,15 @@ namespace Nadlan.Models.Renovation
         public RenovationCategory Category { get; set; }
         public string Comments { get; set; }
         public decimal Cost { get; set; }
+        public int Units { get; set; }
         public RenovationProject RenovationProject { get; set; }
         public int RenovationProjectId { get; set; }
         public bool IsCompleted { get; set; }
-        //[ForeignKey("Id")]
-        //public virtual ICollection<Message> Messages { get; set; }
+        public bool IsDeleted { get; set; }
+
+        public RenovationProduct Product { get; set; }
+        public int ProductId { get; set; }
+
     }
 
     public enum RenovationCategory

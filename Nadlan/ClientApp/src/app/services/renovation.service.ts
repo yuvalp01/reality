@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class RenovationService {
 
+
   options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
   controller = 'api/renovation';
 
@@ -64,6 +65,21 @@ export class RenovationService {
   }
 
 
+  deleteLine(lineId: number): Observable<number> {
+    return this.httpClient.delete<number>(`${this.baseUrl}/${this.controller}/lines/${lineId}`, this.options);
+
+  }
+
+  updateProject(project: IRenovationProject) {
+    return this.httpClient.put<IRenovationProject>(`${this.baseUrl}/api/renovation/project`, project, this.options);
+
+  }
+
+
+
+  addLine(line: IRenovationLine): Observable<IRenovationLine> {
+    return this.httpClient.post<IRenovationLine>(`${this.baseUrl}/api/renovation/lines`, line, this.options);
+  }
 
 
 
@@ -71,9 +87,18 @@ export class RenovationService {
   getProducts(): Observable<IRenovationProduct[]> {
     return this.httpClient.get<IRenovationProduct[]>(`${this.baseUrl}/${this.controller}/products`)
   }
+
+  getProductByType(itemType: string):Observable<IRenovationProduct[]> {
+    return this.httpClient.get<IRenovationProduct[]>(`${this.baseUrl}/${this.controller}/products/byType/${itemType}`);
+  }
+
   getProductById(id: number):Observable<IRenovationProduct> {
     return this.httpClient.get<IRenovationProduct>(`${this.baseUrl}/${this.controller}/products/${id}`);
   }
+
+
+
+
   deleteProduct(id: number):Observable<{}> {
     return this.httpClient.delete<IRenovationProduct>(`${this.baseUrl}/${this.controller}/products/${id}`, this.options);
   }

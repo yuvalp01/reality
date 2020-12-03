@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nadlan.Repositories;
 
 namespace Nadlan.Migrations
 {
     [DbContext(typeof(NadlanConext))]
-    partial class NadlanConextModelSnapshot : ModelSnapshot
+    [Migration("20201128132236_isdelete")]
+    partial class isdelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -339,17 +341,11 @@ namespace Nadlan.Migrations
 
                     b.Property<bool>("IsDeleted");
 
-                    b.Property<int>("ProductId");
-
                     b.Property<int>("RenovationProjectId");
 
                     b.Property<string>("Title");
 
-                    b.Property<int>("Units");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
 
                     b.HasIndex("RenovationProjectId");
 
@@ -598,11 +594,6 @@ namespace Nadlan.Migrations
 
             modelBuilder.Entity("Nadlan.Models.Renovation.RenovationLine", b =>
                 {
-                    b.HasOne("Nadlan.Models.Renovation.RenovationProduct", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Nadlan.Models.Renovation.RenovationProject", "RenovationProject")
                         .WithMany()
                         .HasForeignKey("RenovationProjectId")

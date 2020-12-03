@@ -21,9 +21,19 @@ namespace Nadlan.Repositories.Renovation
         {
             return await Context.RenovationProducts
                 .OrderByDescending(a => a.Id)
-                //.Where(a=>!a.IsDeleted)
+                .Where(a=>!a.IsDeleted)
                 .ToListAsync();
         }
+
+        internal async Task<List<RenovationProduct>> GetByTypeAsync(string itemType)
+        {
+            return await Context.RenovationProducts
+                .OrderByDescending(a => a.Id)
+                .Where(a => !a.IsDeleted)
+                .Where(a => a.ItemType== itemType)
+                .ToListAsync();
+        }
+
 
         public Task<RenovationProduct> GetByIdAsync(int id)
         {
@@ -45,7 +55,6 @@ namespace Nadlan.Repositories.Renovation
 
         public async Task SoftDeleteAsync(int renovationProductId)
         {
-            //throw new NotImplementedException("delete only direcly in db with boolean flag");
             var renovationProduct = await GetByIdAsync(renovationProductId);
             renovationProduct.IsDeleted = true;
             await UpdateAsync(renovationProduct);

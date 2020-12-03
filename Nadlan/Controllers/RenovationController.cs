@@ -16,11 +16,13 @@ namespace Nadlan.Controllers
         //private readonly NadlanConext _context;
         private readonly RenovationRepositoryWrapper _repositoryWraper;
         private readonly IMapper _mapper;
+        private readonly NadlanConext _context;
 
         public RenovationController(NadlanConext context, IMapper mapper)
         {
             _repositoryWraper = new RenovationRepositoryWrapper(context);
             _mapper = mapper;
+            _context = context;
         }
 
 
@@ -56,22 +58,6 @@ namespace Nadlan.Controllers
             var products = await _repositoryWraper.RenovationProductRepository.GetAllAsync();
             if (products == null) return NotFound();
             return Ok(products);
-            //     .GetPaymentByIdAsync(id);
-            //var payment = new List<RenovationProduct>();
-            //payment.Add(new RenovationProduct
-            //{
-            //    Id = 1,
-            //    Description = "test description",
-            //    Link = "https://www.google.com",
-            //    Name = "test",
-            //    PhotoUrl = "url",
-            //    Price = 12,
-            //    SerialNumber = "345sd345fdsf",
-            //    Store = "IKEA"
-
-            //});
-            //if (payment == null) return NotFound();
-            //return Ok(payment);
         }
         [HttpGet("products/{id}")]
         public async Task<IActionResult> GetRenovationProductsById([FromRoute] int id)
@@ -81,6 +67,17 @@ namespace Nadlan.Controllers
             if (products == null) return NotFound();
             return Ok(products);
         }
+
+        [HttpGet("products/byType/{itemType}")]
+        public async Task<IActionResult> GetRenovationProductsByStore([FromRoute] string itemType)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var products = await _repositoryWraper.RenovationProductRepository.GetByTypeAsync(itemType);
+            if (products == null) return NotFound();
+            return Ok(products);
+        }
+
+
         [HttpPost("products")]
         public async Task<IActionResult> AddfProduct([FromBody] RenovationProduct product)
         { 
@@ -100,8 +97,21 @@ namespace Nadlan.Controllers
             return NoContent();
         }
 
+
+        [HttpPut("project")]
+        public async Task<IActionResult> UpdateProject([FromBody] RenovationProject project)
+        {
+
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            _context.RenovationProjects.Update(project);
+            await _context.SaveChangesAsync();
+            if (project == null) return NotFound();
+
+            return NoContent();
+        }
+
         [HttpDelete("products/{id}")]
-        public async Task<IActionResult> DeleteProduct([FromBody] int id)
+        public async Task<IActionResult> DeleteProduct([FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             await _repositoryWraper.RenovationProductRepository.SoftDeleteAsync(id);
@@ -177,7 +187,6 @@ namespace Nadlan.Controllers
                 return NotFound();
             }
             return Ok();
-            // return CreatedAtAction("PaymentUpdated", new { id = payment.Id },payment);
 
         }
 
@@ -217,40 +226,50 @@ namespace Nadlan.Controllers
         [HttpGet("lines/{renovationProjectId}")]
         public async Task<IActionResult> GetRenovationLines([FromRoute] int renovationProjectId)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            // var mockRepo = new RenovationLineRepositoryMock();
-            var renovationLines = await _repositoryWraper.RenovationLineRepository
-                 .GetLinesAsync(renovationProjectId);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            if (renovationLines == null)
-            {
-                return NotFound();
-            }
+            var renovationLines = await _repositoryWraper.RenovationLineRepository
+                 .GetLinesAsyncOrderByCategory(renovationProjectId);
+
+            if (renovationLines == null) return NotFound();
 
             return Ok(renovationLines);
         }
 
-        [HttpGet("lines_/{renovationProjectId}")]
-        public async Task<IActionResult> GetRenovationLines_([FromRoute] int renovationProjectId)
+        [HttpPost("lines")]
+        public async Task<IActionResult> AddLine([FromBody] RenovationLine line)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var renovationLines = await _repositoryWraper.RenovationLineRepository
-                 .GetLinesByProjectIdAsync(renovationProjectId);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            await _repositoryWraper.RenovationLineRepository.CreateAsync(line);
+            if (line.Id == 0) return NotFound();
+            return Ok();
 
-            if (renovationLines == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(renovationLines);
         }
 
+        //[HttpGet("lines_/{renovationProjectId}")]
+        //public async Task<IActionResult> GetRenovationLines_([FromRoute] int renovationProjectId)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+        //    var renovationLines = await _repositoryWraper.RenovationLineRepository
+        //         .GetLinesByProjectIdAsync(renovationProjectId);
+
+        //    if (renovationLines == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return Ok(renovationLines);
+        //}
+        [HttpDelete("lines/{lineId}")]
+        public async Task<IActionResult> DeleteLine([FromRoute] int lineId)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            await _repositoryWraper.RenovationLineRepository.SoftDeleteAsync(lineId);
+            return Ok();
+        }
 
         [HttpPut("line")]
         public async Task<IActionResult> UpdateLine([FromBody] RenovationLine line)

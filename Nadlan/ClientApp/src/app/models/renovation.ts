@@ -5,10 +5,14 @@ export interface IRenovationLine {
   title: string;
   category: number;
   cost: number;
+  units: number;
   //totalPrice: number;
   comments: string;
   renovationProject: IRenovationProject;
+  renovationProjectId: number;
   isCompleted: boolean;
+  isEditMode:boolean;
+  productId:number;
 }
 export interface IRenovationProject {
   id: number;
@@ -47,53 +51,8 @@ export interface IRenovationProduct {
   photoUrl: string;
   link: string;
   serialNumber: string;
+  itemType: string;
+  selectedItems: number;
 
 }
 
-
-
-
-
-
-
-// export interface ILine {
-//   id: number;
-//   title: Date;
-//   category: number;
-//   workCost: boolean;
-//   itemsTotalPrice: boolean;
-//   totalPrice: boolean;
-//   comments: number;
-//   items: IItem[];
-
-// }
-// export interface IItem {
-//   id: number;
-//   description: string;
-//   quantity: number;
-//   product: IProduct;
-// }
-// export interface IProduct {
-//   id: number;
-//   name: string;
-//   price: number;
-//   reference: string;
-//   link: string;
-
-// }
-
-// export interface IItemDto {
-//   itemId: number;
-//   lineId: number;
-//   lineTitle: string;
-//   lineCategory: number;
-//   itemDescription: string;
-//   productId: number;
-//   productName: string;
-//   quantity: number;
-//   price: number;
-//   totalPrice: number;
-//   reference: string;
-//   link: string;
-
-// }
