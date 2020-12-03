@@ -184,6 +184,43 @@ Loading...
         <mat-card-title>Virtual Account</mat-card-title>
         <mat-card-subtitle>This is where we settle the accounts between ourselves.</mat-card-subtitle>
 
+<div *hasClaim="['admin']">
+
+
+<span>Pending Profits: </span> 
+
+<span [ngClass]="{
+  positive: isPositive(investorReportOverview.totalPendingProfits),
+  negative: !isPositive(investorReportOverview.totalPendingProfits)}">
+        {{investorReportOverview.totalPendingProfits | currency:'EUR' : number:'1.0-0'}}</span>
+<br/>
+<span>Pending Bonus: </span>
+
+<span [ngClass]="{
+  positive: isPositive(investorReportOverview.totalPendingBonus),
+  negative: !isPositive(investorReportOverview.totalPendingBonus)}">
+        {{investorReportOverview.totalPendingBonus | currency:'EUR' : number:'1.0-0'}}</span>
+<br/>
+<span>Pending Expenses: </span>
+
+
+<span style="cursor: pointer;" (click)="showPendingExpenses()"
+ [ngClass]="{
+  positive: isPositive(investorReportOverview.totalPendingExpenses),
+  negative: !isPositive(investorReportOverview.totalPendingExpenses)}">
+        {{investorReportOverview.totalPendingExpenses | currency:'EUR' : number:'1.0-0'}}</span>
+        <br/>
+    
+        <span>Actual Balace:</span>
+        <span>
+          {{investorReportOverview.cashBalance
+            +investorReportOverview.totalPendingProfits
+            +investorReportOverview.totalPendingBonus
+            +investorReportOverview.totalPendingExpenses
+            | currency:'EUR' : number:'1.0-0'}}
+          </span>
+</div>
+
         <app-personal-trans [stakeholderId]="stakeholderId" [editable]="false"></app-personal-trans>
       </mat-card>
     </mat-tab>

@@ -32,10 +32,14 @@ namespace Nadlan.Repositories
 
                 investorReportOverview.TotalInvestment = portfolioReportLines.Sum(a => a.Investment);
                 investorReportOverview.TotalPendingProfits = portfolioReportLines.Sum(a => a.PendingProfits);
-                investorReportOverview.TotalDistribution = portfolioReportLines.Sum(a => a.Distributed);
+                investorReportOverview.TotalPendingBonus = portfolioReportLines.Sum(a => a.PendingBonus);
+                //investorReportOverview.TotalDistribution = portfolioReportLines.Sum(a => a.Distributed);
                 investorReportOverview.TotalNetProfit = portfolioReportLines.Sum(a => a.NetProfit);
-                investorReportOverview.TotalBalace = investorReportOverview.CashBalance
-                    + investorReportOverview.TotalPendingProfits + investorReportOverview.TotalPendingExpenses;
+                investorReportOverview.TotalPendingExpenses = portfolioReportLines.Sum(a => a.PendingExpenses);
+                investorReportOverview.TotalBalace = 
+                    investorReportOverview.CashBalance
+                    + investorReportOverview.TotalPendingProfits
+                    + investorReportOverview.TotalPendingExpenses;
                 return investorReportOverview;
             }
             catch (Exception)
@@ -92,12 +96,13 @@ namespace Nadlan.Repositories
                     out netIncome);
                 portfolioLineReport.Investment = investment * portfolioLine.Percentage; //GetTotalInvestment(portfolioLine) * portfolioLine.Percentage;
                 portfolioLineReport.NetProfit = (netIncome - bonusSoFar) * portfolioLine.Percentage;
-
+           
                 //In a partenership apartments all expenses included in the apartment funds
                 if (partnershipApartments.Contains(portfolioLine.ApartmentId))
                 {
-                    portfolioLineReport.PendingProfits = GetPendingProfit(portfolioLine) * portfolioLine.Percentage;
                     portfolioLineReport.Distributed = GetGeneralDistributionPerInvestor(portfolioLine) * -1 * portfolioLine.Percentage;
+                    //portfolioLineReport.PendingProfits = GetPendingProfit(portfolioLine) * portfolioLine.Percentage;
+                    portfolioLineReport.PendingProfits = portfolioLineReport.NetProfit - portfolioLineReport.Distributed;
                     portfolioLineReport.PendingExpenses = 0;
                 }
                 //In full ownership apartments there is no need in distribution because it's 100% ownership
@@ -106,8 +111,11 @@ namespace Nadlan.Repositories
                 else
                 {
                     portfolioLineReport.PendingProfits = 0;
-                    portfolioLineReport.Distributed = GetPendingProfit(portfolioLine) * portfolioLine.Percentage;
+                    portfolioLineReport.Distributed = netIncome * portfolioLine.Percentage;
                     portfolioLineReport.PendingExpenses = GetPendingExpenses(portfolioLine) * portfolioLine.Percentage;
+                    var bonusPaid = _apartmentReportRepository.GetAccountSum(portfolioLine.ApartmentId, 300);
+                    portfolioLineReport.PendingBonus = -1 * (bonusSoFar + bonusPaid) * portfolioLine.Percentage;
+
                     //var bonusPaid = _apartmentReportRepository.GetAccountSum(portfolioLine.ApartmentId, 300);
                     //portfolioLineReport.PendingBonus = GetPendingBonus(portfolioLine) - bonusPaid;
                 }

@@ -59,6 +59,7 @@ export interface IInvestorReportOverview {
 
   cashBalance: number,
   totalPendingProfits: number,
+  totalPendingBonus: number,
   totalPendingExpenses: number,
   totalBalace: number,
   portfolioLines: IPortfolioReport[],
