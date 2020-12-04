@@ -50,6 +50,7 @@
               <a mat-button class="nav-link text-dark" [matMenuTriggerFor]="menu">Renovation</a>
               <mat-menu #menu="matMenu">
                 <!-- <button *hasClaim="['admin']" [routerLink]='["/planning"]' class="nav-link text-dark" mat-menu-item>Planning</button> -->
+                <button *hasClaim="['admin']" [routerLink]='["/renovation-overview",3]' class="nav-link text-dark" mat-menu-item>Ionias</button>
                 <button *hasClaim="['stella','admin']" [routerLink]='["/products"]' class="nav-link text-dark" mat-menu-item>Products</button>
                 <button *hasClaim="['stella','admin']" [routerLink]='["/renovation-overview",1]' class="nav-link text-dark" mat-menu-item>Mavromichali</button>
                 <button *hasClaim="['stella','admin']" [routerLink]='["/renovation-overview",2]' class="nav-link text-dark" mat-menu-item>Makedonias</button>

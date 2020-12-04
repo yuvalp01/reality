@@ -11,7 +11,13 @@ import { ProductFormComponent } from '../product-form/product-form.component';
 })
 export class ProductsComponent implements OnInit {
   dataSource = new MatTableDataSource<IRenovationProduct>();
-  displayedColumns: string[] = ['id', 'name', 'description', 'store', 'price', 'photoUrl', 'link', 'serialNumber', 'actions'];
+  displayedColumns: string[] = ['id', 'name', 'description','type', 'store', 'price', 'photoUrl', 'link', 'serialNumber', 'actions'];
+
+  show_work: boolean = true;
+  show_furniture: boolean = true;
+  show_amenity: boolean = true;
+  show_appliances: boolean = true;
+  show_fixtures: boolean = true;
 
   constructor(private renovationService: RenovationService,
     private snackBar: MatSnackBar,
@@ -27,6 +33,9 @@ export class ProductsComponent implements OnInit {
     this.renovationService.getProducts().subscribe({
       next: (result) => {
         this.dataSource.data = result;
+        this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+          return data.itemType == filter;
+        };
       },
       error: (err) => console.error(err)
     });
@@ -39,6 +48,62 @@ export class ProductsComponent implements OnInit {
     });
     dialogLocal.componentInstance.refreshEmitter.subscribe(() => this.loadList())
   }
+
+  switchFilter(type) {
+    this.dataSource.filter =type;
+    switch (type) {
+      case 'work':
+        this.show_work = true;
+        //turn off other filters
+        this.show_furniture = false;
+        this.show_amenity = false;
+        this.show_appliances = false;
+        this.show_fixtures = false;
+        break;
+      case 'furniture':
+        this.show_furniture = true;
+        //turn off other filters
+        this.show_work = false;
+        this.show_amenity = false;
+        this.show_appliances = false;
+        this.show_fixtures = false;
+        break;
+      case 'amenity':
+        this.show_amenity = true;
+        //turn off other filters
+        this.show_work = false;
+        this.show_furniture = false;
+        this.show_appliances = false;
+        this.show_fixtures = false;
+        break;
+      case 'appliances':
+        this.show_appliances = true;
+        //turn off other filters
+        this.show_work = false;
+        this.show_furniture = false;
+        this.show_amenity = false;
+        this.show_fixtures = false;
+        break;
+        case 'other':
+          this.show_fixtures = true;
+          //turn off other filters
+          this.show_work = false;
+          this.show_furniture = false;
+          this.show_appliances = false;
+          this.show_amenity = false;
+          break;
+      default:
+        this.show_appliances = true;
+        this.show_amenity = true;
+        this.show_work = true;
+        this.show_furniture = true;
+        this.show_fixtures = true;
+        break;
+
+    }
+  }
+
+
 
   delete(id: number) {
     if (confirm("Are you sure you want to delete?"))

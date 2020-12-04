@@ -24,6 +24,23 @@
         </mat-form-field>
       </fieldset>
       <fieldset>
+        <mat-form-field  appearance="fill"  style="width: 100%">
+          <mat-label>Type</mat-label>
+          <mat-select formControlName="itemType">
+
+            <mat-option>None</mat-option>
+            <mat-option value="work">Work</mat-option>
+            <mat-option value="fixtures">Fixtures</mat-option>
+            <mat-option value="furniture">Furniture</mat-option>
+            <mat-option value="amenities">Amenities</mat-option>
+            <mat-option value="appliances">Appliances</mat-option>
+            <mat-option value="other">Other</mat-option>
+
+          </mat-select>
+        </mat-form-field>
+        
+      </fieldset>
+      <fieldset>
         <mat-form-field style="width: 100%" appearance="fill">
           <mat-label>Price</mat-label>
           <input formControlName="price" matInput />
@@ -32,11 +49,6 @@
       <fieldset>
         <mat-form-field style="width: 100%" appearance="fill">
           <mat-label>Photo Url</mat-label>
-          <!-- <a matTooltip="Open drive folder"
-          target="_blank" 
-          href="https://drive.google.com/drive/folders/14ZoDWIwCZx5ksTyJCsxvauPKPpGfomVr">
-          <mat-icon>link</mat-icon></a> -->
-          
          <input style="display: none;"
           formControlName="photoUrl" matInput 
            placeholder="A link to a photo in the Drive folder"/>
@@ -44,17 +56,10 @@
            target="_blank" 
            href="https://drive.google.com/drive/folders/14ZoDWIwCZx5ksTyJCsxvauPKPpGfomVr">
            <mat-icon>link</mat-icon></a>
-              <!-- 
-             <img *ngIf="productForm.controls.photoUrl"  style="width: 20px;" src="{{createDriveLink(productForm.controls.photoUrl.value)}}">
-              -->
              <drive-link-gen  [originalLink]= "productForm.controls.photoUrl.value" 
              (linkGeneratedEvent)="updatePhotoUrl($event)">
-
              </drive-link-gen>
-
-      <!-- <span>
-         {{driveLinkGen.generatedLink}}
-       </span> -->
+      
             </mat-form-field>
 
       </fieldset>

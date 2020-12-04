@@ -2,12 +2,11 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { RenovationService } from '../../services/renovation.service';
 import { TransactionService } from '../../services/transaction.service';
 import { IRenovationLine, IRenovationProduct, IRenovationProject } from '../../models';
-import { MatTableDataSource, MatDialog } from '@angular/material';
+import { MatTableDataSource, MatDialog, MatSort, MatSortable } from '@angular/material';
 import { IRenovationPayment, ITransaction } from '../../models';
 import { PaymentFormComponent } from '../payment-form/payment-form.component';
 import { ExcelService } from '../../services/excel.service';
 import { ActivatedRoute } from '@angular/router';
-import { Ptor } from 'protractor';
 import { SecurityService } from 'src/app/security/security.service';
 
 @Component({
@@ -17,6 +16,7 @@ import { SecurityService } from 'src/app/security/security.service';
 })
 export class RenovationOverviewComponent implements OnInit {
 
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
   constructor(private renovationService: RenovationService,
     private transactionService: TransactionService,
     private securityService: SecurityService,
@@ -31,6 +31,7 @@ export class RenovationOverviewComponent implements OnInit {
 
   project: IRenovationProject;
   products: IRenovationProduct[];
+  filteredProducts: IRenovationProduct[];
   totalCost: number = 0;
   totalPaymentsPlanned: number = 0;
   totalPaymentsDone: number = 0;
@@ -40,9 +41,9 @@ export class RenovationOverviewComponent implements OnInit {
   getRenovationPayments: IRenovationPayment[];
   progressPercent: string = '0%';
   productType = 'work';
-
-  // PROJECT_ID: number = 2;
   projectId: number = 0;
+
+
   ngOnInit() {
     this.route.paramMap.subscribe(a => {
       this.projectId = +a.get('projectId')
@@ -52,16 +53,41 @@ export class RenovationOverviewComponent implements OnInit {
 
   loadData(projectId: number) {
 
-    if (this.securityService.securityObject.claims.findIndex(a=>a.claimType=='admin')==-1) {
+    if (this.securityService.securityObject.claims.findIndex(a => a.claimType == 'admin') == -1) {
       this.displayedColumns_lines.pop();
     }
     this.loadProject(projectId);
     this.loadPayments(projectId, null);
     this.loadLines(projectId);
-   }
+  }
 
+  // ngAfterViewInit() {
+  //   this.dataSourceLines.sort = this.sort;
+  // }
 
-  filteredProducts: IRenovationProduct[];
+  loadLines(projectId: number) {
+    this.renovationService.getRenovationLines(projectId)
+      .subscribe(result => {
+        let lines = result
+        this.totalCost = lines.reduce((total, line) => total + line.cost, 0);
+        // if(this.planningMode){
+        //   this.sort.sort(({ id: 'id', start: 'desc'}) as MatSortable);
+        // }
+        // else{
+        //   this.sort.sort(({ id: 'category', start: 'asc'}) as MatSortable);
+        // }
+        this.dataSourceLines.sort = this.sort;
+        this.dataSourceLines.data = lines;
+        this.calcCompletedLines();
+        if (this.products == undefined) {
+          this.loadProducts();
+        }
+      }, error => console.error(error));
+  }
+
+//   sortData(obj){
+// debugger;
+//   }
   filterType(type) {
     this.productType = type;
     this.filteredProducts = this.products.filter(a => a.itemType == this.productType);
@@ -105,19 +131,9 @@ export class RenovationOverviewComponent implements OnInit {
   }
 
 
-  loadLines(projectId: number) {
-    this.renovationService.getRenovationLines(projectId)
-      .subscribe(result => {
-        let lines = result
-        this.totalCost = lines.reduce((total, line) => total + line.cost, 0);
-        this.dataSourceLines.data = lines;
-        this.calcCompletedLines();
-        if (this.products == undefined) {
-          this.loadProducts();
-        }
-      }, error => console.error(error));
+ 
 
-  }
+
 
   loadPayments(projectId, newBalance: number) {
     this.renovationService.getRenovationPayments(projectId)
@@ -188,7 +204,6 @@ export class RenovationOverviewComponent implements OnInit {
     product.selectedItems--;
   }
 
-  // @ViewChild('test',{static:false}) test:ElementRef; 
 
   saveProject(project: IRenovationProject) {
     // console.log(this.test.nativeElement.value);
@@ -210,6 +225,14 @@ export class RenovationOverviewComponent implements OnInit {
   planningMode: boolean;
   itemEditMode() {
     this.planningMode = !this.planningMode;
+    this.sort.sort(({ id: 'id', start: 'desc'}) as MatSortable);
+
+    // if (this.planningMode) {
+    //   this.dataSourceLines.data =   this.dataSourceLines.data.sort(a => a.productId);
+    // }
+    // else {
+    //   this.dataSourceLines.data= this.dataSourceLines.data.sort(a => a.category);
+    // }
   }
 
 
@@ -243,15 +266,6 @@ export class RenovationOverviewComponent implements OnInit {
     line.isEditMode = false;
     this.totalCost = this.dataSourceLines.data.reduce((total, line) => total + line.cost, 0);
   }
-
-
-  // loadLines() {
-  //   this.renovationService.getRenovationLines(3).subscribe({
-  //     next: (result) => { this.lines = result; this.dataSource.data = result },
-  //     error: (err) => console.error(err)
-  //   });
-  // }
-
 
 
 

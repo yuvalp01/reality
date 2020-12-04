@@ -1,0 +1,11 @@
+.show-type {
+    color: gray;
+    background-color: #3f51b5ad;
+    cursor: pointer;
+  }
+  
+  .hide-type {
+    color: white;
+    background-color: #3f51b5;
+    cursor: pointer;
+  }
