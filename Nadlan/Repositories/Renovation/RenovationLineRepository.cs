@@ -13,23 +13,26 @@ namespace Nadlan.Repositories.Renovation
         {
         }
 
-        public Task<List<RenovationLine>> GetLinesAsyncOrderByCategory(int projectId)
-        {
-            var lines = Context.RenovationLines
-                 .Where(a => a.IsDeleted == false)
-                 .Where(a => a.RenovationProjectId == projectId)
-                 .OrderByDescending(a=>a.Id)
-                 .ToListAsync();
+        //public Task<List<RenovationLine>> GetLinesAsyncOrderByCategory(int projectId)
+        //{
+        //    var lines = Context.RenovationLines
+        //         .Include(a=>a.Product)
+        //         .Where(a => a.IsDeleted == false)
+        //         .Where(a => a.RenovationProjectId == projectId)
+        //         .OrderByDescending(a=>a.Id)
+        //         .ToListAsync();
 
-            return lines;
-        }
+        //    return lines;
+        //}
 
         public Task<List<RenovationLine>> GetLinesAsync(int projectId)
         {
             var lines = Context.RenovationLines
+                 .Include(a => a.Product)
                  .Where(a => a.IsDeleted == false)
                  .Where(a => a.RenovationProjectId == projectId)
-                 .OrderBy(a => a.Category)
+                // .OrderBy(a=>a.Product.Id)
+                 .OrderByDescending(a => a.Id)
                  .ToListAsync();
 
             return lines;

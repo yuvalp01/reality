@@ -21,7 +21,14 @@ namespace Nadlan.Models.Renovation
         public string Comments { get; set; }
         //public Transaction Transaction { get; set; }
         public int TransactionId { get; set; }
+        public Stage Stage { get; set; }
     }
 
+    public enum Stage
+    {
+        Planning = 10,
+        InProgress = 20,
+        Done = 30
 
+    }
 }

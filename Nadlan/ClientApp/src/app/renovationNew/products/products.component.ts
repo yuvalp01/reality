@@ -15,7 +15,7 @@ export class ProductsComponent implements OnInit {
 
   show_work: boolean = true;
   show_furniture: boolean = true;
-  show_amenity: boolean = true;
+  show_amenities: boolean = true;
   show_appliances: boolean = true;
   show_fixtures: boolean = true;
 
@@ -56,7 +56,7 @@ export class ProductsComponent implements OnInit {
         this.show_work = true;
         //turn off other filters
         this.show_furniture = false;
-        this.show_amenity = false;
+        this.show_amenities = false;
         this.show_appliances = false;
         this.show_fixtures = false;
         break;
@@ -64,12 +64,12 @@ export class ProductsComponent implements OnInit {
         this.show_furniture = true;
         //turn off other filters
         this.show_work = false;
-        this.show_amenity = false;
+        this.show_amenities = false;
         this.show_appliances = false;
         this.show_fixtures = false;
         break;
-      case 'amenity':
-        this.show_amenity = true;
+      case 'amenities':
+        this.show_amenities = true;
         //turn off other filters
         this.show_work = false;
         this.show_furniture = false;
@@ -81,20 +81,20 @@ export class ProductsComponent implements OnInit {
         //turn off other filters
         this.show_work = false;
         this.show_furniture = false;
-        this.show_amenity = false;
+        this.show_amenities = false;
         this.show_fixtures = false;
         break;
-        case 'other':
+        case 'fixtures':
           this.show_fixtures = true;
           //turn off other filters
           this.show_work = false;
           this.show_furniture = false;
           this.show_appliances = false;
-          this.show_amenity = false;
+          this.show_amenities = false;
           break;
       default:
         this.show_appliances = true;
-        this.show_amenity = true;
+        this.show_amenities = true;
         this.show_work = true;
         this.show_furniture = true;
         this.show_fixtures = true;

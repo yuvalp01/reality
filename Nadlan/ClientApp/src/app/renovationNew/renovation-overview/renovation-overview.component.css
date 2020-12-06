@@ -80,3 +80,38 @@ mat-drawer-content {
 {
     color: gray;
 }
+
+tr.extra
+{
+  background-color: lightyellow !important;
+}
+
+.statusChip
+{
+  border-radius: 5px;
+  font-weight: bold;
+  color: beige;
+  font-size: 13px;
+  padding: 2px;
+}
+.plan
+{
+  background-color: dodgerblue;
+}
+.ongoing
+{
+  background-color: darkseagreen;
+}
+.done
+{
+  /* cadetblue */
+  background-color: lightcoral;
+}
+
+.button-container {
+  display: inline;
+  justify-content: center;
+  width: 120px;
+  cursor: pointer;
+
+}

@@ -1,3 +1,4 @@
+import { NumberValueAccessor } from "@angular/forms";
 import { IApartment, ITransaction } from "./basic";
 
 export interface IRenovationLine {
@@ -13,6 +14,7 @@ export interface IRenovationLine {
   isCompleted: boolean;
   isEditMode:boolean;
   productId:number;
+  insertStage:number;
 }
 export interface IRenovationProject {
   id: number;
@@ -24,20 +26,18 @@ export interface IRenovationProject {
   apartment: IApartment;
   peneltyPerDay: number;
   transactionId: number;
+  stage:number
 }
 
 export interface IRenovationPayment {
   id: number;
   title: string;
   amount: number;
-  //cost: number;
   criteria: string;
   comments: string;
   datePayment: Date;
   renovationProjectId: number;
   renovationProject: IRenovationProject;
-  // checkIdWriten: boolean;
-  // checkInvoiceScanned: boolean;
   isConfirmed: boolean;
   
 }

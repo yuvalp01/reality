@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nadlan.Models.Renovation;
 using Nadlan.Repositories;
@@ -229,7 +230,7 @@ namespace Nadlan.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var renovationLines = await _repositoryWraper.RenovationLineRepository
-                 .GetLinesAsyncOrderByCategory(renovationProjectId);
+                 .GetLinesAsync(renovationProjectId);
 
             if (renovationLines == null) return NotFound();
 

@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
   navigateByUser(userName:string) {
     switch (userName) { 
       case 'yuval':
-        this.router.navigateByUrl(`/expenses`);
+        this.router.navigateByUrl(`/renovation-overview`);
         break;
       case 'stella':
         this.router.navigateByUrl(`/issue-list`);

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { RenovationService } from '../../services/renovation.service';
 import { TransactionService } from '../../services/transaction.service';
 import { IRenovationLine, IRenovationProduct, IRenovationProject } from '../../models';
@@ -26,8 +26,10 @@ export class RenovationOverviewComponent implements OnInit {
   }
   dataSourceLines = new MatTableDataSource<IRenovationLine>();
   dataSourcePayments = new MatTableDataSource<IRenovationPayment>();
-  displayedColumns_lines: string[] = ['category', 'title', 'units', 'cost', 'comments', 'isCompleted', 'actions'];
+  displayedColumns_lines: string[] = ['itemType', 'title', 'units', 'cost', 'comments', 'isCompleted','actions'];
+  displayedColumns_lines_filtered:string[];
   displayedColumns_payments: string[] = ['title', 'criteria', 'amount', 'comments', 'datePayment', 'checkIdWriten', 'checkInvoiceScanned', 'checkCriteriaMet', 'actions'];
+
 
   project: IRenovationProject;
   products: IRenovationProduct[];
@@ -53,12 +55,9 @@ export class RenovationOverviewComponent implements OnInit {
 
   loadData(projectId: number) {
 
-    if (this.securityService.securityObject.claims.findIndex(a => a.claimType == 'admin') == -1) {
-      this.displayedColumns_lines.pop();
-    }
     this.loadProject(projectId);
     this.loadPayments(projectId, null);
-    this.loadLines(projectId);
+    //this.loadLines(projectId);
   }
 
   // ngAfterViewInit() {
@@ -76,6 +75,16 @@ export class RenovationOverviewComponent implements OnInit {
         // else{
         //   this.sort.sort(({ id: 'category', start: 'asc'}) as MatSortable);
         // }
+        if (
+          //  this.securityService.securityObject.claims.findIndex(a => a.claimType == 'admin') == -1 ||
+          this.project.stage != 30) {
+            this.displayedColumns_lines_filtered = this.displayedColumns_lines;
+          // this.displayedColumns_lines.push('actions');
+          }
+          else{
+            this.displayedColumns_lines_filtered = this.displayedColumns_lines.filter(a=>a!='actions');
+            //this.displayedColumns_lines.splice(this.displayedColumns_lines.indexOf('actions'),)
+          }
         this.dataSourceLines.sort = this.sort;
         this.dataSourceLines.data = lines;
         this.calcCompletedLines();
@@ -85,9 +94,9 @@ export class RenovationOverviewComponent implements OnInit {
       }, error => console.error(error));
   }
 
-//   sortData(obj){
-// debugger;
-//   }
+  //   sortData(obj){
+  // debugger;
+  //   }
   filterType(type) {
     this.productType = type;
     this.filteredProducts = this.products.filter(a => a.itemType == this.productType);
@@ -105,7 +114,10 @@ export class RenovationOverviewComponent implements OnInit {
   afterProductsLoad(result: IRenovationProduct[]) {
     this.products = result
     this.products.forEach(a => {
-      a.selectedItems = this.dataSourceLines.data.filter(l => l.productId == a.id).length;
+      // a.selectedItems = this.dataSourceLines.data.filter(l => l.productId == a.id).length;
+      let lines = this.dataSourceLines.data.filter(l => l.productId == a.id);
+      a.selectedItems = lines.reduce((total, line) => total + line.units, 0);
+
     })
     this.filterType('work');
   }
@@ -115,6 +127,7 @@ export class RenovationOverviewComponent implements OnInit {
       .subscribe(result => {
         this.project = result;
         this.loadTransaction(this.project.transactionId);
+        this.loadLines(projectId);
       }, error => console.error(error));
 
   }
@@ -131,7 +144,7 @@ export class RenovationOverviewComponent implements OnInit {
   }
 
 
- 
+
 
 
 
@@ -225,14 +238,7 @@ export class RenovationOverviewComponent implements OnInit {
   planningMode: boolean;
   itemEditMode() {
     this.planningMode = !this.planningMode;
-    this.sort.sort(({ id: 'id', start: 'desc'}) as MatSortable);
-
-    // if (this.planningMode) {
-    //   this.dataSourceLines.data =   this.dataSourceLines.data.sort(a => a.productId);
-    // }
-    // else {
-    //   this.dataSourceLines.data= this.dataSourceLines.data.sort(a => a.category);
-    // }
+    this.sort.sort(({ id: 'id', start: 'desc' }) as MatSortable);
   }
 
 
@@ -245,8 +251,7 @@ export class RenovationOverviewComponent implements OnInit {
     newLine.comments = product.description;
     newLine.units = 1;
     newLine.cost = product.price;
-
-    // this.lines.push(newLine);
+    newLine.insertStage = this.project.stage;
 
     this.renovationService.addLine(newLine).subscribe({
       next: () => this.loadLines(this.projectId),

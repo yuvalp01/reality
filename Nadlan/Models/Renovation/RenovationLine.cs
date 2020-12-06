@@ -16,6 +16,7 @@ namespace Nadlan.Models.Renovation
         public int RenovationProjectId { get; set; }
         public bool IsCompleted { get; set; }
         public bool IsDeleted { get; set; }
+        public Stage InsertStage { get; set; }
 
         public RenovationProduct Product { get; set; }
         public int ProductId { get; set; }
@@ -29,5 +30,7 @@ namespace Nadlan.Models.Renovation
         Bathroom = 2,
         Room = 3
     }
+
+
 
 }

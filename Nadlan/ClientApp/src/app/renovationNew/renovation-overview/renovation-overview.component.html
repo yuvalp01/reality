@@ -1,464 +1,514 @@
-
-
 <mat-drawer-container class="example-container" autosize [hasBackdrop]="false">
-  <!-- <mat-drawer #drawer [mode]="mode.value">I'm a drawer</mat-drawer> -->
-  <mat-drawer [opened]="planningMode"  #drawer mode="side">
+  <mat-drawer [opened]="planningMode" #drawer mode="side">
 
+    <div id="filter">
+      <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+        <mat-button-toggle (change)="filterType($event.value)" value="work">
+          <mat-icon style="font-size:20px;" matTooltip="Work">
+            handyman
+          </mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle (change)="filterType($event.value)" value="fixtures">
+          <mat-icon style=" font-size:20px;" matTooltip="Fixtures">
+            bathtub
+          </mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle (change)="filterType($event.value)" value="furniture">
+          <mat-icon style="font-size:20px;" matTooltip="Furniture">
+            weekend
+          </mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle (change)="filterType($event.value)" value="amenities">
+          <mat-icon style=" font-size:20px;" matTooltip="Amenities">
+            free_breakfast
+          </mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle (change)="filterType($event.value)" value="appliances">
+          <mat-icon style=" font-size:20px;" matTooltip="Appliances">
+            tv
+          </mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <div *ngFor="let product of filteredProducts">
 
-
-      <div id="filter">
-          <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-              <mat-button-toggle (change)="filterType($event.value)" value="work">
-                <mat-icon style="font-size:20px;" matTooltip="Work">
-                handyman
-              </mat-icon></mat-button-toggle>
-              <mat-button-toggle (change)="filterType($event.value)" value="fixtures">
-                <mat-icon style=" font-size:20px;" matTooltip="Fixtures">
-                  bathtub
-                </mat-icon>
-              </mat-button-toggle>
-              <mat-button-toggle (change)="filterType($event.value)" value="furniture">
-                <mat-icon style="font-size:20px;" matTooltip="Furniture">
-                  countertops
-                </mat-icon>
-              </mat-button-toggle>
-            <mat-button-toggle (change)="filterType($event.value)" value="amenities">
-              <mat-icon style=" font-size:20px;" matTooltip="Amenities">
-                free_breakfast
-              </mat-icon>
-            </mat-button-toggle>
-            <mat-button-toggle (change)="filterType($event.value)" value="appliances">
-              <mat-icon style=" font-size:20px;" matTooltip="Appliances">
-                tv
-              </mat-icon>
-            </mat-button-toggle>
-        </mat-button-toggle-group>
-      </div>
-      <div *ngFor="let product of filteredProducts">
-
-      <div (click)="addItem(product)" style="cursor: pointer;"  [ngClass]="{'selected':product.selectedItems>0}">
-        <mat-icon style="color: green;" >add</mat-icon>
-        <span [matTooltip]="product.description + '('+product.price+')'">  {{product.name}} </span>
+      <div (click)="addItem(product)" style="cursor: pointer;" [ngClass]="{'selected':product.selectedItems>0}">
+        <mat-icon style="color: green;">add</mat-icon>
+        <span [matTooltip]="product.description + '('+product.price+')'"> {{product.name}} </span>
         <span *ngIf="product.selectedItems>0">({{product.selectedItems}})</span>
       </div>
-
-          <!-- <mat-checkbox disabled [checked]="product.selected">
-              <span [ngClass]="{'selected':product.selected}" (click)="addItem(product)">
-                  {{product.name}}
-              </span>
-
-          </mat-checkbox> -->
-
-      </div>
+    </div>
   </mat-drawer>
   <mat-drawer-content>
-<!-- drawer.toggle() -->
-      <button mat-raised-button *hasClaim="['admin']" (click)="itemEditMode()">Plan Renovation</button>
 
-      <ng-container *ngIf="dataSourceLines.data && project">
-        <mat-tab-group style="width: 100%;" dynamicHeight="false">
-      
-          <mat-tab *ngIf="paymentTransaction" label="Milestones & Payments">
-            <mat-card>
-              <mat-card-title style="font-size: 19px;">
-                <span> Renovation Price:</span><span style="font-weight:bold;">
-                  {{totalCost| currency:'EUR' : 'symbol':'1.0-0'}}</span>
-                <span> Paid so far: </span><span style="font-weight:bold; color:green;">
-                  {{transactionAmount | currency:'EUR':'symbol':'1.0-0'}}</span>
-                <span> Left to pay: </span><span style="font-weight:bold; color:red;">
-                  {{totalCost-transactionAmount | currency:'EUR':'symbol':'1.0-0'}}</span>
-                <div id="paymentsProgressBar" style="height: 20px;">
-                  <mat-progress-bar mode="determinate" value="{{(transactionAmount / totalCost)*100}}">
-                  </mat-progress-bar>
-                  <span [ngStyle]="{'left':(transactionAmount / totalCost)*100 +1 +'%'}"
-                    style="position:relative; font-size: 15px; top:-22px; font-weight: bold;color:green;;">
-                    {{(transactionAmount / totalCost)| percent:'1.0'}}
-                  </span>
-                </div>
-                <div id="errors" *ngIf="totalPaymentsDone!=transactionAmount ||totalPaymentsPlanned!=totalCost"
-                  style="border-style:dashed;border-color: red; font-size: 14px; ">
-                  <ul>
-                    <li *ngIf="totalPaymentsDone!=transactionAmount">
-                      Payment transaction amount does not equal to total payments!
-                      ({{transactionAmount}} != {{totalPaymentsDone}})
-                    </li>
-                    <li *ngIf="totalPaymentsPlanned!=totalCost">
-                      The renovation cost does not equal to the the payments plan!
-                      ({{totalCost}} != {{totalPaymentsPlanned}})
-                    </li>
-                  </ul>
-                </div>
-      
-                <!-- <p *ngIf="totalPaymentsDone!=transactionAmount" style="color:red">
+
+    <ng-container *ngIf="dataSourceLines.data && project">
+
+      <mat-tab-group style="width: 100%;" dynamicHeight="false">
+        
+        <mat-tab *ngIf="paymentTransaction" label="Milestones & Payments">
+          <mat-card>
+            <mat-card-title style="font-size: 19px;">
+              <span> Renovation Price:</span><span style="font-weight:bold;">
+                {{totalCost| currency:'EUR' : 'symbol':'1.0-0'}}</span>
+              <span> Paid so far: </span><span style="font-weight:bold; color:green;">
+                {{transactionAmount | currency:'EUR':'symbol':'1.0-0'}}</span>
+              <span> Left to pay: </span><span style="font-weight:bold; color:red;">
+                {{totalCost-transactionAmount | currency:'EUR':'symbol':'1.0-0'}}</span>
+              <div id="paymentsProgressBar" style="height: 20px;">
+                <mat-progress-bar mode="determinate" value="{{(transactionAmount / totalCost)*100}}">
+                </mat-progress-bar>
+                <span [ngStyle]="{'left':(transactionAmount / totalCost)*100 +1 +'%'}"
+                  style="position:relative; font-size: 15px; top:-22px; font-weight: bold;color:green;;">
+                  {{(transactionAmount / totalCost)| percent:'1.0'}}
+                </span>
+              </div>
+              <div id="errors" *ngIf="totalPaymentsDone!=transactionAmount ||totalPaymentsPlanned!=totalCost"
+                style="border-style:dashed;border-color: red; font-size: 14px; ">
+                <ul>
+                  <li *ngIf="totalPaymentsDone!=transactionAmount">
+                    Payment transaction amount does not equal to total payments!
+                    ({{transactionAmount}} != {{totalPaymentsDone}})
+                  </li>
+                  <li *ngIf="totalPaymentsPlanned!=totalCost">
+                    The renovation cost does not equal to the the payments plan!
+                    ({{totalCost}} != {{totalPaymentsPlanned}})
+                  </li>
+                </ul>
+              </div>
+
+              <!-- <p *ngIf="totalPaymentsDone!=transactionAmount" style="color:red">
                   Payment transaction amount does not equal to total payments!
                   <br />
                   <span>
                     {{transactionAmount}} != {{totalPaymentsDone}}
                   </span>
                 </p> -->
-              </mat-card-title>
-              <mat-card-content>
-                <button *hasClaim="['admin']" class="add-item" mat-mini-fab (click)="openForm('add',0)" title="Add Payment">
-                  <mat-icon>add</mat-icon>
-                </button>
-                <div id="tblPayments">
-                  <table style="width: 100%;" mat-table [dataSource]="dataSourcePayments" matSort class="mat-elevation-z8">
-                    <ng-container matColumnDef="id">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-                      <td mat-cell *matCellDef="let item">{{item.id}}</td>
-                    </ng-container>
-      
-                    <ng-container matColumnDef="title">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
-                      <td mat-cell *matCellDef="let item">{{item.title}}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="criteria">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Criteria</th>
-                      <td mat-cell *matCellDef="let item">
-                        {{item.criteria }}
-                      </td>
-                    </ng-container>
-                    <ng-container matColumnDef="amount">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
-                      <td mat-cell *matCellDef="let item">
-                        {{item.amount}}
-                      </td>
-                    </ng-container>
-                    <ng-container matColumnDef="comments">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>
-                      <td mat-cell *matCellDef="let item">
-                        <span> {{item.comments}}</span>
-                      </td>
-                    </ng-container>
-                    <!-- <ng-container matColumnDef="projectName">
+            </mat-card-title>
+            <mat-card-content>
+              <button *hasClaim="['admin']" class="add-item" mat-mini-fab (click)="openForm('add',0)"
+                title="Add Payment">
+                <mat-icon>add</mat-icon>
+              </button>
+              <div id="tblPayments">
+                <table style="width: 100%;" mat-table [dataSource]="dataSourcePayments" matSort
+                  class="mat-elevation-z8">
+                  <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                    <td mat-cell *matCellDef="let item">{{item.id}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="title">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+                    <td mat-cell *matCellDef="let item">{{item.title}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="criteria">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Criteria</th>
+                    <td mat-cell *matCellDef="let item">
+                      {{item.criteria }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="amount">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+                    <td mat-cell *matCellDef="let item">
+                      {{item.amount}}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="comments">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>
+                    <td mat-cell *matCellDef="let item">
+                      <span> {{item.comments}}</span>
+                    </td>
+                  </ng-container>
+                  <!-- <ng-container matColumnDef="projectName">
                       <th mat-header-cell *matHeaderCellDef mat-sort-header>Renovation Project</th>
                       <td mat-cell *matCellDef="let item">{{item.renovationProject.name}}</td>
                     </ng-container> -->
-                    <ng-container matColumnDef="datePayment">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Paid On</th>
-                      <td mat-cell *matCellDef="let item">
-                        <span> {{item.datePayment| date:'dd/MM/yyyy'}}</span>
-                      </td>
-      
-                    </ng-container>
-                    <ng-container matColumnDef="checkCriteriaMet">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Criteria Met?</th>
-                      <td mat-cell *matCellDef="let item">
-                        <ng-container>
-                          <!-- <mat-checkbox [checked]="item.checkInvoiceScanned"></mat-checkbox> -->
-                          <!-- <span>  {{item.checkInvoiceScanned}}</span> -->
-                          <mat-icon *ngIf="!item.datePayment">close</mat-icon>
-                          <mat-icon *ngIf="item.datePayment">done</mat-icon>
-                        </ng-container>
-                      </td>
-                    </ng-container>
-      
-                    <ng-container matColumnDef="checkIdWriten">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Id Denoted?</th>
-                      <td mat-cell *matCellDef="let item">
-                        <ng-container>
-                          <!-- <mat-checkbox [checked]="item.checkIdWriten"></mat-checkbox> -->
-                          <mat-icon *ngIf="!item.datePayment">close</mat-icon>
-                          <mat-icon *ngIf="item.datePayment">done</mat-icon>
-                          <!-- <span>  {{item.checkIdWriten}}</span> -->
-                        </ng-container>
-                      </td>
-      
-                    </ng-container>
-                    <ng-container matColumnDef="checkInvoiceScanned">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Scanned?</th>
-                      <td mat-cell *matCellDef="let item">
-                        <ng-container>
-                          <!-- <mat-checkbox [checked]="item.checkInvoiceScanned"></mat-checkbox> -->
-                          <!-- <span>  {{item.checkInvoiceScanned}}</span> -->
-                          <mat-icon *ngIf="!item.datePayment">close</mat-icon>
-                          <mat-icon *ngIf="item.datePayment">done</mat-icon>
-                        </ng-container>
-                      </td>
-                    </ng-container>
-      
-                    <ng-container matColumnDef="actions">
-                      <th mat-header-cell *matHeaderCellDef></th>
-                      <td mat-cell *matCellDef="let item">
-                        <mat-icon *ngIf="item.isConfirmed" matTooltip="Payment Confirmed">check_circle</mat-icon>
-      
-                        <ng-container *ngIf="!item.isConfirmed">
-                          <!-- <button *ngIf="!item.datePayment" (click)="openForm(item.id)" mat-button color="primary">Pay</button> -->
-                          <!-- <button *ngIf="!item.datePayment" class="add-item" mat-icon-button color="primary"  (click)="openForm(item.id)"  matTooltip="Make Payment">
+                  <ng-container matColumnDef="datePayment">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Paid On</th>
+                    <td mat-cell *matCellDef="let item">
+                      <span> {{item.datePayment| date:'dd/MM/yyyy'}}</span>
+                    </td>
+
+                  </ng-container>
+                  <ng-container matColumnDef="checkCriteriaMet">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Criteria Met?</th>
+                    <td mat-cell *matCellDef="let item">
+                      <ng-container>
+                        <!-- <mat-checkbox [checked]="item.checkInvoiceScanned"></mat-checkbox> -->
+                        <!-- <span>  {{item.checkInvoiceScanned}}</span> -->
+                        <mat-icon *ngIf="!item.datePayment">close</mat-icon>
+                        <mat-icon *ngIf="item.datePayment">done</mat-icon>
+                      </ng-container>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="checkIdWriten">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Id Denoted?</th>
+                    <td mat-cell *matCellDef="let item">
+                      <ng-container>
+                        <!-- <mat-checkbox [checked]="item.checkIdWriten"></mat-checkbox> -->
+                        <mat-icon *ngIf="!item.datePayment">close</mat-icon>
+                        <mat-icon *ngIf="item.datePayment">done</mat-icon>
+                        <!-- <span>  {{item.checkIdWriten}}</span> -->
+                      </ng-container>
+                    </td>
+
+                  </ng-container>
+                  <ng-container matColumnDef="checkInvoiceScanned">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Scanned?</th>
+                    <td mat-cell *matCellDef="let item">
+                      <ng-container>
+                        <!-- <mat-checkbox [checked]="item.checkInvoiceScanned"></mat-checkbox> -->
+                        <!-- <span>  {{item.checkInvoiceScanned}}</span> -->
+                        <mat-icon *ngIf="!item.datePayment">close</mat-icon>
+                        <mat-icon *ngIf="item.datePayment">done</mat-icon>
+                      </ng-container>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let item">
+                      <mat-icon *ngIf="item.isConfirmed" matTooltip="Payment Confirmed">check_circle</mat-icon>
+
+                      <ng-container *ngIf="!item.isConfirmed">
+                        <!-- <button *ngIf="!item.datePayment" (click)="openForm(item.id)" mat-button color="primary">Pay</button> -->
+                        <!-- <button *ngIf="!item.datePayment" class="add-item" mat-icon-button color="primary"  (click)="openForm(item.id)"  matTooltip="Make Payment">
                             <mat-icon>monetization_on</mat-icon>
                           </button> -->
-                          <mat-icon style="cursor: pointer;" color="accent" matTooltip="Make Payment"
-                            *ngIf="!item.datePayment" (click)="openForm('payment',item.id)">monetization_on</mat-icon>
-                          <ng-container *hasClaim="['admin']">
-                            <button (click)="delete(item.id)" mat-button color="warn">Delete</button>
-                            <button *ngIf="item.datePayment" (click)="confirm(item.id)" mat-button
-                              color="success">Confirm</button>
-                            <!-- <button *ngIf="item.datePayment" (click)="cancelPayment(item.id)" mat-button
+                        <mat-icon style="cursor: pointer;" color="accent" matTooltip="Make Payment"
+                          *ngIf="!item.datePayment" (click)="openForm('payment',item.id)">monetization_on</mat-icon>
+                        <ng-container *hasClaim="['admin']">
+                          <button (click)="delete(item.id)" mat-button color="warn">Delete</button>
+                          <button *ngIf="item.datePayment" (click)="confirm(item.id)" mat-button
+                            color="success">Confirm</button>
+                          <!-- <button *ngIf="item.datePayment" (click)="cancelPayment(item.id)" mat-button
                               color="success">Cancel</button> -->
-                            <mat-icon style="cursor: pointer;" color="accent" matTooltip="Cancel Payment"
-                              *ngIf="item.datePayment" (click)="cancelPayment(item.id)">cancel</mat-icon>
-      
-                          </ng-container>
-      
-                          <button *ngIf="item.datePayment" (click)="openForm('edit',item.id)" mat-button
-                            color="primary">Edit</button>
-      
-                        </ng-container>
-                      </td>
-                    </ng-container>
-      
-      
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns_payments"></tr>
-                    <tr [matTooltip]="!row.isConfirmed && row.datePayment?'Pending for confirmation':''" [ngClass]="{'pending':row.datePayment && !row.isConfirmed,
-                                       'completed':row.isConfirmed }" (click)="printId(row.id)" mat-row
-                      *matRowDef="let row; columns: displayedColumns_payments"></tr>
-                  </table>
-                </div>
-      
-      
-              </mat-card-content>
-            </mat-card>
-          </mat-tab>
-      
-          <mat-tab label="Contract">
-            <mat-card *ngIf="project">
-              <mat-card-title>Contract
-                <ng-container *hasClaim="['admin']">
-                  <mat-icon style="cursor:pointer;" *ngIf="!isProjectEditMode" (click)="isProjectEditMode=true">edit</mat-icon>
-                  <mat-icon style="cursor:pointer;" *ngIf="isProjectEditMode" (click)="saveProject(project);isProjectEditMode=false">save</mat-icon>
-                </ng-container>
-              </mat-card-title>
-              <mat-card-content>
-      
-                <mat-accordion id="report_" >
-                  <mat-expansion-panel disabled="true">
-                    <mat-expansion-panel-header>
-                      <mat-panel-title>
-                        <mat-icon mat-list-icon>business_center</mat-icon>
-                        <span>Project Name</span>
-                      </mat-panel-title>
-                      <mat-panel-description>
-                        <span  *ngIf="!isProjectEditMode">
-                          {{project.name}}
-                        </span>
-                        <input *ngIf="isProjectEditMode"
-                        (keydown)="handleInput($event)"
-                         class="text-input"
-                          placeholder="Name"
-                        [value]="project.name" [(ngModel)]="project.name"/>     
-                      </mat-panel-description>
-                    </mat-expansion-panel-header>
-                  </mat-expansion-panel>
-      
-                  <mat-expansion-panel *ngIf="!planningMode" disabled="true">
-                    <mat-expansion-panel-header>
-                      <mat-panel-title>
-                        <mat-icon mat-list-icon>date_range</mat-icon>
-                        <span >Start Date</span>
-                      </mat-panel-title>
-                      <mat-panel-description>    
-                        <span *ngIf="!isProjectEditMode">
-                          {{project.dateStart  | date:'dd-MM-yyyy'}}
-                        </span>
-                        <input
-                      
-                        *ngIf="isProjectEditMode" 
-                         class="text-input"
-                          placeholder="Date Start"
-                        [value]="project.dateStart" [(ngModel)]="project.dateStart"/>
-      
-      
-                      </mat-panel-description>
-                    </mat-expansion-panel-header>
-                  </mat-expansion-panel>
-      
-                  <mat-expansion-panel *ngIf="!planningMode" disabled="true">
-                    <mat-expansion-panel-header>
-                      <mat-panel-title>
-                        <mat-icon mat-list-icon>date_range</mat-icon>
-                        <span>End Date</span>
-                      </mat-panel-title>
-                      <mat-panel-description>
-                        <span *ngIf="!isProjectEditMode">
-                          {{project.dateEnd  | date:'dd-MM-yyyy'}}
-                        </span>
-                        <input
-                        *ngIf="isProjectEditMode" 
-                         class="text-input"
-                          placeholder="Date Start"
-                        [value]="project.dateEnd" [(ngModel)]="project.dateEnd"/>
-      
-                      </mat-panel-description>
-                    </mat-expansion-panel-header>
-                  </mat-expansion-panel>
-      
-                  <mat-expansion-panel *ngIf="!planningMode" disabled="true">
-                    <mat-expansion-panel-header>
-                      <mat-panel-title>
-                        <mat-icon mat-list-icon>work_off</mat-icon>
-                        <span>Penalty Per Day</span>
-                      </mat-panel-title>
-                      <mat-panel-description>
+                          <mat-icon style="cursor: pointer;" color="accent" matTooltip="Cancel Payment"
+                            *ngIf="item.datePayment" (click)="cancelPayment(item.id)">cancel</mat-icon>
 
-                        <span *ngIf="!isProjectEditMode">
-                          {{project.peneltyPerDay  |currency:'EUR' : number:'1.0-0'}}
-                        </span>
-                        <input
-                        *ngIf="isProjectEditMode" 
-                         class="text-input"
-                          placeholder="Penalty"
-                        [value]="project.peneltyPerDay" [(ngModel)]="project.peneltyPerDay"/>
-      
-      
-                      </mat-panel-description>
-                    </mat-expansion-panel-header>
-                  </mat-expansion-panel>
-      
-                  <mat-expansion-panel [expanded]="planningMode">
-                    <mat-expansion-panel-header matTooltip="Work done so far">
-                      <mat-panel-title>
-                        <mat-icon mat-list-icon>attach_money</mat-icon>
-                        <span>Total Price</span>
-      
-                        <div id="linesProgressBar" style="height: 20px;">
-                          <mat-progress-bar color="accent" mode="determinate" value="{{(totalLinesDone / totalCost)*100}}">
-                          </mat-progress-bar>
-                          <span [ngStyle]="{'left':(totalLinesDone / totalCost)*100 +1 +'%'}"
-                            style="position:relative; font-size: 13px; top:-19px; font-weight: bold;color:green;;">
-                            {{(totalLinesDone / totalCost)| percent:'1.0'}}
-                          </span>
-                        </div>
-                      </mat-panel-title>
-                      <mat-panel-description>
-                        <mat-list-item>
-                          <span>{{totalCost| currency:'EUR' : 'symbol':'1.0-0'}}</span>
-                        </mat-list-item>
-                      </mat-panel-description>
-                    </mat-expansion-panel-header>
-      
+                        </ng-container>
 
-                    <div id="tblLines">
-                      <table style="width: 100%;" mat-table 
+                        <button *ngIf="item.datePayment" (click)="openForm('edit',item.id)" mat-button
+                          color="primary">Edit</button>
 
-                      [dataSource]="dataSourceLines" matSort class="mat-elevation-z8">
-                        <ng-container matColumnDef="id">
-                          <th mat-header-cell  mat-sort-header *matHeaderCellDef>ID</th>
-                          <td mat-cell *matCellDef="let item">{{item.id}}</td>
-                        </ng-container>
-      
-                        <ng-container matColumnDef="title">
-                          <th mat-header-cell  mat-sort-header *matHeaderCellDef>Title</th>
-                          <td mat-cell *matCellDef="let item">{{item.title}}</td>
-                        </ng-container>
-                        <ng-container matColumnDef="cost">
-                          <th mat-header-cell  mat-sort-header *matHeaderCellDef>Cost</th>
-                          <td mat-cell *matCellDef="let item">
-                            <span *ngIf="!item.isEditMode">{{item.cost | currency:'EUR' : 'symbol':'1.0-0'}}</span>
-                            <input *ngIf="item.isEditMode" style="width: 50px; border-radius:10px;"
-                             [(ngModel)]="item.cost"
-                             [value]="item.cost" type="number" />
-                          </td>
-                        </ng-container>
-                        <ng-container matColumnDef="units">
-                          <th mat-header-cell  mat-sort-header *matHeaderCellDef mat-sort-header>units</th>
-                          <td mat-cell *matCellDef="let item">
-                            
-      
-                            <span *ngIf="!item.isEditMode">{{item.units}}</span>
-                            <input *ngIf="item.isEditMode" style="width: 30px; border-radius:15px;"
-                             [(ngModel)]="item.units"
-                             [value]="item.units" type="number" /></td>
                       </ng-container>
-      
-                        <ng-container matColumnDef="category">
-                          <th mat-header-cell mat-sort-header *matHeaderCellDef>Category</th>
-                          <td mat-cell *matCellDef="let item">
-                            <mat-icon matTooltip="General" *ngIf="item.category==0">format_paint</mat-icon>
-                            <mat-icon matTooltip="kitchen" *ngIf="item.category==1">kitchen</mat-icon>
-                            <mat-icon matTooltip="Bathroom" *ngIf="item.category==2">bathtub</mat-icon>
-                            <mat-icon matTooltip="Rooms" *ngIf="item.category==3">checkroom</mat-icon>
-                          </td>
-                        </ng-container>
-                        <ng-container matColumnDef="comments">
-                          <th mat-header-cell *matHeaderCellDef>Comments</th>
-                          <td mat-cell *matCellDef="let item">
-      
-      
-                            <span *ngIf="!item.isEditMode">
-                              {{item.comments}}
-                            </span>
-      
-                            <mat-form-field *ngIf="item.isEditMode" style="width: 100%;" floatLabel="never">
-                              <textarea matInput  placeholder="Comments"
-                                [value]="item.comments" [(ngModel)]="item.comments"></textarea>
-                            </mat-form-field>
-      
-                          </td>
-      
-                        </ng-container>
-                        <ng-container matColumnDef="isCompleted">
-                          <th mat-header-cell *matHeaderCellDef>Completed?</th>
-                          <td mat-cell *matCellDef="let item">
-                            <mat-checkbox [disabled]="item.isEditMode" [checked]="item.isCompleted"
-                              (change)="complete($event, item)"></mat-checkbox>
-                          </td>
-      
-                        </ng-container>
-      
-      
-      
-                        <ng-container matColumnDef="actions">
-                          <th mat-header-cell *matHeaderCellDef >
-                            <mat-icon matTooltip="Refresh" style="cursor: pointer; " (click)="loadLines(projectId)">refresh</mat-icon>
-                          </th>
-                          <td mat-cell *matCellDef="let item">
-                            <div>
-                              <mat-icon matTooltip="Edit" *ngIf="!item.isEditMode" (click)="item.isEditMode=true" style="cursor: pointer;">
-                                edit
-                              </mat-icon>
-                              <mat-icon matTooltip="Cancel edit" *ngIf="item.isEditMode" (click)="item.isEditMode=false" style="cursor: pointer;">
-                                cancel
-                              </mat-icon>
-                              <mat-icon matTooltip="Save line" *ngIf="item.isEditMode" (click)="saveLine(item)" style="cursor: pointer;">
-                                save
-                              </mat-icon>
-                              <mat-icon (click)="deleteLine(item)" style="cursor: pointer;">
-                                delete
-                              </mat-icon>
-                            </div>
-                          </td>
-                        </ng-container>
-      
-      
-      
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns_lines"></tr>
-                        <tr (blur)="row.isEditMode=false" (click)="printId(row.id)" mat-row *matRowDef="let row; columns: displayedColumns_lines"></tr>
-      
-                      </table>
-      
-                      <button *hasClaim="['admin']" mat-button color="primary" (click)="exportAsXLSX()">Export to
-                        Excel</button>
-      
-                    </div>
+                    </td>
+                  </ng-container>
 
-                  </mat-expansion-panel>
-      
-                </mat-accordion>
-              </mat-card-content>
-            </mat-card>
-          </mat-tab>
-      
-          <mat-tab label="Discution">
-TBD
 
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns_payments"></tr>
+                  <tr [matTooltip]="!row.isConfirmed && row.datePayment?'Pending for confirmation':''" [ngClass]="{'pending':row.datePayment && !row.isConfirmed,
+                                       'completed':row.isConfirmed }" (click)="printId(row.id)" mat-row
+                    *matRowDef="let row; columns: displayedColumns_payments"></tr>
+                </table>
+              </div>
+
+
+            </mat-card-content>
+          </mat-card>
+        </mat-tab>
+
+        <mat-tab label="Contract">
+          <mat-card *ngIf="project">
+            <mat-card-title>Contract
+              <span *ngIf="project.stage==10" class="statusChip plan">Plannig</span>
+              <span *ngIf="project.stage==20" class="statusChip ongoing">Ongoing</span>
+              <span *ngIf="project.stage==30" class="statusChip done">Done</span>
+
+                <div class="button-container" *ngIf="project.stage!=30">
+                <button mat-mini-fab color="primary" 
+                matTooltip="Plan"
+                *ngIf="project.stage!=30" 
+                (click)="itemEditMode()">
+                  <mat-icon>dvr</mat-icon>
+                  </button>
+                </div>
+
+              <ng-container *hasClaim="['admin']">
+                <mat-icon style="cursor:pointer;" *ngIf="!isProjectEditMode" (click)="isProjectEditMode=true">edit
+                </mat-icon>
+                <mat-icon style="cursor:pointer;" *ngIf="isProjectEditMode"
+                  (click)="saveProject(project);isProjectEditMode=false">save</mat-icon>
+              </ng-container>
+            </mat-card-title>
+            <mat-card-content>
+
+              <mat-accordion id="report_">
+                <mat-expansion-panel disabled="true">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <mat-icon mat-list-icon>business_center</mat-icon>
+                      <span>Project Name</span>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      <span *ngIf="!isProjectEditMode">
+                        {{project.name}}
+                      </span>
+                      <input *ngIf="isProjectEditMode" (keydown)="handleInput($event)" class="text-input"
+                        placeholder="Name" [value]="project.name" [(ngModel)]="project.name" />
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel *ngIf="!planningMode" disabled="true">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <mat-icon mat-list-icon>date_range</mat-icon>
+                      <span>Start Date</span>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      <span *ngIf="!isProjectEditMode">
+                        {{project.dateStart  | date:'dd-MM-yyyy'}}
+                      </span>
+                      <input *ngIf="isProjectEditMode" class="text-input" placeholder="Date Start"
+                        [value]="project.dateStart" [(ngModel)]="project.dateStart" />
+
+
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel *ngIf="!planningMode" disabled="true">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <mat-icon mat-list-icon>date_range</mat-icon>
+                      <span>End Date</span>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      <span *ngIf="!isProjectEditMode">
+                        {{project.dateEnd  | date:'dd-MM-yyyy'}}
+                      </span>
+                      <input *ngIf="isProjectEditMode" class="text-input" placeholder="Date Start"
+                        [value]="project.dateEnd" [(ngModel)]="project.dateEnd" />
+
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel *ngIf="!planningMode" disabled="true">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <mat-icon mat-list-icon>work_off</mat-icon>
+                      <span>Penalty Per Day</span>
+                    </mat-panel-title>
+                    <mat-panel-description>
+
+                      <span *ngIf="!isProjectEditMode">
+                        {{project.peneltyPerDay  |currency:'EUR' : number:'1.0-0'}}
+                      </span>
+                      <input *ngIf="isProjectEditMode" class="text-input" placeholder="Penalty"
+                        [value]="project.peneltyPerDay" [(ngModel)]="project.peneltyPerDay" />
+
+
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel [expanded]="planningMode">
+                  <mat-expansion-panel-header matTooltip="Work done so far">
+                    <mat-panel-title>
+                      <mat-icon mat-list-icon>attach_money</mat-icon>
+                      <span>Total Price</span>
+
+                      <div id="linesProgressBar" style="height: 20px;">
+                        <mat-progress-bar color="accent" mode="determinate"
+                          value="{{(totalLinesDone / totalCost)*100}}">
+                        </mat-progress-bar>
+                        <span [ngStyle]="{'left':(totalLinesDone / totalCost)*100 +1 +'%'}"
+                          style="position:relative; font-size: 13px; top:-19px; font-weight: bold;color:green;;">
+                          {{(totalLinesDone / totalCost)| percent:'1.0'}}
+                        </span>
+                      </div>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      <mat-list-item>
+                        <span>{{totalCost| currency:'EUR' : 'symbol':'1.0-0'}}</span>
+                      </mat-list-item>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+
+
+                  <div id="tblLines">
+                    <table style="width: 100%;" mat-table [dataSource]="dataSourceLines" matSort
+                      class="mat-elevation-z8">
+                      <ng-container matColumnDef="id">
+                        <th mat-header-cell mat-sort-header *matHeaderCellDef>ID</th>
+                        <td mat-cell *matCellDef="let item">{{item.id}}</td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="title">
+                        <th mat-header-cell mat-sort-header *matHeaderCellDef>Title</th>
+                        <td mat-cell *matCellDef="let item">{{item.title}}</td>
+                      </ng-container>
+                      <ng-container matColumnDef="cost">
+                        <th mat-header-cell mat-sort-header *matHeaderCellDef>Cost</th>
+                        <td mat-cell *matCellDef="let item">
+                          <span *ngIf="!item.isEditMode">{{item.cost | currency:'EUR' : 'symbol':'1.0-0'}}</span>
+                          <input *ngIf="item.isEditMode" style="width: 50px; border-radius:10px;"
+                            [(ngModel)]="item.cost" [value]="item.cost" type="number" />
+                        </td>
+                      </ng-container>
+                      <ng-container matColumnDef="units">
+                        <th mat-header-cell mat-sort-header *matHeaderCellDef mat-sort-header>units</th>
+                        <td mat-cell *matCellDef="let item">
+
+
+                          <span *ngIf="!item.isEditMode">{{item.units}}</span>
+                          <input *ngIf="item.isEditMode" style="width: 30px; border-radius:15px;"
+                            [(ngModel)]="item.units" [value]="item.units" type="number" /></td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="itemType">
+                        <th mat-header-cell mat-sort-header *matHeaderCellDef>Category</th>
+                        <td mat-cell *matCellDef="let item">
+                          <!-- <span>{{item.product.itemType}}</span>
+ -->
+
+
+                          <mat-icon matTooltip="Work" *ngIf="item.product.itemType=='work'">handyman</mat-icon>
+                          <mat-icon matTooltip="Fixtures" *ngIf="item.product.itemType=='fixtures'">bathtub</mat-icon>
+                          <mat-icon matTooltip="Furniture" *ngIf="item.product.itemType=='furniture'">weekend
+                          </mat-icon>
+                          <mat-icon matTooltip="Amenities" *ngIf="item.product.itemType=='amenities'">free_breakfast
+                          </mat-icon>
+                          <mat-icon matTooltip="Appliances" *ngIf="item.product.itemType=='appliances'">tv</mat-icon>
+                          <!-- <mat-icon matTooltip="General" *ngIf="item.category==0">format_paint</mat-icon>
+                          <mat-icon matTooltip="kitchen" *ngIf="item.category==1">kitchen</mat-icon>
+                          <mat-icon matTooltip="Bathroom" *ngIf="item.category==2">bathtub</mat-icon>
+                          <mat-icon matTooltip="Rooms" *ngIf="item.category==3">checkroom</mat-icon> -->
+
+                        </td>
+                      </ng-container>
+                      <ng-container matColumnDef="comments">
+                        <th mat-header-cell *matHeaderCellDef>Comments</th>
+                        <td mat-cell *matCellDef="let item">
+
+
+                          <span *ngIf="!item.isEditMode">
+                            {{item.comments}}
+                          </span>
+
+                          <mat-form-field *ngIf="item.isEditMode" style="width: 100%;" floatLabel="never">
+                            <textarea matInput placeholder="Comments" [value]="item.comments"
+                              [(ngModel)]="item.comments"></textarea>
+                          </mat-form-field>
+
+                        </td>
+
+                      </ng-container>
+                      <ng-container matColumnDef="isCompleted">
+                        <th mat-header-cell mat-sort-header *matHeaderCellDef>Completed?</th>
+                        <td mat-cell *matCellDef="let item">
+                          <mat-checkbox [disabled]="item.isEditMode" [checked]="item.isCompleted"
+                            (change)="complete($event, item)"></mat-checkbox>
+                        </td>
+
+                      </ng-container>
+
+
+
+                      <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef>
+                          <mat-icon matTooltip="Refresh" style="cursor: pointer; " (click)="loadLines(projectId)">
+                            refresh</mat-icon>
+                        </th>
+                        <td mat-cell *matCellDef="let item">
+                          <div *ngIf="item.insertStage>=project.stage">
+                            <mat-icon matTooltip="Edit" *ngIf="!item.isEditMode" (click)="item.isEditMode=true"
+                              style="cursor: pointer;">
+                              edit
+                            </mat-icon>
+                            <mat-icon matTooltip="Cancel edit" *ngIf="item.isEditMode" (click)="item.isEditMode=false"
+                              style="cursor: pointer;">
+                              cancel
+                            </mat-icon>
+                            <mat-icon matTooltip="Save line" *ngIf="item.isEditMode" (click)="saveLine(item)"
+                              style="cursor: pointer;">
+                              save
+                            </mat-icon>
+                            <mat-icon (click)="deleteLine(item)" style="cursor: pointer;">
+                              delete
+                            </mat-icon>
+                          </div>
+                        </td>
+                      </ng-container>
+
+
+
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns_lines_filtered"></tr>
+                      <tr [ngClass]="{'extra':row.insertStage!=10}" (blur)="row.isEditMode=false"
+                        (click)="printId(row.id)" mat-row
+                        *matRowDef="let row; columns: displayedColumns_lines_filtered"></tr>
+
+                    </table>
+
+                    <button *hasClaim="['admin']" mat-button color="primary" (click)="exportAsXLSX()">Export to
+                      Excel</button>
+
+                  </div>
+
+                </mat-expansion-panel>
+
+              </mat-accordion>
+            </mat-card-content>
+          </mat-card>
+        </mat-tab>
+        <mat-tab label="Floor Plan">
+
+          <mat-tab-group>
+            <mat-tab label="Original">
+              <img style="width: 1000px;" 
+              src="https://drive.google.com/uc?export=view&amp;id=1a8p8jR7A4cbLL3V-NNvRdrbp29rZOtlm">
+            </mat-tab>
+          <mat-tab label="Basic Plan">
+            
+            <img style="width: 1000px;" 
+
+            src="https://drive.google.com/uc?export=view&amp;id=1kSKlQeEyvVJzINtH7hLYz7fzsd0cKm5V">
           </mat-tab>
-        </mat-tab-group>
-      </ng-container>
+        <mat-tab label="Furniture Plan">
+
+          <img style="width: 800px;" 
+          src="https://drive.google.com/uc?export=view&amp;id=1CmisBKcuEPJUPu_KaTQzDAbhevwBFNf3">
+        </mat-tab>
+          </mat-tab-group>
+          <!-- <mat-card class="example-card">
+            <mat-card-header>
+              <div mat-card-avatar class="example-header-image"></div>
+              <mat-card-title>Before</mat-card-title>
+              <mat-card-subtitle>Based on original plan and measurements</mat-card-subtitle>
+            </mat-card-header>
+            <img mat-card-image src="https://drive.google.com/uc?export=view&amp;id=1a8p8jR7A4cbLL3V-NNvRdrbp29rZOtlm"
+              alt="Original">
+            <mat-card-content>
+              <p>
+                The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+                A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+                bred for hunting.
+              </p>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-button>Show Original</button>
+              <button mat-button>Show Basic Plan</button>
+              <button mat-button>Show Furniture Plan</button>
+            </mat-card-actions>
+          </mat-card> -->
+
+
+
+          <!-- <img style="width: 1000px;" 
+          src="https://drive.google.com/uc?export=view&amp;id=1a8p8jR7A4cbLL3V-NNvRdrbp29rZOtlm"> -->
+        </mat-tab>
+        <mat-tab label="Discution">
+          TBD
+
+        </mat-tab>
+      </mat-tab-group>
+    </ng-container>
 
 
 
   </mat-drawer-content>
 </mat-drawer-container>
-
-
-
