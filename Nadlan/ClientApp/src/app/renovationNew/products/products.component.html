@@ -1,4 +1,4 @@
-<button mat-mini-fab (click)="openForm(0)">
+<button mat-mini-fab (click)="openForm(null)">
   <mat-icon>add</mat-icon>
 </button>
 <mat-chip-list>
@@ -82,7 +82,7 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let item">
-      <button (click)="openForm(item.id)" mat-button color="primary">Edit</button>
+      <button (click)="openForm(item)" mat-button color="primary">Edit</button>
       <button (click)="delete(item.id)" mat-button color="warn">Delete</button>
     </td>
   </ng-container>

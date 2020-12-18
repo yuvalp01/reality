@@ -24,61 +24,46 @@ export class ProductFormComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any) { }
   formTitle: string;
   productForm: FormGroup;
-  product: IRenovationProduct;
+  // product: IRenovationProduct;
   @Output() refreshEmitter = new EventEmitter();
 
   // @ViewChild('driveLinkGen',{static:false}) driveLinkGen: DriveLinkGenComponent;
-
-
-  updatePhotoUrl(yyy:string)
-  {
-    this.productForm.controls.photoUrl.patchValue(yyy);
-    this.productForm.markAsDirty();
-  }
 
   @ViewChild('firstField',{static:false}) firstField: ElementRef;
 
 
   ngOnInit() {
     this.productForm = this.formBuilder.group({
-      id:0,
+      id: [0],
       name: ['', Validators.required],
       description: [''],
-      itemType:[''],
-      price: [0],
+      itemType:['',Validators.required],
+      price: [0, Validators.required],
       store: [null],
       link: [null],
       serialNumber: [null],
       photoUrl: null,
       isDeleted:false,
     });
-    //add new
-    if (this.data==0) {
-      this.formTitle = "Add new";
-    }
-    else {
+    //default: add new
+    this.formTitle = "Add New Product";
+    if (this.data) {
       this.formTitle = "Edit Product";
-      this.loadData();
+      this.loadData(this.data as IRenovationProduct);
     }
 
   }
-  loadData() {
-    this.renovationService.getProductById(this.data)
-      .subscribe({
-        next: result => {
-          this.product = result;
-          this.productForm.setValue(this.product);
-        },
-        error: err => console.error(err)
-      });
+  loadData(item:IRenovationProduct) {
+    this.productForm.patchValue(item);
   }
   save() {
     if (this.productForm.valid && this.productForm.dirty) {
-      const t: IRenovationProduct = { ...this.product, ...this.productForm.value }
+     // const t: IRenovationProduct = { ...this.product, ...this.productForm.value }
+      let product: IRenovationProduct = Object.assign({}, this.productForm.value);
       //If new
       if (this.data) {
         {
-          this.renovationService.updateProduct(t)
+          this.renovationService.updateProduct(product)
             .subscribe({
               next: result => this.onSaveComplete('Updated'),
               error: err => console.error(err)
@@ -87,7 +72,7 @@ export class ProductFormComponent implements OnInit {
         }
       }
       else {
-        this.renovationService.addProduct(t)
+        this.renovationService.addProduct(product)
           .subscribe({
             next: result => this.onSaveComplete('Added'),
             error: err => console.error(err)
@@ -102,14 +87,14 @@ export class ProductFormComponent implements OnInit {
   onSaveComplete(_action: string) {
     let snackBarRef = this.snackBar.open(`Product`, _action, { duration: 2000 });
     this.refreshEmitter.emit();
-    if(_action=="Updated")
-    {
+    // if(_action=="Updated")
+    // {
       this.dialogRef.close();
-    }
-    else{
-      this.productForm.reset();
-      this.firstField.nativeElement.focus();
-    }
+    // }
+    // else{
+    //   this.productForm.reset();
+    //   this.firstField.nativeElement.focus();
+    // }
    
   }
 

@@ -40,11 +40,11 @@ export class ProductsComponent implements OnInit {
       error: (err) => console.error(err)
     });
   }
-  openForm(itemId: number) {
+  openForm(item: IRenovationProduct) {
     let dialogLocal = this.dialog.open(ProductFormComponent, {
       height: 'auto',
       width: '500px',
-      data: itemId
+      data: item
     });
     dialogLocal.componentInstance.refreshEmitter.subscribe(() => this.loadList())
   }

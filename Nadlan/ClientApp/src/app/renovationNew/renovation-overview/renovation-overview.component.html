@@ -401,7 +401,7 @@
                       <ng-container matColumnDef="isCompleted">
                         <th mat-header-cell mat-sort-header *matHeaderCellDef>Completed?</th>
                         <td mat-cell *matCellDef="let item">
-                          <mat-checkbox [disabled]="item.isEditMode" [checked]="item.isCompleted"
+                          <mat-checkbox [disabled]="item.isEditMode|| project.stage==30" [checked]="item.isCompleted"
                             (change)="complete($event, item)"></mat-checkbox>
                         </td>
 
@@ -411,7 +411,7 @@
 
                       <ng-container matColumnDef="actions">
                         <th mat-header-cell *matHeaderCellDef>
-                          <mat-icon matTooltip="Refresh" style="cursor: pointer; " (click)="loadLines(projectId)">
+                          <mat-icon *hasClaim="'admin'" matTooltip="Refresh" style="cursor: pointer; " (click)="loadLines(projectId)">
                             refresh</mat-icon>
                         </th>
                         <td mat-cell *matCellDef="let item">
@@ -459,6 +459,7 @@
 
           <mat-tab-group>
             <mat-tab label="Original">
+              TODO: also electricity plan
               <img style="width: 1000px;" 
               src="https://drive.google.com/uc?export=view&amp;id=1a8p8jR7A4cbLL3V-NNvRdrbp29rZOtlm">
             </mat-tab>
@@ -502,6 +503,10 @@
           src="https://drive.google.com/uc?export=view&amp;id=1a8p8jR7A4cbLL3V-NNvRdrbp29rZOtlm"> -->
         </mat-tab>
         <mat-tab label="Discution">
+          TBD
+
+        </mat-tab>
+        <mat-tab label="Open Issues">
           TBD
 
         </mat-tab>
