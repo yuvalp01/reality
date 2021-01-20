@@ -1,6 +1,6 @@
 import { Component, OnInit, NgZone, Inject, ViewChild, EventEmitter, Output, ElementRef } from '@angular/core';
 import { RenovationService } from 'src/app/services/renovation.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MatSnackBar, MAT_DIALOG_DATA, MatDialogRef, _countGroupLabelsBeforeOption } from '@angular/material';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
@@ -82,6 +82,13 @@ export class ProductFormComponent implements OnInit {
     else {
       return;
     }
+  }
+
+
+  updatePhotoUrl(val:string)
+  {
+    this.productForm.controls.photoUrl.patchValue(val);
+    this.productForm.markAsDirty();
   }
 
   onSaveComplete(_action: string) {
