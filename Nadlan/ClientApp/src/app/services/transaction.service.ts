@@ -12,15 +12,23 @@ export class TransactionService {
   }
 
 
-  getTransactions_(filter:IFilter): Observable<ITransaction[]> {
+  getTransactions_(filter: IFilter): Observable<ITransaction[]> {
     let params = new URLSearchParams();
-    for(let key in filter){
-        params.set(key, filter[key]) 
+    for (let key in filter) {
+      params.set(key, filter[key])
     }
     return this.httpClient.get<ITransaction[]>(`${this.baseUrl}api/transactions?${params}`);
   }
 
-  getTransactions(monthsBack:number): Observable<ITransaction[]> {
+  getFilteredTransactions(filter: IFilter): Observable<ITransaction[]> {
+    let params = new URLSearchParams();
+    for (let key in filter) {
+      params.set(key, filter[key])
+    }
+    return this.httpClient.get<ITransaction[]>(`${this.baseUrl}api/transactions/GetFiltered?${params}`);
+  }
+
+  getTransactions(monthsBack: number): Observable<ITransaction[]> {
     return this.httpClient.get<ITransaction[]>(`${this.baseUrl}api/transactions/list/${monthsBack}`);
 
     //let options = new HttpHeaders().set('Authorization', 'Bearer ' + this.securityService.securityObject.bearerToken);
@@ -43,8 +51,10 @@ export class TransactionService {
   getPendingExpensesForInvestor(stakeholderId: number): Observable<ITransaction[]> {
     return this.httpClient.get<ITransaction[]>(`${this.baseUrl}api/transactions/getPendingExpensesForInvestor/${stakeholderId}`);
   }
+  getPendingExpensesForApartment(apartmentId: number, year: number): Observable<ITransaction[]> {
+    return this.httpClient.get<ITransaction[]>(`${this.baseUrl}api/transactions/getPendingExpensesForApartment/${apartmentId}/${year}`);
+  }
 
-  
 
 
 
