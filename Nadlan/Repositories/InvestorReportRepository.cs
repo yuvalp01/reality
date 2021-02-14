@@ -20,12 +20,12 @@ namespace Nadlan.Repositories
             _apartmentReportRepository = new ApartmentReportRepository(context);
         }
 
-        public async Task<InvestorReportOverview> GetInvestorReport(int investorId)
+        public async Task<InvestorReportOverview> GetInvestorReport(int investorId, DateTime currentDate)
         {
             try
             {
                 IQueryable<Portfolio> portfolioLines = GetPortfolioLines(investorId);
-                List<PortfolioReport> portfolioReportLines = GetPortfolioReportLines(portfolioLines);
+                List<PortfolioReport> portfolioReportLines = GetPortfolioReportLines(portfolioLines, currentDate);
                 InvestorReportOverview investorReportOverview = new InvestorReportOverview();
                 investorReportOverview.Name = Context.Stakeholders.Find(investorId).Name;
                 investorReportOverview.CashBalance = await GetPersonalBalance(investorId);
@@ -55,10 +55,10 @@ namespace Nadlan.Repositories
         }
 
 
-        public List<PortfolioReport> GetPortfolio(int investorId)
+        public List<PortfolioReport> GetPortfolio(int investorId, DateTime currentDate)
         {
             IQueryable<Portfolio> portfolioLines = GetPortfolioLines(investorId);
-            List<PortfolioReport> portfolioReportLines = GetPortfolioReportLines(portfolioLines);
+            List<PortfolioReport> portfolioReportLines = GetPortfolioReportLines(portfolioLines, currentDate);
             return portfolioReportLines;
         }
 
@@ -73,7 +73,7 @@ namespace Nadlan.Repositories
 
 
 
-        private List<PortfolioReport> GetPortfolioReportLines(IQueryable<Portfolio> portfolioLines)
+        private List<PortfolioReport> GetPortfolioReportLines(IQueryable<Portfolio> portfolioLines, DateTime currentDate)
         {
             //TODO: move this logic to the server side
             List<int> partnershipApartments = new List<int> { 1, 3, 4, 20 };
@@ -92,6 +92,7 @@ namespace Nadlan.Repositories
                 var bonusSoFar = _apartmentReportRepository
                     .GetBonus(portfolioLine.ApartmentId,
                     portfolioLine.Apartment.PurchaseDate,
+                    currentDate,
                     out investment,
                     out netIncome);
                 portfolioLineReport.Investment = investment * portfolioLine.Percentage; //GetTotalInvestment(portfolioLine) * portfolioLine.Percentage;
@@ -112,7 +113,7 @@ namespace Nadlan.Repositories
                 {
                     portfolioLineReport.PendingProfits = 0;
                     portfolioLineReport.Distributed = netIncome * portfolioLine.Percentage;
-                    portfolioLineReport.PendingExpenses = GetPendingExpenses(portfolioLine) * portfolioLine.Percentage;
+                    portfolioLineReport.PendingExpenses = GetPendingExpenses(portfolioLine.ApartmentId) * portfolioLine.Percentage;
                     var bonusPaid = _apartmentReportRepository.GetAccountSum(portfolioLine.ApartmentId, 300);
                     portfolioLineReport.PendingBonus = -1 * (bonusSoFar + bonusPaid) * portfolioLine.Percentage;
 
@@ -126,15 +127,7 @@ namespace Nadlan.Repositories
             return portfolioReportLines;
         }
 
-        private decimal GetPendingBonus(Portfolio portfolioLine)
-        {
-            var netIncome = _apartmentReportRepository.GetNetIncome(portfolioLine.ApartmentId, 0);
-            var investment = _apartmentReportRepository.GetAccountSum(portfolioLine.ApartmentId, 13);
-            var bonus = _apartmentReportRepository.CalcBonus(investment, netIncome, portfolioLine.Apartment.PurchaseDate, DateTime.Today);
-            return bonus;
-        }
-
-        private decimal GetPendingExpenses(Portfolio portfolioLine)
+        public decimal GetPendingExpenses(int apartmentId)
         {
 
             Func<Transaction, bool> expensesFilter = t =>
@@ -143,12 +136,10 @@ namespace Nadlan.Repositories
             var expenses = Context.Transactions
                 .Where(a => a.IsDeleted == false)
                 .Where(a => a.PersonalTransactionId == 0)
-                .Where(a => a.ApartmentId == portfolioLine.ApartmentId)
+                .Where(a => a.ApartmentId == apartmentId)
                 .Sum(a => a.Amount);
             return expenses;
         }
-
-
 
         private decimal GetTotalInvestment(Portfolio portfolioLine)
         {
@@ -232,85 +223,3 @@ namespace Nadlan.Repositories
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//private decimal GetPendingProfit(List<int> apartmentIds)
-//{
-//    var profitPredicate = nonPurchaseFilters.GetProfitIncludingDistributionsFilter();
-//    var profit = Context.Transactions
-//        .Include(a => a.Account)
-//        .Where(profitPredicate)
-//        .Where(a => apartmentIds.Contains(a.ApartmentId))
-//        //.AsQueryable()
-//        .Sum(a => a.Amount);
-//    //var profitToInvestor = profit;
-//    return profit;
-//}
-
-// var totalPendingProfits = portfolioReportLines.Sum(a => a.PendingProfits);
-//  var totalPendingExpenses = portfolioReportLines.Sum(a => a.PendingExpenses);
-//var totalDistribution = portfolioReportLines.Sum(a => a.Distributed);
-// totalDistribution = _apartmentReportRepository.GetAccountSum(portfolioLines.,100);
-// investorReportOverview.TotalInvestment = _apartmentReportRepository.GetAccountSum(apartmentIds, 13);
-
-// investorReportOverview.PortfolioLines = portfolioReportLines;
-
-//investorReportOverview.TotalPendingProfits = GetPendingProfit(apartmentIds);
-
-
-//investorReportOverview.TotalDistribution = portfolioReportLines.Sum(a => a.PendingExpenses);
-//_apartmentReportRepository.GetNetProfitForInvestors(apartmentIds);
-//ProfitsSoFar = totalPendingProfits + totalDistribution
-
-
-//private decimal GetPendingExpenses_(Portfolio portfolioLine)
-//{
-
-//    //Func<Transaction, bool> basicPredicate = t =>
-//    //!t.IsDeleted &&
-//    //!t.IsPurchaseCost &&
-//   // !t.IsBusinessExpense &&
-//  //  t.Account.AccountTypeId == 0;
-
-//    Func<Transaction, bool> expensesFilter = t =>
-//   !t.IsDeleted &&
-//    //t.AccountId != 1 &&//Except for rent
-//    //t.AccountId != 100 &&//Except for distribution
-//    //t.AccountId != 300 &&//Except for bonus
-//    t.PersonalTransactionId == 0;//Not covered yet
-
-
-
-//    var expensesPredicate = nonPurchaseFilters.GetPendingExpensesFilter();
-
-//    var profit = Context.Transactions
-//        .Include(a => a.Account)
-//        .Where(expensesPredicate)
-//        .Where(a => a.ApartmentId == portfolioLine.ApartmentId)
-//        .AsQueryable()
-//        .Sum(a => a.Amount);
-//    //var profitToInvestor = profit;
-//    return profit;
-//}

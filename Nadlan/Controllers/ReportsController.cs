@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Nadlan.Repositories;
-using AutoMapper;
-using Nadlan.ViewModels.Reports;
-using Nadlan.Models;
-using Nadlan.ViewModels;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Nadlan.Repositories;
+using Nadlan.ViewModels;
+using Nadlan.ViewModels.Reports;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Nadlan.Controllers
 {
@@ -52,7 +48,10 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
 
-            InvestorReportOverview investorReportOverview = await _investorReportWraper.GetInvestorReport(accountId);
+            DateTime currentDate = DateTime.Today;
+            //if (currentYearEnd > 0) currentDate = new DateTime(currentYearEnd, 12, 31);
+
+            InvestorReportOverview investorReportOverview = await _investorReportWraper.GetInvestorReport(accountId, DateTime.Today);
 
             return Ok(investorReportOverview);
         }
@@ -64,8 +63,10 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
+            DateTime currentDate = DateTime.Today;
+            //if (currentYearEnd > 0) currentDate = new DateTime(currentYearEnd, 12, 31);
 
-            List<PortfolioReport> investorReportOverview =  _investorReportWraper.GetPortfolio(accountId);
+            List<PortfolioReport> investorReportOverview = _investorReportWraper.GetPortfolio(accountId, DateTime.Today);
 
             return Ok(investorReportOverview);
         }
@@ -99,16 +100,18 @@ namespace Nadlan.Controllers
             return Ok(diagnosticReport);
         }
 
-        [HttpGet("GetSummaryReport/{apartmentId}")]
-        public async Task<IActionResult> GetSummaryReport([FromRoute] int apartmentId)
+        [HttpGet("GetSummaryReport/{apartmentId}/{currentYearEnd}")]
+        public async Task<IActionResult> GetSummaryReport([FromRoute] int apartmentId, int currentYearEnd)
         {
+            DateTime currentDate = DateTime.Today;
+            //if (currentYearEnd > 0) currentDate = new DateTime(currentYearEnd, 12, 31);
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            SummaryReport purchaseReport = await _repositoryWraper.Summary.GetSummaryReport(apartmentId);
+            SummaryReport purchaseReport = await _repositoryWraper.Summary.GetSummaryReport(apartmentId, currentDate);
             if (purchaseReport == null)
             {
                 return NotFound();
@@ -116,6 +119,32 @@ namespace Nadlan.Controllers
 
             return Ok(purchaseReport);
         }
+
+        [HttpGet("GetSoFarReport/{apartmentId}/{currentYearEnd}")]
+        public async Task<IActionResult> GetSoFarReport([FromRoute] int apartmentId, int currentYearEnd)
+        {
+            DateTime currentDate = DateTime.Today;
+            if (currentYearEnd > 0) currentDate = new DateTime(currentYearEnd, 12, 31, 23, 59, 59);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            SoFarReport purchaseReport = await _repositoryWraper.Summary.GetSoFarReport(apartmentId, currentDate);
+            if (purchaseReport == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(purchaseReport);
+        }
+
+
+
+
+
+
 
         [HttpGet("GetPurchaseReport/{apartmentId}")]
         public async Task<IActionResult> GetPurchaseReport([FromRoute] int apartmentId)
@@ -144,7 +173,10 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
 
-            IncomeReport summaryReport = await _repositoryWraper.Income.GetIncomeReport(apartmentId, year);
+            DateTime currentDate = DateTime.Today;
+            //if (currentYearEnd > 0) currentDate = new DateTime(currentYearEnd, 12, 31);
+
+            IncomeReport summaryReport = await _repositoryWraper.Income.GetIncomeReport(apartmentId, year, currentDate);
 
             if (summaryReport == null)
             {

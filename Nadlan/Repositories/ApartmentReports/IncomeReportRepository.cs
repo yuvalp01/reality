@@ -17,7 +17,8 @@ namespace Nadlan.Repositories.ApartmentReports
         public IncomeReportRepository(NadlanConext conext) : base(conext)
         {
         }
-        public async Task<IncomeReport> GetIncomeReport(int apartmentId, int year)
+
+            public async Task<IncomeReport> GetIncomeReport(int apartmentId, int year, DateTime currentDate)
         {
 
             IncomeReport incomeReport = new IncomeReport();
@@ -33,7 +34,7 @@ namespace Nadlan.Repositories.ApartmentReports
             {
                 if (year == 0)
                 {
-                    incomeReport.Bonus = -1* await Task.FromResult(CalcBonus(investment, incomeReport.NetIncome, purchaseDate, DateTime.Now));
+                    incomeReport.Bonus = -1* await Task.FromResult(CalcBonus(investment, incomeReport.NetIncome, purchaseDate, currentDate));
                     incomeReport.NetForInvestor = incomeReport.NetIncome - incomeReport.Bonus;
                 }
                 //Do not calculate bonus so far if it's for specific year

@@ -21,14 +21,12 @@ namespace Nadlan.Repositories.ApartmentReports
         {
             var predicate = GetRegularTransactionsFilter(apartmentId, 0, true);
 
-            PurchaseReport purchaseReport = new PurchaseReport
-            {
-                Investment = GetAccountSum(apartmentId, 13),
-                TotalCost = GetTotalCost(apartmentId),
-                RenovationCost = GetRenovationCost(apartmentId),
-                ExpensesNoRenovation = GetExpensesWithoutRenovaiton(apartmentId),
-                AccountsSum = GetAccountSummaryPurchase(apartmentId)
-            };
+            PurchaseReport purchaseReport = new PurchaseReport();
+            purchaseReport.Investment = GetAccountSum(apartmentId, 13);
+            purchaseReport.TotalCost = GetTotalCost(apartmentId);
+            purchaseReport.RenovationCost = GetRenovationCost(apartmentId);
+            purchaseReport.ExpensesNoRenovation = GetExpensesWithoutRenovaiton(apartmentId);
+            purchaseReport.AccountsSum = GetAccountSummaryPurchase(apartmentId);
 
             purchaseReport.AccountsSum = await Task.FromResult(KeepRenovationAccountsTogether(purchaseReport.AccountsSum));
 
@@ -122,32 +120,4 @@ namespace Nadlan.Repositories.ApartmentReports
     }
 }
 
-
-
-// var allPurchase = GetAllPurchase(apartmentId);
-
-//var investment = GetInvestment(allPurchase);
-// var investment = GetInvestment(apartmentId);
-// var totalCost = GetTotalCost(allPurchase);
-//var totalCost = GetTotalCost(apartmentId);
-//  var renovationCost = Context.Transactions.Where(purchaseFilters.GetRenovationFilter()).Sum(a=>a.Amount);
-//var expensesNoRenovation = Context.Transactions.Where(purchaseFilters.GetCostNotRenovataionFilter());
-// var accountSummary = GetAccountSummaryPurchase(apartmentId);
-
-
-
-//private IEnumerable<AccountSummary> GetAccountSummaryPurchase(IEnumerable<Transaction> transactions)
-//{
-//    var basic = purchaseFilters.GetTotalCostFilter();
-//    return transactions
-//        .Where(basic)
-//        .GroupBy(g => new { g.AccountId, g.Account.Name })
-//        .OrderBy(a => a.Sum(s => s.Amount))
-//        .Select(a => new AccountSummary
-//        {
-//            AccountId = a.Key.AccountId,
-//            Name = a.Key.Name,
-//            Total = Math.Abs(a.Sum(s => s.Amount))
-//        });
-//}
 

@@ -255,7 +255,6 @@
 
     </mat-tab>
     <mat-tab label="Purchase Report">
-
       <ng-template mat-tab-label>
         <span>Purchase Report</span>
         <mat-spinner *ngIf="!purchaseReport" diameter="20"></mat-spinner>
@@ -341,10 +340,8 @@
       </mat-card>
     </mat-tab>
     <mat-tab label="General Info">
-
-
       <ng-template mat-tab-label>
-        <span *ngIf="apartmentInfo">General Info</span>
+        <span>General Info</span>
         <mat-spinner *ngIf="!apartmentInfo" diameter="20"></mat-spinner>
 
       </ng-template>
@@ -391,7 +388,7 @@
 
     <mat-tab label="Entrepreneur">
       <ng-template mat-tab-label>
-        <span *ngIf="summaryReport && apartmentInfo">Entrepreneur</span>
+        <span>Entrepreneur</span>
         <mat-spinner *ngIf="!(summaryReport && apartmentInfo)" diameter="20"></mat-spinner>
       </ng-template>
       <mat-card *ngIf="summaryReport">

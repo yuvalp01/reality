@@ -2,6 +2,7 @@
 using Nadlan.Models;
 using Nadlan.ViewModels.Reports;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,7 +19,55 @@ namespace Nadlan.Repositories.ApartmentReports
 
         }
 
-        public async Task<SummaryReport> GetSummaryReport(int apartmentId)
+        public async Task<SoFarReport> GetSoFarReport(int apartmentId, DateTime currentDate)
+        {
+            SoFarReport soFarReport = new SoFarReport(apartmentId, currentDate);
+
+            soFarReport.Investment = GetAccountSum(apartmentId, 13);
+            soFarReport.Distributed = GetAccountSum(apartmentId, 100,currentDate);
+            soFarReport.BonusPaid = GetAccountSum(apartmentId, 300,currentDate);
+            soFarReport.GrossIncome = GetAccountSum(apartmentId, 1, currentDate);
+            soFarReport.NetIncome = GetNetIncomeNew(apartmentId, currentDate, true);
+            soFarReport.PendingExpenses = GetPendingExpenses(apartmentId, currentDate);
+
+            Apartment apartment = Context.Apartments.Where(a => a.Id == apartmentId).First();
+            soFarReport.RoiAccumulated = CalcAccumulatedRoi(apartment.PurchaseDate, currentDate, soFarReport.Investment, soFarReport.NetIncome);
+            soFarReport.Years = GetAgeInYears(apartment.PurchaseDate, currentDate);
+            //Make sure it's not a future purchase
+            if (soFarReport.Years > 0)
+            {
+                soFarReport.ROI = soFarReport.RoiAccumulated / soFarReport.Years;
+            }
+            soFarReport.RoiForInvestor = soFarReport.ROI;
+
+            //Leipzig - no bonus
+            if (apartment.Id != 20)
+            {
+                const double THRESHOLD = 0.03;
+                const decimal PERCENTAGE = (decimal)0.5;
+                //Use compound interest
+                soFarReport.ThresholdAccumulated = CalcAccumulatedThreshold(THRESHOLD, soFarReport.Years);
+
+                //Bonus - only when roi is more than threshold         
+                if (soFarReport.RoiAccumulated > soFarReport.ThresholdAccumulated)
+                {
+                    soFarReport.BonusPercentage = (soFarReport.RoiAccumulated - soFarReport.ThresholdAccumulated) * PERCENTAGE;
+                    soFarReport.RoiForInvestor = (soFarReport.RoiAccumulated - soFarReport.BonusPercentage) / soFarReport.Years;
+                    soFarReport.Bonus = soFarReport.BonusPercentage * soFarReport.Investment;
+                    soFarReport.PendingBonus = soFarReport.Bonus + soFarReport.BonusPaid;
+                    //summaryReport.BonusExpected = -1 * (summaryReport.BonusSoFar + summaryReport.BonusPaid);
+                }
+            }
+
+            soFarReport.PredictedROI = CalcPredictedROI(apartmentId, soFarReport.Investment);
+            soFarReport.NetForInvestor = soFarReport.NetIncome - soFarReport.Bonus;
+            soFarReport.PendingDistribution = soFarReport.NetForInvestor + soFarReport.Distributed;
+
+            return soFarReport;
+        }
+
+
+        public async Task<SummaryReport> GetSummaryReport(int apartmentId, DateTime currentDate)
         {
             SummaryReport summaryReport = new SummaryReport();
 
@@ -28,8 +77,8 @@ namespace Nadlan.Repositories.ApartmentReports
             summaryReport.NetIncome = await Task.FromResult(GetNetIncome(apartmentId, 0));
 
             Apartment apartment = Context.Apartments.Where(a => a.Id == apartmentId).First();
-            summaryReport.RoiAccumulated = CalcAccumulatedRoi(apartment.PurchaseDate, DateTime.Now,  summaryReport.Investment, summaryReport.NetIncome);
-            summaryReport.Years = GetAgeInYears(apartment.PurchaseDate);
+            summaryReport.RoiAccumulated = CalcAccumulatedRoi(apartment.PurchaseDate, currentDate,  summaryReport.Investment, summaryReport.NetIncome);
+            summaryReport.Years = GetAgeInYears(apartment.PurchaseDate, currentDate);
             //Make sure it's not a future purchase
             if (summaryReport.Years > 0)
             {
@@ -90,101 +139,21 @@ namespace Nadlan.Repositories.ApartmentReports
 
 
 
+        private decimal GetPendingExpenses(int apartmentId, DateTime currentDate)
+        {
 
+            Func<Transaction, bool> expensesFilter = t =>
+           !t.IsDeleted &&
+            t.PersonalTransactionId == 0;//Not covered yet
+            var expenses = Context.Transactions
+                .Where(a => a.IsDeleted == false)
+                .Where(a => a.PersonalTransactionId == 0)
+                .Where(a => a.ApartmentId == apartmentId)
+                .Where(a=> a.Date<=currentDate)
+                .Sum(a => a.Amount);
+            return expenses;
+        }
     }
+
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//if (summaryReport.Years > 1)
-//{
-//    summaryReport.ThresholdAccumulated = (decimal)Math.Pow((1 + THRESHOLD), (double)summaryReport.Years) - 1;
-//}
-//else
-//{
-//    summaryReport.ThresholdAccumulated = (decimal)THRESHOLD * summaryReport.Years;
-//}
-
-
-////if (year != 0) basic = t => basic(t) && t.Date.Year == year;
-//var result = Context.Transactions
-//    .Where(predicate)
-//    .Where(a => a.AccountId != 100)//remove distribution
-//    .Where(a => a.AccountId != 300)//remove bonus
-//    .Sum(a => a.Amount);
-
-
-
-
-//summaryReport.NetIncome = await Task.FromResult(Context.Transactions
-//.Include(a => a.Account)
-////.Where(predicate)
-//.Where(a => a.IsDeleted == false)
-//.Where(a => a.IsBusinessExpense == false)
-//.Where(a => a.AccountId != 100)//remove distribution
-//.Where(a => a.AccountId != 300)//remove bonus
-//.Where(a => a.ApartmentId == apartmentId)
-//.Where(a => a.Account.AccountTypeId == 0)
-//.Sum(a => a.Amount));
-
-//private IEnumerable<Transaction> GetAllDistributions(IEnumerable<Transaction> transactions)
-//{
-//    var basic = nonPurchaseFilters.GetAllDistributionsFilter();
-//    return transactions.Where(basic);
-//}
-
-
-//t.IsDeleted == false &&
-//t.IsBusinessExpense == false &&
-//t.ApartmentId == apartmetId;
-
-//    // NetIncome = Context.Transactions.Where(predicate).Where(a => a.AccountId == 100).Sum(a => a.Amount),//all years
-
-//    //Investment = await Task.FromResult(investment.Sum(a => a.Amount)),
-//    //Distributed = await Task.FromResult(distributed.Sum(a => a.Amount)),
-
-//};
-
-//var investment = allTransactions.Where(a => a.AccountId == 13);
-//var distributed = allTransactions.Where(a => a.AccountId == 100);
-//var bonusPaidLine = allTransactions.Where(a => a.AccountId == 300);
-
-// var allNonPurchase = GetAllNonPurchase(apartmentId);
-//var allPurchase = GetAllPurchase(apartmentId);
-
-//var investment = GetInvestment(allPurchase);
-//var distributed = GetAllDistributions(allNonPurchase);
-//// decimal bonus = GetBonus(netIncome,apartmentId);
-////var totalCost = GetTotalCost(apartmentId);
-//summaryReport.Distributed = await Task.FromResult(Context.Transactions
-//    .Where(predicate)
-//    .Where(a => a.AccountId == 100)
-//    .Sum(a => a.Amount));//all years
-//summaryReport.BonusPaid = await Task.FromResult(Context.Transactions
-//    .Where(predicate)
-//    .Where(a => a.AccountId == 300)
-//    .Sum(a => a.Amount));
-
-//var allTransactions = transactionRepository.GetAllValidTransactionsForReports(apartmentId);
-
-
-//var investment = Context.Transactions.Where(predicate).Where(a => a.AccountId == 13).Sum(a => a.Amount);
-//var distributed = Context.Transactions.Where(predicate).Where(a => a.AccountId == 100).Sum(a => a.Amount);
-//var bonuspaidline = Context.Transactions.Where(predicate).Where(a => a.AccountId == 300).Sum(a => a.Amount);
-
-//var basic = nonPurchaseFilters.GetProfitRemoveDistributionFilter();
-//var basic = nonPurchaseFilters.GetProfitIncludingDistributionsFilter();

@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nadlan.BusinessLogic;
 using Nadlan.Models;
-using Nadlan.ViewModels.Reports;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,14 +23,14 @@ namespace Nadlan.Repositories.ApartmentReports
         }
 
 
-        protected Func<Transaction, bool> GetAllValidTransactionsForReports(List<int> apartmetIds)
-        {
-            Func<Transaction, bool> result = t =>
-                 t.IsDeleted == false &&
-                 t.IsBusinessExpense == false &&
-                 apartmetIds.Contains(t.ApartmentId);
-            return result;
-        }
+        //protected Func<Transaction, bool> GetAllValidTransactionsForReports(List<int> apartmetIds)
+        //{
+        //    Func<Transaction, bool> result = t =>
+        //         t.IsDeleted == false &&
+        //         t.IsBusinessExpense == false &&
+        //         apartmetIds.Contains(t.ApartmentId);
+        //    return result;
+        //}
         protected Func<Transaction, bool> GetAllValidTransactionsForReports(int apartmetId)
         {
             Func<Transaction, bool> result = t =>
@@ -42,15 +40,25 @@ namespace Nadlan.Repositories.ApartmentReports
             return result;
         }
 
-        protected decimal GetAccountSum(int apartmentId, int accountId, int year)
+        protected decimal GetAccountSum(int apartmentId, int accountId, int year, bool isSoFar = false)
         {
             var predicate = GetAllValidTransactionsForReports(apartmentId);
             Func<Transaction, bool> filter;
             if (year != 0)
             {
-                filter = b =>
+                if (isSoFar)
+                {
+                    filter = b =>
                          predicate(b) &&
-                         b.Date.Year == year;
+                         b.Date.Year <= year;
+                }
+                else
+                {
+                    filter = b =>
+                             predicate(b) &&
+                             b.Date.Year == year;
+                }
+
             }
             else
             {
@@ -70,6 +78,38 @@ namespace Nadlan.Repositories.ApartmentReports
                  .Where(a => a.AccountId == accountId)
                  .Sum(a => a.Amount);
         }
+        public decimal GetAccountSum(int apartmentId, int accountId, DateTime currentDate)
+        {
+            var predicate = GetAllValidTransactionsForReports(apartmentId);
+            return Context.Transactions
+                 .Where(predicate)
+                 .Where(a => a.AccountId == accountId)
+                 .Where(a=>a.Date<=currentDate)
+                 .Sum(a => a.Amount);
+        }
+
+        /// <param name="year">0 for all years</param>
+        public decimal GetNetIncomeNew(int apartmentId, DateTime currentDate, bool isAggregated)
+        {
+            var predicate = GetRegularTransactionsFilterNew(apartmentId,false);
+            Func<Transaction, bool> filter;
+            if (isAggregated)
+            {
+                filter = b =>
+                predicate(b) &&
+                b.Date <= currentDate;
+            }
+            else
+            {
+                filter = b =>
+                predicate(b) &&
+                b.Date == currentDate;
+            }
+            var result = Context.Transactions
+              //  .Include(a => a.Account)
+                .Where(filter).Sum(a => a.Amount);
+            return result;
+        }
 
 
         /// <param name="year">0 for all years</param>
@@ -78,31 +118,21 @@ namespace Nadlan.Repositories.ApartmentReports
             var predicate = GetRegularTransactionsFilter(apartmentId, year, false);
 
             var result = Context.Transactions
-                .Include(a => a.Account)
+                //.Include(a => a.Account)
                 .Where(predicate).Sum(a => a.Amount);
             return result;
         }
 
-        public decimal GetBonus(int apartmentId,DateTime purchaseDate, out decimal investment, out decimal netIncome)
+        public decimal GetBonus(int apartmentId,DateTime purchaseDate,DateTime currentDate, out decimal investment, out decimal netIncome)
         {
             netIncome = GetNetIncome(apartmentId, 0);
             investment = GetAccountSum(apartmentId, 13);
 
-            //Func<Transaction, bool> basic = GetAllValidTransactionsForReports(apartmentId);
-            //Func<Transaction, bool> netAfterBonus = t =>
-            //            basic(t) &&
-            //            t.IsPurchaseCost == true &&
-            //            t.AccountId != 100 &&//Except for distribution
-            //            t.Account.AccountTypeId == 0;
-
-            //netIncome = Context.Transactions
-            //        .Include(a => a.Account)
-            //        .Where(netAfterBonus).Sum(a => a.Amount);
             if (apartmentId==20)
             {
                 return 0;
             }
-            var bonus = CalcBonus(investment, netIncome, purchaseDate, DateTime.Now);
+            var bonus = CalcBonus(investment, netIncome, purchaseDate, currentDate);
 
             return bonus;
         }
@@ -121,38 +151,32 @@ namespace Nadlan.Repositories.ApartmentReports
             return result;
         }
 
-        protected IEnumerable<Transaction> GetTotalCost(IEnumerable<Transaction> transactions)
+        //protected IEnumerable<Transaction> GetTotalCost(IEnumerable<Transaction> transactions)
+        //{
+        //    var basic = purchaseFilters.GetTotalCostFilter();
+        //    return transactions.Where(basic);
+        //}
+
+
+
+
+
+        protected Func<Transaction, bool> GetRegularTransactionsFilterNew(int apartmentId, bool isPurchaseCost)
         {
-            var basic = purchaseFilters.GetTotalCostFilter();
-            return transactions.Where(basic);
+            Func<Transaction, bool> basic = GetAllValidTransactionsForReports(apartmentId);
+            Func<Transaction, bool> filter = t =>
+                        basic(t) &&
+                        t.IsPurchaseCost == isPurchaseCost &&
+                        t.AccountId != 100 &&//Except for distribution
+                        t.AccountId != 198 &&//Except for deposit
+                        t.AccountId != 200 &&//Except for business
+                        t.AccountId != 201 &&//Except for balance
+                        t.AccountId != 300;//Except for bonus
+                       // t.Account.AccountTypeId == 0;
+
+            return filter;
         }
 
-
-        /// <param name="year">0 for all years</param>
-        protected decimal GetMaintenanceExpenses(int apartmentId, int year)
-        {
-            var predicate = GetRegularTransactionsFilter(apartmentId, year, false);
-
-            var result = Context.Transactions
-                .Include(a => a.Account)
-                .Where(predicate)
-                //Remove rent
-                .Where(a => a.AccountId != 1)
-                .Sum(a => a.Amount);
-            return result;
-        }
-
-        /// <param name="year">0 for all years</param>
-        protected decimal GetPurchaseExpenses(int apartmentId, int year)
-        {
-            var predicate = GetRegularTransactionsFilter(apartmentId, year, true);
-
-            var result = Context.Transactions
-                .Include(a => a.Account)
-                .Where(predicate)
-                .Sum(a => a.Amount);
-            return result;
-        }
 
 
 
@@ -163,17 +187,19 @@ namespace Nadlan.Repositories.ApartmentReports
             Func<Transaction, bool> expensesFilter = t =>
                         basic(t) &&
                         t.IsPurchaseCost == isPurchaseCost &&
-                        //t.AccountId != 1 &&//Except for rent
+                        t.AccountId != 198 &&//Except for deposit
+                        t.AccountId != 200 &&//Except for business
+                        t.AccountId != 201 &&//Except for balance
                         t.AccountId != 100 &&//Except for distribution
-                        t.AccountId != 300 &&//Except for bonus
-                        t.Account.AccountTypeId == 0;
+                        t.AccountId != 300;//Except for bonus
+                        //t.Account.AccountTypeId == 0;
 
             Func<Transaction, bool> filter;
             if (year != 0)
             {
                 filter = b =>
-                         expensesFilter(b) &&
-                         b.Date.Year == year;
+                expensesFilter(b) &&
+                b.Date.Year == year;
             }
             else
             {
@@ -196,13 +222,13 @@ namespace Nadlan.Repositories.ApartmentReports
             }
         }
 
-        public decimal CalcBonus(decimal investment, decimal netIncome, DateTime purchaseDate, DateTime currentTime)
+        public decimal CalcBonus(decimal investment, decimal netIncome, DateTime purchaseDate, DateTime currentDate)
         {
             const double THRESHOLD = 0.03;
             const decimal PERCENTAGE = (decimal)0.5;
-            decimal years = GetAgeInYears(purchaseDate);
+            decimal years = GetAgeInYears(purchaseDate, currentDate);
             decimal thresholdAccumulated = CalcAccumulatedThreshold(THRESHOLD, years);
-            decimal roiAccumulated = CalcAccumulatedRoi(purchaseDate, currentTime, investment, netIncome);
+            decimal roiAccumulated = CalcAccumulatedRoi(purchaseDate, currentDate, investment, netIncome);
             //less than threshold - no bonus     
             if (roiAccumulated <= thresholdAccumulated) return 0;
 
@@ -213,9 +239,9 @@ namespace Nadlan.Repositories.ApartmentReports
 
 
 
-        protected decimal GetAgeInYears(DateTime date)
+        protected decimal GetAgeInYears(DateTime date, DateTime currentDate)
         {
-            return (decimal)((DateTime.Now - date).TotalDays) / (decimal)365.255;
+            return (decimal)((currentDate - date).TotalDays) / (decimal)365.255;
 
         }
 
@@ -230,50 +256,36 @@ namespace Nadlan.Repositories.ApartmentReports
         }
 
 
-        protected decimal CalcROI(Apartment apartment, SummaryReport summaryReport)
-        {
-            if (apartment.PurchaseDate > DateTime.Now)
-            {
-                return 0;
-            }
-            decimal years_dec = GetAgeInYears(apartment.PurchaseDate);
-            decimal roi = 0;
-            if (summaryReport.Investment > 0 && years_dec > 0)
-            {
-                roi = (summaryReport.NetIncome / summaryReport.Investment) / years_dec;
-            }
-            return roi;
-        }
 
 
-        protected IEnumerable<Transaction> GetAllTransactions(int apartmetId)
-        {
-            var result = Context.Transactions
-                 .Include(a => a.Account)
-                 .Where(a => a.IsDeleted == false)
-                 .Where(a => a.ApartmentId == apartmetId);
-            return result;
-        }
+        //protected IEnumerable<Transaction> GetAllTransactions(int apartmetId)
+        //{
+        //    var result = Context.Transactions
+        //         .Include(a => a.Account)
+        //         .Where(a => a.IsDeleted == false)
+        //         .Where(a => a.ApartmentId == apartmetId);
+        //    return result;
+        //}
 
-        protected IEnumerable<Transaction> GetAllNonPurchase(int apartmetId)
-        {
-            var basic = nonPurchaseFilters.GetProfitIncludingDistributionsFilter();
-            var result = Context.Transactions
-                 .Include(a => a.Account)
-                 .Where(basic)
-                 .Where(a => a.ApartmentId == apartmetId);
-            return result;
-        }
+        //protected IEnumerable<Transaction> GetAllNonPurchase(int apartmetId)
+        //{
+        //    var basic = nonPurchaseFilters.GetProfitIncludingDistributionsFilter();
+        //    var result = Context.Transactions
+        //         .Include(a => a.Account)
+        //         .Where(basic)
+        //         .Where(a => a.ApartmentId == apartmetId);
+        //    return result;
+        //}
 
-        protected IEnumerable<Transaction> GetAllPurchase(int apartmetId)
-        {
-            var basic = purchaseFilters.GetAllPurchaseFilter();
-            var result = Context.Transactions
-                 .Include(a => a.Account)
-                 .Where(basic)
-                 .Where(a => a.ApartmentId == apartmetId);
-            return result;
-        }
+        //protected IEnumerable<Transaction> GetAllPurchase(int apartmetId)
+        //{
+        //    var basic = purchaseFilters.GetAllPurchaseFilter();
+        //    var result = Context.Transactions
+        //         .Include(a => a.Account)
+        //         .Where(basic)
+        //         .Where(a => a.ApartmentId == apartmetId);
+        //    return result;
+        //}
 
 
         public async Task<decimal> GetExpensesBalance()
@@ -294,137 +306,3 @@ namespace Nadlan.Repositories.ApartmentReports
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-///// <param name="year">0 for all years</param>
-//protected decimal GetNetIncome(int apartmentId)
-//{
-//    var basic = GetAllValidTransactionsForReports(apartmentId);
-//    //var basic = nonPurchaseFilters.GetProfitIncludingDistributionsFilter();
-//    //if (year != 0) basic = t => basic(t) && t.Date.Year == year;
-//    var result = Context.Transactions
-//        .Include(a => a.Account)
-//        .Where(basic)
-//        .Where(a => a.IsPurchaseCost == false)//remove distribution
-//        .Where(a => a.AccountId != 100)//remove distribution
-//        .Where(a => a.AccountId != 300)//remove bonus
-//        .Where(a => a.Account.AccountTypeId == 0);
-//    //if (year != 0) return result.Where(a => a.Date.Year == year);
-//    return result;
-//}
-
-
-///// <param name="year">0 for all years</param>
-//protected IEnumerable<Transaction> GetNetIncome(int apartmentId, int year)
-//{
-//    var basic = GetAllValidTransactionsForReports(apartmentId);
-//    //var basic = nonPurchaseFilters.GetProfitIncludingDistributionsFilter();
-//    //if (year != 0) basic = t => basic(t) && t.Date.Year == year;
-//    var result = Context.Transactions
-//        .Include(a => a.Account)
-//        .Where(basic)
-//        .Where(a => a.IsPurchaseCost == false)//remove distribution
-//        .Where(a => a.AccountId != 100)//remove distribution
-//        .Where(a => a.AccountId != 300)//remove bonus
-//        .Where(a => a.Account.AccountTypeId == 0);
-//    if (year != 0) return result.Where(a => a.Date.Year == year);
-//    return result;
-//}
-
-//[Obsolete]
-///// <param name="year">0 for all years</param>
-//protected IEnumerable<Transaction> GetBonusPaid(IEnumerable<Transaction> transactions, int year)
-//{
-//    var result = transactions
-//        .Where(a => a.AccountId == 300);//remove bonus
-//    if (year != 0) return result.Where(a => a.Date.Year == year);
-//    return result;
-//}
-
-
-
-
-
-
-
-
-//protected IEnumerable<Transaction> GetNetIncome(int apartmetId, int year)
-//{
-//    var basic = nonPurchaseFilters.GetProfitRemoveDistributionFilter();
-//    if (year != 0) basic = t => basic(t) && t.Date.Year == year;
-
-//    return Context.Transactions
-//         .Include(a => a.Account)
-//         .Where(basic)
-//         .Where(a => a.ApartmentId == apartmetId);
-//}
-
-//protected decimal GetInvestment(int apartmentId)
-//{
-//    var predicate = GetAllValidTransactionsForReports(apartmentId);
-//    return Context.Transactions
-//         .Where(predicate)
-//         .Where(a=>a.AccountId==13)
-//         .Sum(a=>a.Amount);
-//}
-
-
-//protected IEnumerable<Transaction> GetInvestment(IEnumerable<Transaction> transactions)
-//{
-//    var basic = purchaseFilters.GetInvestmentFilter();
-//    return transactions
-//         .Where(basic);
-//}
-
-//public Func<Transaction, bool> GetProfitIncludingDistributionsFilter()
-//{
-//    Func<Transaction, bool> basicPredicate = t =>
-//                !t.IsDeleted &&
-//                !t.IsPurchaseCost &&
-//                !t.IsBusinessExpense &&
-//                t.Account.AccountTypeId == 0;
-//    //t.AccountId != 198; //Not a deposit (this line is a not needed as we have the AccountTypeId condition)
-//    return basicPredicate;
-//}
-
-//double years = ((DateTime.Now - investment.date).TotalDays) / 365.255;
-//double years = DateTime.Now.Subtract(investment.date).TotalDays / 365.255;
-//System.TimeSpan diff = DateTime.Now.Subtract(investment.date) / 365.255;
-//DateTime zeroTime = new DateTime(1, 1, 1);
-//TimeSpan span = DateTime.Today - apartment.PurchaseDate;
-// decimal years_dec = ((zeroTime + span).Year - 1) + ((zeroTime + span).Month - 1) / 12m;
-// decimal years_dec = (decimal)((DateTime.Now - apartment.PurchaseDate).TotalDays) / (decimal)365.255;
-
-//var xxx = diff.TotalDays/365;
-
-
-//protected IEnumerable<Transaction> GetInvestment(int apartmetId)
-//{
-//    var basic = purchaseFilters.GetInvestmentFilter();
-//    return Context.Transactions
-//         .Include(a => a.Account)
-//         .Where(basic)
-//         .Where(a => a.ApartmentId == apartmetId);
-//}

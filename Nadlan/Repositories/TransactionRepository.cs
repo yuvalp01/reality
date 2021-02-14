@@ -14,6 +14,9 @@ namespace Nadlan.Repositories
         public int? AccountId { get; set; }
         public int? ApartmentId { get; set; }
         public int? MonthsBack { get; set; }
+        public bool? IsPurchaseCost { get; set; }
+        public int? Year { get; set; }
+        public bool? IsSoFar { get; set; }
     }
 
     public class TransactionRepository : Repository<Transaction>, ITransactionRepository
@@ -65,12 +68,8 @@ namespace Nadlan.Repositories
             {
                 return await transactionList.ToListAsync();
             }
-
-            //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-            //{
-            //    transactions = transactions.Where(a=> a.Id>1000);
-            //}
         }
+
         public async Task<List<TransactionDto>> GetAllExpensesAsync(int monthsBack)
         {
             Func<Transaction, bool> basicPredicate = t => !t.IsDeleted;
@@ -298,13 +297,6 @@ namespace Nadlan.Repositories
             Update(transaction);
             await SaveAsync();
         }
-        //[Obsolete]
-        //public async Task DeleteTransactionAsync(Transaction transaction)
-        //{
-        //    throw new NotImplementedException("delete only direcly in db with boolean flag");
-        //    Delete(transaction);
-        //    await SaveAsync();
-        //}
 
         public Task<Transaction> GetByIdAsync(int id)
         {
@@ -346,9 +338,49 @@ namespace Nadlan.Repositories
 
         }
 
+        public Task<List<Transaction>> GetPendingExpensesForApartment(int apartmentId, int year)
+        {
+
+            return Context.Transactions
+                         .Where(a => a.IsDeleted == false)
+                         .Where(a => a.ApartmentId==apartmentId)
+                         .Where(a => a.PersonalTransactionId == 0)
+                         .Where(a => a.Date.Year <= year)
+                         .ToListAsync();
+
+
+        }
+
+
+
+        public Task<List<Transaction>> GetFilteredTransactions(Filter filter)
+        {
+            var query = Context.Transactions.OrderByDescending(a => a.Id)
+                                    .Where(a => !a.IsDeleted);
+            //Conditionaly filter accounts:
+            query = query.Where(a => filter.AccountId == null ? true : a.AccountId == filter.AccountId);
+            //Conditionaly filter apartments:
+            query = query.Where(a => filter.ApartmentId == null ? true : a.ApartmentId == filter.ApartmentId);
+            //Conditionaly filter isPurchaseCost:
+            query = query.Where(a => filter.IsPurchaseCost == null ? true : a.IsPurchaseCost == filter.IsPurchaseCost);
+            //Conditionaly filter year:
+            if (filter.Year != null)
+            {
+                if (filter.Year > 0)
+                {
+                    if (filter.IsSoFar.Value)
+                    {
+                        query = query.Where(a => a.Date.Year <= filter.Year);
+                    }
+                    else
+                    {
+                        query = query.Where(a => a.Date.Year == filter.Year);
+                    }
+                }
+            }
+            return query.ToListAsync();
+        }
     }
-
-
 }
 
 

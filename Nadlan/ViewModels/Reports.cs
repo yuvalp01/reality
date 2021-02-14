@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 namespace Nadlan.ViewModels.Reports
 {
@@ -23,7 +20,7 @@ namespace Nadlan.ViewModels.Reports
         public decimal BonusExpected { get; set; }
         [Obsolete]
         public decimal BonusPaid { get; set; }
-       
+
         public decimal NetForInvestor { get; set; }
         public decimal Years { get; set; }
 
@@ -33,6 +30,17 @@ namespace Nadlan.ViewModels.Reports
         public decimal BonusSoFar { get; set; }
 
     }
+
+
+
+
+
+
+
+
+
+
+
 
     public class PurchaseReport
     {
@@ -105,7 +113,40 @@ namespace Nadlan.ViewModels.Reports
 
 
 
+    public class SoFarReport
+    {
+        public int ApartmentId { get; }
+        public DateTime CurrentDate { get; }
+        public SoFarReport(int apartmentId, DateTime currentDate)
+        {
+            ApartmentId = apartmentId;
+            CurrentDate = currentDate;
+        }
+        public decimal Investment { get; set; }
+        public decimal GrossIncome{ get; set; }
+        public decimal NetIncome { get; set; }
+        public decimal PendingExpenses { get; set; }
 
+        public decimal ROI { get; set; }
+        public decimal RoiForInvestor { get; set; }
+        public decimal PredictedROI { get; set; }
 
+        //Distribution
+        public decimal PendingDistribution { get; set; }
+        public decimal Distributed { get; set; }
+
+        //Bonus
+        public decimal Bonus { get; set; }
+        public decimal BonusPaid { get; set; }
+        public decimal PendingBonus { get; set; }
+        public decimal BonusPercentage { get; set; }
+
+        public decimal NetForInvestor { get; set; }
+        public decimal Years { get; set; }
+
+        public decimal RoiAccumulated { get; set; }
+        public decimal ThresholdAccumulated { get; set; }
+
+    }
 
 }
