@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges, Inject } from '@angular/core';
-import { IIncomeReport, IPurchaseReport, ISummaryReport, ITransaction, IApartment, IEndOfTheYearCalc, ISoFarReport, IFilter, IPersonalTransaction } from '../models';
+import { IIncomeReport, IPurchaseReport, ISummaryReport, ITransaction, IApartment, ISoFarReport, IFilter, IPersonalTransaction } from '../models';
 import { ReportService } from '../services/reports.service';
 import { ActivatedRoute, RouterEvent, NavigationEnd } from '@angular/router';
 import { TransactionService } from '../services/transaction.service';

@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IIncomeReport, IPurchaseReport, ISummaryReport, IApartment, IInvestorReportOverview, IEndOfTheYearCalc, ISoFarReport } from '../models';
+import { IIncomeReport, IPurchaseReport, ISummaryReport, IApartment, IInvestorReportOverview, ISoFarReport } from '../models';
 
 
 @Injectable()
