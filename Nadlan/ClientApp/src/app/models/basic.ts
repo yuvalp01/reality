@@ -15,7 +15,7 @@ export interface ITransaction {
   isConfirmed: boolean;
   hours: number;
   personalTransactionId: number;
-  messages:IMessage[];
+  messages: IMessage[];
   //hasUnreadMessages:boolean;
 
 }
@@ -59,11 +59,12 @@ export interface IAccount {
   accountTypeId: number;
 }
 export interface IPersonalTransaction {
-  id: number; 
+  id: number;
   date: Date;
   amount: number;
   comments: string;
   stakeholderId: number;
+  apartmentId: number;
   apartment: IApartment;
   transactionType: number;
 
@@ -75,15 +76,16 @@ export interface IStakeholder {
   type: number;
 }
 
-export interface IAppUser
-{
+export interface IAppUser {
   userId: number;
   userName: string
 }
 
-export interface IFilter
-{
-  accountId:number;
-  apartmentId:number;
-  monthsBack:number;
+export interface IFilter {
+  accountId: number;
+  apartmentId: number;
+  monthsBack: number;
+  isPurchaseCost: boolean;
+  year: number;
+  isSoFar: boolean;
 }

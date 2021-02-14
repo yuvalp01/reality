@@ -3,29 +3,51 @@ export interface ISummaryReport {
   investment: number,
   netIncome: number,
   roi: number,
-  roiForInvestor:number,
+  roiForInvestor: number,
   predictedROI: number;
   initialRemainder: number,
   balance: number,
   distributed: number,
   bonusExpected: number,
   bonusPaid: number,
-  years:number,
-  roiAccumulated:number,
-  thresholdAccumulated:number,
-  bonusSoFar:number,
-  bonusPercentage:number,
+  years: number,
+  roiAccumulated: number,
+  thresholdAccumulated: number,
+  bonusSoFar: number,
+  bonusPercentage: number,
   netForInvestor: number,
 
+}
+export interface ISoFarReport {
+  investment: number,
+  netIncome: number,
+  grossIncome: number,
+  pendingExpenses: number,
+  roi: number,
+  roiForInvestor: number,
+  predictedROI: number;
+
+  pendingDistribution: number,
+  distributed: number,
+
+  Bonus: number,
+  bonusPaid: number,
+  pendingBonus: number,
+  bonusPercentage: number,
+
+  years: number,
+  roiAccumulated: number,
+  thresholdAccumulated: number,
+  netForInvestor: number,
 
 
 }
 
 
 export interface IIncomeReport {
-  grossIncome:number,
+  grossIncome: number,
   expenses: number,
-  tax:number,
+  tax: number,
   netIncome: number,
   //forDistribution: number,
   netForInvestor: number,
@@ -40,9 +62,9 @@ export interface IPurchaseReport {
   totalCost: number,
   renovationCost: number,
   expensesNoRenovation: number,
-  remainder:number,
+  remainder: number,
   accountsSum: IAccountsSum,
- 
+
 }
 export interface IAccountsSum {
   accountId: number,
@@ -77,7 +99,7 @@ export interface IPortfolioReport {
 
 
   pendingProfits: number,
-  pendingExpenses: number, 
+  pendingExpenses: number,
   ownership: number,
   //[Obsolete]
   minimalProfitUpToDate: number,
