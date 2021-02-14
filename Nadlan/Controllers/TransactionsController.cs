@@ -98,6 +98,30 @@ namespace Nadlan.Controllers
             return Ok(transaction);
         }
 
+        [HttpGet("getPendingExpensesForApartment/{apartmentId}/{year}")]
+        public async Task<IActionResult> getPendingExpensesForApartment([FromRoute] int apartmentId, int year)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var transaction = await _repositoryWraper.Transaction
+                .GetPendingExpensesForApartment(apartmentId, year);
+
+            if (transaction == null) return NotFound();
+
+            return Ok(transaction);
+        }
+
+
+        [HttpGet("GetFiltered")]
+        public async Task<IEnumerable<TransactionDto>> GetFiltered([FromQuery] Filter filter)
+        {
+            var transactions = await _repositoryWraper.Transaction.GetFilteredTransactions(filter);
+
+            var transactionsDto = _mapper.Map<List<Transaction>, IEnumerable<TransactionDto>>(transactions);
+            return transactionsDto;
+        }
+
+
 
         // GET: api/Transactions/5
         [HttpGet("{apartmentId}/{accountId}/{isPurchaseCost}/{year=0}")]
