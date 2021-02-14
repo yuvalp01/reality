@@ -103,20 +103,14 @@ namespace Nadlan.Controllers
 
         // DELETE: api/PersonalTransactions/5
         [HttpDelete("{id}")]
-        protected async Task<ActionResult<PersonalTransaction>> DeletePersonalTransaction(int id)
+        public async Task<ActionResult> DeletePersonalTransaction(int id)
         {
-            await _repositoryWrapper.PersonalTransaction
-                .DeleteTransactionAsync(new PersonalTransaction { Id = id });
-
-            //var personalTransaction = await _context.PersonalTransactions.FindAsync(id);
-            //if (personalTransaction == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //_context.PersonalTransactions.Remove(personalTransaction);
-            //await _context.SaveChangesAsync();
-            return CreatedAtAction("DeletePersonalTransaction", new { id });
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            await _repositoryWrapper.PersonalTransaction.SoftDeleteTransactionAsync(id);
+            return Ok();
 
         }
 

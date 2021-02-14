@@ -65,23 +65,28 @@ namespace Nadlan.Repositories
             Create(transaction);
             await SaveAsync();
         }
+
         public async Task UpdateTransactionAsync(PersonalTransaction transaction)
         {
             Update(transaction);
             await SaveAsync();
         }
-        //public async Task UpdateTransactionAsync(PersonalTransaction dbTransaction, PersonalTransaction transaction)
-        //{
-        //    Update(transaction);
-        //    await SaveAsync();
-        //}
+
         [Obsolete]
         public async Task DeleteTransactionAsync(PersonalTransaction transaction)
         {
             throw new NotImplementedException("delete only direcly in db with boolean flag");
-            //Delete(transaction);
-            //await SaveAsync();
         }
+
+
+
+        public async Task SoftDeleteTransactionAsync(int personalTransId)
+        {
+            var originalTransaction = Context.PersonalTransactions.FindAsync(personalTransId);
+            originalTransaction.Result.IsDeleted = true;
+            await SaveAsync();
+        }
+
 
         public Task<PersonalTransaction> GetByIdAsync(int id)
         {
