@@ -38,7 +38,7 @@ export class AddExpenseComponent implements OnInit {
   signIcone: string = 'add';
   tooltipSign: string = 'Increase your account';
   enableSwitch: boolean = false;
-
+  partnershipApartments: number[] = [1, 3, 4, 20];
   purchaseCostAccounts: number[] = [6, 7, 8, 11, 12, 13, 16, 17, 18];
 
   @Output() refreshEmitter = new EventEmitter();
@@ -55,6 +55,11 @@ export class AddExpenseComponent implements OnInit {
         //In the future, add a checkbox "use investor credit card" 
         //transaction.personalTransactionId = -1;
         transaction.personalTransactionId = 0;//most cases: still not covered
+        //for partenership apartments no need to cover
+        if (this.partnershipApartments.includes(transaction.apartmentId)) {
+          transaction.personalTransactionId = -2;//CoveredByFunds
+        }
+        //for balance and business accounts it's not relevant
         if (transaction.accountId == 200 || transaction.accountId == 201) {
           transaction.personalTransactionId = -3;//not relevant
         }
