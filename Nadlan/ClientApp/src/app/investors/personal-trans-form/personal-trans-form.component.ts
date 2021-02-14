@@ -33,7 +33,6 @@ export class PersonalTransFormComponent implements OnInit {
   @Output() chageStakeholderEmitter = new EventEmitter();
 
   ngOnInit() {
-    this.loadData();
     this.personalTransForm = this.formBuilder.group({
       stakeholderId: [0, Validators.required],
       apartmentId: [0, Validators.min(-2)],
@@ -42,6 +41,9 @@ export class PersonalTransFormComponent implements OnInit {
       date: [null, Validators.required],
       comments: ['', Validators.required],
     });
+
+    this.loadData();
+
     this.personalTransForm.get('stakeholderId').valueChanges.subscribe(val => {
       let currentStakeholder = this.personalTransForm.controls['stakeholderId'].value;
       this.chageStakeholderEmitter.emit(currentStakeholder)
@@ -83,7 +85,7 @@ export class PersonalTransFormComponent implements OnInit {
 
 
   onSaveComplete(result: IPersonalTransaction) {
-    let action = 'Updated'; 
+    let action = 'Updated';
     if (result) {
       this.personalTrans = result;
       action = 'Added';
@@ -102,6 +104,12 @@ export class PersonalTransFormComponent implements OnInit {
       });
     if (this.data.transactionId == 0) {
       this.title = "Add new";
+      if (this.data.expected) {
+
+        this.personalTransForm.patchValue(this.data.expected);
+
+      }
+
     }
     else {
       this.title = "Edit";

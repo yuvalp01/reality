@@ -9,7 +9,9 @@ import { IPersonalTransaction, IStakeholder, IInvestorReportOverview, IPortfolio
 export class PersonalTransService {
 
   constructor(private httpClient: HttpClient, @Inject('BASE_URL') private baseUrl: String) {
+    // this.currentYearEnd = 2020;
   }
+  //currentYearEnd: number;
 
   getPesonalTrans(): Observable<IPersonalTransaction[]> {
     return this.httpClient.get<IPersonalTransaction[]>(this.baseUrl + 'api/personalTransactions');
@@ -32,7 +34,7 @@ export class PersonalTransService {
     return this.httpClient.get<IPersonalTransaction[]>(`${this.baseUrl}api/personalTransactions/GetAllDistributions/${stakeholderId}`);
   }
 
-  
+
   addPersonalTrans(transaction: IPersonalTransaction): Observable<IPersonalTransaction> {
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.httpClient.post<IPersonalTransaction>(this.baseUrl + 'api/personalTransactions', transaction, options);
@@ -41,7 +43,7 @@ export class PersonalTransService {
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.httpClient.put<IPersonalTransaction>(this.baseUrl + 'api/personalTransactions', transaction, options);
   }
-  detelePersonalTrans(transactionId: number): Observable<{}> {
+  detelePersonalTrans(transactionId: any): Observable<{}> {
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.httpClient.delete<IPersonalTransaction>(this.baseUrl + `api/personalTransactions/${transactionId}`, options);
   }
