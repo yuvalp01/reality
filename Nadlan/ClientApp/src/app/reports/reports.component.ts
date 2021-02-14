@@ -41,14 +41,5 @@ export class ReportsComponent implements OnInit {
 
     });
 
-
-
-
-
-    //showReport(apartmentId: number) {
-    //  this.selectedApartmentId = apartmentId;
-    //  //this.route.snapshot.params['apartmentId'] = this.selectedApartmentId;
-
-    //}
   }
 }

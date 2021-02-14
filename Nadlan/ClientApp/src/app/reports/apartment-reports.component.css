@@ -27,6 +27,11 @@ mat-card {
   cursor: pointer;
 }
 
+.disabled {
+  color: lightgray;
+  cursor: default;
+}
+
 /*::ng-deep .mat-tab-header {
   background-color: red;
 }*/

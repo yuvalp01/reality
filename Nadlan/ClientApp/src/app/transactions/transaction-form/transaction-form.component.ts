@@ -31,21 +31,10 @@ export class TransactionFormComponent implements OnInit {
   apartments: IApartment[];
   transaction: ITransaction;
   @Output() refreshEmitter = new EventEmitter();
-  // disableCoveredSwitch: boolean = false;
-  // @ViewChild('group',{static:false}) group;
 
-  // switchIsCovered() {
-  //   if (this.transactionFormGroup.controls.personalTransactionId.value == 0) {
-  //     this.transactionFormGroup.patchValue({ personalTransactionId: -1 });
-  //   }
-  //   else {
-  //     this.transactionFormGroup.patchValue({ personalTransactionId: 0 });
-  //   }
-  //   this.transactionFormGroup.controls.personalTransactionId.markAsDirty();
-  // }
 
   ngOnInit() {
-    
+
     this.transactionFormGroup = this.formBuilder.group({
       accountId: [0, Validators.min(-2)],
       apartmentId: [0, Validators.min(-2)],
@@ -54,7 +43,7 @@ export class TransactionFormComponent implements OnInit {
       isPurchaseCost: [false],
       isBusinessExpense: [false],
       isConfirmed: [false],
-      personalTransactionId: [null,Validators.required],
+      personalTransactionId: [null, Validators.required],
       comments: [''],
     });
     this.loadData();
@@ -68,8 +57,7 @@ export class TransactionFormComponent implements OnInit {
       });
     if (this.data.transactionId == 0) {
       this.title = "Add new";
-      if(this.data.expected)
-      {
+      if (this.data.expected) {
         this.loadTrans(this.data.expected);
         this.transactionFormGroup.markAsDirty();
       }
