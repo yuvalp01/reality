@@ -39,7 +39,7 @@ export class AddExpenseComponent implements OnInit {
   tooltipSign: string = 'Increase your account';
   enableSwitch: boolean = false;
   partnershipApartments: number[] = [1, 3, 4, 20];
-  purchaseCostAccounts: number[] = [6, 7, 8, 11, 12, 13, 16, 17, 18];
+  purchaseCostAccounts: number[] = [6, 7, 8, 11, 12, 13, 16, 17, 20];
 
   @Output() refreshEmitter = new EventEmitter();
 

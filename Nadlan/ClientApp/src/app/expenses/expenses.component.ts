@@ -20,8 +20,8 @@ export class ExpensesComponent implements OnInit {
   dataSourceAssistant = new MatTableDataSource<ITransaction>();
   selectedApartment: any;
   assistantBalance: number = 0;
-  visibleAccountsHours: number[] = [4, 6, 11, 16, 18, 200];
-  visibleAccountsExpenses: number[] = [1, 4, 6, 18, 11, 8, 16, 19, 198, 200, 201];
+  visibleAccountsHours: number[] = [4, 6, 11, 16, 18, 20, 200];
+  visibleAccountsExpenses: number[] = [1, 4, 6, 18, 11, 8, 16, 19, 20, 198, 200, 201];
   monthsBack: number = 3;
   currentUser: string = 'unknown';
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -128,10 +128,10 @@ export class ExpensesComponent implements OnInit {
       data: { tableName: 'transactions', id: message.id }
     });
     // dialogLocal.afterClosed().subscribe(() => this.loadList())
-     dialogLocal.componentInstance.readEmitter.subscribe((status) => {
-       if(status=='read') message['unreadByMe']=false;
-       if(status=='new') message['unreadByOthers']=true;
-      })
+    dialogLocal.componentInstance.readEmitter.subscribe((status) => {
+      if (status == 'read') message['unreadByMe'] = false;
+      if (status == 'new') message['unreadByOthers'] = true;
+    })
   }
 
   ngAfterViewInit(): void {
