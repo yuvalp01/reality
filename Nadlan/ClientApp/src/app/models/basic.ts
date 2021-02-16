@@ -88,4 +88,6 @@ export interface IFilter {
   isPurchaseCost: boolean;
   year: number;
   isSoFar: boolean;
+  personalTransactionId: number;
+  isLiteObject: boolean;
 }

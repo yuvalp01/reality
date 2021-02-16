@@ -33,7 +33,8 @@ namespace Nadlan.Controllers
         [HttpGet]
         public async Task<IEnumerable<TransactionDto>> GetTransactions([FromQuery] Filter filter)
         {
-            var transactions = await _repositoryWraper.Transaction.GetAllAsync(filter);
+           // var transactions = await _repositoryWraper.Transaction.GetAllAsync(filter);
+            var transactions = await _repositoryWraper.Transaction.GetFilteredTransactions(filter);
 
             var transactionsDto = _mapper.Map<List<Transaction>, IEnumerable<TransactionDto>>(transactions);
             return transactionsDto;

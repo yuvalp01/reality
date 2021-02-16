@@ -96,6 +96,7 @@ export class ApartmentReportsComponent implements OnInit {
     this.filter.year = this.selectedYear;
     this.filter.accountId = accountId;
     this.filter.isSoFar = true;
+    this.filter.isLiteObject = true;
 
     this.transactionService.getFilteredTransactions(this.filter).subscribe({
       next: (result) => {
