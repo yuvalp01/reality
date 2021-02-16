@@ -31,6 +31,7 @@
       </mat-form-field>
 
     </fieldset>
+
     <fieldset>
       <mat-form-field style="width: 100%" appearance="outline">
         <mat-label>Apartment</mat-label>
@@ -42,6 +43,66 @@
       </mat-form-field>
 
     </fieldset>
+    <mat-slide-toggle (change)="loadTransactions()" formControlName="showPurchaseCostOnly">Show Purchase Cost Only
+    </mat-slide-toggle>
+    <div 
+    style="border:solid; 
+    height: 200px;
+    overflow:auto;
+    background-color:
+    aliceblue; 
+    position: absolute;
+    left: 0;
+    top:50px"
+      *ngIf="dataSourceTrans.data.length>0" id="transTbl">
+
+      <!-- <p *ngFor="let item of dataSourceTrans.data">{{item.id}} | {{item.comments}}</p> -->
+
+
+      <table mat-table [dataSource]="dataSourceTrans.data" matSort class="mat-elevation-z8">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+          <td mat-cell *matCellDef="let transaction">{{transaction.id}}</td>
+        </ng-container>
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+          <td mat-cell *matCellDef="let transaction">{{transaction.date | date:'dd-MM-yyyy'}}</td>
+       </ng-container>
+       <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+        <td mat-cell *matCellDef="let transaction">
+          <!--how_to_reg-->
+          <mat-icon matTooltip="Still not covered by the investor" *ngIf="transaction.personalTransactionId == 0">
+            hourglass_full</mat-icon>
+          <span [ngClass]="{
+          positive: isPositive(transaction.amount),
+          negative: !isPositive(transaction.amount)
+        }">
+            {{transaction.amount}}
+
+          </span>
+
+        </td>
+  </ng-container>
+  <ng-container matColumnDef="account">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+    <td mat-cell *matCellDef="let transaction">{{transaction.accountName}}</td>
+  </ng-container>
+  <ng-container matColumnDef="comments">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>
+    <td mat-cell *matCellDef="let transaction">
+      {{transaction.comments}}
+    </td>
+  </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  
+        </table>
+
+
+    </div>
     <fieldset>
       <mat-form-field style="width: 100%" appearance="outline">
         <mat-label>Amount</mat-label>

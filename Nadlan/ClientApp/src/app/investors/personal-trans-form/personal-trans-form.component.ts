@@ -2,10 +2,11 @@ import { Component, OnInit, ViewChild, NgZone, Inject, Output, EventEmitter, ɵC
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
-import { IStakeholder, IPersonalTransaction, IApartment } from '../../models';
+import { IStakeholder, IPersonalTransaction, IApartment, ITransaction, IFilter } from '../../models';
 import { PersonalTransService } from '../personal-trans.service';
-import { MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+import { MAT_DIALOG_DATA, MatSnackBar, MatTableDataSource } from '@angular/material';
 import { ApartmentService } from 'src/app/services/apartment.service';
+import { TransactionService } from 'src/app/services/transaction.service';
 
 
 
@@ -21,6 +22,7 @@ export class PersonalTransFormComponent implements OnInit {
     private _ngZone: NgZone,
     private snackBar: MatSnackBar,
     private personalTransService: PersonalTransService,
+    private transactionService: TransactionService,
     private apartmentService: ApartmentService,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
@@ -29,6 +31,13 @@ export class PersonalTransFormComponent implements OnInit {
   stakeholders: IStakeholder[];
   apartments: IApartment[];
   personalTrans: IPersonalTransaction;
+  //showPurchaseCostOnly: boolean = false;
+  dataSourceTrans = new MatTableDataSource<ITransaction>();
+  //displayedColumns: string[] = ['id', 'date', 'apartmentId', 'isPurchaseCost', 'accountId', 'amount', 'comments', 'actions'];
+  displayedColumns: string[] = ['id', 'date', 'amount', 'comments', 'account'];
+
+  //transactions: ITransaction[];
+
   @Output() refreshEmitter = new EventEmitter();
   @Output() chageStakeholderEmitter = new EventEmitter();
 
@@ -40,6 +49,7 @@ export class PersonalTransFormComponent implements OnInit {
       amount: [null, Validators.required],
       date: [null, Validators.required],
       comments: ['', Validators.required],
+      showPurchaseCostOnly: false,
     });
 
     this.loadData();
@@ -48,6 +58,7 @@ export class PersonalTransFormComponent implements OnInit {
       let currentStakeholder = this.personalTransForm.controls['stakeholderId'].value;
       this.chageStakeholderEmitter.emit(currentStakeholder)
     });
+
   }
 
   saveTransaction() {
@@ -148,11 +159,33 @@ export class PersonalTransFormComponent implements OnInit {
   }
 
 
+  loadTransactions() {
+    let filter: IFilter = {} as IFilter;
+    filter.personalTransactionId = 0;
+    filter.apartmentId = this.personalTransForm.controls.apartmentId.value;
+    filter.isPurchaseCost = this.personalTransForm.controls.showPurchaseCostOnly.value;
+    this.transactionService.getTransactions_(filter).subscribe({
+      next: (result) => {
+        this.dataSourceTrans.data = result;
+        let total = this.dataSourceTrans.data.reduce((sum, current) => sum + current.amount, 0)
+        this.personalTransForm.controls.amount.setValue(total);
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
 
   @ViewChild('autosize', { static: false }) autosize: CdkTextareaAutosize;
   triggerResize() {
     // Wait for changes to be applied, then trigger textarea resize.
     this._ngZone.onStable.pipe(take(1))
       .subscribe(() => this.autosize.resizeToFitContent(true));
+  }
+
+  public isPositive(value: number): boolean {
+    if (value >= 0) {
+      return true;
+    }
+    return false;
   }
 }
