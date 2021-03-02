@@ -92,12 +92,27 @@ namespace Nadlan.Controllers
 
         // POST: api/PersonalTransactions
         [HttpPost]
-        public async Task<ActionResult<PersonalTransaction>> PostPersonalTransaction(PersonalTransaction personalTransaction)
+        public async Task<ActionResult<PersonalTransaction>> PostPersonalTransaction(PersonalTransaction personalTransaction, [FromQuery] Filter filter)
         {
             await _repositoryWrapper.PersonalTransaction
                 .CreateTransactionAsync(personalTransaction);
             return CreatedAtAction("GetPersonalTransaction", new { id = personalTransaction.Id }, personalTransaction);
         }
+
+
+        [HttpPost("withFilter")]
+        public ActionResult<object> PostWithFilter(PersonalTransWithFilter transWithFilter)
+        {
+
+            var affected =  _repositoryWrapper.PersonalTransaction
+                .CreatePersonalTransAndUpdateTransactions(transWithFilter);
+           // return CreatedAtAction("GetPersonalTransaction", new { id = transWithFilter.PersonalTransaction, affected });
+            return Ok(affected); // CreatedAtAction("GetPersonalTransaction", new { id = transWithFilter.PersonalTransaction.Id, affected =  9 });
+
+
+        }
+
+
 
 
 

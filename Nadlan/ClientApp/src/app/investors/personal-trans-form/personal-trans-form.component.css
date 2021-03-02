@@ -1,3 +1,7 @@
 fieldset {
   height: 70px
 }
+
+.withFilter{
+  background-color: teal;
+}

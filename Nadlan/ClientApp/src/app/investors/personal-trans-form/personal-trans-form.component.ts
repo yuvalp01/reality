@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, NgZone, Inject, Output, EventEmitter, ɵC
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
-import { IStakeholder, IPersonalTransaction, IApartment, ITransaction, IFilter } from '../../models';
+import { IStakeholder, IPersonalTransaction, IApartment, ITransaction, IFilter, IPersonalTransWithFilter } from '../../models';
 import { PersonalTransService } from '../personal-trans.service';
 import { MAT_DIALOG_DATA, MatSnackBar, MatTableDataSource } from '@angular/material';
 import { ApartmentService } from 'src/app/services/apartment.service';
@@ -31,26 +31,39 @@ export class PersonalTransFormComponent implements OnInit {
   stakeholders: IStakeholder[];
   apartments: IApartment[];
   personalTrans: IPersonalTransaction;
-  //showPurchaseCostOnly: boolean = false;
   dataSourceTrans = new MatTableDataSource<ITransaction>();
   //displayedColumns: string[] = ['id', 'date', 'apartmentId', 'isPurchaseCost', 'accountId', 'amount', 'comments', 'actions'];
   displayedColumns: string[] = ['id', 'date', 'amount', 'comments', 'account'];
+  years: number[] = [2018, 2019, 2020, 2021, 2022, 2023];
 
-  //transactions: ITransaction[];
+  isFilterConfirmed: boolean = false;
+  showResults: boolean = false;
+
+  //filterTransForm: FormGroup;
+  filterTrans: IFilter;
 
   @Output() refreshEmitter = new EventEmitter();
   @Output() chageStakeholderEmitter = new EventEmitter();
 
   ngOnInit() {
     this.personalTransForm = this.formBuilder.group({
-      stakeholderId: [0, Validators.required],
+      stakeholderId: [0, Validators.min(1)],
       apartmentId: [0, Validators.min(-2)],
       transactionType: [null, Validators.required],
       amount: [null, Validators.required],
       date: [null, Validators.required],
       comments: ['', Validators.required],
-      showPurchaseCostOnly: false,
+      // showPurchaseCostOnly: false,
+      filter_isPurchaseCost: null,
+      filter_year: null,
+
     });
+
+    // this.filterTransForm = this.formBuilder.group({
+    //   isPurchaseCost: null,
+    //   year: null,
+    // });
+
 
     this.loadData();
 
@@ -62,7 +75,6 @@ export class PersonalTransFormComponent implements OnInit {
   }
 
   saveTransaction() {
-
     if (this.personalTransForm.valid) {
       if (this.personalTransForm.dirty) {
         const t: IPersonalTransaction = { ...this.personalTrans, ...this.personalTransForm.value }
@@ -76,11 +88,31 @@ export class PersonalTransFormComponent implements OnInit {
             })
         }
         else {
-          this.personalTransService.addPersonalTrans(t)
-            .subscribe({
-              next: result => this.onSaveComplete(result),
-              error: err => console.error(err)
-            });
+
+          //let isConfirmed = this.personalTransForm.controls.isConfirmed.value;
+          if (this.isFilterConfirmed && this.dataSourceTrans.data.length > 0) {
+            // let filter = {} as IFilter;
+            // filter.apartmentId = t.apartmentId;
+            // filter.personalTransactionId = 0;
+            // filter.isPurchaseCost = this.personalTransForm.controls.showPurchaseCostOnly.value;
+
+            let transWithFilter = {} as IPersonalTransWithFilter;
+            transWithFilter.filter = this.filterTrans;
+            transWithFilter.personalTransaction = t;
+            this.personalTransService.addPersonalTransWithFilter(transWithFilter)
+              .subscribe({
+                next: result => this.onSaveComplete_(result),
+                error: err => console.error(err)
+              });
+          }
+          //block
+          else {
+            this.personalTransService.addPersonalTrans(t)
+              .subscribe({
+                next: result => this.onSaveComplete(result),
+                error: err => console.error(err)
+              });
+          }
         }
       }
       else {
@@ -94,6 +126,16 @@ export class PersonalTransFormComponent implements OnInit {
     }
   }
 
+
+  onSaveComplete_(result: number) {
+    let action = 'Updated';
+    if (result) {
+      // this.personalTrans = result;
+      action = `Added with ${result} affected`;
+    }
+    let snackBarRef = this.snackBar.open(`Personal transaction`, action, { duration: 2000 });
+    this.refreshEmitter.emit();
+  }
 
   onSaveComplete(result: IPersonalTransaction) {
     let action = 'Updated';
@@ -157,18 +199,52 @@ export class PersonalTransFormComponent implements OnInit {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + 3);
     ///
   }
+  closeResults(isConfirmed) {
+    this.showResults = false;
+    this.isFilterConfirmed = isConfirmed;
+    if (isConfirmed) {
+      let sum = this.dataSourceTrans.data.reduce((sum, current) => sum + current.amount, 0)
+      // this.totalTransactions = this.dataSourceTrans.data.length;
+      this.personalTransForm.controls.amount.setValue(sum);
+    }
+    else {
+      this.personalTransForm.controls.filter_year.reset();
+      this.personalTransForm.controls.filter_isPurchaseCost.reset();
+      this.dataSourceTrans = new MatTableDataSource<ITransaction>();
+    }
 
+  }
+
+
+  loadFilter() {
+    this.filterTrans = {} as IFilter;
+    this.filterTrans.isSoFar = true;
+    this.filterTrans.personalTransactionId = 0;
+    this.filterTrans.apartmentId = this.personalTransForm.controls.apartmentId.value;
+    if (this.personalTransForm.controls.filter_year.value) {
+      this.filterTrans.year = this.personalTransForm.controls.filter_year.value;
+    }
+    if (this.personalTransForm.controls.filter_isPurchaseCost.value) {
+      this.filterTrans.isPurchaseCost = this.personalTransForm.controls.filter_isPurchaseCost.value;
+    }
+  }
 
   loadTransactions() {
-    let filter: IFilter = {} as IFilter;
-    filter.personalTransactionId = 0;
-    filter.apartmentId = this.personalTransForm.controls.apartmentId.value;
-    filter.isPurchaseCost = this.personalTransForm.controls.showPurchaseCostOnly.value;
-    this.transactionService.getTransactions_(filter).subscribe({
+    this.loadFilter();
+    this.showResults = true;
+    // let filter: IFilter = {} as IFilter;
+    // filter.personalTransactionId = 0;
+    // filter.apartmentId = this.personalTransForm.controls.apartmentId.value;
+    // filter.isPurchaseCost = this.personalTransForm.controls.showPurchaseCostOnly.value;
+    // debugger
+    // if (this.personalTransForm.controls.purchaseCost.value != -1) {
+    //   filter.isPurchaseCost = this.personalTransForm.controls.purchaseCost.value;
+    // }
+    this.transactionService.getFilteredTransactions(this.filterTrans).subscribe({
       next: (result) => {
         this.dataSourceTrans.data = result;
-        let total = this.dataSourceTrans.data.reduce((sum, current) => sum + current.amount, 0)
-        this.personalTransForm.controls.amount.setValue(total);
+        // let total = this.dataSourceTrans.data.reduce((sum, current) => sum + current.amount, 0)
+        // this.personalTransForm.controls.amount.setValue(total);
       },
       error: (err) => console.error(err)
     });

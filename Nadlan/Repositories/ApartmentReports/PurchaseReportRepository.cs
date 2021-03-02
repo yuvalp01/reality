@@ -40,7 +40,7 @@ namespace Nadlan.Repositories.ApartmentReports
             var purchaceFilter = purchaseFilters.GetTotalCostFilter();
 
             return Context.Transactions
-               .Include(a => a.Account)
+               //.Include(a => a.Account)
                .Where(basic)
                .Where(purchaceFilter)
                .Where(a => a.AccountId == 6 || a.AccountId == 17)
@@ -55,7 +55,7 @@ namespace Nadlan.Repositories.ApartmentReports
 
 
             return Context.Transactions
-               .Include(a => a.Account)
+               //.Include(a => a.Account)
                .Where(basic)
                .Where(purchaceFilter)
                .Where(a => !(a.AccountId == 6 || a.AccountId == 17 || a.AccountId == 12))

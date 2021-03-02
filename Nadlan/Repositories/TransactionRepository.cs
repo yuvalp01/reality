@@ -356,33 +356,33 @@ namespace Nadlan.Repositories
 
 
 
-        public Task<List<Transaction>> GetFilteredTransactions_(Filter filter)
-        {
-            var query = Context.Transactions.OrderByDescending(a => a.Id)
-                                    .Where(a => !a.IsDeleted);
-            //Conditionaly filter accounts:
-            query = query.Where(a => filter.AccountId == null ? true : a.AccountId == filter.AccountId);
-            //Conditionaly filter apartments:
-            query = query.Where(a => filter.ApartmentId == null ? true : a.ApartmentId == filter.ApartmentId);
-            //Conditionaly filter isPurchaseCost:
-            query = query.Where(a => filter.IsPurchaseCost == null ? true : a.IsPurchaseCost == filter.IsPurchaseCost);
-            //Conditionaly filter year:
-            if (filter.Year != null)
-            {
-                if (filter.Year > 0)
-                {
-                    if (filter.IsSoFar.Value)
-                    {
-                        query = query.Where(a => a.Date.Year <= filter.Year);
-                    }
-                    else
-                    {
-                        query = query.Where(a => a.Date.Year == filter.Year);
-                    }
-                }
-            }
-            return query.ToListAsync();
-        }
+        //public Task<List<Transaction>> GetFilteredTransactions_(Filter filter)
+        //{
+        //    var query = Context.Transactions.OrderByDescending(a => a.Id)
+        //                            .Where(a => !a.IsDeleted);
+        //    //Conditionaly filter accounts:
+        //    query = query.Where(a => filter.AccountId == null ? true : a.AccountId == filter.AccountId);
+        //    //Conditionaly filter apartments:
+        //    query = query.Where(a => filter.ApartmentId == null ? true : a.ApartmentId == filter.ApartmentId);
+        //    //Conditionaly filter isPurchaseCost:
+        //    query = query.Where(a => filter.IsPurchaseCost == null ? true : a.IsPurchaseCost == filter.IsPurchaseCost);
+        //    //Conditionaly filter year:
+        //    if (filter.Year != null)
+        //    {
+        //        if (filter.Year > 0)
+        //        {
+        //            if (filter.IsSoFar.Value)
+        //            {
+        //                query = query.Where(a => a.Date.Year <= filter.Year);
+        //            }
+        //            else
+        //            {
+        //                query = query.Where(a => a.Date.Year == filter.Year);
+        //            }
+        //        }
+        //    }
+        //    return query.ToListAsync();
+        //}
 
 
 

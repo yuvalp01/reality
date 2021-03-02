@@ -60,11 +60,15 @@ namespace Nadlan.Repositories.ApartmentReports
             Func<Transaction, bool> basic = GetAllValidTransactionsForReports(apartmentId);
             Func<Transaction, bool> expensesFilter = t =>
                         basic(t) &&
-                        t.IsPurchaseCost==false &&
+                        t.IsPurchaseCost == false &&
                         t.AccountId != 1 &&//Except for rent
                         t.AccountId != 100 &&//Except for distribution
                         t.AccountId != 300 &&//Except for bonus
-                        t.Account.AccountTypeId == 0;
+
+                        t.AccountId != 198 &&//Except for Security Deposit
+                        t.AccountId != 200 &&//Except for Business
+                        t.AccountId != 201;//Except for Balance
+                       // t.Account.AccountTypeId == 0;
 
             Func<Transaction, bool> filter;
             if (year != 0)
@@ -79,7 +83,7 @@ namespace Nadlan.Repositories.ApartmentReports
             }
 
             var result = Context.Transactions
-                .Include(a => a.Account)
+                //.Include(a => a.Account)
                 .Where(filter)
                 .Sum(a => a.Amount);
             // if (year != 0) return result.Where(a => a.Date.Year == year);

@@ -25,9 +25,16 @@ namespace Nadlan.BusinessLogic
                         !t.IsDeleted &&
                         !t.IsBusinessExpense &&
                         t.IsPurchaseCost &&
-                        t.Account.AccountTypeId == 0 &&
-                        !t.Account.IsIncome &&
-                        t.AccountId != 13; //investment
+                        //t.Account.AccountTypeId == 0 &&
+                        t.AccountId != 198 &&//Except for Security Deposit
+                        t.AccountId != 200 &&//Except for Business
+                        t.AccountId != 201 &&//Except for Balance
+                        //  !t.Account.IsIncome &&
+                        t.AccountId != 13 && //not investment
+                        t.AccountId != 1; // not rent
+
+
+
 
 
             return basicPredicate;

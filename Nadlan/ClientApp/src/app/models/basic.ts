@@ -91,3 +91,8 @@ export interface IFilter {
   personalTransactionId: number;
   isLiteObject: boolean;
 }
+
+export interface IPersonalTransWithFilter {
+  personalTransaction: IPersonalTransaction;
+  filter: IFilter;
+}

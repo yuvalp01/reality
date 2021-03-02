@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
+
 namespace Nadlan.Repositories
 {
     public class PersonalTransactionRepository : Repository<PersonalTransaction>, IPersonalTransactionRepository
@@ -65,6 +66,45 @@ namespace Nadlan.Repositories
             Create(transaction);
             await SaveAsync();
         }
+
+        public int CreatePersonalTransAndUpdateTransactions(PersonalTransWithFilter transWithFilter)
+        {
+            try
+            {
+                var strategy = Context.Database.CreateExecutionStrategy();
+                int affected = 0;
+                strategy.Execute(() =>
+                {
+                    using (var dbContextTransaction = Context.Database.BeginTransaction())
+                    {
+
+                        //create
+                        Create(transWithFilter.PersonalTransaction);
+                        Context.SaveChanges();
+
+                        //update
+                        TransactionRepository transactionRepository = new TransactionRepository(Context);
+                        List<Transaction> transactionsToUpdate = transactionRepository.GetFilteredTransactions(transWithFilter.Filter).Result;
+                        transactionsToUpdate.ForEach(t =>
+                        {
+                          t.Comments = t.Comments +  $" || Covered on {DateTime.Today.ToString("yyyy-MM-dd")}";
+                          t.PersonalTransactionId = transWithFilter.PersonalTransaction.Id;
+                        });
+                        Context.SaveChanges();
+
+                        dbContextTransaction.Commit();
+                        affected = transactionsToUpdate.Count;
+                    }
+                });
+                return affected;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
 
         public async Task UpdateTransactionAsync(PersonalTransaction transaction)
         {

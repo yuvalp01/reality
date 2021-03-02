@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IPersonalTransaction, IStakeholder, IInvestorReportOverview, IPortfolioReport } from '../models';
+import { IPersonalTransaction, IStakeholder, IInvestorReportOverview, IPortfolioReport, IFilter, IPersonalTransWithFilter } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +32,12 @@ export class PersonalTransService {
   //}
   getAllDistributions(stakeholderId: number): Observable<IPersonalTransaction[]> {
     return this.httpClient.get<IPersonalTransaction[]>(`${this.baseUrl}api/personalTransactions/GetAllDistributions/${stakeholderId}`);
+  }
+
+
+  addPersonalTransWithFilter(transWithFilter: IPersonalTransWithFilter): Observable<number> {
+    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    return this.httpClient.post<number>(this.baseUrl + 'api/personalTransactions/withFilter', transWithFilter, options);
   }
 
 

@@ -143,12 +143,14 @@ namespace Nadlan.Repositories.ApartmentReports
             var predicate = GetRegularTransactionsFilter(apartmentId, 0, true);
 
             var result = Context.Transactions
-                .Include(a => a.Account)
+                //.Include(a => a.Account)
                 .Where(predicate)
-                .Where(a => a.Account.IsIncome == false)
+                //.Where(a => a.Account.IsIncome == false)
+                .Where(a => a.AccountId != 1) // not rent
                 .Where(a => a.AccountId != 13)  //not investment
                 .Sum(a => a.Amount);
             return result;
+            //return result;
         }
 
         //protected IEnumerable<Transaction> GetTotalCost(IEnumerable<Transaction> transactions)
