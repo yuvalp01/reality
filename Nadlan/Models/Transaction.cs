@@ -22,8 +22,7 @@ namespace Nadlan.Models
 
         public int PersonalTransactionId { get; set; }
 
-        //public int PaidById { get; set; }
-        //public Stakeholder PaidBy { get; set; }
+        public int UserAccount { get; set; }
 
         public bool IsDeleted { get; set; }
 
