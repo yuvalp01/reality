@@ -27,22 +27,22 @@ namespace Nadlan.Repositories
         {
         }
 
-        [Obsolete]
-        public Task<List<Transaction>> GetAllAsync(Filter filter)
-        {
-            var query = Context.Transactions.OrderByDescending(a => a.Id)
-                                    .Include(a => a.Account)
-                                    .Include(a => a.Apartment)
-                                    .Where(a => !a.IsDeleted);
-            //Conditionaly filter accounts:
-            query = query.Where(a => filter.AccountId == null ? true : a.AccountId == filter.AccountId);
-            //Conditionaly filter apartments:
-            query = query.Where(a => filter.ApartmentId == null ? true : a.ApartmentId == filter.ApartmentId);
-            //Conditionaly filter months back:
-            query = query.Where(a => filter.MonthsBack == null ? true : a.Date > DateTime.Today.AddMonths(-(int)filter.MonthsBack));
+        //[Obsolete]
+        //public Task<List<Transaction>> GetAllAsync(Filter filter)
+        //{
+        //    var query = Context.Transactions.OrderByDescending(a => a.Id)
+        //                            .Include(a => a.Account)
+        //                            .Include(a => a.Apartment)
+        //                            .Where(a => !a.IsDeleted);
+        //    //Conditionaly filter accounts:
+        //    query = query.Where(a => filter.AccountId == null ? true : a.AccountId == filter.AccountId);
+        //    //Conditionaly filter apartments:
+        //    query = query.Where(a => filter.ApartmentId == null ? true : a.ApartmentId == filter.ApartmentId);
+        //    //Conditionaly filter months back:
+        //    query = query.Where(a => filter.MonthsBack == null ? true : a.Date > DateTime.Today.AddMonths(-(int)filter.MonthsBack));
 
-            return query.ToListAsync();
-        }
+        //    return query.ToListAsync();
+        //}
 
         public async Task<List<Transaction>> GetAllAsync(int monthsBack)
         {
@@ -62,7 +62,6 @@ namespace Nadlan.Repositories
                 foreach (var trans in transactions)
                 {
                     trans.Messages = messages.Where(a => a.ParentId == trans.Id).ToList();
-                    //trans.HasUnreadMessages = trans.Messages.TrueForAll(a=>a.IsRead)
                 }
                 return transactions;
             }
