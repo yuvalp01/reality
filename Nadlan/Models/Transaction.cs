@@ -28,9 +28,6 @@ namespace Nadlan.Models
 
         [NotMapped]
         public List<Message> Messages { get; set; }
-        //[NotMapped]
-        //public bool HasUnreadMessages { get; set; }
-
 
         [NotMapped]
         public decimal Hours { get; set; }
