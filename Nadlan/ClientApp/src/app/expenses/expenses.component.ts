@@ -157,18 +157,6 @@ export class ExpensesComponent implements OnInit {
     });
   }
 
-
-  // checkNewMessages_() {
-  //   this.dataSourceAssistant.data.forEach(trans => {
-  //     if (trans.messages.length > 0) {
-  //       trans['hasMessages'] = true;
-  //       let unread = trans.messages.filter(a => a.userName.toLowerCase() != this.currentUser && !a.isRead);
-  //       if (unread.length > 0) trans['hasUnread'] = true;
-  //       else trans['hasUnread'] = false;
-  //     }
-  //   });
-  // }
-
   public isPositive(value: number): boolean {
     if (value >= 0) {
       return true;

@@ -44,6 +44,10 @@ td.mat-column-amount {
   color: red;
 }
 
+.bold{
+  font-weight: bolder;
+}
+
 .disabled {
   color: lightgray;
   cursor: default;

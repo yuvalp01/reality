@@ -43,30 +43,27 @@ export class AddExpenseComponent implements OnInit {
 
   @Output() refreshEmitter = new EventEmitter();
 
+
+
+
   saveTransaction(formValues: any): void {
 
 
     if (this.transactionForm.valid) {
       if (this.transactionForm.dirty) {
 
-        var transaction: ITransaction = Object.assign({}, this.transactionForm.value);
+        let transaction: ITransaction;
+        if (this.transactionId == 0) {
+          transaction = Object.assign({}, this.transactionForm.value);
+        }
+        else {
+          transaction = { ...this.data.expense, ...this.transactionForm.value }
+        }
+
         let isPurchaseCost = this.transactionForm.controls['isPurchaseCost'].value;
         transaction.isPurchaseCost = isPurchaseCost;
-        //In the future, add a checkbox "use investor credit card" 
-        //transaction.personalTransactionId = -1;
-        transaction.personalTransactionId = 0;//most cases: still not covered
-        //for partenership apartments no need to cover
-        if (this.partnershipApartments.includes(transaction.apartmentId)) {
-          transaction.personalTransactionId = -2;//CoveredByFunds
-        }
-        //for balance and business accounts it's not relevant
-        if (transaction.accountId == 200 || transaction.accountId == 201) {
-          transaction.personalTransactionId = -3;//not relevant
-        }
-        //this is consider as business expense (turns to isbuisiness=1 on the server)
-        if (this.isHourForm && transaction.accountId == 4) {
-          transaction.personalTransactionId = -3;
-        }
+
+        transaction.personalTransactionId = this.calcPersonalTransactionId(transaction);
 
         //
         if (this.isHourForm) {
@@ -105,6 +102,34 @@ export class AddExpenseComponent implements OnInit {
   }
 
 
+  calcPersonalTransactionId(transaction: ITransaction): number {
+
+    //Not relevant for:
+    if (transaction.accountId == 200 ||  //for business accounts
+      transaction.accountId == 201 ||  //for balance accounts
+      (this.isHourForm && transaction.accountId == 4)) //For hourly routine work
+    {
+      return -3;//not relevant
+    }
+    else {
+      //for partenership apartments no need to cover
+      if (this.partnershipApartments.includes(transaction.apartmentId)) {
+        return -2;//CoveredByFunds
+      }
+      else {
+        if (transaction.isPettyCash) {
+          return 0; //still not covered yet
+        }
+        else {
+          return -1; //investor credit card
+        }
+      }
+    }
+  }
+
+
+
+
   ngOnInit(): void {
 
     this.getAllLists();
@@ -117,6 +142,7 @@ export class AddExpenseComponent implements OnInit {
       hours: null,
       comments: ['', Validators.required],
       isPurchaseCost: { value: false, disabled: true },
+      isPettyCash: true,
     })
 
     this.configureFormType();
@@ -260,6 +286,7 @@ export class AddExpenseComponent implements OnInit {
         hours: expense.hours,
         comments: expense.comments,
         isPurchaseCost: expense.isPurchaseCost,
+        isPettyCash: expense.isPettyCash,
       });
 
       //this.setSign(expense.accountId);
@@ -273,8 +300,6 @@ export class AddExpenseComponent implements OnInit {
 
 
 }
-
-
 
 
 

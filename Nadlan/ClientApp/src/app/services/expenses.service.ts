@@ -16,9 +16,9 @@ export class ExpensesService {
 
   controller: string;
 
-  
 
-  getExpenses(monthsBack:number): Observable<ITransaction[]> {
+
+  getExpenses(monthsBack: number): Observable<ITransaction[]> {
     let url = `${this.baseUrl + this.controller}/list/${monthsBack}`;
     return this.httpClient.get<ITransaction[]>(url);
   }
@@ -31,6 +31,8 @@ export class ExpensesService {
   }
 
   addExpense(transaction: ITransaction): Observable<ITransaction> {
+    //(Stalla)
+    transaction.createdBy = 2;
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     let url = `${this.baseUrl + this.controller}`
     //return this.httpClient.post<ITransaction>(`${this.baseUrl}api/transactions/PostExpenses`, transaction, options);
@@ -38,6 +40,7 @@ export class ExpensesService {
   }
 
   updateExpense(transaction: ITransaction): Observable<ITransaction> {
+    //Do not assign here createdBy. We want to preserve the original createdBy. 
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     let url = `${this.baseUrl + this.controller}`
     return this.httpClient.put<ITransaction>(url, transaction, options);

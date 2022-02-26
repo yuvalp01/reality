@@ -16,7 +16,8 @@ export interface ITransaction {
   hours: number;
   personalTransactionId: number;
   messages: IMessage[];
-  //hasUnreadMessages:boolean;
+  createdBy: number;
+  isPettyCash: boolean;
 
 }
 

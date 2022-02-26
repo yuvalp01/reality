@@ -59,12 +59,15 @@ export class TransactionService {
 
 
   addTransaction(transaction: ITransaction): Observable<ITransaction> {
+    //(Yuval)
+    transaction.createdBy = 1;
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.httpClient.post<ITransaction>(this.baseUrl + 'api/transactions', transaction, options);
     // .pipe(catchError(this.had))
   }
 
   updateTransaction(transaction: ITransaction): any {
+    //Do not assign here createdBy. We want to preserve the original createdBy. 
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.httpClient.put<ITransaction>(`${this.baseUrl}api/transactions/${transaction.id}`, transaction, options);
   }

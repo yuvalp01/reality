@@ -8,7 +8,7 @@
   <button mat-mini-fab (click)="openAddMode('hours')" matTooltip="Log working hours">
     <mat-icon>timer</mat-icon>
   </button>
-  <button mat-mini-fab (click)="refreshData()" matTooltip="Refresh"  color="primary" >
+  <button mat-mini-fab (click)="refreshData()" matTooltip="Refresh" color="primary">
     <mat-icon>refresh</mat-icon>
     <!-- <mat-icon  style="cursor: pointer;padding-left: 5px;">refresh</mat-icon> -->
 
@@ -25,7 +25,8 @@
 
     <mat-form-field>
       <mat-label>Search</mat-label>
-      <input type="text" matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="selectedApartment" name="selectedApartment">
+      <input type="text" matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="selectedApartment"
+        name="selectedApartment">
     </mat-form-field>
     <p *ngIf="monthsBack>0">This list shows only {{monthsBack}} months back.
       <button (click)="loadAllList()" style="padding: 0;" mat-button color="primary">Show a complete list</button>
@@ -43,14 +44,13 @@
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
       <td data-id="{{transaction.id}}" mat-cell *matCellDef="let transaction">
-        <ng-container *hasClaim="['admin']" >
-          <mat-icon style="cursor: pointer;"
-          (click)="openMessages(transaction)">add_comment</mat-icon>
+        <ng-container *hasClaim="['admin']">
+          <mat-icon style="cursor: pointer;" (click)="openMessages(transaction)">add_comment</mat-icon>
         </ng-container>
         <span>
           {{transaction.date | date:'dd-MM-yyyy'}}
         </span>
-        
+
       </td>
     </ng-container>
 
@@ -63,12 +63,11 @@
 
     <ng-container matColumnDef="amount">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
-      <td mat-cell
-          [ngClass]="{
+      <td mat-cell [ngClass]="{
           positive: isPositive(transaction.amount),
-          negative: !isPositive(transaction.amount)
-        }"
-          *matCellDef="let transaction">
+          negative: !isPositive(transaction.amount),
+          bold: transaction.isPettyCash
+        }" *matCellDef="let transaction">
         {{transaction.amount}}
       </td>
     </ng-container>
@@ -88,16 +87,15 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>
       <td mat-cell *matCellDef="let transaction">
 
-        <ng-container id="messages">         
-          <mat-icon *ngIf="transaction.hasMessages && !transaction.unreadByMe && !transaction.unreadByOthers" style="cursor: pointer;"
-          (click)="openMessages(transaction)">mail_outline</mat-icon>
-          <mat-icon *ngIf="transaction.unreadByMe" style="cursor: pointer;"
-          (click)="openMessages(transaction)">
-           mark_email_unread
+        <ng-container id="messages">
+          <mat-icon *ngIf="transaction.hasMessages && !transaction.unreadByMe && !transaction.unreadByOthers"
+            style="cursor: pointer;" (click)="openMessages(transaction)">mail_outline</mat-icon>
+          <mat-icon *ngIf="transaction.unreadByMe" style="cursor: pointer;" (click)="openMessages(transaction)">
+            mark_email_unread
           </mat-icon>
           <mat-icon matTooltip="Message sent" *ngIf="transaction.unreadByOthers" style="cursor: pointer;"
-          (click)="openMessages(transaction)">
-          forward_to_inbox
+            (click)="openMessages(transaction)">
+            forward_to_inbox
           </mat-icon>
           <!-- <mat-icon *ngIf="!item.unreadByOthers && !item.unreadByMe" style="cursor: pointer;"
           (click)="openMessages(item.id)">mail_outline</mat-icon> -->
@@ -107,10 +105,11 @@
            -->
 
         </ng-container>
-        
+
         <mat-icon matTooltip="Maintenance" *ngIf="transaction.accountId==4">build</mat-icon>
         <mat-icon matTooltip="Renovation (miscellaneous)" *ngIf="transaction.accountId==6">format_paint</mat-icon>
-        <mat-icon matTooltip="Renovation (contractor)" style="color:blue" *ngIf="transaction.accountId==17">format_paint</mat-icon>
+        <mat-icon matTooltip="Renovation (contractor)" style="color:blue" *ngIf="transaction.accountId==17">format_paint
+        </mat-icon>
         <!--receipt vpn_key<mat-icon *ngIf="transaction.accountId==4">description</mat-icon*ngIf="transaction.accountId==4">-->
         <mat-icon matTooltip="Registration" *ngIf="transaction.accountId==8">assignment</mat-icon>
         <mat-icon matTooltip="Purcahse Miscellaneous" *ngIf="transaction.accountId==11">star</mat-icon>
@@ -158,8 +157,10 @@
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let transaction">
         <div>
-          <button *ngIf="!transaction.isConfirmed && transaction.accountId!=17" (click)="openEdit(transaction.id)" mat-button color="primary">Edit</button>
-          <button *ngIf="!transaction.isConfirmed && transaction.accountId!=17" (click)="delete(transaction.id)" mat-button color="warn">Delete</button>
+          <button *ngIf="!transaction.isConfirmed && transaction.accountId!=17" (click)="openEdit(transaction.id)"
+            mat-button color="primary">Edit</button>
+          <button *ngIf="!transaction.isConfirmed && transaction.accountId!=17" (click)="delete(transaction.id)"
+            mat-button color="warn">Delete</button>
           <!--<button (click)="openEdit(transaction.id)" mat-button color="primary">Edit</button>
           <button (click)="delete(transaction.id)" mat-button color="warn">Delete</button>-->
           <ng-container *ngIf="!transaction.isConfirmed">
