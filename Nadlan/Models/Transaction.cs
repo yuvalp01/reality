@@ -29,7 +29,7 @@ namespace Nadlan.Models
         [NotMapped]
         public List<Message> Messages { get; set; }
 
-        [NotMapped]
+        //[NotMapped]
         public decimal Hours { get; set; }
     }
 }

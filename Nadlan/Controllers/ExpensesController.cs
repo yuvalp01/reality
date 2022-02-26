@@ -70,6 +70,8 @@ namespace Nadlan.Controllers
             }
 
             var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
+            //Expenses will be just a transaction with userAccount 2 (Stella) 
+            transaction.UserAccount = 2;
 
             await _repositoryWraper.Transaction.CreateExpenseAndTransactionAsync(transaction);
             return CreatedAtAction("PostExpense", new { id = transaction.Id }, transaction);
@@ -84,6 +86,8 @@ namespace Nadlan.Controllers
             }
 
             var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
+            //Expenses will be just a transaction with userAccount 2 (Stella) 
+            transaction.UserAccount = 2;
             await _repositoryWraper.Transaction.UpdateExpenseAndTransactionAsync(transaction);
             return NoContent();
             //return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);

@@ -162,6 +162,8 @@ namespace Nadlan.Controllers
             }
 
             var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
+            //Classic transactions (not expenses) will get userAccount 1 
+            transaction.UserAccount = 1;
             //Not distribution transaction
             if (transaction.AccountId != 100)
             {
@@ -176,36 +178,40 @@ namespace Nadlan.Controllers
             return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
         }
 
+        //YUVAL: removed on 25.2, used in Expenses controller 
+        //// POST: api/Transactions
+        //[HttpPost("PostExpenses")]
+        //public async Task<IActionResult> PostExpenses([FromBody] TransactionDto transactionDto)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-        // POST: api/Transactions
-        [HttpPost("PostExpenses")]
-        public async Task<IActionResult> PostExpenses([FromBody] TransactionDto transactionDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //    var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
+        //    //Expenses will be just a transaction with userAccount 2 (Stella) 
+        //    transaction.UserAccount = 2;
+        //    await _repositoryWraper.Transaction.CreateExpenseAndTransactionAsync(transaction);
+        //    return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
+        //}
 
-            var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
+        //YUVAL: removed on 25.2, used in Expenses controller 
+        //[HttpPut("PutExpenses")]
+        //public async Task<IActionResult> PutExpenses([FromBody] TransactionDto transactionDto)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            await _repositoryWraper.Transaction.CreateExpenseAndTransactionAsync(transaction);
-            return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
-        }
+        //    var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
 
-        [HttpPut("PutExpenses")]
-        public async Task<IActionResult> PutExpenses([FromBody] TransactionDto transactionDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //    // await _repositoryWraper.Transaction.CreateDoubleTransactionAsync(transaction, isHours);
+        //    await _repositoryWraper.Transaction.UpdateExpenseAndTransactionAsync(transaction);
+        //    return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
+        //}
 
-            var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
 
-            // await _repositoryWraper.Transaction.CreateDoubleTransactionAsync(transaction, isHours);
-            await _repositoryWraper.Transaction.UpdateExpenseAndTransactionAsync(transaction);
-            return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
-        }
         [HttpPut("confirm")]
         public async Task<IActionResult> Confirm([FromBody] int transactionId)
         {
