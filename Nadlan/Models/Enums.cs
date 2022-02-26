@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Nadlan.Models
+﻿namespace Nadlan.Models
 {
     public enum ApartmentStatus
     {
@@ -11,7 +6,7 @@ namespace Nadlan.Models
         OfferSubmitted = 20,
         CommittedToAgency = 30,
         CommittedToSeller = 35,
-        WaitingForRenovation =40,
+        WaitingForRenovation = 40,
         InRenovation = 50,
         SearchingForTenant = 60,
         Occupied = 70,
@@ -34,6 +29,12 @@ namespace Nadlan.Models
         CoveredByFunds = -2,
         NotRelevant = -3,
         ExpectedPayment = -4
+    }
+    public enum CreatedByEnum
+    {
+        Any = 0,
+        Yuval = 1,
+        Stella = 2
     }
 
 }

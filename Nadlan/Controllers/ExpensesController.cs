@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Nadlan.Models;
 using Nadlan.Repositories;
 using Nadlan.ViewModels;
@@ -32,16 +33,17 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var transaction = await _repositoryWraper.Transaction.GetAllExpensesAsync(monthsBack);
-            if (transaction == null)
+            //var transaction = await _repositoryWraper.Transaction.GetAllExpensesAsync(monthsBack);
+            var transactions = await _repositoryWraper.Transaction.GetAllTransactionDtoAsync(monthsBack, CreatedByEnum.Stella);
+
+            if (transactions == null)
             {
                 return NotFound();
             }
 
-            return Ok(transaction);
+            return Ok(transactions);
         }
         // GET: api/Transactions/5
-        //[HttpGet("GetExpense/{transactionId}")]
         [HttpGet("{transactionId}")]
         public async Task<IActionResult> GetExpense([FromRoute] int transactionId)
         {
@@ -49,8 +51,8 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
+            var transaction = await _context.Transactions.FindAsync(transactionId);
 
-            var transaction = await _repositoryWraper.Transaction.GetExpenseByIdAsync(transactionId);
             if (transaction == null)
             {
                 return NotFound();
@@ -71,27 +73,52 @@ namespace Nadlan.Controllers
 
             var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
             //Expenses will be just a transaction with userAccount 2 (Stella) 
-            transaction.UserAccount = 2;
+            transaction.CreatedBy = 2;
 
             await _repositoryWraper.Transaction.CreateExpenseAndTransactionAsync(transaction);
             return CreatedAtAction("PostExpense", new { id = transaction.Id }, transaction);
         }
 
+        //[HttpPut()]
+        //public async Task<IActionResult> PutExpense([FromBody] TransactionDto transactionDto)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
+        //    //Expenses will be just a transaction with userAccount 2 (Stella) 
+        //    transaction.UserAccount = 2;
+        //    await _repositoryWraper.Transaction.UpdateExpenseAndTransactionAsync(transaction);
+        //    return NoContent();
+        //}
+
+
         [HttpPut()]
-        public async Task<IActionResult> PutExpense([FromBody] TransactionDto transactionDto)
+        public async Task<IActionResult> PutExpense([FromBody] Transaction transaction)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
-            //Expenses will be just a transaction with userAccount 2 (Stella) 
-            transaction.UserAccount = 2;
-            await _repositoryWraper.Transaction.UpdateExpenseAndTransactionAsync(transaction);
+            //var  _transaction = new Transaction();
+
+
+            _context.Entry(transaction).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
             return NoContent();
-            //return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
+
+
+            //var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
+            ////Expenses will be just a transaction with userAccount 2 (Stella) 
+            //transaction.UserAccount = 2;
+            //await _repositoryWraper.Transaction.UpdateExpenseAndTransactionAsync(transaction);
+            //return NoContent();
         }
+
+
         [Authorize]
         [HttpPut("confirm")]
         public async Task<IActionResult> Confirm([FromBody] int transactionId)
@@ -100,14 +127,10 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            // await _repositoryWraper.Transaction.CreateDoubleTransactionAsync(transaction, isHours);
             await _repositoryWraper.Transaction.Confirm(transactionId);
             return NoContent();
-            //return CreatedAtAction("Confirm", new { id = transactionId });
         }
 
-        //[HttpPut("DeleteExpense")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> SoftDeleteExpense([FromRoute] int id)
         {

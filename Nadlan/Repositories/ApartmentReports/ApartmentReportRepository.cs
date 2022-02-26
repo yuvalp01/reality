@@ -22,15 +22,6 @@ namespace Nadlan.Repositories.ApartmentReports
             transactionRepository = new TransactionRepository(conext);
         }
 
-
-        //protected Func<Transaction, bool> GetAllValidTransactionsForReports(List<int> apartmetIds)
-        //{
-        //    Func<Transaction, bool> result = t =>
-        //         t.IsDeleted == false &&
-        //         t.IsBusinessExpense == false &&
-        //         apartmetIds.Contains(t.ApartmentId);
-        //    return result;
-        //}
         protected Func<Transaction, bool> GetAllValidTransactionsForReports(int apartmetId)
         {
             Func<Transaction, bool> result = t =>
@@ -153,16 +144,6 @@ namespace Nadlan.Repositories.ApartmentReports
             //return result;
         }
 
-        //protected IEnumerable<Transaction> GetTotalCost(IEnumerable<Transaction> transactions)
-        //{
-        //    var basic = purchaseFilters.GetTotalCostFilter();
-        //    return transactions.Where(basic);
-        //}
-
-
-
-
-
         protected Func<Transaction, bool> GetRegularTransactionsFilterNew(int apartmentId, bool isPurchaseCost)
         {
             Func<Transaction, bool> basic = GetAllValidTransactionsForReports(apartmentId);
@@ -258,43 +239,22 @@ namespace Nadlan.Repositories.ApartmentReports
         }
 
 
-
-
-        //protected IEnumerable<Transaction> GetAllTransactions(int apartmetId)
+        //public async Task<decimal> GetExpensesBalance()
         //{
-        //    var result = Context.Transactions
-        //         .Include(a => a.Account)
-        //         .Where(a => a.IsDeleted == false)
-        //         .Where(a => a.ApartmentId == apartmetId);
-        //    return result;
-        //}
-
-        //protected IEnumerable<Transaction> GetAllNonPurchase(int apartmetId)
-        //{
-        //    var basic = nonPurchaseFilters.GetProfitIncludingDistributionsFilter();
-        //    var result = Context.Transactions
-        //         .Include(a => a.Account)
-        //         .Where(basic)
-        //         .Where(a => a.ApartmentId == apartmetId);
-        //    return result;
-        //}
-
-        //protected IEnumerable<Transaction> GetAllPurchase(int apartmetId)
-        //{
-        //    var basic = purchaseFilters.GetAllPurchaseFilter();
-        //    var result = Context.Transactions
-        //         .Include(a => a.Account)
-        //         .Where(basic)
-        //         .Where(a => a.ApartmentId == apartmetId);
-        //    return result;
+        //    var balance = Context.Expenses
+        //        .Where(a => !a.Transaction.IsDeleted)
+        //        .SumAsync(a => a.Transaction.Amount);
+        //    return await balance * -1;
         //}
 
 
         public async Task<decimal> GetExpensesBalance()
         {
-            var balance = Context.Expenses
-                .Where(a => !a.Transaction.IsDeleted)
-                .SumAsync(a => a.Transaction.Amount);
+            var balance = Context.Transactions
+                .Where(a => !a.IsDeleted)
+                .Where(a=> a.CreatedBy == (int)CreatedByEnum.Stella)
+                .Where(a=>a.IsPettyCash)
+                .SumAsync(a => a.Amount);
             return await balance * -1;
         }
 

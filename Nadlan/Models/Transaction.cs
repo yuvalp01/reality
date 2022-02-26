@@ -22,7 +22,8 @@ namespace Nadlan.Models
 
         public int PersonalTransactionId { get; set; }
 
-        public int UserAccount { get; set; }
+        public int CreatedBy { get; set; }
+        public bool IsPettyCash { get; set; }
 
         public bool IsDeleted { get; set; }
 

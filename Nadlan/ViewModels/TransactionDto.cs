@@ -24,8 +24,8 @@ namespace Nadlan.ViewModels
         public decimal Hours { get; set; }
         public int PersonalTransactionId { get; set; }
         public List<Message> Messages { get; set; }
-        //public bool HasUnreadMessages { get; set; }
-
+        public bool IsPettyCash { get; set; }
+        public int CreatedBy { get; set; }
 
     }
 }

@@ -28,12 +28,16 @@ namespace Nadlan.Repositories
         }
 
 
-        public async Task<List<Transaction>> GetAllAsync(int monthsBack)
+        public async Task<List<Transaction>> GetAllAsync(int monthsBack, CreatedByEnum createdBy)
         {
             var transactionList = Context.Transactions.OrderByDescending(a => a.Id)
                 .Include(a => a.Account)
                 .Include(a => a.Apartment)
                 .Where(a => !a.IsDeleted);
+            if (createdBy != CreatedByEnum.Any)
+            {
+                transactionList = transactionList.Where(a => a.CreatedBy == (int)createdBy);
+            }
             if (monthsBack > 0)
             {
                 var transactions = await transactionList
@@ -55,105 +59,156 @@ namespace Nadlan.Repositories
             }
         }
 
-        public async Task<List<TransactionDto>> GetAllExpensesAsync(int monthsBack)
+
+        public async Task<List<TransactionDto>> GetAllTransactionDtoAsync(int monthsBack, CreatedByEnum createdBy)
         {
-            Func<Transaction, bool> basicPredicate = t => !t.IsDeleted;
-            Func<Transaction, bool> predicate;
-            if (monthsBack != 0)
+            var transactionList = Context.Transactions.OrderByDescending(a => a.Id)
+                .Include(a => a.Account)
+                .Include(a => a.Apartment)
+                .Where(a => !a.IsDeleted);
+            if (createdBy != CreatedByEnum.Any)
             {
-                predicate = t =>
-                basicPredicate(t) && t.Date > DateTime.Today.AddMonths(-monthsBack);
-            }
-            else
-            {
-                predicate = basicPredicate;
+                transactionList = transactionList.Where(a => a.CreatedBy == (int)createdBy);
             }
 
-
-            var expensesList = Context.Expenses.Join(
-                Context.Transactions
-                .Where(a => predicate(a)),
-                expense => expense.TransactionId,
-                transaction => transaction.Id,
-                (expense, transaction) => new TransactionDto
-                {
-                    AccountId = transaction.AccountId,
-                    AccountName = transaction.Account.Name,
-                    Amount = transaction.Amount * -1,
-                    ApartmentId = transaction.ApartmentId,
-                    ApartmentAddress = transaction.Apartment.Address,
-                    Comments = transaction.Comments,
-                    Date = transaction.Date,
-                    Hours = expense.Hours,
-                    Id = transaction.Id,
-                    IsPurchaseCost = transaction.IsPurchaseCost,
-                    IsConfirmed = transaction.IsConfirmed
-                }
-                ).OrderByDescending(a => a.Date).ThenByDescending(a => a.Id);
+           var transactionListDto = transactionList.Select(transaction => new TransactionDto {
+               AccountId = transaction.AccountId,
+               AccountName = transaction.Account.Name,
+               Amount = transaction.Amount * -1,
+               ApartmentId = transaction.ApartmentId,
+               ApartmentAddress = transaction.Apartment.Address,
+               Comments = transaction.Comments,
+               Date = transaction.Date,
+               Hours = transaction.Hours,
+               Id = transaction.Id,
+               IsPurchaseCost = transaction.IsPurchaseCost,
+               IsConfirmed = transaction.IsConfirmed,
+               PersonalTransactionId = transaction.PersonalTransactionId,
+               IsPettyCash = transaction.IsPettyCash,
+               CreatedBy = transaction.CreatedBy
+               
+           });
 
 
-            if (monthsBack != 0)
+            if (monthsBack > 0)
             {
-                var expenses = await expensesList
+                var transactions = await transactionListDto
                     .Where(a => a.Date > DateTime.Today.AddMonths(-monthsBack))
                     .ToListAsync();
-
                 var messages = await Context.Messages
-                     .Where(a => a.IsDeleted == false)
-                     .Where(a => a.TableName == "transactions")
-                     .ToListAsync();
-                foreach (var expense in expenses)
+                    .Where(a => a.IsDeleted == false)
+                    .Where(a => a.TableName == "transactions")
+                    .ToListAsync();
+                foreach (var trans in transactions)
                 {
-                    expense.Messages = messages.Where(a => a.ParentId == expense.Id).ToList();
+                    trans.Messages = messages.Where(a => a.ParentId == trans.Id).ToList();
                 }
-                return expenses;
+                return transactions;
             }
             else
             {
-                return await expensesList.ToListAsync();
+                return await transactionListDto.ToListAsync();
             }
-
-
-        }
-
-        public async Task<TransactionDto> GetExpenseByIdAsync(int transactionId)
-        {
-            return await Context.Expenses.Join(
-                Context.Transactions.Where(a => a.Id == transactionId
-                && !a.IsDeleted),
-                expense => expense.TransactionId,
-                transaction => transaction.Id,
-                (expense, transaction) => new TransactionDto
-                {
-                    AccountId = transaction.AccountId,
-                    AccountName = transaction.Account.Name,
-                    Amount = transaction.Amount * -1,
-                    ApartmentId = transaction.ApartmentId,
-                    ApartmentAddress = transaction.Apartment.Address,
-                    Comments = transaction.Comments,
-                    Date = transaction.Date,
-                    Hours = expense.Hours,
-                    Id = transaction.Id,
-                    IsPurchaseCost = transaction.IsPurchaseCost,
-                    IsConfirmed = transaction.IsConfirmed
-                }
-                ).FirstOrDefaultAsync();
         }
 
 
+        //[Obsolete("Use GetAllExpensesAsync, exepenses table obsolete")]
+        //public async Task<List<TransactionDto>> GetAllExpensesAsync_(int monthsBack)
+        //{
+        //    Func<Transaction, bool> basicPredicate = t => !t.IsDeleted;
+        //    Func<Transaction, bool> predicate;
+        //    if (monthsBack != 0)
+        //    {
+        //        predicate = t =>
+        //        basicPredicate(t) && t.Date > DateTime.Today.AddMonths(-monthsBack);
+        //    }
+        //    else
+        //    {
+        //        predicate = basicPredicate;
+        //    }
 
 
+        //    var expensesList = Context.Expenses.Join(
+        //        Context.Transactions
+        //        .Where(a => predicate(a)),
+        //        expense => expense.TransactionId,
+        //        transaction => transaction.Id,
+        //        (expense, transaction) => new TransactionDto
+        //        {
+        //            AccountId = transaction.AccountId,
+        //            AccountName = transaction.Account.Name,
+        //            Amount = transaction.Amount * -1,
+        //            ApartmentId = transaction.ApartmentId,
+        //            ApartmentAddress = transaction.Apartment.Address,
+        //            Comments = transaction.Comments,
+        //            Date = transaction.Date,
+        //            Hours = expense.Hours,
+        //            Id = transaction.Id,
+        //            IsPurchaseCost = transaction.IsPurchaseCost,
+        //            IsConfirmed = transaction.IsConfirmed
+        //        }
+        //        ).OrderByDescending(a => a.Date).ThenByDescending(a => a.Id);
 
 
-        private Expense CreateCorrespondingExpense(Transaction originalTransaction)
-        {
-            Expense correspondingExpense = new Expense
-            {
-                Hours = originalTransaction.Hours,
-                TransactionId = originalTransaction.Id,
-            };
-            return correspondingExpense;
-        }
+        //    if (monthsBack != 0)
+        //    {
+        //        var expenses = await expensesList
+        //            .Where(a => a.Date > DateTime.Today.AddMonths(-monthsBack))
+        //            .ToListAsync();
+
+        //        var messages = await Context.Messages
+        //             .Where(a => a.IsDeleted == false)
+        //             .Where(a => a.TableName == "transactions")
+        //             .ToListAsync();
+        //        foreach (var expense in expenses)
+        //        {
+        //            expense.Messages = messages.Where(a => a.ParentId == expense.Id).ToList();
+        //        }
+        //        return expenses;
+        //    }
+        //    else
+        //    {
+        //        return await expensesList.ToListAsync();
+        //    }
+
+
+        //}
+
+        //[Obsolete("Not needed anymore, used directly in the Expenses controller")]
+        //public async Task<TransactionDto> GetExpenseByIdAsync(int transactionId)
+        //{
+        //    return await Context.Expenses.Join(
+        //        Context.Transactions.Where(a => a.Id == transactionId
+        //        && !a.IsDeleted),
+        //        expense => expense.TransactionId,
+        //        transaction => transaction.Id,
+        //        (expense, transaction) => new TransactionDto
+        //        {
+        //            AccountId = transaction.AccountId,
+        //            AccountName = transaction.Account.Name,
+        //            Amount = transaction.Amount * -1,
+        //            ApartmentId = transaction.ApartmentId,
+        //            ApartmentAddress = transaction.Apartment.Address,
+        //            Comments = transaction.Comments,
+        //            Date = transaction.Date,
+        //            Hours = expense.Hours,
+        //            Id = transaction.Id,
+        //            IsPurchaseCost = transaction.IsPurchaseCost,
+        //            IsConfirmed = transaction.IsConfirmed
+        //        }
+        //        ).FirstOrDefaultAsync();
+        //}
+
+        //[Obsolete("Expenses table is not in use anymore")]
+        //private Expense CreateCorrespondingExpense(Transaction originalTransaction)
+        //{
+        //    Expense correspondingExpense = new Expense
+        //    {
+        //        Hours = originalTransaction.Hours,
+        //        TransactionId = originalTransaction.Id,
+        //    };
+        //    return correspondingExpense;
+        //}
 
         public async Task UpdateExpenseAndTransactionAsync(Transaction transaction)
         {
@@ -164,9 +219,10 @@ namespace Nadlan.Repositories
 
             //Update original transaction:
             Context.Entry(originalTransaction).CurrentValues.SetValues(transaction);
-            //Update origial expense with hours:
-            var originalExpense = Context.Expenses.Single(a => a.TransactionId == transaction.Id);
-            originalExpense.Hours = transaction.Hours;
+            //Removed - not using expense table anymore
+            ////Update origial expense with hours:
+            //var originalExpense = Context.Expenses.Single(a => a.TransactionId == transaction.Id);
+            //originalExpense.Hours = transaction.Hours;
 
             await SaveAsync();
         }
@@ -188,7 +244,7 @@ namespace Nadlan.Repositories
         {
             // The expense is on the business when:
             //"Business/Geneal" transaction is a business expense and also
-            // when it's hours for apartment maintances (so only apartments with tenants)
+            // when its hours for apartment maintenance (so only apartments with tenants)
             if (transaction.AccountId == 200
                 || (transaction.AccountId == 4 && transaction.Hours > 0))
             {
@@ -210,9 +266,9 @@ namespace Nadlan.Repositories
             //Charge the original amount
             transaction.Amount = transaction.Amount * -1;
             Create(transaction);
-            Expense assiatantExpense = CreateCorrespondingExpense(transaction);
-            //Create(assiatantTransaction);
-            Context.Set<Expense>().Add(assiatantExpense);
+            //Removed - not using expense table anymore
+            //Expense assiatantExpense = CreateCorrespondingExpense(transaction);
+            //Context.Set<Expense>().Add(assiatantExpense);
 
 
             await SaveAsync();
@@ -326,7 +382,7 @@ namespace Nadlan.Repositories
         public Task<List<Transaction>> GetPendingExpensesForApartment(int apartmentId, int year)
         {
             //If 0 show all up-to-date
-            if (year==0) year = DateTime.Today.Year;
+            if (year == 0) year = DateTime.Today.Year;
             return Context.Transactions
                          .Where(a => a.IsDeleted == false)
                          .Where(a => a.ApartmentId == apartmentId)
@@ -379,7 +435,7 @@ namespace Nadlan.Repositories
                     }
                 }
             }
-            return query.OrderBy(a=>a.Date).ToListAsync();
+            return query.OrderBy(a => a.Date).ToListAsync();
         }
     }
 }

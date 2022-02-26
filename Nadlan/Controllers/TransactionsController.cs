@@ -33,7 +33,6 @@ namespace Nadlan.Controllers
         [HttpGet]
         public async Task<IEnumerable<TransactionDto>> GetTransactions([FromQuery] Filter filter)
         {
-           // var transactions = await _repositoryWraper.Transaction.GetAllAsync(filter);
             var transactions = await _repositoryWraper.Transaction.GetFilteredTransactions(filter);
 
             var transactionsDto = _mapper.Map<List<Transaction>, IEnumerable<TransactionDto>>(transactions);
@@ -45,7 +44,7 @@ namespace Nadlan.Controllers
         [HttpGet("list/{monthsBack}")]
         public async Task<IEnumerable<TransactionDto>> GetTransactions(int monthsBack)
         {
-            var transactions = await _repositoryWraper.Transaction.GetAllAsync(monthsBack);
+            var transactions = await _repositoryWraper.Transaction.GetAllAsync(monthsBack, CreatedByEnum.Any);
 
             var transactionsDto = _mapper.Map<List<Transaction>, IEnumerable<TransactionDto>>(transactions);
             return transactionsDto;
@@ -163,7 +162,8 @@ namespace Nadlan.Controllers
 
             var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
             //Classic transactions (not expenses) will get userAccount 1 
-            transaction.UserAccount = 1;
+            transaction.CreatedBy = (int)CreatedByEnum.Yuval;
+
             //Not distribution transaction
             if (transaction.AccountId != 100)
             {
