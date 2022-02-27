@@ -141,7 +141,7 @@ export class AddExpenseComponent implements OnInit {
       date: [null, Validators.required],
       hours: null,
       comments: ['', Validators.required],
-      isPurchaseCost: { value: false, disabled: true },
+      isPurchaseCost: { value: false, disabled: false },
       isPettyCash: true,
     })
 
