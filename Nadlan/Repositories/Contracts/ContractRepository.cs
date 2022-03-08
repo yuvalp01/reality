@@ -52,7 +52,7 @@ namespace Nadlan.Repositories.Messages
         {
             var contractToDelete = _context.Contracts.Find(id);
             contractToDelete.IsDeleted = true;
-            //_context.Update(contractToDelete);
+            _context.Update(contractToDelete);
             await _context.SaveChangesAsync();
 
         }
