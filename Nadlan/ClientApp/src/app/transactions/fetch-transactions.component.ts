@@ -24,9 +24,9 @@ export class TransactionListComponent implements OnInit {
   showPurchaseCostOnly: boolean = false;
   showSharedApartmentsOnly: boolean = false;
   selectedApartmentStatus: number = 0;
-  readonly sharedApartments:number[] = [1,3,4,20];
+  readonly sharedApartments: number[] = [1, 3, 4, 20];
   sum: number = 0;
-  monthsBack:number=3;
+  monthsBack: number = 3;
   currentUser: string = 'unknown';
 
   constructor(
@@ -42,8 +42,7 @@ export class TransactionListComponent implements OnInit {
     }
     this.refreshData();
   }
-  loadAllList()
-  {
+  loadAllList() {
     this.monthsBack = 0;
     this.refreshData();
   }
@@ -93,7 +92,7 @@ export class TransactionListComponent implements OnInit {
         if (this.showSharedApartmentsOnly) {
           isMatchSharedApartmentsOnly = this.sharedApartments.includes(data.apartmentId);
         }
-        
+
 
         if (this.showUnconfirmedOnly) {
           isMatchUnconfirmed = data.isConfirmed == false;
@@ -158,6 +157,12 @@ export class TransactionListComponent implements OnInit {
     });
   }
 
+  payUnpay(transactionId) {
+    this.transactionService.payUnpayTransaction(transactionId).subscribe(() => {
+      this.refreshData();
+    });
+  }
+
   openMessages(id: number) {
 
     let dialogLocal = this.dialog.open(MessageBoxComponent, {
@@ -165,7 +170,7 @@ export class TransactionListComponent implements OnInit {
       width: 'auto',
       data: { tableName: 'transactions', id: id }
     });
-   // dialogLocal.afterClosed().subscribe(() => this.loadList())
+    // dialogLocal.afterClosed().subscribe(() => this.loadList())
     // dialogLocal.componentInstance.refreshEmitter.subscribe(() => this.loadList())
   }
 

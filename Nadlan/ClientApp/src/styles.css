@@ -48,6 +48,10 @@ td.mat-column-amount {
   font-weight: bolder;
 }
 
+.pending td{
+  color: gray;
+}
+
 .disabled {
   color: lightgray;
   cursor: default;
@@ -90,4 +94,3 @@ td.mat-column-amount {
   font-weight: bold;
   /*color: rebeccapurple !important;*/
 }
-

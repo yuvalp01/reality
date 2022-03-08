@@ -85,8 +85,8 @@ namespace Nadlan.Repositories
                IsConfirmed = transaction.IsConfirmed,
                PersonalTransactionId = transaction.PersonalTransactionId,
                IsPettyCash = transaction.IsPettyCash,
-               CreatedBy = transaction.CreatedBy
-               
+               CreatedBy = transaction.CreatedBy,
+               IsPending = transaction.IsPending
            });
 
 
@@ -112,103 +112,6 @@ namespace Nadlan.Repositories
         }
 
 
-        //[Obsolete("Use GetAllExpensesAsync, exepenses table obsolete")]
-        //public async Task<List<TransactionDto>> GetAllExpensesAsync_(int monthsBack)
-        //{
-        //    Func<Transaction, bool> basicPredicate = t => !t.IsDeleted;
-        //    Func<Transaction, bool> predicate;
-        //    if (monthsBack != 0)
-        //    {
-        //        predicate = t =>
-        //        basicPredicate(t) && t.Date > DateTime.Today.AddMonths(-monthsBack);
-        //    }
-        //    else
-        //    {
-        //        predicate = basicPredicate;
-        //    }
-
-
-        //    var expensesList = Context.Expenses.Join(
-        //        Context.Transactions
-        //        .Where(a => predicate(a)),
-        //        expense => expense.TransactionId,
-        //        transaction => transaction.Id,
-        //        (expense, transaction) => new TransactionDto
-        //        {
-        //            AccountId = transaction.AccountId,
-        //            AccountName = transaction.Account.Name,
-        //            Amount = transaction.Amount * -1,
-        //            ApartmentId = transaction.ApartmentId,
-        //            ApartmentAddress = transaction.Apartment.Address,
-        //            Comments = transaction.Comments,
-        //            Date = transaction.Date,
-        //            Hours = expense.Hours,
-        //            Id = transaction.Id,
-        //            IsPurchaseCost = transaction.IsPurchaseCost,
-        //            IsConfirmed = transaction.IsConfirmed
-        //        }
-        //        ).OrderByDescending(a => a.Date).ThenByDescending(a => a.Id);
-
-
-        //    if (monthsBack != 0)
-        //    {
-        //        var expenses = await expensesList
-        //            .Where(a => a.Date > DateTime.Today.AddMonths(-monthsBack))
-        //            .ToListAsync();
-
-        //        var messages = await Context.Messages
-        //             .Where(a => a.IsDeleted == false)
-        //             .Where(a => a.TableName == "transactions")
-        //             .ToListAsync();
-        //        foreach (var expense in expenses)
-        //        {
-        //            expense.Messages = messages.Where(a => a.ParentId == expense.Id).ToList();
-        //        }
-        //        return expenses;
-        //    }
-        //    else
-        //    {
-        //        return await expensesList.ToListAsync();
-        //    }
-
-
-        //}
-
-        //[Obsolete("Not needed anymore, used directly in the Expenses controller")]
-        //public async Task<TransactionDto> GetExpenseByIdAsync(int transactionId)
-        //{
-        //    return await Context.Expenses.Join(
-        //        Context.Transactions.Where(a => a.Id == transactionId
-        //        && !a.IsDeleted),
-        //        expense => expense.TransactionId,
-        //        transaction => transaction.Id,
-        //        (expense, transaction) => new TransactionDto
-        //        {
-        //            AccountId = transaction.AccountId,
-        //            AccountName = transaction.Account.Name,
-        //            Amount = transaction.Amount * -1,
-        //            ApartmentId = transaction.ApartmentId,
-        //            ApartmentAddress = transaction.Apartment.Address,
-        //            Comments = transaction.Comments,
-        //            Date = transaction.Date,
-        //            Hours = expense.Hours,
-        //            Id = transaction.Id,
-        //            IsPurchaseCost = transaction.IsPurchaseCost,
-        //            IsConfirmed = transaction.IsConfirmed
-        //        }
-        //        ).FirstOrDefaultAsync();
-        //}
-
-        //[Obsolete("Expenses table is not in use anymore")]
-        //private Expense CreateCorrespondingExpense(Transaction originalTransaction)
-        //{
-        //    Expense correspondingExpense = new Expense
-        //    {
-        //        Hours = originalTransaction.Hours,
-        //        TransactionId = originalTransaction.Id,
-        //    };
-        //    return correspondingExpense;
-        //}
 
         public async Task UpdateExpenseAndTransactionAsync(Transaction transaction)
         {
@@ -261,6 +164,10 @@ namespace Nadlan.Repositories
             if (transaction.Hours > 0)
             {
                 transaction.Comments = $"Hours: {transaction.Comments}";
+            }
+            if (!transaction.IsPettyCash)
+            {
+                transaction.IsPending = true;
             }
             SwitchIsBusinessExpense(transaction);
             //Charge the original amount
@@ -320,6 +227,14 @@ namespace Nadlan.Repositories
             }
 
             await SaveAsync();
+        }
+
+        internal async Task<bool> PayUnpay(int transactionId)
+        {
+            var originalTransaction = await Context.Transactions.FindAsync(transactionId);
+            originalTransaction.IsPending = !originalTransaction.IsPending;
+            await SaveAsync();
+            return originalTransaction.IsPending;
         }
 
         public async Task<decimal> IncreaseTransactionAmountAsync(int transactionId, decimal additionalAmount)
@@ -441,3 +356,106 @@ namespace Nadlan.Repositories
 }
 
 
+
+
+
+
+
+
+//[Obsolete("Use GetAllExpensesAsync, exepenses table obsolete")]
+//public async Task<List<TransactionDto>> GetAllExpensesAsync_(int monthsBack)
+//{
+//    Func<Transaction, bool> basicPredicate = t => !t.IsDeleted;
+//    Func<Transaction, bool> predicate;
+//    if (monthsBack != 0)
+//    {
+//        predicate = t =>
+//        basicPredicate(t) && t.Date > DateTime.Today.AddMonths(-monthsBack);
+//    }
+//    else
+//    {
+//        predicate = basicPredicate;
+//    }
+
+
+//    var expensesList = Context.Expenses.Join(
+//        Context.Transactions
+//        .Where(a => predicate(a)),
+//        expense => expense.TransactionId,
+//        transaction => transaction.Id,
+//        (expense, transaction) => new TransactionDto
+//        {
+//            AccountId = transaction.AccountId,
+//            AccountName = transaction.Account.Name,
+//            Amount = transaction.Amount * -1,
+//            ApartmentId = transaction.ApartmentId,
+//            ApartmentAddress = transaction.Apartment.Address,
+//            Comments = transaction.Comments,
+//            Date = transaction.Date,
+//            Hours = expense.Hours,
+//            Id = transaction.Id,
+//            IsPurchaseCost = transaction.IsPurchaseCost,
+//            IsConfirmed = transaction.IsConfirmed
+//        }
+//        ).OrderByDescending(a => a.Date).ThenByDescending(a => a.Id);
+
+
+//    if (monthsBack != 0)
+//    {
+//        var expenses = await expensesList
+//            .Where(a => a.Date > DateTime.Today.AddMonths(-monthsBack))
+//            .ToListAsync();
+
+//        var messages = await Context.Messages
+//             .Where(a => a.IsDeleted == false)
+//             .Where(a => a.TableName == "transactions")
+//             .ToListAsync();
+//        foreach (var expense in expenses)
+//        {
+//            expense.Messages = messages.Where(a => a.ParentId == expense.Id).ToList();
+//        }
+//        return expenses;
+//    }
+//    else
+//    {
+//        return await expensesList.ToListAsync();
+//    }
+
+
+//}
+
+//[Obsolete("Not needed anymore, used directly in the Expenses controller")]
+//public async Task<TransactionDto> GetExpenseByIdAsync(int transactionId)
+//{
+//    return await Context.Expenses.Join(
+//        Context.Transactions.Where(a => a.Id == transactionId
+//        && !a.IsDeleted),
+//        expense => expense.TransactionId,
+//        transaction => transaction.Id,
+//        (expense, transaction) => new TransactionDto
+//        {
+//            AccountId = transaction.AccountId,
+//            AccountName = transaction.Account.Name,
+//            Amount = transaction.Amount * -1,
+//            ApartmentId = transaction.ApartmentId,
+//            ApartmentAddress = transaction.Apartment.Address,
+//            Comments = transaction.Comments,
+//            Date = transaction.Date,
+//            Hours = expense.Hours,
+//            Id = transaction.Id,
+//            IsPurchaseCost = transaction.IsPurchaseCost,
+//            IsConfirmed = transaction.IsConfirmed
+//        }
+//        ).FirstOrDefaultAsync();
+//}
+
+//[Obsolete("Expenses table is not in use anymore")]
+//private Expense CreateCorrespondingExpense(Transaction originalTransaction)
+//{
+//    Expense correspondingExpense = new Expense
+//    {
+//        Hours = originalTransaction.Hours,
+//        TransactionId = originalTransaction.Id,
+//    };
+//    return correspondingExpense;
+//}

@@ -18,6 +18,7 @@ export interface ITransaction {
   messages: IMessage[];
   createdBy: number;
   isPettyCash: boolean;
+  isPending: boolean;
 
 }
 

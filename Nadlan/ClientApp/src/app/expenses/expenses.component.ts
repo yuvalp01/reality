@@ -13,10 +13,11 @@ import { SecurityService } from '../security/security.service';
 
 @Component({
   templateUrl: './expenses.component.html',
-  styles: ['table{width:100%}']
+  // styles: ['table{width:100%}'],
+  styleUrls: ['./expenses.component.css']
 })
 export class ExpensesComponent implements OnInit {
-  displayedColumnsAssistant: string[] = ['date', 'isPurchaseCost', 'apartmentId', 'amount', 'comments', 'hours', 'actions'];
+  displayedColumnsAssistant: string[] = ['id', 'date', 'isPurchaseCost', 'apartmentId', 'amount', 'comments', 'hours', 'actions'];
   dataSourceAssistant = new MatTableDataSource<ITransaction>();
   selectedApartment: any;
   assistantBalance: number = 0;
@@ -180,6 +181,14 @@ export class ExpensesComponent implements OnInit {
       this.refreshData();
     });
   }
+
+  payUnpay(transactionId) {
+    this.transactionService.payUnpayTransaction(transactionId).subscribe(() => {
+      this.refreshData();
+    });
+  }
+
+
 
   exportAsXLSX(): void {
 

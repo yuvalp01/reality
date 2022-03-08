@@ -77,6 +77,12 @@ export class TransactionService {
     return this.httpClient.put<ITransaction>(`${this.baseUrl}api/transactions/confirm`, transactionId, options);
   }
 
+  payUnpayTransaction(transactionId: ITransaction): Observable<ITransaction> {
+    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    return this.httpClient.put<ITransaction>(`${this.baseUrl}api/transactions/payUnpay`, transactionId, options);
+  }
+
+
   deteleTransaction(transactionId: any): Observable<{}> {
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.httpClient.delete<ITransaction>(this.baseUrl + `api/transactions/${transactionId}`, options);

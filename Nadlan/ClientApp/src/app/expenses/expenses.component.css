@@ -1,19 +1,5 @@
-table {
-  width: 100%
-}
-.mat-column-date {
-  width: 80px;
-}
 
-.mat-column-amount {
-  width: 120px;
-}
-
-.mat-column-actions {
-  width: 245px;
-}
-
-
+table{width:100%}
 
 td.mat-cell:last-of-type
 {
@@ -25,6 +11,7 @@ td.mat-cell:first-of-type
 
     padding-right: 5px !important;
 }
+
 .mat-button
 {
     padding: 0;

@@ -87,8 +87,8 @@ export class AddExpenseComponent implements OnInit {
 
         }
         else {
-          this.expensesService.addExpense(transaction).subscribe(() => {
-            let snackBarRef = this.snackBar.open(`Expense`, 'Added', { duration: 2000 });
+          this.expensesService.addExpense(transaction).subscribe((t) => {
+            let snackBarRef = this.snackBar.open(`Expense`, `Transaction ID: ${t.id} added`, { duration: 2000 });
             this.refreshEmitter.emit();
           });
           this.transactionForm.reset();

@@ -38,7 +38,7 @@
   <table mat-table [dataSource]="dataSourceAssistant" matSort class="mat-elevation-z8">
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-      <td mat-cell *matCellDef="let transaction">{{transaction.id}}</td>
+      <td mat-cell matTooltip="Transaction ID" *matCellDef="let transaction">{{transaction.id}}</td>
     </ng-container>
 
     <ng-container matColumnDef="date">
@@ -161,19 +161,27 @@
             mat-button color="primary">Edit</button>
           <button *ngIf="!transaction.isConfirmed && transaction.accountId!=17" (click)="delete(transaction.id)"
             mat-button color="warn">Delete</button>
-          <!--<button (click)="openEdit(transaction.id)" mat-button color="primary">Edit</button>
-          <button (click)="delete(transaction.id)" mat-button color="warn">Delete</button>-->
-          <ng-container *ngIf="!transaction.isConfirmed">
+          <ng-container *ngIf="!transaction.isConfirmed && !transaction.isPending">
             <button *hasClaim="['admin']" (click)="confirm(transaction.id)" mat-button color="green">Confirm</button>
           </ng-container>
+          <mat-icon *ngIf="transaction.isConfirmed" matTooltip="Confirmed">check_circle</mat-icon>
+
+          <ng-container *ngIf="!transaction.isPettyCash && !transaction.isConfirmed">
+            <button (click)="payUnpay(transaction.id)" mat-button color="green">
+              <mat-icon *ngIf="transaction.isPending" matTooltip="Click after payment is done">hourglass_empty
+              </mat-icon>
+              <mat-icon *ngIf="!transaction.isPending" matTooltip="Paid (click again to cancel payment)"
+                style="color: green;">check</mat-icon>
+            </button>
+          </ng-container>
         </div>
-        <mat-icon *ngIf="transaction.isConfirmed" matTooltip="Confirmed">check_circle</mat-icon>
+
 
       </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumnsAssistant"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumnsAssistant"></tr>
+    <tr mat-row [ngClass]="{pending: row.isPending}" *matRowDef="let row; columns: displayedColumnsAssistant"></tr>
 
   </table>
 

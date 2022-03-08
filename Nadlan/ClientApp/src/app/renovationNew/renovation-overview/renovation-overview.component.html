@@ -45,7 +45,7 @@
     <ng-container *ngIf="dataSourceLines.data && project">
 
       <mat-tab-group style="width: 100%;" dynamicHeight="false">
-        
+
         <mat-tab *ngIf="paymentTransaction" label="Milestones & Payments">
           <mat-card>
             <mat-card-title style="font-size: 19px;">
@@ -217,14 +217,12 @@
               <span *ngIf="project.stage==20" class="statusChip ongoing">Ongoing</span>
               <span *ngIf="project.stage==30" class="statusChip done">Done</span>
 
-                <div class="button-container" *ngIf="project.stage!=30">
-                <button mat-mini-fab color="primary" 
-                matTooltip="Plan"
-                *ngIf="project.stage!=30" 
-                (click)="itemEditMode()">
+              <div class="button-container" *ngIf="project.stage!=30">
+                <button mat-mini-fab color="primary" matTooltip="Plan" *ngIf="project.stage!=30"
+                  (click)="itemEditMode()">
                   <mat-icon>dvr</mat-icon>
-                  </button>
-                </div>
+                </button>
+              </div>
 
               <ng-container *hasClaim="['admin']">
                 <mat-icon style="cursor:pointer;" *ngIf="!isProjectEditMode" (click)="isProjectEditMode=true">edit
@@ -260,7 +258,7 @@
                     </mat-panel-title>
                     <mat-panel-description>
                       <span *ngIf="!isProjectEditMode">
-                        {{project.dateStart  | date:'dd-MM-yyyy'}}
+                        {{project.dateStart | date:'dd-MM-yyyy'}}
                       </span>
                       <input *ngIf="isProjectEditMode" class="text-input" placeholder="Date Start"
                         [value]="project.dateStart" [(ngModel)]="project.dateStart" />
@@ -278,7 +276,7 @@
                     </mat-panel-title>
                     <mat-panel-description>
                       <span *ngIf="!isProjectEditMode">
-                        {{project.dateEnd  | date:'dd-MM-yyyy'}}
+                        {{project.dateEnd | date:'dd-MM-yyyy'}}
                       </span>
                       <input *ngIf="isProjectEditMode" class="text-input" placeholder="Date Start"
                         [value]="project.dateEnd" [(ngModel)]="project.dateEnd" />
@@ -296,7 +294,7 @@
                     <mat-panel-description>
 
                       <span *ngIf="!isProjectEditMode">
-                        {{project.peneltyPerDay  |currency:'EUR' : number:'1.0-0'}}
+                        {{project.peneltyPerDay |currency:'EUR' : number:'1.0-0'}}
                       </span>
                       <input *ngIf="isProjectEditMode" class="text-input" placeholder="Penalty"
                         [value]="project.peneltyPerDay" [(ngModel)]="project.peneltyPerDay" />
@@ -357,7 +355,8 @@
 
                           <span *ngIf="!item.isEditMode">{{item.units}}</span>
                           <input *ngIf="item.isEditMode" style="width: 30px; border-radius:15px;"
-                            [(ngModel)]="item.units" [value]="item.units" type="number" /></td>
+                            [(ngModel)]="item.units" [value]="item.units" type="number" />
+                        </td>
                       </ng-container>
 
                       <ng-container matColumnDef="itemType">
@@ -411,7 +410,8 @@
 
                       <ng-container matColumnDef="actions">
                         <th mat-header-cell *matHeaderCellDef>
-                          <mat-icon *hasClaim="'admin'" matTooltip="Refresh" style="cursor: pointer; " (click)="loadLines(projectId)">
+                          <mat-icon *hasClaim="'admin'" matTooltip="Refresh" style="cursor: pointer; "
+                            (click)="loadLines(projectId)">
                             refresh</mat-icon>
                         </th>
                         <td mat-cell *matCellDef="let item">
@@ -444,7 +444,7 @@
 
                     </table>
 
-                    <button *hasClaim="['admin']" mat-button color="primary" (click)="exportAsXLSX()">Export to
+                    <button *hasClaim="['admin','stella']" mat-button color="primary" (click)="exportAsXLSX()">Export to
                       Excel</button>
 
                   </div>
@@ -460,20 +460,19 @@
           <mat-tab-group>
             <mat-tab label="Original">
               TODO: also electricity plan
-              <img style="width: 1000px;" 
-              src="https://drive.google.com/uc?export=view&amp;id=1a8p8jR7A4cbLL3V-NNvRdrbp29rZOtlm">
+              <img style="width: 1000px;"
+                src="https://drive.google.com/uc?export=view&amp;id=1a8p8jR7A4cbLL3V-NNvRdrbp29rZOtlm">
             </mat-tab>
-          <mat-tab label="Basic Plan">
-            
-            <img style="width: 1000px;" 
+            <mat-tab label="Basic Plan">
 
-            src="https://drive.google.com/uc?export=view&amp;id=1kSKlQeEyvVJzINtH7hLYz7fzsd0cKm5V">
-          </mat-tab>
-        <mat-tab label="Furniture Plan">
+              <img style="width: 1000px;"
+                src="https://drive.google.com/uc?export=view&amp;id=1kSKlQeEyvVJzINtH7hLYz7fzsd0cKm5V">
+            </mat-tab>
+            <mat-tab label="Furniture Plan">
 
-          <img style="width: 800px;" 
-          src="https://drive.google.com/uc?export=view&amp;id=1CmisBKcuEPJUPu_KaTQzDAbhevwBFNf3">
-        </mat-tab>
+              <img style="width: 800px;"
+                src="https://drive.google.com/uc?export=view&amp;id=1CmisBKcuEPJUPu_KaTQzDAbhevwBFNf3">
+            </mat-tab>
           </mat-tab-group>
           <!-- <mat-card class="example-card">
             <mat-card-header>

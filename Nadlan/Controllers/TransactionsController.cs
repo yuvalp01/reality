@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Nadlan.Models;
 using Nadlan.Repositories;
 using Nadlan.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -75,9 +74,9 @@ namespace Nadlan.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var transaction = await _context.Transactions
-                .Where(a=>a.IsDeleted==false)
-                .Where(a=>a.PersonalTransactionId==id)
-                .OrderByDescending(a=>a.Date)
+                .Where(a => a.IsDeleted == false)
+                .Where(a => a.PersonalTransactionId == id)
+                .OrderByDescending(a => a.Date)
                 .ToListAsync();
 
             if (transaction == null) return NotFound();
@@ -178,38 +177,6 @@ namespace Nadlan.Controllers
             return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
         }
 
-        //YUVAL: removed on 25.2, used in Expenses controller 
-        //// POST: api/Transactions
-        //[HttpPost("PostExpenses")]
-        //public async Task<IActionResult> PostExpenses([FromBody] TransactionDto transactionDto)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
-        //    //Expenses will be just a transaction with userAccount 2 (Stella) 
-        //    transaction.UserAccount = 2;
-        //    await _repositoryWraper.Transaction.CreateExpenseAndTransactionAsync(transaction);
-        //    return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
-        //}
-
-        //YUVAL: removed on 25.2, used in Expenses controller 
-        //[HttpPut("PutExpenses")]
-        //public async Task<IActionResult> PutExpenses([FromBody] TransactionDto transactionDto)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
-
-        //    // await _repositoryWraper.Transaction.CreateDoubleTransactionAsync(transaction, isHours);
-        //    await _repositoryWraper.Transaction.UpdateExpenseAndTransactionAsync(transaction);
-        //    return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
-        //}
 
 
         [HttpPut("confirm")]
@@ -220,10 +187,27 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
 
-            // await _repositoryWraper.Transaction.CreateDoubleTransactionAsync(transaction, isHours);
             await _repositoryWraper.Transaction.Confirm(transactionId);
             return CreatedAtAction("Confirm", new { id = transactionId });
         }
+
+        [HttpPut("payUnpay")]
+        public async Task<IActionResult> PayUnpay([FromBody] int transactionId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            bool isPendingNew = await _repositoryWraper.Transaction.PayUnpay(transactionId);
+            return CreatedAtAction("Confirm", new { id = transactionId, isPending = isPendingNew });
+        }
+
+
+
+
+
+
 
         // PUT: api/Transactions/5
         [HttpPut("{id}")]
@@ -264,3 +248,39 @@ namespace Nadlan.Controllers
         }
     }
 }
+
+
+
+
+//YUVAL: removed on 25.2, used in Expenses controller 
+//// POST: api/Transactions
+//[HttpPost("PostExpenses")]
+//public async Task<IActionResult> PostExpenses([FromBody] TransactionDto transactionDto)
+//{
+//    if (!ModelState.IsValid)
+//    {
+//        return BadRequest(ModelState);
+//    }
+
+//    var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
+//    //Expenses will be just a transaction with userAccount 2 (Stella) 
+//    transaction.UserAccount = 2;
+//    await _repositoryWraper.Transaction.CreateExpenseAndTransactionAsync(transaction);
+//    return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
+//}
+
+//YUVAL: removed on 25.2, used in Expenses controller 
+//[HttpPut("PutExpenses")]
+//public async Task<IActionResult> PutExpenses([FromBody] TransactionDto transactionDto)
+//{
+//    if (!ModelState.IsValid)
+//    {
+//        return BadRequest(ModelState);
+//    }
+
+//    var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
+
+//    // await _repositoryWraper.Transaction.CreateDoubleTransactionAsync(transaction, isHours);
+//    await _repositoryWraper.Transaction.UpdateExpenseAndTransactionAsync(transaction);
+//    return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
+//}

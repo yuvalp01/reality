@@ -24,7 +24,7 @@ namespace Nadlan.Models
 
         public int CreatedBy { get; set; }
         public bool IsPettyCash { get; set; }
-
+        public bool IsPending { get; set; }
         public bool IsDeleted { get; set; }
 
         [NotMapped]
