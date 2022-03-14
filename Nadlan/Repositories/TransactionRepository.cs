@@ -23,6 +23,7 @@ namespace Nadlan.Repositories
 
     public class TransactionRepository : Repository<Transaction>, ITransactionRepository
     {
+        //private readonly IMapper _mapper;
         public TransactionRepository(NadlanConext context) : base(context)
         {
         }
@@ -71,23 +72,24 @@ namespace Nadlan.Repositories
                 transactionList = transactionList.Where(a => a.CreatedBy == (int)createdBy);
             }
 
-           var transactionListDto = transactionList.Select(transaction => new TransactionDto {
-               AccountId = transaction.AccountId,
-               AccountName = transaction.Account.Name,
-               Amount = transaction.Amount * -1,
-               ApartmentId = transaction.ApartmentId,
-               ApartmentAddress = transaction.Apartment.Address,
-               Comments = transaction.Comments,
-               Date = transaction.Date,
-               Hours = transaction.Hours,
-               Id = transaction.Id,
-               IsPurchaseCost = transaction.IsPurchaseCost,
-               IsConfirmed = transaction.IsConfirmed,
-               PersonalTransactionId = transaction.PersonalTransactionId,
-               IsPettyCash = transaction.IsPettyCash,
-               CreatedBy = transaction.CreatedBy,
-               IsPending = transaction.IsPending
-           });
+            var transactionListDto = transactionList.Select(transaction => new TransactionDto
+            {
+                AccountId = transaction.AccountId,
+                AccountName = transaction.Account.Name,
+                Amount = transaction.Amount * -1,
+                ApartmentId = transaction.ApartmentId,
+                ApartmentAddress = transaction.Apartment.Address,
+                Comments = transaction.Comments,
+                Date = transaction.Date,
+                Hours = transaction.Hours,
+                Id = transaction.Id,
+                IsPurchaseCost = transaction.IsPurchaseCost,
+                IsConfirmed = transaction.IsConfirmed,
+                PersonalTransactionId = transaction.PersonalTransactionId,
+                IsPettyCash = transaction.IsPettyCash,
+                CreatedBy = transaction.CreatedBy,
+                IsPending = transaction.IsPending
+            });
 
 
             if (monthsBack > 0)
@@ -122,10 +124,6 @@ namespace Nadlan.Repositories
 
             //Update original transaction:
             Context.Entry(originalTransaction).CurrentValues.SetValues(transaction);
-            //Removed - not using expense table anymore
-            ////Update origial expense with hours:
-            //var originalExpense = Context.Expenses.Single(a => a.TransactionId == transaction.Id);
-            //originalExpense.Hours = transaction.Hours;
 
             await SaveAsync();
         }
@@ -142,6 +140,8 @@ namespace Nadlan.Repositories
             originalTransaction.Result.IsDeleted = true;
             await SaveAsync();
         }
+
+
 
         private void SwitchIsBusinessExpense(Transaction transaction)
         {
@@ -236,6 +236,8 @@ namespace Nadlan.Repositories
             await SaveAsync();
             return originalTransaction.IsPending;
         }
+
+
 
         public async Task<decimal> IncreaseTransactionAmountAsync(int transactionId, decimal additionalAmount)
         {
@@ -352,110 +354,140 @@ namespace Nadlan.Repositories
             }
             return query.OrderBy(a => a.Date).ToListAsync();
         }
+
+
+        public async Task<RentRelatedTransactionsResponse> CreateRentTransactionsAsync(Transaction rentTrans)
+        {
+
+            //Classic transactions (not expenses) will get userAccount 1 
+            rentTrans.CreatedBy = (int)CreatedByEnum.Yuval;
+            //decimal rent = rentTrans.Amount;
+            await CreateTransactionAsync(rentTrans);
+
+            //Cloe management transaction based on the rent
+            var managementTrans = Context.Transactions.AsNoTracking()
+                             .FirstOrDefault(e => e.Id == rentTrans.Id);
+            //rest id
+            managementTrans.Id = 0;
+            //Update new values
+            SetManagementValues(rentTrans, managementTrans);
+
+            await CreateTransactionAsync(managementTrans);
+
+            //Clone TaxTrans
+            var taxTrans = Context.Transactions.AsNoTracking()
+                             .FirstOrDefault(e => e.Id == rentTrans.Id);
+            //rest id
+            taxTrans.Id = 0;
+            //Update new values
+            SetTaxValues(rentTrans, taxTrans);
+
+            await CreateTransactionAsync(taxTrans);
+
+            return new RentRelatedTransactionsResponse
+            {
+                Rent = rentTrans,
+                Management = managementTrans,
+                Tax = taxTrans
+            };
+        }
+
+        private void SetManagementValues(Transaction rentTrans, Transaction managementTrans)
+        {
+            //Update new values
+            managementTrans.AccountId = 2;
+            managementTrans.Amount = rentTrans.Amount * 0.1m;
+            managementTrans.Comments = $"Created automatically based on 10% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id})";
+        }
+
+        private void SetTaxValues(Transaction rentTrans, Transaction taxTrans)
+        {
+            //Update new values
+            taxTrans.AccountId = 50;
+            taxTrans.Amount = rentTrans.Amount * 0.15m;
+            taxTrans.Comments = $"Created automatically based on 15% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id})";
+        }
+
+
+        public async Task<RentRelatedTransactionsResponse> UpdateRentTransactionsAsync(Transaction rentTrans)
+        {
+
+            var originalRent = Context.Transactions.AsNoTracking()
+                 .FirstOrDefault(e => e.Id == rentTrans.Id);
+
+            //Update rent
+            rentTrans.IsConfirmed = false;
+            Context.Entry(rentTrans).State = EntityState.Modified;
+        
+            //update Management
+            var mngTrans = FindTransByAccount(originalRent, 2);
+            //reset confirm
+            mngTrans.IsConfirmed = false;
+            //Update new values
+            mngTrans.Amount = rentTrans.Amount * -0.1m;
+            mngTrans.Date = rentTrans.Date;
+            mngTrans.Comments = $"Created automatically based on 10% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id}";
+            Context.Entry(mngTrans).State = EntityState.Modified;
+
+            //update Tax
+            var taxTrans = FindTransByAccount(originalRent, 50);
+            //reset confirm
+            taxTrans.IsConfirmed = false;
+            taxTrans.Amount = rentTrans.Amount * -0.15m;
+            taxTrans.Date = rentTrans.Date;
+            taxTrans.Comments = $"Created automatically based on 15% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id}";
+            Context.Entry(taxTrans).State = EntityState.Modified;
+
+            await Context.SaveChangesAsync();
+
+            return new RentRelatedTransactionsResponse
+            {
+                Rent = rentTrans,
+                Management = mngTrans,
+                Tax = taxTrans
+            };
+
+        }
+
+        public async Task SoftDeleteRentTransactionsAsync(int transactionId)
+        {
+            var originalTransaction = await Context.Transactions.FindAsync(transactionId);
+            originalTransaction.IsDeleted = true;
+
+            var mngTrans = FindTransByAccount(originalTransaction, 2);
+            mngTrans.IsDeleted = true;
+            var taxTrans = FindTransByAccount(originalTransaction, 50);
+            taxTrans.IsDeleted = true;
+            await SaveAsync();
+
+        }
+
+        private Transaction FindTransByAccount(Transaction originalRent, int accountId)
+        {
+            var transaction = Context.Transactions
+            .Where(a => a.Date == originalRent.Date
+             && a.ApartmentId == originalRent.ApartmentId
+             && a.AccountId == accountId).FirstOrDefault();
+            return transaction;
+        }
+
+
     }
+
+
+    public class RentRelatedTransactionsResponse
+    {
+        public Transaction Rent { get; set; }
+        public Transaction Management { get; set; }
+        public Transaction Tax { get; set; }
+
+    }
+
+
 }
 
 
 
 
-
-
-
-
-//[Obsolete("Use GetAllExpensesAsync, exepenses table obsolete")]
-//public async Task<List<TransactionDto>> GetAllExpensesAsync_(int monthsBack)
-//{
-//    Func<Transaction, bool> basicPredicate = t => !t.IsDeleted;
-//    Func<Transaction, bool> predicate;
-//    if (monthsBack != 0)
-//    {
-//        predicate = t =>
-//        basicPredicate(t) && t.Date > DateTime.Today.AddMonths(-monthsBack);
-//    }
-//    else
-//    {
-//        predicate = basicPredicate;
-//    }
-
-
-//    var expensesList = Context.Expenses.Join(
-//        Context.Transactions
-//        .Where(a => predicate(a)),
-//        expense => expense.TransactionId,
-//        transaction => transaction.Id,
-//        (expense, transaction) => new TransactionDto
-//        {
-//            AccountId = transaction.AccountId,
-//            AccountName = transaction.Account.Name,
-//            Amount = transaction.Amount * -1,
-//            ApartmentId = transaction.ApartmentId,
-//            ApartmentAddress = transaction.Apartment.Address,
-//            Comments = transaction.Comments,
-//            Date = transaction.Date,
-//            Hours = expense.Hours,
-//            Id = transaction.Id,
-//            IsPurchaseCost = transaction.IsPurchaseCost,
-//            IsConfirmed = transaction.IsConfirmed
-//        }
-//        ).OrderByDescending(a => a.Date).ThenByDescending(a => a.Id);
-
-
-//    if (monthsBack != 0)
-//    {
-//        var expenses = await expensesList
-//            .Where(a => a.Date > DateTime.Today.AddMonths(-monthsBack))
-//            .ToListAsync();
-
-//        var messages = await Context.Messages
-//             .Where(a => a.IsDeleted == false)
-//             .Where(a => a.TableName == "transactions")
-//             .ToListAsync();
-//        foreach (var expense in expenses)
-//        {
-//            expense.Messages = messages.Where(a => a.ParentId == expense.Id).ToList();
-//        }
-//        return expenses;
-//    }
-//    else
-//    {
-//        return await expensesList.ToListAsync();
-//    }
-
-
-//}
-
-//[Obsolete("Not needed anymore, used directly in the Expenses controller")]
-//public async Task<TransactionDto> GetExpenseByIdAsync(int transactionId)
-//{
-//    return await Context.Expenses.Join(
-//        Context.Transactions.Where(a => a.Id == transactionId
-//        && !a.IsDeleted),
-//        expense => expense.TransactionId,
-//        transaction => transaction.Id,
-//        (expense, transaction) => new TransactionDto
-//        {
-//            AccountId = transaction.AccountId,
-//            AccountName = transaction.Account.Name,
-//            Amount = transaction.Amount * -1,
-//            ApartmentId = transaction.ApartmentId,
-//            ApartmentAddress = transaction.Apartment.Address,
-//            Comments = transaction.Comments,
-//            Date = transaction.Date,
-//            Hours = expense.Hours,
-//            Id = transaction.Id,
-//            IsPurchaseCost = transaction.IsPurchaseCost,
-//            IsConfirmed = transaction.IsConfirmed
-//        }
-//        ).FirstOrDefaultAsync();
-//}
-
-//[Obsolete("Expenses table is not in use anymore")]
-//private Expense CreateCorrespondingExpense(Transaction originalTransaction)
-//{
-//    Expense correspondingExpense = new Expense
-//    {
-//        Hours = originalTransaction.Hours,
-//        TransactionId = originalTransaction.Id,
-//    };
-//    return correspondingExpense;
-//}
+//var originalRent = Context.Transactions.FirstOrDefault(a => a.Id == transaction.Id);
+//Context.Entry(originalRent).State = EntityState.Detached;

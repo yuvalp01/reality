@@ -33,7 +33,6 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
-            //var transaction = await _repositoryWraper.Transaction.GetAllExpensesAsync(monthsBack);
             var transactions = await _repositoryWraper.Transaction.GetAllTransactionDtoAsync(monthsBack, CreatedByEnum.Stella);
 
             if (transactions == null)
@@ -79,20 +78,6 @@ namespace Nadlan.Controllers
             return CreatedAtAction("PostExpense", new { id = transaction.Id }, transaction);
         }
 
-        //[HttpPut()]
-        //public async Task<IActionResult> PutExpense([FromBody] TransactionDto transactionDto)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
-        //    //Expenses will be just a transaction with userAccount 2 (Stella) 
-        //    transaction.UserAccount = 2;
-        //    await _repositoryWraper.Transaction.UpdateExpenseAndTransactionAsync(transaction);
-        //    return NoContent();
-        //}
 
 
         [HttpPut()]
@@ -103,19 +88,10 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
 
-            //var  _transaction = new Transaction();
-
-
             _context.Entry(transaction).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return NoContent();
 
-
-            //var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
-            ////Expenses will be just a transaction with userAccount 2 (Stella) 
-            //transaction.UserAccount = 2;
-            //await _repositoryWraper.Transaction.UpdateExpenseAndTransactionAsync(transaction);
-            //return NoContent();
         }
 
 

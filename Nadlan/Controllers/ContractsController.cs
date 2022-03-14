@@ -15,12 +15,10 @@ namespace Nadlan.Controllers
     public class ContractsController : ControllerBase
     {
         private RepositoryWrapper _repositoryWraper;
-        private readonly IMapper _mapper;
 
-        public ContractsController(NadlanConext context, IMapper mapper)
+        public ContractsController(NadlanConext context)
         {
             _repositoryWraper = new RepositoryWrapper(context);
-            _mapper = mapper;
         }
 
         [HttpGet]

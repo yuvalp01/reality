@@ -178,6 +178,83 @@ namespace Nadlan.Controllers
         }
 
 
+        // POST: api/Transactions
+        [HttpPost("PostRent")]
+        public async Task<IActionResult> PostRent([FromBody] TransactionDto transactionDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (transactionDto.AccountId != 1)
+            {
+                return BadRequest("Only rent account (1) is valid");
+            }
+            var rentTrans = _mapper.Map<TransactionDto, Transaction>(transactionDto);
+
+            var result = await _repositoryWraper.Transaction.CreateRentTransactionsAsync(rentTrans);
+
+            return Ok(result);
+        }
+
+        // PUT: api/Transactions/5
+        [HttpPut("UpdateRent/{id}")]
+        public async Task<IActionResult> UpdateRent([FromRoute] int id, [FromBody] Transaction transaction)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!TransactionExists(id))
+            {
+                return BadRequest();
+            }
+
+
+            var results = await _repositoryWraper.Transaction.UpdateRentTransactionsAsync(transaction);
+
+            //var originalRent = _context.Transactions.FirstOrDefault(a => a.Id == transaction.Id);
+            //_context.Entry(originalRent).State = EntityState.Detached;
+
+            ////Update rent
+            //transaction.IsConfirmed = false;
+            //_context.Entry(transaction).State = EntityState.Modified;
+
+            ////update Management
+            //var mngTrans = FindTransByAccount(originalRent, 2);
+            //mngTrans.IsConfirmed = false;
+            //mngTrans.Amount = transaction.Amount * -0.1m;
+            //mngTrans.Date = transaction.Date;
+            //mngTrans.Comments = $"Created automatically based on 10% of ${transaction.Amount} rent. (transactionId: {transaction.Id}";
+            //_context.Entry(mngTrans).State = EntityState.Modified;
+
+            ////update Tax
+            //var taxTrans = FindTransByAccount(originalRent, 50);
+            //taxTrans.IsConfirmed = false;
+            //taxTrans.Amount = transaction.Amount * -0.15m;
+            //taxTrans.Date = transaction.Date;
+            //taxTrans.Comments = $"Created automatically based on 15% of ${transaction.Amount} rent. (transactionId: {transaction.Id}";
+            //_context.Entry(taxTrans).State = EntityState.Modified;
+
+            //await _context.SaveChangesAsync();
+
+
+            return Ok(results);
+        }
+
+        [HttpDelete("SoftDeleteRent/{id}")]
+        public async Task<IActionResult> SoftDeleteRent([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            await _repositoryWraper.Transaction.SoftDeleteRentTransactionsAsync(id);
+            return Ok();
+
+        }
+
 
         [HttpPut("confirm")]
         public async Task<IActionResult> Confirm([FromBody] int transactionId)

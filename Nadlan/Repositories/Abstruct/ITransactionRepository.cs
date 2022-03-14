@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Nadlan.ViewModels;
 
 namespace Nadlan.Repositories
 {
@@ -15,5 +16,10 @@ namespace Nadlan.Repositories
         Task CreateTransactionAsync(Transaction transaction);
         Task UpdateTransactionAsync(Transaction dbTransaction, Transaction transaction);
         Task SoftDeleteTransactionAsync(int transactionId);
+
+
+        Task<RentRelatedTransactionsResponse> CreateRentTransactionsAsync(Transaction rent);
+        Task<RentRelatedTransactionsResponse> UpdateRentTransactionsAsync(Transaction transaction);
+        Task SoftDeleteRentTransactionsAsync(int transactionId);
     }
 }

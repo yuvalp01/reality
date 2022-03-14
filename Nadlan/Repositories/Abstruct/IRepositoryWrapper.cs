@@ -11,10 +11,6 @@ namespace Nadlan.Repositories
         TransactionRepository Transaction { get; }
         AccountRepository Account { get; }
         ApartmentReportRepository ApartmentReport { get; }
-        //GeneralInfoReportRepository GeneralInfoReportRepo { get; }
-        //SummaryReportRepository SummaryReportRepo { get; }
-        //PurchaseReportRepository PurchaseReportRepo { get; }
-        //DiagnosticReportRepository DiagnosticReportRepo { get; }
         InvestorReportRepository InvestorReport{ get; }
         PersonalTransactionRepository PersonalTransaction { get; }
         void Save();
