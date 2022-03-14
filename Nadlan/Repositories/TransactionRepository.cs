@@ -352,7 +352,7 @@ namespace Nadlan.Repositories
                     }
                 }
             }
-            return query.OrderBy(a => a.Date).ToListAsync();
+            return query.OrderByDescending(a => a.Date).ToListAsync();
         }
 
 
@@ -465,7 +465,8 @@ namespace Nadlan.Repositories
         private Transaction FindTransByAccount(Transaction originalRent, int accountId)
         {
             var transaction = Context.Transactions
-            .Where(a => a.Date == originalRent.Date
+            .Where(a => !a.IsDeleted
+             && a.Date == originalRent.Date
              && a.ApartmentId == originalRent.ApartmentId
              && a.AccountId == accountId).FirstOrDefault();
             return transaction;

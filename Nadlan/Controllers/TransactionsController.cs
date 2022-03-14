@@ -239,8 +239,8 @@ namespace Nadlan.Controllers
 
             //await _context.SaveChangesAsync();
 
-
-            return Ok(results);
+            return NoContent();
+            //return Ok(results);
         }
 
         [HttpDelete("SoftDeleteRent/{id}")]
