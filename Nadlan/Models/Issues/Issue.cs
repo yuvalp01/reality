@@ -20,6 +20,7 @@ namespace Nadlan.Models.Issues
         public bool IsNew { get; set; }
         public string CreatedBy { get; set; }
         public bool IsDeleted { get; set; }
+        public int StakeholderId { get; set; }
         [NotMapped]
         public virtual ICollection<Message> Messages { get; set; }
     }

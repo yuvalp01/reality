@@ -31,16 +31,14 @@ namespace Nadlan.Controllers
         }
 
 
-        [HttpGet("{isOpenOnly}")]
-        public async Task<IActionResult> GetIssues([FromRoute] bool isOpenOnly)
+        [HttpGet("{isOpenOnly}/{stakeholderId}")]
+        public async Task<IActionResult> GetIssues([FromRoute] bool isOpenOnly, [FromRoute] int stakeholderId)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var issues = await _repositoryWraper.IssueRepository
-                .GetAllIssuesAsync(isOpenOnly);
-            //var issues = await _repositoryWraper.IssueRepository
-            //    .GetAllIssuesAsync();
+                .GetAllIssuesAsync(isOpenOnly, stakeholderId);
+
             if (issues == null) return NotFound();
-            //var json = JsonConvert.SerializeObject(issues);
             return Ok(issues);
         }
 

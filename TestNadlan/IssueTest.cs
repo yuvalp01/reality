@@ -38,7 +38,7 @@ namespace TestNadlan
         public void GetAllIssues()
         {
             //act
-            var openIssues = _issueRepository.GetAllIssuesAsync(false).Result;
+            var openIssues = _issueRepository.GetAllIssuesAsync(false,0).Result;
             //assert       
             Assert.IsTrue(openIssues.Count == 4);
         }
@@ -47,7 +47,7 @@ namespace TestNadlan
         {
 
             //act
-            var openIssues_ = _issueRepository.GetAllIssuesAsync(true).Result;
+            var openIssues_ = _issueRepository.GetAllIssuesAsync(true,0).Result;
             //assert       
             Assert.IsTrue(openIssues_.Count == 3);
         }

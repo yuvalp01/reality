@@ -9,45 +9,36 @@ namespace Nadlan.BusinessLogic
 {
     public class IssueFilter
     {
-        public Func<Issue, bool> GetAllIssues()
-        {
-            Func<Issue, bool> basicPredicate = t =>
-                        !t.IsDeleted;
-            return basicPredicate;
-        }
-
-        public Func<Issue, bool> GetOpenIssues()
-        {
-            Func<Issue, bool> basicPredicate = t =>
-                        t.IsDeleted == false
-                     && t.DateClose == null;
-            return basicPredicate;
-        }
-
-        //public Func<Message, bool> GetItemsOfOpenIssues()
+        //public Func<Issue, bool> GetAllIssues()
         //{
-        //    Func<Message, bool> basicPredicate = t =>
+        //    Func<Issue, bool> basicPredicate = t =>
+        //                !t.IsDeleted;
+        //    return basicPredicate;
+        //}
+
+        //public Func<Issue, bool> GetOpenIssues()
+        //{
+        //    Func<Issue, bool> basicPredicate = t =>
         //                t.IsDeleted == false
-        //             && t.Issue.IsDeleted == false
-        //             && t.Issue.DateClose == null;
+        //             && t.DateClose == null;
         //    return basicPredicate;
         //}
 
 
-        public Func<Message, bool> GetAllMessages()
-        {
-            Func<Message, bool> basicPredicate = t =>
-                        !t.IsDeleted;
-            return basicPredicate;
-        }
+        //public Func<Message, bool> GetAllMessages()
+        //{
+        //    Func<Message, bool> basicPredicate = t =>
+        //                !t.IsDeleted;
+        //    return basicPredicate;
+        //}
 
-        public Func<Message, bool> GetItemsOfIssues()
-        {
-            Func<Message, bool> basicPredicate = t =>
-                        t.IsDeleted == false;
-                     //&& t.Issue.IsDeleted == false;
-            return basicPredicate;
-        }
+        //public Func<Message, bool> GetItemsOfIssues()
+        //{
+        //    Func<Message, bool> basicPredicate = t =>
+        //                t.IsDeleted == false;
+
+        //    return basicPredicate;
+        //}
 
 
     }

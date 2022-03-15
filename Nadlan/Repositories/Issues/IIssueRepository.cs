@@ -6,7 +6,7 @@ namespace Nadlan.Repositories.Issues
 {
     public interface IIssueRepository
     {
-        Task<List<Issue>> GetAllIssuesAsync(bool isOnlyOpen);
+        Task<List<Issue>> GetAllIssuesAsync(bool isOnlyOpen, int stakeholderId);
         Task<Issue> GetIssueByIdAsync(int issueId);
         Task UpdateIssueAsync(Issue issue);
         Task CreateIssueAsync(Issue issue);
