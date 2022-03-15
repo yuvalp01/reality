@@ -30,10 +30,8 @@ export class IssueListComponent implements OnInit {
     }
     this.loadList();
   }
-  onPanelOpened(item:IIssue)
-  {
-    if(this.currentUser.toLowerCase()!='yuval')
-    {
+  onPanelOpened(item: IIssue) {
+    if (this.currentUser.toLowerCase() != 'yuval') {
       item.isNew = false;
       this.issueService.updateIssue(item).subscribe();
     }
@@ -48,7 +46,12 @@ export class IssueListComponent implements OnInit {
   }
   loadList() {
     this.openIssues = [];
-    this.issueService.getOpenIssues().subscribe({
+    let stakeholderId = 0;
+    if (this.currentUser == 'stella') {
+      stakeholderId = 2;
+    }
+
+    this.issueService.getOpenIssues(stakeholderId).subscribe({
       next: result => {
         this.closedIssues = result.filter(a => a.dateClose != null);
         this.openIssues = result.filter(a => a.dateClose == null);

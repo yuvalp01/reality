@@ -9,9 +9,10 @@ export interface IIssue {
   dateClose: Date;
   aprtment: IApartment;
   isNew: boolean;
-  createdBy:string;
+  createdBy: string;
   isDeleted: boolean;
-  messages: IMessage[]
+  messages: IMessage[];
+  stakeholderId: number;
 }
 export interface IMessage {
   id: number;

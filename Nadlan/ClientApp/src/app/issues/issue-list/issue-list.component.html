@@ -4,75 +4,77 @@
 
 <!-- <message-box></message-box> -->
 <!-- *hasClaim="['admin']" -->
-<button *hasClaim="['admin']"  mat-mini-fab (click)="openIssueForm(null)" matTooltip="Add New">
+<button mat-mini-fab (click)="openIssueForm(null)" matTooltip="Add New">
   <mat-icon>add</mat-icon>
 </button>
 
-<button mat-mini-fab (click)="loadList()" matTooltip="Refresh"  color="primary" >
+<button mat-mini-fab (click)="loadList()" matTooltip="Refresh" color="primary">
   <mat-icon>refresh</mat-icon>
 </button>
 <div *ngIf="openIssues.length==0" style="margin-left: 50%;;">
   <mat-spinner diameter="40"></mat-spinner>
 </div>
 <mat-accordion *ngFor="let item of openIssues">
-  <mat-expansion-panel (opened)="onPanelOpened(item)"
-  [hideToggle]='false'>
-    <mat-expansion-panel-header  
-    [ngClass]="{'priority-high':item.priority==1, 'priority-mid':item.priority==2,'priority-low':item.priority==3}">
-      <mat-panel-title  style="cursor: pointer;"
+  <mat-expansion-panel (opened)="onPanelOpened(item)" [hideToggle]='false'>
+    <mat-expansion-panel-header
       [ngClass]="{'priority-high':item.priority==1, 'priority-mid':item.priority==2,'priority-low':item.priority==3}">
-          {{item.title}}
-          <mat-icon *ngIf="item.description">article</mat-icon>
+      <mat-panel-title style="cursor: pointer;" [ngClass]="
+        { 'priority-high':item.priority==1,
+          'priority-mid':item.priority==2,
+          'priority-low':item.priority==3}">
+
+        <span *hasClaim="['admin']">
+          <img *ngIf="item.stakeholderId==2" [ngClass]="{'profile':true}" src="/assets/stella.gif" />
+          <img *ngIf="item.stakeholderId==1" [ngClass]="{'profile':true}" src="/assets/yuval.gif" />
+        </span>
+        {{item.title}}
+        <mat-icon *ngIf="item.description">article</mat-icon>
       </mat-panel-title>
-      <mat-panel-description [ngClass]="{'priority-high':item.priority==1, 'priority-mid':item.priority==2,'priority-low':item.priority==3}">
-        <span  matTooltip="Creation date" >  {{item.dateOpen | date:'dd-MM-yyyy'}}</span>
-          <mat-icon *ngIf="item.isNew" matTooltip="New or updated">fiber_new</mat-icon>
-          <mat-icon *ngIf="item.unreadByMe" matTooltip="New message">mark_email_unread</mat-icon>
-          <mat-icon *ngIf="item.unreadByOthers" matTooltip="Message sent">forward_to_inbox</mat-icon>
-          
+      <mat-panel-description
+        [ngClass]="{'priority-high':item.priority==1, 'priority-mid':item.priority==2,'priority-low':item.priority==3}">
+        <span matTooltip="Creation date"> {{item.dateOpen | date:'dd-MM-yyyy'}}</span>
+        <mat-icon *ngIf="item.isNew" matTooltip="New or updated">fiber_new</mat-icon>
+        <mat-icon *ngIf="item.unreadByMe" matTooltip="New message">mark_email_unread</mat-icon>
+        <mat-icon *ngIf="item.unreadByOthers" matTooltip="Message sent">forward_to_inbox</mat-icon>
+
       </mat-panel-description>
-   
+
     </mat-expansion-panel-header>
     <p> {{item.description}}</p>
-    
-    <mat-icon *ngIf="!item.unreadByOthers && !item.unreadByMe" style="cursor: pointer;"
-     matTooltip="Wtite a message" 
-     (click)="openMessages(item.id)">mail_outline</mat-icon>
-     <mat-icon *ngIf="item.unreadByMe" style="cursor: pointer;"
-     (click)="openMessages(item.id)">
+
+    <mat-icon *ngIf="!item.unreadByOthers && !item.unreadByMe" style="cursor: pointer;" matTooltip="Wtite a message"
+      (click)="openMessages(item.id)">mail_outline</mat-icon>
+    <mat-icon *ngIf="item.unreadByMe" style="cursor: pointer;" (click)="openMessages(item.id)">
       mark_email_unread
-     </mat-icon>
-     <mat-icon *ngIf="item.unreadByOthers" style="cursor: pointer;"
-     matTooltip="Wtite a message" 
-     (click)="openMessages(item.id)">
-     forward_to_inbox
-     </mat-icon>
-    <ng-container *hasClaim="['admin']">
-    <mat-icon style="cursor: pointer;" (click)="delete(item.id)">delete</mat-icon>
-    <mat-icon style="cursor: pointer;" (click)="openIssueForm(item)">edit</mat-icon>
+    </mat-icon>
+    <mat-icon *ngIf="item.unreadByOthers" style="cursor: pointer;" matTooltip="Wtite a message"
+      (click)="openMessages(item.id)">
+      forward_to_inbox
+    </mat-icon>
+    <ng-container>
+      <mat-icon *hasClaim="['admin']" style="cursor: pointer;" (click)="delete(item.id)">delete</mat-icon>
+      <mat-icon style="cursor: pointer;" (click)="openIssueForm(item)">edit</mat-icon>
     </ng-container>
-    
+
   </mat-expansion-panel>
 </mat-accordion>
 
 <mat-accordion *ngIf="closedIssues && closedIssues.length>0">
-  <mat-expansion-panel 
-  [hideToggle]='false'>
+  <mat-expansion-panel [hideToggle]='false'>
     <mat-expansion-panel-header style="font-weight: bold;">
-Closed Issues
-    </mat-expansion-panel-header>     
-     <mat-panel-title>
-      </mat-panel-title>
-      <mat-panel-description >
-      </mat-panel-description>
-   
-      <div *ngFor="let item of closedIssues">
-        {{item.title}}
-      </div>
+      Closed Issues
+    </mat-expansion-panel-header>
+    <mat-panel-title>
+    </mat-panel-title>
+    <mat-panel-description>
+    </mat-panel-description>
+
+    <div *ngFor="let item of closedIssues">
+      {{item.title}}
+    </div>
     <!-- <mat-icon style="cursor: pointer;" (click)="delete(item.id)">delete</mat-icon>
     <mat-icon style="cursor: pointer;" (click)="openIssueForm(item)">edit</mat-icon>
     <mat-icon style="cursor: pointer;" (click)="openMessages(item.id)">mail</mat-icon>
      -->
   </mat-expansion-panel>
 </mat-accordion>
-

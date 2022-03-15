@@ -1,4 +1,3 @@
-
 <form [formGroup]="issueForm" (ngSubmit)="save()">
     <fieldset>
         <mat-form-field appearance="fill">
@@ -9,15 +8,15 @@
     <fieldset>
         <fieldset>
             <mat-form-field appearance="fill">
-              <mat-label>Apartment</mat-label>
-              <mat-select formControlName="apartmentId">
-                <mat-option *ngFor="let apartment of apartments" [value]="apartment.id">
-                  {{apartment.address}}
-                </mat-option>
-              </mat-select>
+                <mat-label>Apartment</mat-label>
+                <mat-select formControlName="apartmentId">
+                    <mat-option *ngFor="let apartment of apartments" [value]="apartment.id">
+                        {{apartment.address}}
+                    </mat-option>
+                </mat-select>
             </mat-form-field>
-      
-          </fieldset>
+
+        </fieldset>
         <mat-form-field appearance="fill">
             <mat-label>Description</mat-label>
             <textarea formControlName="description" matInput placeholder="Description"></textarea>
@@ -44,14 +43,18 @@
             <mat-label>Priprity</mat-label>
             <input formControlName="priority" matInput type="number" max="3" min="1" placeholder="Priority">
         </mat-form-field>
-            <mat-checkbox formControlName="isNew"style="width: 50%;">
-                Mark As New</mat-checkbox>
+        <mat-checkbox formControlName="isNew" style="width: 50%;">
+            Mark As New</mat-checkbox>
+
     </fieldset>
     <fieldset>
-        <button mat-flat-button 
-        style="background-color: green;" color="primary" 
-        name="submit" 
-        type="submit">
+        <mat-button-toggle-group *hasClaim="['admin']" formControlName="stakeholderId">
+            <mat-button-toggle [value]=1>Yuval</mat-button-toggle>
+            <mat-button-toggle [value]=2>Stella</mat-button-toggle>
+        </mat-button-toggle-group>
+    </fieldset>
+    <fieldset>
+        <button mat-flat-button style="background-color: green;" color="primary" name="submit" type="submit">
             Save
             <mat-icon>check_circle</mat-icon>
         </button>

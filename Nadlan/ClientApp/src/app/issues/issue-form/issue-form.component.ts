@@ -17,19 +17,19 @@ export class IssueFormComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private securityService:SecurityService,
+    private securityService: SecurityService,
     public dialogRef: MatDialogRef<IssueFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private snackBar: MatSnackBar,
     private issueService: IssuesService,
-    private apartmentService: ApartmentService) { 
+    private apartmentService: ApartmentService) {
     this.userName = securityService.securityObject.userName;
-    }
+  }
 
   issueForm: FormGroup;
   apartments: IApartment[];
   @Output() refreshEmitter = new EventEmitter();
-  userName:string;
+  userName: string;
 
   ngOnInit() {
     this.apartmentService.getApartments().subscribe({
@@ -44,7 +44,8 @@ export class IssueFormComponent implements OnInit {
       apartmentId: 0,
       dateOpen: [new Date(), Validators.required],
       dateClose: null,
-      isNew: [true]
+      isNew: [true],
+      stakeholderId: [2]
     });
     this.issueForm.valueChanges.subscribe(val => {
       this.issueForm.controls['isNew'].patchValue(true);
@@ -60,7 +61,7 @@ export class IssueFormComponent implements OnInit {
   save() {
     if (this.issueForm.valid) {
       if (this.issueForm.dirty) {
-        // const t: ITransaction = { ...this.transaction, ...this.transactionFormGroup.value }
+
         let issue: IIssue = Object.assign({}, this.issueForm.value);
         issue.createdBy = this.userName;
         issue.dateOpen = this.fixUtcDate(issue.dateOpen);

@@ -14,8 +14,8 @@ export class IssuesService {
     @Inject('BASE_URL') private baseUrl: String) { }
 
 
-  getOpenIssues(): Observable<IIssue[]> {
-    return this.httpClient.get<IIssue[]>(`${this.baseUrl}${this.controller}/false`);
+  getOpenIssues(stakeholderId: number): Observable<IIssue[]> {
+    return this.httpClient.get<IIssue[]>(`${this.baseUrl}${this.controller}/false/${stakeholderId}`);
 
   }
   addNewIssue(issue: IIssue): Observable<{}> {
