@@ -22,7 +22,7 @@ export class ExpensesComponent implements OnInit {
   selectedApartment: any;
   assistantBalance: number = 0;
   visibleAccountsHours: number[] = [4, 6, 11, 16, 18, 20, 200];
-  visibleAccountsExpenses: number[] = [1, 4, 6, 7, 10, 16, 18, 11, 8, 16, 19, 20, 198, 200, 201];
+  visibleAccountsExpenses: number[] = [1, 4, 5, 6, 7, 10, 16, 18, 11, 8, 16, 19, 20, 198, 200, 201];
   monthsBack: number = 3;
   currentUser: string = 'unknown';
   @ViewChild(MatSort, { static: true }) sort: MatSort;
