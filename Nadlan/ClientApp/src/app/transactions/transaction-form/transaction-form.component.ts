@@ -45,6 +45,7 @@ export class TransactionFormComponent implements OnInit {
       isConfirmed: [false],
       personalTransactionId: [null, Validators.required],
       comments: [''],
+      includeAllRentTrans: [false]
     });
     this.loadData();
   }
@@ -84,7 +85,9 @@ export class TransactionFormComponent implements OnInit {
   loadTrans(result: ITransaction) {
     this.transaction = result;
     this.transactionFormGroup.patchValue(this.transaction);
-
+    if (this.transaction.accountId == 1) {
+      this.transactionFormGroup.controls['includeAllRentTrans'].setValue(true);
+    }
   }
 
 
@@ -95,20 +98,22 @@ export class TransactionFormComponent implements OnInit {
       if (this.transactionFormGroup.dirty) {
         const t: ITransaction = { ...this.transaction, ...this.transactionFormGroup.value }
         t.date = this.fixUtcDate(t.date);
+        let includeAllRentTrans = this.transactionFormGroup.value.includeAllRentTrans;
 
         if (t.id) {
-          this.transactionService.updateTransaction(t)
+          this.transactionService.updateTransaction(t, includeAllRentTrans)
             .subscribe({
               next: result => this.onSaveComplete(result),
               error: err => console.error(err)
             })
         }
         else {
-          this.transactionService.addTransaction(t)
+          this.transactionService.addTransaction(t, includeAllRentTrans)
             .subscribe({
               next: result => this.onSaveComplete(result),
               error: err => console.error(err)
             });
+
         }
       }
       else {
@@ -124,6 +129,7 @@ export class TransactionFormComponent implements OnInit {
 
 
   onSaveComplete(result: ITransaction) {
+    debugger
     let action = 'Updated';
     if (result) {
       this.transaction = result;
@@ -132,7 +138,6 @@ export class TransactionFormComponent implements OnInit {
     }
     let snackBarRef = this.snackBar.open(`Transaction`, action, { duration: 2000 });
     this.refreshEmitter.emit();
-
   }
 
 

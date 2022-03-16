@@ -56,20 +56,25 @@ export class TransactionService {
   }
 
 
-
-
-  addTransaction(transaction: ITransaction): Observable<ITransaction> {
+  addTransaction(transaction: ITransaction, includeAllRentTrans = false): Observable<ITransaction> {
     //(Yuval)
     transaction.createdBy = 1;
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return this.httpClient.post<ITransaction>(this.baseUrl + 'api/transactions', transaction, options);
-    // .pipe(catchError(this.had))
+    let url = `${this.baseUrl}api/transactions`;
+    if (includeAllRentTrans) {
+      url = `${url}/PostRent`
+    }
+    return this.httpClient.post<ITransaction>(url, transaction, options);
   }
 
-  updateTransaction(transaction: ITransaction): any {
+  updateTransaction(transaction: ITransaction, includeAllRentTrans = false): any {
     //Do not assign here createdBy. We want to preserve the original createdBy. 
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return this.httpClient.put<ITransaction>(`${this.baseUrl}api/transactions/${transaction.id}`, transaction, options);
+    let url = `${this.baseUrl}api/transactions`;
+    if (includeAllRentTrans) {
+      url = `${url}/UpdateRent`
+    }
+    return this.httpClient.put<ITransaction>(`${url}/${transaction.id}`, transaction, options);
   }
 
   confirmTransaction(transactionId: ITransaction): Observable<ITransaction> {
@@ -83,9 +88,17 @@ export class TransactionService {
   }
 
 
-  deteleTransaction(transactionId: any): Observable<{}> {
+  deteleTransaction(transactionId: any, includeAllRentTrans = false): Observable<{}> {
+    //SoftDeleteRent
+    let url = `${this.baseUrl}api/transactions`;
+    if (includeAllRentTrans) {
+      url = `${url}/SoftDeleteRent`
+    }
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    return this.httpClient.delete<ITransaction>(this.baseUrl + `api/transactions/${transactionId}`, options);
+
+
+    return this.httpClient.delete<ITransaction>(`${url}/${transactionId}`, options);
+    //return this.httpClient.delete<ITransaction>(this.baseUrl + `api/transactions/${transactionId}`, options);
   }
 
 }

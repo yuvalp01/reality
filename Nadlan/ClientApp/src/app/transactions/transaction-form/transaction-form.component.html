@@ -1,6 +1,8 @@
 <div class="container">
   <form [formGroup]="transactionFormGroup" (ngSubmit)="saveTransaction()">
-    <h3><mat-icon>cached</mat-icon>{{title}} transaction</h3>
+    <h3>
+      <mat-icon>cached</mat-icon>{{title}} transaction
+    </h3>
 
     <fieldset>
       <mat-form-field style="width: 100%" appearance="outline">
@@ -26,46 +28,25 @@
 
     </fieldset>
     <fieldset>
-      <mat-form-field  style="width: 50%" appearance="outline">
+      <mat-form-field style="width: 50%" appearance="outline">
         <mat-label>Transaction Type</mat-label>
-        <mat-select [disabled]="transactionFormGroup.controls.personalTransactionId.value>0" formControlName="personalTransactionId" >
-          <mat-option  [value]="0">Not covered yet</mat-option>
-          <mat-option  [value]="-1">Via bank account</mat-option>
-          <mat-option  [value]="-2">Project funds</mat-option>
-          <mat-option  [value]="-4">Future payment</mat-option>
-          <mat-option  [value]="-3">Not relevant</mat-option>
+        <mat-select [disabled]="transactionFormGroup.controls.personalTransactionId.value>0"
+          formControlName="personalTransactionId">
+          <mat-option [value]="0">Not covered yet</mat-option>
+          <mat-option [value]="-1">Via bank account</mat-option>
+          <mat-option [value]="-2">Project funds</mat-option>
+          <mat-option [value]="-4">Future payment</mat-option>
+          <mat-option [value]="-3">Not relevant</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field  style="width: 50%" appearance="outline">
+      <mat-form-field style="width: 50%" appearance="outline">
         <mat-label>Personal Transaction ID</mat-label>
-      <input matInput
-      formControlName="personalTransactionId"
-      [value]="transactionFormGroup.controls.personalTransactionId.value"
-      type="text" required>
-    </mat-form-field>
+        <input matInput formControlName="personalTransactionId"
+          [value]="transactionFormGroup.controls.personalTransactionId.value" type="text" required>
+      </mat-form-field>
 
     </fieldset>
-      <!-- <mat-button-toggle-group formControlName="personalTransactionId"
-                               #group="matButtonToggleGroup"
-                               value="{{transactionFormGroup.controls.personalTransactionId.value}}">
-        <mat-button-toggle value="0" >
-          Not covered yet
-        </mat-button-toggle>
-        <mat-button-toggle value="-1" >
-          Via bank
-        </mat-button-toggle>
-        <mat-button-toggle value="-2" >
-          From funds
-        </mat-button-toggle>
-        <mat-button-toggle value="-3" >
-          Not relevant
-        </mat-button-toggle>
 
-      </mat-button-toggle-group> -->
-      <!--<span class="example-selected-value">Selected value: {{group.value}}</span>
-
-
-    </fieldset>-->
     <fieldset>
       <mat-form-field style="width: 100%" appearance="outline">
         <mat-label>Apartment</mat-label>
@@ -81,25 +62,27 @@
       <mat-form-field style="width: 50%" appearance="outline">
         <mat-label>GL Acount</mat-label>
         <mat-select formControlName="accountId">
-          <mat-option *ngFor="let acount of accounts" [value]="acount.id">
-            {{acount.name}}
+          <mat-option *ngFor="let account of accounts" [value]="account.id">
+            {{account.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-checkbox style="width: 50%; padding-left: 25px" formControlName="isPurchaseCost">
+      <mat-checkbox *ngIf="transactionFormGroup.value.accountId!=1" style="width: 50%; padding-left: 25px"
+        formControlName="isPurchaseCost">
         Purchase Cost?
       </mat-checkbox>
+      <mat-checkbox *ngIf="transactionFormGroup.value.accountId==1" style="width: 50%; padding-left: 25px"
+        formControlName="includeAllRentTrans">
+        Include trans?
+      </mat-checkbox>
+
     </fieldset>
 
     <fieldset>
       <mat-form-field appearance="outline" style="width: 100%">
         <mat-label>Comments</mat-label>
-        <textarea formControlName="comments"
-                  matInput
-                  cdkTextareaAutosize
-                  #autosize="cdkTextareaAutosize"
-                  cdkAutosizeMinRows="1"
-                  cdkAutosizeMaxRows="5"></textarea>
+        <textarea formControlName="comments" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+          cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
       </mat-form-field>
     </fieldset>
 
