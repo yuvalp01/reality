@@ -394,8 +394,15 @@ namespace Nadlan.Repositories
 
         private void SetManagementValues(Transaction rentTrans, Transaction managementTrans)
         {
+            List<int> partnershipApartments = new List<int> { 1, 3, 4, 20 };
+
             //Update new values
             managementTrans.AccountId = 2;
+            managementTrans.PersonalTransactionId = 0; //most cases - not cover yet
+            if (partnershipApartments.Contains(rentTrans.ApartmentId))
+            {
+                managementTrans.PersonalTransactionId = -2; //for partnership use project funds
+            }
             managementTrans.Amount = rentTrans.Amount * 0.1m;
             managementTrans.Comments = $"Created automatically based on 10% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id})";
         }
@@ -404,6 +411,7 @@ namespace Nadlan.Repositories
         {
             //Update new values
             taxTrans.AccountId = 50;
+            taxTrans.PersonalTransactionId = -4;//Future payment
             taxTrans.Amount = rentTrans.Amount * 0.15m;
             taxTrans.Comments = $"Created automatically based on 15% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id})";
         }
