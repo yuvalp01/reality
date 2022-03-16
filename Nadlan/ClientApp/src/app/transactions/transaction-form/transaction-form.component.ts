@@ -129,7 +129,6 @@ export class TransactionFormComponent implements OnInit {
 
 
   onSaveComplete(result: ITransaction) {
-    debugger
     let action = 'Updated';
     if (result) {
       this.transaction = result;

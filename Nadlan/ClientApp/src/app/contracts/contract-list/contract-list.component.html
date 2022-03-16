@@ -65,10 +65,21 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let item">
           <div>
-            <button (click)="openForm(item)" mat-button color="primary">Edit</button>
-            <button *hasClaim="['admin']" (click)="delete(item.id)" mat-button color="warn">Delete</button>
-            <!-- <button *hasClaim="['admin']" (click)="openTransaction(item)" mat-button color="primary">Payment</button> -->
-            <a *hasClaim="['admin']" [routerLink]='["/contract-payments",item.id]'>Payments</a>
+            <button mat-icon-button matTooltip="Edit" (click)="openForm(item)" mat-button color="primary">
+              <mat-icon>mode_edit</mat-icon>
+            </button>
+
+            <button mat-icon-button matTooltip="Delete" *hasClaim="['admin']" (click)="delete(item.id)" mat-button
+              color="warn">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-icon-button *hasClaim="['admin']" matTooltip="Payments" style="color: green;"
+              [routerLink]='["/contract-payments",item.id]'>
+              <mat-icon>euro_symbol</mat-icon>
+
+
+
+            </button>
           </div>
         </td>
       </ng-container>
