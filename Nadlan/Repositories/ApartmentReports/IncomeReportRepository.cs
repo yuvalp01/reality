@@ -24,10 +24,10 @@ namespace Nadlan.Repositories.ApartmentReports
 
             IncomeReport incomeReport = new IncomeReport();
             incomeReport.AccountsSum = GetAccountSummaryNonPurchase(apartmentId, year);
-            incomeReport.GrossIncome = GetAccountSum(apartmentId, 1, year);
+            incomeReport.GrossIncome = GetAccountSum(apartmentId, (int)Accounts.Rent, year);
             incomeReport.NetIncome = GetNetIncome(apartmentId, year);
             incomeReport.Expenses = GetAllExpenses(apartmentId, year);
-            decimal investment = GetAccountSum(apartmentId, 13);
+            decimal investment = GetAccountSum(apartmentId, (int)Accounts.Investment);
             DateTime purchaseDate = Context.Apartments.Where(a => a.Id == apartmentId).First().PurchaseDate;
 
 
@@ -41,7 +41,7 @@ namespace Nadlan.Repositories.ApartmentReports
                 //Do not calculate bonus so far if it's for specific year
                 else
                 {
-                    decimal bonusPaid = GetAccountSum(apartmentId, 300, year);
+                    decimal bonusPaid = GetAccountSum(apartmentId, (int)Accounts.Bonus, year);
                     incomeReport.NetForInvestor = incomeReport.NetIncome + bonusPaid;
                     incomeReport.Bonus = bonusPaid;
                 }
@@ -68,7 +68,8 @@ namespace Nadlan.Repositories.ApartmentReports
 
                         t.AccountId != (int)Accounts.SecurityDeposit &&//Except for Security Deposit
                         t.AccountId != (int)Accounts.Business &&//Except for Business
-                        t.AccountId != (int)Accounts.Balance;//Except for Balance
+                        t.AccountId != (int)Accounts.Balance &&//Except for Balance
+                        t.AccountId != (int)Accounts.Mortgage_Payment;//Mortgage payment is the actual payment but only the interest should be included
                        // t.Account.AccountTypeId == 0;
 
             Func<Transaction, bool> filter;

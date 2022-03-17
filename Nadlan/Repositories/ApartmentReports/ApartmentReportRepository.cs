@@ -240,16 +240,6 @@ namespace Nadlan.Repositories.ApartmentReports
 
         }
 
-
-        //public async Task<decimal> GetExpensesBalance()
-        //{
-        //    var balance = Context.Expenses
-        //        .Where(a => !a.Transaction.IsDeleted)
-        //        .SumAsync(a => a.Transaction.Amount);
-        //    return await balance * -1;
-        //}
-
-
         public async Task<decimal> GetExpensesBalance()
         {
             var balance = Context.Transactions
