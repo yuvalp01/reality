@@ -1,4 +1,5 @@
 ﻿using Nadlan.Models;
+using Nadlan.Models.Enums;
 using System;
 
 namespace Nadlan.BusinessLogic
@@ -20,37 +21,13 @@ namespace Nadlan.BusinessLogic
             return basicPredicate;
         }
 
-        //public  Func<Transaction, bool> GetProfitRemoveDistributionFilter()
-        //{
-        //    Func<Transaction, bool> basic = GetProfitIncludingDistributionsFilter();
-        //    //int[] ExcludedAccounts = { 100,198 };//Distribution and deposit account account.
-
-        //    Func<Transaction, bool> basicProfitPredicate = t =>
-        //                basic(t) &&
-        //                t.AccountId != 100;
-        //    return basicProfitPredicate;
-        //}
-
-        //public  Func<Transaction, bool> GetAllDistributionsFilter()
-        //{
-        //    Func<Transaction, bool> basic = GetProfitIncludingDistributionsFilter();
-        //    Func<Transaction, bool> distributionPredicate = t =>
-        //                basic(t) &&
-        //                t.AccountId == 100;//Distribution account
-        //    return distributionPredicate;
-        //}
-
         public Func<Transaction, bool> GetAllBonusesFilter()
         {
             Func<Transaction, bool> bonusFilter = t =>
             !t.IsDeleted &&
-            t.AccountId == 300;
+            t.AccountId == (int)Accounts.Bonus;
             return bonusFilter;
         }
-
-
-
-
 
 
         public Func<Transaction, bool> GetGrossIncomeFilter()
@@ -58,7 +35,7 @@ namespace Nadlan.BusinessLogic
             Func<Transaction, bool> basic = GetProfitIncludingDistributionsFilter();
             Func<Transaction, bool> distributionPredicate = t =>
                         basic(t) &&
-                        t.AccountId == 1;//Rent
+                        t.AccountId == (int)Accounts.Rent;//Rent
             return distributionPredicate;
         }
         public Func<Transaction, bool> GetAllExpensesFilter()
@@ -66,9 +43,9 @@ namespace Nadlan.BusinessLogic
             Func<Transaction, bool> basic = GetProfitIncludingDistributionsFilter();
             Func<Transaction, bool> expensesFilter = t =>
                         basic(t) &&
-                        t.AccountId != 1 &&//Except for rent
-                        t.AccountId != 100 &&//Except for distribution
-                        t.AccountId != 300;//Except for bonus
+                        t.AccountId != (int)Accounts.Rent &&//Except for rent
+                        t.AccountId != (int)Accounts.Distribution &&//Except for distribution
+                        t.AccountId != (int)Accounts.Bonus;//Except for bonus
             return expensesFilter;
         }
         public Func<Transaction, bool> GetPendingExpensesFilter()

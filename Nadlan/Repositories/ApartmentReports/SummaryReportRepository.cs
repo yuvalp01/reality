@@ -1,5 +1,6 @@
 ﻿using Nadlan.BusinessLogic;
 using Nadlan.Models;
+using Nadlan.Models.Enums;
 using Nadlan.ViewModels.Reports;
 using System;
 using System.Collections.Generic;
@@ -119,9 +120,9 @@ namespace Nadlan.Repositories.ApartmentReports
             {
                 return 0;
             }
-            var income = expectedTransactions.Where(a => a.AccountId == 1).First();
+            var income = expectedTransactions.Where(a => a.AccountId == (int)Accounts.Rent).First();
             decimal anualRent = income.FrequencyPerYear * income.Amount;
-            var allExpenses = expectedTransactions.Where(a => a.AccountId != 1);
+            var allExpenses = expectedTransactions.Where(a => a.AccountId != (int)Accounts.Rent);
 
             decimal annualExpenses = 0;
             foreach (var expense in allExpenses)

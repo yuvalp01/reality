@@ -1,4 +1,5 @@
 ﻿using Nadlan.Models;
+using Nadlan.Models.Enums;
 using System;
 
 namespace Nadlan.BusinessLogic
@@ -26,12 +27,12 @@ namespace Nadlan.BusinessLogic
                         !t.IsBusinessExpense &&
                         t.IsPurchaseCost &&
                         //t.Account.AccountTypeId == 0 &&
-                        t.AccountId != 198 &&//Except for Security Deposit
-                        t.AccountId != 200 &&//Except for Business
-                        t.AccountId != 201 &&//Except for Balance
+                        t.AccountId != (int)Accounts.SecurityDeposit &&//Except for Security Deposit
+                        t.AccountId != (int)Accounts.Business &&//Except for Business
+                        t.AccountId != (int)Accounts.Balance &&//Except for Balance
                         //  !t.Account.IsIncome &&
-                        t.AccountId != 13 && //not investment
-                        t.AccountId != 1; // not rent
+                        t.AccountId != (int)Accounts.Investment && //not investment
+                        t.AccountId != (int)Accounts.Rent; // not rent
 
 
 
@@ -45,7 +46,8 @@ namespace Nadlan.BusinessLogic
             Func<Transaction, bool> basic = GetTotalCostFilter();
             bool predicate(Transaction t) =>
                           basic(t) &&
-                         (t.AccountId == 6 || t.AccountId == 17);
+                         (t.AccountId == (int)Accounts.RenovationMiscellaneous 
+                         || t.AccountId == (int)Accounts.RenovationContractor);
 
             return predicate;
         }
@@ -54,8 +56,8 @@ namespace Nadlan.BusinessLogic
             Func<Transaction, bool> basic = GetTotalCostFilter();
             bool predicate(Transaction t) =>
                           basic(t) &&
-                         !(t.AccountId == 6 || t.AccountId == 17) &&
-                         t.AccountId!=12;
+                         !(t.AccountId == (int)Accounts.RenovationMiscellaneous || t.AccountId == (int)Accounts.RenovationContractor) &&
+                         t.AccountId!= (int)Accounts.ApartmentCost;
 
             return predicate;
         }
@@ -63,7 +65,7 @@ namespace Nadlan.BusinessLogic
         {
             bool predicate(Transaction t) =>
               !t.IsDeleted &&
-              t.AccountId == 13;
+              t.AccountId == (int)Accounts.Investment;
             return predicate;
         }
     }

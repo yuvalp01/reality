@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nadlan.BusinessLogic;
 using Nadlan.Models;
+using Nadlan.Models.Enums;
 using Nadlan.ViewModels.Reports;
 using System;
 using System.Collections.Generic;
@@ -61,13 +62,13 @@ namespace Nadlan.Repositories.ApartmentReports
             Func<Transaction, bool> expensesFilter = t =>
                         basic(t) &&
                         t.IsPurchaseCost == false &&
-                        t.AccountId != 1 &&//Except for rent
-                        t.AccountId != 100 &&//Except for distribution
-                        t.AccountId != 300 &&//Except for bonus
+                        t.AccountId != (int)Accounts.Rent &&//Except for rent
+                        t.AccountId != (int)Accounts.Distribution &&//Except for distribution
+                        t.AccountId != (int)Accounts.Bonus &&//Except for bonus
 
-                        t.AccountId != 198 &&//Except for Security Deposit
-                        t.AccountId != 200 &&//Except for Business
-                        t.AccountId != 201;//Except for Balance
+                        t.AccountId != (int)Accounts.SecurityDeposit &&//Except for Security Deposit
+                        t.AccountId != (int)Accounts.Business &&//Except for Business
+                        t.AccountId != (int)Accounts.Balance;//Except for Balance
                        // t.Account.AccountTypeId == 0;
 
             Func<Transaction, bool> filter;
@@ -99,7 +100,7 @@ namespace Nadlan.Repositories.ApartmentReports
             var accountSummary = Context.Transactions
                 .Include(a => a.Account)
                 .Where(basic)
-                .Where(a => a.AccountId != 1)
+                .Where(a => a.AccountId != (int)Accounts.Rent)
                 .GroupBy(g => new { g.AccountId, g.Account.Name })
                 .OrderBy(a => a.Sum(s => s.Amount))
                 .Select(a => new AccountSummary
@@ -113,24 +114,4 @@ namespace Nadlan.Repositories.ApartmentReports
 
     }
 }
-
-
-
-//public Func<Transaction, bool> GetAllExpensesFilter(int apartmentId, int year)
-//{
-
-//    //       !t.IsDeleted &&
-//    //!t.IsPurchaseCost &&
-//    //!t.IsBusinessExpense &&
-//    //t.Account.AccountTypeId == 0;
-
-//    Func<Transaction, bool> basic = GetAllValidTransactionsForReports(apartmentId);
-//    Func<Transaction, bool> expensesFilter = t =>
-//                basic(t) &&
-//                t.AccountId != 1 &&//Except for rent
-//                t.AccountId != 100 &&//Except for distribution
-//                t.AccountId != 300;//Except for bonus
-
-//    return expensesFilter;
-//}
 

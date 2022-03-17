@@ -138,8 +138,8 @@ namespace Nadlan.Repositories.ApartmentReports
                 //.Include(a => a.Account)
                 .Where(predicate)
                 //.Where(a => a.Account.IsIncome == false)
-                .Where(a => a.AccountId != 1) // not rent
-                .Where(a => a.AccountId != 13)  //not investment
+                .Where(a => a.AccountId != (int)Accounts.Rent) // not rent
+                .Where(a => a.AccountId != (int)Accounts.Investment)  //not investment
                 .Sum(a => a.Amount);
             return result;
             //return result;
@@ -151,12 +151,13 @@ namespace Nadlan.Repositories.ApartmentReports
             Func<Transaction, bool> filter = t =>
                         basic(t) &&
                         t.IsPurchaseCost == isPurchaseCost &&
-                        t.AccountId != 100 &&//Except for distribution
-                        t.AccountId != 198 &&//Except for deposit
-                        t.AccountId != 200 &&//Except for business
-                        t.AccountId != 201 &&//Except for balance
-                        t.AccountId != 300;//Except for bonus
-                       // t.Account.AccountTypeId == 0;
+                        t.AccountId != (int)Accounts.Distribution &&
+                        t.AccountId != (int)Accounts.SecurityDeposit &&
+                        t.AccountId != (int)Accounts.Business &&
+                        t.AccountId != (int)Accounts.Balance &&
+                        t.AccountId != (int)Accounts.Bonus &&
+                        t.AccountId != (int)Accounts.Mortgage_Payment;
+
 
             return filter;
         }
@@ -171,12 +172,12 @@ namespace Nadlan.Repositories.ApartmentReports
             Func<Transaction, bool> expensesFilter = t =>
                         basic(t) &&
                         t.IsPurchaseCost == isPurchaseCost &&
-                        t.AccountId != 198 &&//Except for deposit
-                        t.AccountId != 200 &&//Except for business
-                        t.AccountId != 201 &&//Except for balance
-                        t.AccountId != 100 &&//Except for distribution
-                        t.AccountId != 300;//Except for bonus
-                        //t.Account.AccountTypeId == 0;
+                        t.AccountId != (int)Accounts.Distribution && 
+                        t.AccountId != (int)Accounts.SecurityDeposit &&
+                        t.AccountId != (int)Accounts.Business && 
+                        t.AccountId != (int)Accounts.Balance && 
+                        t.AccountId != (int)Accounts.Bonus &&
+                        t.AccountId != (int)Accounts.Mortgage_Payment;
 
             Func<Transaction, bool> filter;
             if (year != 0)

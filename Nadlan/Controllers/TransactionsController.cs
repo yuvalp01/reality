@@ -165,7 +165,7 @@ namespace Nadlan.Controllers
             transaction.CreatedBy = (int)CreatedByEnum.Yuval;
 
             //Not distribution transaction
-            if (transaction.AccountId != 100)
+            if (transaction.AccountId != (int)Accounts.Distribution)
             {
                 await _repositoryWraper.Transaction.CreateTransactionAsync(transaction);
             }
@@ -187,7 +187,7 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (transactionDto.AccountId != 1)
+            if (transactionDto.AccountId != (int)Accounts.Rent)
             {
                 return BadRequest("Only rent account (1) is valid");
             }

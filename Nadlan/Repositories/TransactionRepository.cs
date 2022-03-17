@@ -196,7 +196,7 @@ namespace Nadlan.Repositories
 
         public async Task DistributeBalanceAsync(Transaction transaction)
         {
-            if (transaction.AccountId != 100)
+            if (transaction.AccountId != (int)Accounts.Distribution)
             {
                 throw new ArgumentException("It is only possible to distribute from account 100");
             }
