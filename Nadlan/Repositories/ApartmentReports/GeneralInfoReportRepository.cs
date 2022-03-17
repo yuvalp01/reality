@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nadlan.Models;
+using Nadlan.Models.Enums;
 using Nadlan.ViewModels;
 using Nadlan.ViewModels.Reports;
 using System;

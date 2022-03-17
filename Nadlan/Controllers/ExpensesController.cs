@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Nadlan.Models;
+using Nadlan.Models.Enums;
 using Nadlan.Repositories;
 using Nadlan.ViewModels;
 using System;

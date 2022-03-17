@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using Nadlan.Models.Enums;
 
 namespace Nadlan.Models
 {

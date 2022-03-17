@@ -1,4 +1,4 @@
-﻿namespace Nadlan.Models
+﻿namespace Nadlan.Models.Enums
 {
     public enum ApartmentStatus
     {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nadlan.BusinessLogic;
 using Nadlan.Models;
+using Nadlan.Models.Enums;
 using Nadlan.Repositories.ApartmentReports;
 using Nadlan.ViewModels.Reports;
 using System;
