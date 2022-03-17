@@ -22,6 +22,7 @@
           <mat-button-toggle value="1">Rent</mat-button-toggle>
           <mat-button-toggle *hasClaim="['admin']" value="2">Management</mat-button-toggle>
           <mat-button-toggle *hasClaim="['admin']" value="50">Tax</mat-button-toggle>
+          <mat-button-toggle *hasClaim="['admin']" value="21">Interest Cost</mat-button-toggle>
         </mat-button-toggle-group>
       </p>
       <transaction-list *ngIf="dataSource.data" [dataSource]="dataSource.data"
