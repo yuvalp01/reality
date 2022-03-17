@@ -72,7 +72,8 @@
         hourglass_full</mat-icon>
       <span [ngClass]="{
           positive: isPositive(transaction.amount),
-          negative: !isPositive(transaction.amount)
+          negative: !isPositive(transaction.amount),
+          bold: transaction.isPettyCash
         }">
         {{transaction.amount}}
 
