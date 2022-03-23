@@ -23,7 +23,9 @@ namespace Nadlan.Models
         public int PersonalTransactionId { get; set; }
 
         public int CreatedBy { get; set; }
-        public bool IsPettyCash { get; set; }
+        //public bool IsPettyCash { get; set; }
+        public int BankAccountId { get; set; }
+        
         public bool IsPending { get; set; }
         public bool IsDeleted { get; set; }
 

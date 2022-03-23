@@ -88,7 +88,7 @@ namespace Nadlan.Repositories
                 IsPurchaseCost = transaction.IsPurchaseCost,
                 IsConfirmed = transaction.IsConfirmed,
                 PersonalTransactionId = transaction.PersonalTransactionId,
-                IsPettyCash = transaction.IsPettyCash,
+                BankAccountId = transaction.BankAccountId,
                 CreatedBy = transaction.CreatedBy,
                 IsPending = transaction.IsPending
             });
@@ -167,7 +167,7 @@ namespace Nadlan.Repositories
             {
                 transaction.Comments = $"Hours: {transaction.Comments}";
             }
-            if (!transaction.IsPettyCash)
+            if (transaction.BankAccountId!=0)
             {
                 transaction.IsPending = true;
             }
@@ -547,6 +547,20 @@ namespace Nadlan.Repositories
 
         }
 
+        /// <summary>
+        /// Get all Stella's expenses
+        /// </summary>
+        /// <returns></returns>
+        public async Task<decimal> GetExpensesBalance()
+        {
+            var balance = Context.Transactions
+                .Where(a => !a.IsDeleted)
+                .Where(a => a.CreatedBy == (int)CreatedByEnum.Stella)
+                .Where(a => a.BankAccountId == 0)
+                .SumAsync(a => a.Amount);
+            return await balance * -1;
+        }
+
         private Transaction FindTransByAccount(Transaction originalRent, int accountId)
         {
             var transaction = Context.Transactions
@@ -556,6 +570,9 @@ namespace Nadlan.Repositories
              && a.AccountId == accountId).FirstOrDefault();
             return transaction;
         }
+
+
+
 
 
     }

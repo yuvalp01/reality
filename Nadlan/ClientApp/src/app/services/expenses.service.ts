@@ -60,9 +60,4 @@ export class ExpensesService {
     return this.httpClient.get<number>(url);
   }
 
-
-  //confirmExpense(transactionId: ITransaction): Observable<ITransaction> {
-  //  const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-  //  return this.httpClient.put<ITransaction>(`${this.baseUrl}api/transactions/confirm`, transactionId, options);
-  //}
 }

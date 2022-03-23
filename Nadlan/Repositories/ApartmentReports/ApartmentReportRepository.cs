@@ -240,15 +240,17 @@ namespace Nadlan.Repositories.ApartmentReports
 
         }
 
-        public async Task<decimal> GetExpensesBalance()
-        {
-            var balance = Context.Transactions
-                .Where(a => !a.IsDeleted)
-                .Where(a=> a.CreatedBy == (int)CreatedByEnum.Stella)
-                .Where(a=>a.IsPettyCash)
-                .SumAsync(a => a.Amount);
-            return await balance * -1;
-        }
+
+        //Moved to TransactionRepository
+        //public async Task<decimal> GetExpensesBalance()
+        //{
+        //    var balance = Context.Transactions
+        //        .Where(a => !a.IsDeleted)
+        //        .Where(a=> a.CreatedBy == (int)CreatedByEnum.Stella)
+        //        .Where(a=>a.BankAccountId==0)
+        //        .SumAsync(a => a.Amount);
+        //    return await balance * -1;
+        //}
 
     }
 

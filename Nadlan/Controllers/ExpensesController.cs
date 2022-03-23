@@ -127,7 +127,7 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
 
-            decimal balance = await _repositoryWraper.ApartmentReport.GetExpensesBalance();
+            decimal balance = await _repositoryWraper.Transaction.GetExpensesBalance();
 
             return Ok(balance);
         }
