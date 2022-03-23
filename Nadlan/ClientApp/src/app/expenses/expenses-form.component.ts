@@ -1,12 +1,13 @@
 import { Component, OnInit, NgZone, ViewChild, Output, Inject, Input, EventEmitter } from "@angular/core";
 import { ApartmentService } from "../services/apartment.service";
-import { IApartment, ITransaction, IAccount } from "../models";
+import { IApartment, ITransaction, IAccount, IBankAccount } from "../models";
 import { FormControl, FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { AccountService } from "../services/account.service";
 import { ExpensesService } from "../services/expenses.service";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { take } from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog, MatSnackBar } from "@angular/material";
+import { BankAccountService } from "../services/bankAaccount.service";
 
 
 @Component(
@@ -18,6 +19,7 @@ export class AddExpenseComponent implements OnInit {
 
   constructor(private apartmentService: ApartmentService,
     private accountService: AccountService,
+    private bankAccountService: BankAccountService,
     private expensesService: ExpensesService,
     private _ngZone: NgZone,
     private snackBar: MatSnackBar,
@@ -27,6 +29,7 @@ export class AddExpenseComponent implements OnInit {
 
   apartments: IApartment[];
   accounts: IAccount[];
+  bankAccounts: IBankAccount[];
   transactionId: number = 0;
   transactionForm: FormGroup;
   @Input() isHourForm: boolean = false;
@@ -117,7 +120,7 @@ export class AddExpenseComponent implements OnInit {
         return -2;//CoveredByFunds
       }
       else {
-        if (transaction.isPettyCash) {
+        if (transaction.bankAccountId == 0) {
           return 0; //still not covered yet
         }
         else {
@@ -142,7 +145,8 @@ export class AddExpenseComponent implements OnInit {
       hours: null,
       comments: ['', Validators.required],
       isPurchaseCost: { value: false, disabled: false },
-      isPettyCash: true,
+      // isPettyCash: true,
+      bankAccountId: [0, Validators.min(0)],
     })
 
     this.configureFormType();
@@ -184,6 +188,21 @@ export class AddExpenseComponent implements OnInit {
         this.transactionForm.controls['amount'].setValue(0);
       }
     });
+
+    // //TODO change!!!
+    // this.transactionForm.get('bankAccountId').valueChanges.subscribe(val => {
+    //   if (this.transactionForm.controls['bankAccountId'].value) {
+    //     let bankAccountId = this.transactionForm.controls['bankAccountId'].value;
+    //     if (bankAccountId == 0) {
+    //       //this.transactionForm.controls['bankAccountId'].clearValidators();
+    //       this.transactionForm.controls['bankAccountId'].setValue(0);
+    //     }
+
+    //   }
+    //   else {
+    //     this.transactionForm.controls['amount'].setValue(0);
+    //   }
+    // });
 
   }
 
@@ -238,6 +257,11 @@ export class AddExpenseComponent implements OnInit {
     this.apartmentService.getApartments().subscribe(result => {
       this.apartments = result;
     }, error => console.error(error));
+
+    this.bankAccountService.getBankAccounts().subscribe(result => {
+      this.bankAccounts = result;
+    }, error => console.error(error));
+
     this.accountService.getAccounts().subscribe(result => {
       if (this.data.visibleAccounts) {
         this.accounts = result.filter(a => this.data.visibleAccounts.includes(a.id));
@@ -286,7 +310,7 @@ export class AddExpenseComponent implements OnInit {
         hours: expense.hours,
         comments: expense.comments,
         isPurchaseCost: expense.isPurchaseCost,
-        isPettyCash: expense.isPettyCash,
+        bankAccountId: expense.bankAccountId,
       });
 
       //this.setSign(expense.accountId);

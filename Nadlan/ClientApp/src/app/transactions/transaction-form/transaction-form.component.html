@@ -5,11 +5,21 @@
     </h3>
 
     <fieldset>
-      <mat-form-field style="width: 100%" appearance="outline">
+      <mat-form-field style="width: 49%; margin-right: 1%;" appearance="outline">
         <mat-label>Date</mat-label>
         <input formControlName="date" matInput [matDatepicker]="picker" placeholder="Date">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field style="width: 49%; margin-left: 1%;" appearance="outline">
+
+        <mat-label>Apartment</mat-label>
+        <mat-select formControlName="apartmentId">
+          <mat-option *ngFor="let apartment of apartments" [value]="apartment.id">
+            {{apartment.address}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
     </fieldset>
     <fieldset>
@@ -48,15 +58,15 @@
     </fieldset>
 
     <fieldset>
-      <mat-form-field style="width: 100%" appearance="outline">
-        <mat-label>Apartment</mat-label>
-        <mat-select formControlName="apartmentId">
-          <mat-option *ngFor="let apartment of apartments" [value]="apartment.id">
-            {{apartment.address}}
+
+      <mat-form-field style="width: 50%;" appearance="outline">
+        <mat-label>Bank Account</mat-label>
+        <mat-select formControlName="bankAccountId">
+          <mat-option *ngFor="let bankAccount of bankAccounts" [value]="bankAccount.id">
+            {{bankAccount.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
-
     </fieldset>
     <fieldset>
       <mat-form-field style="width: 50%" appearance="outline">

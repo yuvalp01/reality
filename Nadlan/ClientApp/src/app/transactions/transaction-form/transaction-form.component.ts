@@ -2,11 +2,12 @@ import { Component, OnInit, ViewChild, NgZone, Inject, Output, EventEmitter, ɵC
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs/operators';
-import { IApartment, IAccount, ITransaction } from '../../models';
+import { IApartment, IAccount, ITransaction, IBankAccount } from '../../models';
 import { TransactionService } from '../../services/transaction.service';
 import { MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { ApartmentService } from '../../services/apartment.service';
 import { AccountService } from '../../services/account.service';
+import { BankAccountService } from 'src/app/services/bankAaccount.service';
 
 
 @Component({
@@ -22,12 +23,14 @@ export class TransactionFormComponent implements OnInit {
     private snackBar: MatSnackBar,
     private transactionService: TransactionService,
     private accountService: AccountService,
+    private bankAccountService: BankAccountService,
     private apartmentService: ApartmentService,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   title: string;
   transactionFormGroup: FormGroup;
   accounts: IAccount[];
+  bankAccounts: IBankAccount[];
   apartments: IApartment[];
   transaction: ITransaction;
   @Output() refreshEmitter = new EventEmitter();
@@ -45,7 +48,8 @@ export class TransactionFormComponent implements OnInit {
       isConfirmed: [false],
       personalTransactionId: [null, Validators.required],
       comments: [''],
-      includeAllRentTrans: [false]
+      includeAllRentTrans: [false],
+      bankAccountId: [-1, Validators.min(0)],
     });
     this.loadData();
   }
@@ -56,6 +60,11 @@ export class TransactionFormComponent implements OnInit {
         next: result => this.accounts = result,
         error: err => console.error(err)
       });
+
+    this.bankAccountService.getBankAccounts().subscribe(result => {
+      this.bankAccounts = result;
+    }, error => console.error(error));
+
     if (this.data.transactionId == 0) {
       this.title = "Add new";
       if (this.data.expected) {

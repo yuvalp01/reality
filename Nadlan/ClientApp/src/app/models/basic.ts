@@ -17,8 +17,9 @@ export interface ITransaction {
   personalTransactionId: number;
   messages: IMessage[];
   createdBy: number;
-  isPettyCash: boolean;
+  // isPettyCash: boolean;
   isPending: boolean;
+  bankAccountId: number;
 
 }
 
@@ -52,6 +53,7 @@ export interface IContract {
   isElectriciyChanged: boolean;
   conditions: string;
   isPaymentConfirmed: boolean;
+  bankAccountId: number;
 }
 
 export interface IAccount {
@@ -60,6 +62,16 @@ export interface IAccount {
   isIncome: boolean;
   accountTypeId: number;
 }
+
+export interface IBankAccount {
+  id: number;
+  name: string;
+  iban: string;
+  bic: string;
+  userNameBank: string;
+  linkToWebsite: string;
+}
+
 export interface IPersonalTransaction {
   id: number;
   date: Date;

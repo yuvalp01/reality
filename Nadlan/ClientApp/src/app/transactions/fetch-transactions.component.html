@@ -73,7 +73,7 @@
       <span [ngClass]="{
           positive: isPositive(transaction.amount),
           negative: !isPositive(transaction.amount),
-          bold: transaction.isPettyCash
+          bold: transaction.bankAccountId==0
         }">
         {{transaction.amount}}
 
@@ -122,7 +122,7 @@
       <button *ngIf="!transaction.isConfirmed && !transaction.isPending" (click)="confirm(transaction.id)" mat-button
         color="green">Confirm</button>
       <mat-icon *ngIf="transaction.isConfirmed" matTooltip="Confirmed">check_circle</mat-icon>
-      <ng-container *ngIf="!transaction.isPettyCash && !transaction.isConfirmed">
+      <ng-container *ngIf="transaction.bankAccountId!=0 && !transaction.isConfirmed">
         <button (click)="payUnpay(transaction.id)" mat-button color="green">
           <mat-icon *ngIf="transaction.isPending" matTooltip="Click after payment is done">hourglass_empty
           </mat-icon>

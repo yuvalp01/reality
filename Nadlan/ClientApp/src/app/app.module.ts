@@ -25,7 +25,7 @@ import { ExcelService } from './services/excel.service';
 import { ExpensesComponent } from './expenses/expenses.component';
 import { AddExpenseComponent } from './expenses/expenses-form.component';
 import { InvestrorsModule } from './investors/investrors.module';
-import {IssuesModule} from './issues/issues.module';
+import { IssuesModule } from './issues/issues.module';
 import { ExpensesService } from './services/expenses.service';
 import { SharedModule } from './shared/shared.module';
 import { WelcomepageComponent } from './welcomepage/welcomepage.component';
@@ -38,11 +38,12 @@ import { AppRoutingModule } from './app.routing.module';
 import { ContractListComponent } from './contracts/contract-list/contract-list.component';
 import { ContractFormComponent } from './contracts/contract-form/contract-form.component';
 import { ContractPaymentsComponent } from './contracts/contract-payments/contract-payments.component';
-import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { ProductsComponent } from './renovationNew/products/products.component';
 import { ProductFormComponent } from './renovationNew/product-form/product-form.component';
 import { DriveLinkGenComponent } from './shared/drive-link-gen/drive-link-gen.component';
 import { PlanningComponent } from './renovationNew/planning/planning.component';
+import { BankAccountService } from './services/bankAaccount.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -88,23 +89,24 @@ import { PlanningComponent } from './renovationNew/planning/planning.component';
 
   providers: [ApartmentService,
     AccountService,
+    BankAccountService,
     TransactionService,
     ExpensesService,
     ReportService,
     RenovationService,
     ExcelService,
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
     { provide: MAT_DIALOG_DATA, useValue: {} },
     { provide: MatDialogRef, useValue: {} }],
   bootstrap: [AppComponent],
   entryComponents: [
     TransactionsDialogComponent,
-     TransactionFormComponent, 
-     AddExpenseComponent,
-     ContractFormComponent,
-     ProductFormComponent,
+    TransactionFormComponent,
+    AddExpenseComponent,
+    ContractFormComponent,
+    ProductFormComponent,
     PaymentFormComponent]
 })
 export class AppModule { }
