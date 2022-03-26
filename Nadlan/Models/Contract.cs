@@ -24,7 +24,7 @@ namespace Nadlan.Models
         public string Conditions { get; set; }
         public bool IsElectriciyChanged { get; set; }
         public bool IsPaymentConfirmed { get; set; }
-        public int BankAccounId { get; set; }
+        public int BankAccountId { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

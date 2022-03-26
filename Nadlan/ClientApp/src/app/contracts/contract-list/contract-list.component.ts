@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ContractService } from '../contract.service';
 import { MatTableDataSource, MatDialog, MatSnackBar } from '@angular/material';
-import { IContract, ITransaction } from 'src/app/models';
+import { IBankAccount, IContract, ITransaction } from 'src/app/models';
 import { ContractFormComponent } from '../contract-form/contract-form.component';
 import { TransactionFormComponent } from 'src/app/transactions/transaction-form/transaction-form.component';
 import { SecurityService } from 'src/app/security/security.service';
 import { error } from 'console';
+import { BankAccountService } from 'src/app/services/bankAaccount.service';
 
 @Component({
   selector: 'app-contract-list',
@@ -16,9 +17,11 @@ export class ContractListComponent implements OnInit {
 
   constructor(private contractService: ContractService,
     private securityService: SecurityService,
+    private bankAccountService: BankAccountService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog) { }
   dataSource = new MatTableDataSource<IContract>();
+  bankAccounts: IBankAccount[];
   isAdmin: boolean = false;
   displayedColumns: string[] = [
     'apartment',
@@ -35,6 +38,9 @@ export class ContractListComponent implements OnInit {
     if (!this.isAdmin) {
       this.displayedColumns.splice(6, 1);
     }
+    this.bankAccountService.getBankAccounts().subscribe(result => {
+      this.bankAccounts = result;
+    }, error => console.error(error));
     this.loadItems();
   }
 

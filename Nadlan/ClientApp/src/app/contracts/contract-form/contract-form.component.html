@@ -1,90 +1,100 @@
-
 <form [formGroup]="contractForm" (ngSubmit)="save()">
     <mat-dialog-content>
-    <fieldset>
-        <mat-form-field class="left" appearance="fill">
-            <mat-label>Apartment</mat-label>
-            <mat-select formControlName="apartmentId">
-            <mat-option *ngFor="let apartment of apartments" [value]="apartment.id">
-                {{apartment.address}}
-            </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field class="right" appearance="fill">
-            <mat-label>Tenant's Name</mat-label>
-            <input formControlName="tenant" matInput placeholder="Tenant's Name">
-        </mat-form-field>
-    </fieldset>
+        <fieldset>
+            <mat-form-field class="left" appearance="fill">
+                <mat-label>Apartment</mat-label>
+                <mat-select formControlName="apartmentId">
+                    <mat-option *ngFor="let apartment of apartments" [value]="apartment.id">
+                        {{apartment.address}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="right" appearance="fill">
+                <mat-label>Tenant's Name</mat-label>
+                <input formControlName="tenant" matInput placeholder="Tenant's Name">
+            </mat-form-field>
+        </fieldset>
 
-    <fieldset>
-        <mat-form-field class="left" appearance="fill">
-            <mat-label>Start Date</mat-label>
-            <input formControlName="dateStart" matInput [matDatepicker]="picker" placeholder="Start Date">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field class="right" appearance="fill">
-            <mat-label>End Date</mat-label>
-            <input formControlName="dateEnd" matInput [matDatepicker]="picker2" placeholder="End Date">
-            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-            <mat-datepicker #picker2></mat-datepicker>
-        </mat-form-field>
-    </fieldset>
-    <fieldset>
-        <mat-form-field class="left" appearance="fill">
-            <mat-label>Price</mat-label>
-            <input formControlName="price" matInput placeholder="Price">
-        </mat-form-field>
+        <fieldset>
+            <mat-form-field class="left" appearance="fill">
+                <mat-label>Start Date</mat-label>
+                <input formControlName="dateStart" matInput [matDatepicker]="picker" placeholder="Start Date">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="right" appearance="fill">
+                <mat-label>End Date</mat-label>
+                <input formControlName="dateEnd" matInput [matDatepicker]="picker2" placeholder="End Date">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+        </fieldset>
+        <fieldset>
+            <mat-form-field class="left" appearance="fill">
+                <mat-label>Price</mat-label>
+                <input formControlName="price" matInput placeholder="Price">
+            </mat-form-field>
 
-        <mat-form-field class="right" apprearance="fill">
-            <mat-label>Payment Day</mat-label>
-            <input formControlName="paymentDay" matInput type="number" max="31" min="1" placeholder="Latest day for payment">
-        </mat-form-field>
-    </fieldset>
-    <fieldset>
-        <mat-form-field class="left" appearance="fill">
-            <mat-label>Deposit</mat-label>
-            <input formControlName="deposit" matInput placeholder="Deposit">
-        </mat-form-field>
-        <mat-form-field class="right" appearance="fill">
-            <mat-label>Penalty per day</mat-label>
-            <input formControlName="penaltyPerDay" matInput placeholder="Penalty per day">
-        </mat-form-field>
-    </fieldset>
-    <fieldset>
+            <mat-form-field class="right" apprearance="fill">
+                <mat-label>Payment Day</mat-label>
+                <input formControlName="paymentDay" matInput type="number" max="31" min="1"
+                    placeholder="Latest day for payment">
+            </mat-form-field>
+        </fieldset>
 
-            <mat-checkbox class="left" formControlName="isElectriciyChanged"style="width: 50%;">
-              pending for electriciy change?</mat-checkbox>
-               <mat-form-field class="right" appearance="fill">
+        <fieldset>
+
+            <mat-form-field style="width: 50%;" appearance="outline">
+                <mat-label>Bank Account</mat-label>
+                <mat-select formControlName="bankAccountId">
+                    <mat-option *ngFor="let bankAccount of bankAccounts" [value]="bankAccount.id">
+                        {{bankAccount.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </fieldset>
+
+        <fieldset>
+            <mat-form-field class="left" appearance="fill">
+                <mat-label>Deposit</mat-label>
+                <input formControlName="deposit" matInput placeholder="Deposit">
+            </mat-form-field>
+            <mat-form-field class="right" appearance="fill">
+                <mat-label>Penalty per day</mat-label>
+                <input formControlName="penaltyPerDay" matInput placeholder="Penalty per day">
+            </mat-form-field>
+        </fieldset>
+        <fieldset>
+
+            <mat-checkbox class="left" formControlName="isElectriciyChanged" style="width: 50%;">
+                pending for electriciy change?</mat-checkbox>
+            <mat-form-field class="right" appearance="fill">
                 <mat-label>Link to contract</mat-label>
                 <input formControlName="link" matInput placeholder="Link to contract">
             </mat-form-field>
-    </fieldset>
-    <fieldset>
-        <mat-form-field style="width: 100%;" appearance="fill">
-            <mat-label>Special Conditions</mat-label>
-            <textarea formControlName="conditions" matInput placeholder="Special conditions">
+        </fieldset>
+        <fieldset>
+            <mat-form-field style="width: 100%;" appearance="fill">
+                <mat-label>Special Conditions</mat-label>
+                <textarea formControlName="conditions" matInput placeholder="Special conditions">
             </textarea>
-        </mat-form-field>
-    </fieldset>
-    <fieldset>
-      <mat-form-field class="left" appearance="fill">
-        <mat-label>Tenant Email</mat-label>
-        <input formControlName="tenantEmail" type="email" matInput placeholder="Tenant email">
-      </mat-form-field>
-      <mat-form-field class="right" appearance="fill">
-        <mat-label>Tenant Phone</mat-label>
-        <input formControlName="tenantPhone" type="tel" matInput placeholder="Tenant phone">
-      </mat-form-field>
-    </fieldset>
-    <fieldset>
-        <button mat-flat-button 
-        style="background-color: green;" color="primary" 
-        name="submit" 
-        type="submit">
-            Save
-            <mat-icon>check_circle</mat-icon>
-        </button>
-    </fieldset>
-</mat-dialog-content>
+            </mat-form-field>
+        </fieldset>
+        <fieldset>
+            <mat-form-field class="left" appearance="fill">
+                <mat-label>Tenant Email</mat-label>
+                <input formControlName="tenantEmail" type="email" matInput placeholder="Tenant email">
+            </mat-form-field>
+            <mat-form-field class="right" appearance="fill">
+                <mat-label>Tenant Phone</mat-label>
+                <input formControlName="tenantPhone" type="tel" matInput placeholder="Tenant phone">
+            </mat-form-field>
+        </fieldset>
+        <fieldset>
+            <button mat-flat-button style="background-color: green;" color="primary" name="submit" type="submit">
+                Save
+                <mat-icon>check_circle</mat-icon>
+            </button>
+        </fieldset>
+    </mat-dialog-content>
 </form>
