@@ -24,7 +24,7 @@ namespace Nadlan.Repositories
 
     public class TransactionRepository : Repository<Transaction>, ITransactionRepository
     {
-        static readonly List<int> apartmentsWithMortgage = new List<int> {14, 16, 17, 18 };
+        static readonly List<int> apartmentsWithMortgage = new List<int> { 14, 16, 17, 18 };
         //private readonly IMapper _mapper;
         public TransactionRepository(NadlanConext context) : base(context)
         {
@@ -62,13 +62,19 @@ namespace Nadlan.Repositories
             }
         }
 
-
+        /// <summary>
+        /// For expenses only
+        /// </summary>
+        /// <param name="monthsBack"></param>
+        /// <param name="createdBy"></param>
+        /// <returns></returns>
         public async Task<List<TransactionDto>> GetAllTransactionDtoAsync(int monthsBack, CreatedByEnum createdBy)
         {
             var transactionList = Context.Transactions.OrderByDescending(a => a.Id)
                 .Include(a => a.Account)
                 .Include(a => a.Apartment)
                 .Where(a => !a.IsDeleted);
+                
             if (createdBy != CreatedByEnum.Any)
             {
                 transactionList = transactionList.Where(a => a.CreatedBy == (int)createdBy);
@@ -91,7 +97,7 @@ namespace Nadlan.Repositories
                 BankAccountId = transaction.BankAccountId,
                 CreatedBy = transaction.CreatedBy,
                 IsPending = transaction.IsPending
-            });
+            }).OrderByDescending(a=>a.Date);
 
 
             if (monthsBack > 0)
@@ -116,19 +122,75 @@ namespace Nadlan.Repositories
         }
 
 
-
         public async Task UpdateExpenseAndTransactionAsync(Transaction transaction)
         {
-            //Charge the original amount
-            transaction.Amount = transaction.Amount * -1;
-            var originalTransaction = Context.Transactions.Find(transaction.Id);
             SwitchIsBusinessExpense(transaction);
 
-            //Update original transaction:
-            Context.Entry(originalTransaction).CurrentValues.SetValues(transaction);
+            Context.Entry(transaction).State = EntityState.Modified;
+            if (transaction.AccountId == (int)Accounts.CashWithdrawal)
+            {
+                //The view model is missing PersonalTransactionId so we need to assign it:
+                var originalTransaction = await Context.Transactions.FindAsync(transaction.Id);
+                transaction.PersonalTransactionId = originalTransaction.PersonalTransactionId;
 
-            await SaveAsync();
+                ////Charge the original amount. TODO: consider a better flow
+                //transaction.Amount = transaction.Amount * -1;
+
+                PersonalTransaction personalTransaction = await Context.PersonalTransactions.FindAsync(transaction.PersonalTransactionId);
+                BankAccount bankAccount = bankAccount = Context.BankAccounts.Where(a => a.Id == transaction.BankAccountId).FirstOrDefault();
+
+                personalTransaction.Amount = transaction.Amount;
+                personalTransaction.ApartmentId = transaction.ApartmentId;
+                personalTransaction.Date = transaction.Date;
+                personalTransaction.StakeholderId = bankAccount.StakeholderId;
+                personalTransaction.Comments = GetAuotomaticCommentForCashWithdrawal(bankAccount, transaction);
+
+                //Update original transaction:
+                Context.PersonalTransactions.Update(personalTransaction).CurrentValues.SetValues(personalTransaction);
+            }
+            await Context.SaveChangesAsync();
         }
+
+
+        //public async Task UpdateExpenseAndTransactionAsync_(Transaction transaction)
+        //{
+        //    //Charge the original amount
+        //    transaction.Amount = transaction.Amount * -1;
+        //    //var originalTransaction = Context.Transactions.Find(transaction.Id);
+        //    SwitchIsBusinessExpense(transaction);
+
+        //    //Update original transaction:
+        //    Context.Entry(transaction).State = EntityState.Modified;
+        //    // Context.Entry(originalTransaction).CurrentValues.SetValues(transaction);
+
+        //    if (transaction.AccountId == (int)Accounts.CashWithdrawal)
+        //    {
+        //        PersonalTransaction personalTransaction = await Context.PersonalTransactions.FindAsync(transaction.PersonalTransactionId);
+        //        BankAccount bankAccount = bankAccount = Context.BankAccounts.Where(a => a.Id == transaction.BankAccountId).FirstOrDefault();
+
+        //        personalTransaction.Amount = transaction.Amount;
+        //        personalTransaction.ApartmentId = transaction.ApartmentId;
+        //        personalTransaction.Date = transaction.Date;
+        //        personalTransaction.StakeholderId = bankAccount.StakeholderId;
+        //        personalTransaction.Comments = GetAuotomaticCommentForCashWithdrawal(bankAccount, transaction);
+
+        //        //Update original transaction:
+        //        Context.PersonalTransactions.Update(personalTransaction).CurrentValues.SetValues(personalTransaction);
+
+
+        //    }
+
+
+
+        //    await SaveAsync();
+
+
+
+
+
+
+
+        //}
         internal async Task Confirm(int transactionId)
         {
             var originalTransaction = Context.Transactions.FindAsync(transactionId);
@@ -138,12 +200,37 @@ namespace Nadlan.Repositories
 
         public async Task SoftDeleteTransactionAsync(int transactionId)
         {
-            var originalTransaction = Context.Transactions.FindAsync(transactionId);
-            originalTransaction.Result.IsDeleted = true;
+            var originalTransaction = await Context.Transactions.FindAsync(transactionId);
+            originalTransaction.IsDeleted = true;
+            if (originalTransaction.AccountId == (int)Accounts.CashWithdrawal)
+            {
+                PersonalTransaction personalTransaction = await Context.PersonalTransactions.FindAsync(originalTransaction.PersonalTransactionId);
+                personalTransaction.IsDeleted = true;
+            }
             await SaveAsync();
         }
 
+        public async Task CreateTransactionAndExpenseAsync(Transaction transaction)
+        {
+            if (transaction.Hours > 0)
+            {
+                transaction.Comments = $"Hours: {transaction.Comments}";
+            }
+            if (transaction.BankAccountId != 0)
+            {
+                transaction.IsPending = true;
+            }
 
+            SwitchIsBusinessExpense(transaction);
+            ////Charge the original amount
+            //transaction.Amount = transaction.Amount * -1;
+            Create(transaction);
+            //Removed - not using expense table anymore
+            //Expense assiatantExpense = CreateCorrespondingExpense(transaction);
+            //Context.Set<Expense>().Add(assiatantExpense);
+
+            await SaveAsync();
+        }
 
         private void SwitchIsBusinessExpense(Transaction transaction)
         {
@@ -161,26 +248,92 @@ namespace Nadlan.Repositories
             }
         }
 
-        public async Task CreateExpenseAndTransactionAsync(Transaction transaction)
+
+        public async Task CreateTransactionAndPersonalTransAsync(Transaction transaction)
         {
+            List<int> relevantAccounts = new List<int>()
+            {
+                //(int) Accounts.Rent,
+                //(int) Accounts.SecurityDeposit,
+                //(int) Accounts.Balance
+                (int) Accounts.CashWithdrawal
+            };
             if (transaction.Hours > 0)
             {
-                transaction.Comments = $"Hours: {transaction.Comments}";
+                throw new InvalidOperationException("Not valid for hours");
             }
-            if (transaction.BankAccountId!=0)
+            if (!relevantAccounts.Contains(transaction.AccountId))
+            {
+                throw new ArgumentException("Valid only for rent, deposit and balance accounts");
+            }
+            if (transaction.BankAccountId != 0)
             {
                 transaction.IsPending = true;
             }
-            SwitchIsBusinessExpense(transaction);
-            //Charge the original amount
-            transaction.Amount = transaction.Amount * -1;
-            Create(transaction);
-            //Removed - not using expense table anymore
-            //Expense assiatantExpense = CreateCorrespondingExpense(transaction);
-            //Context.Set<Expense>().Add(assiatantExpense);
+            ////Charge the original amount. TODO: consider a better flow
+            //transaction.Amount = transaction.Amount * -1;
 
+            //Removed - not using expense table anymore
+            PersonalTransaction personalTransaction = CreateCorrespondingPersonalTransaction(transaction);
+            Context.Set<PersonalTransaction>().Add(personalTransaction);
+            await SaveAsync();
+            transaction.PersonalTransactionId = personalTransaction.Id;
+            Create(transaction);
 
             await SaveAsync();
+        }
+
+
+        private PersonalTransaction CreateCorrespondingPersonalTransaction(Transaction transaction)
+        {
+
+            BankAccount bankAccount = bankAccount = Context.BankAccounts.Where(a => a.Id == transaction.BankAccountId).FirstOrDefault();
+
+
+            ////var portfolio = Context.Portfolios.Where(a => a.ApartmentId == transaction.ApartmentId);
+            ////int stakeholderId = portfolio.FirstOrDefault().StakeholderId;
+            //int stakeholderId = Context.BankAccounts.Where(a => a.Id == transaction.BankAccountId).FirstOrDefault().StakeholderId;
+            ////For these apartments the stakeholder is Yuval
+            //List<int> partnershipApartments = new List<int> { 1, 3, 4 };
+            //if (partnershipApartments.Contains(transaction.ApartmentId))
+            //{
+            //    stakeholderId = 199;//Yuval's bank 
+            //}
+
+
+            string comments = GetAuotomaticCommentForCashWithdrawal(bankAccount, transaction);
+
+            //switch (transaction.AccountId)
+            //{
+            //    case (int)Accounts.Balance:
+            //        comments = $"Automatically created. Cash withdraw from {bankAccount.Name}. {transaction.Comments}";
+            //        break;
+            //    case (int)Accounts.Rent:
+            //        comments = $"Automatically created. Rent received in cash from the tenant. {transaction.Comments}";
+            //        break;
+            //    case (int)Accounts.SecurityDeposit:
+            //        comments = $"Automatically created. Security deposit received in cash from the tenant. {transaction.Comments}";
+            //        break;
+            //    default:
+            //        break;
+            //}
+
+
+            return new PersonalTransaction
+            {
+                Amount = transaction.Amount,
+                ApartmentId = transaction.ApartmentId,
+                Date = transaction.Date,
+                TransactionType = TransactionType.CashWithdrawal,
+                StakeholderId = bankAccount.StakeholderId,
+                Comments = comments,
+            };
+        }
+
+
+        private string GetAuotomaticCommentForCashWithdrawal(BankAccount bankAccount, Transaction transaction)
+        {
+            return $"Automatically created. Cash withdraw from {bankAccount.Name}. {transaction.Comments}";
         }
 
         public async Task CreateTransactionAsync(Transaction transaction)
@@ -556,7 +709,8 @@ namespace Nadlan.Repositories
             var balance = Context.Transactions
                 .Where(a => !a.IsDeleted)
                 .Where(a => a.CreatedBy == (int)CreatedByEnum.Stella)
-                .Where(a => a.BankAccountId == 0)
+                .Where(a => a.BankAccountId == 0 || a.AccountId == (int)Accounts.CashWithdrawal)
+                .Where(a => a.IsPending == false)
                 .SumAsync(a => a.Amount);
             return await balance * -1;
         }

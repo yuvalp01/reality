@@ -31,6 +31,10 @@ export class ContractFormComponent implements OnInit {
       next: result => this.apartments = result,
       error: err => console.error(err)
     });
+    this.bankAccountService.getBankAccounts().subscribe(result => {
+      this.bankAccounts = result;
+    }, error => console.error(error));
+
     this.contractForm = this.formBuilder.group({
       id: 0,
       apartmentId: [null, Validators.required],
@@ -55,9 +59,6 @@ export class ContractFormComponent implements OnInit {
   }
   loadItem(item: IContract) {
     this.contractForm.patchValue(item);
-    this.bankAccountService.getBankAccounts().subscribe(result => {
-      this.bankAccounts = result;
-    }, error => console.error(error));
   }
 
   save() {

@@ -45,33 +45,25 @@
         class="example-full-width">
 
         <mat-icon matTooltip="This action will affect your balance"
-          *ngIf="transactionForm.controls.bankAccountId.value==0" matSuffix>money</mat-icon>
+          *ngIf="transactionForm.controls.bankAccountId.value==0 || transactionForm.controls.accountId.value==202"
+          matSuffix>
+          money</mat-icon>
         <mat-icon matTooltip="This action will NOT affect your balance"
-          *ngIf="transactionForm.controls.bankAccountId.value!=0" matSuffix>credit_card</mat-icon>
+          *ngIf="transactionForm.controls.bankAccountId.value!=0 && transactionForm.controls.accountId.value!=202"
+          matSuffix>
+          credit_card</mat-icon>
         <mat-label>
-          <!--<span matBadge="4" matBadgeOverlap="false">Text with a badge</span>-->
           Amount (€)
         </mat-label>
         <input style="padding-left:2px" matInput formControlName="amount" type="number" min="0"
           placeholder="Amount (€)">
-        <!--<span matPrefix>(-)</span>-->
-        <mat-icon matTooltip="{{tooltipSign}}" matPrefix class="icon-prefix-padding">{{signIcone}}</mat-icon>
-        <!--<mat-icon matTooltip="Switch Sign" (click)="switchSign()" [ngClass]="(enableSwitch)?'enabled':'disabled'" matSuffix>repeat</mat-icon>-->
+        <!-- <mat-icon matTooltip="{{tooltipSign}}" matPrefix class="icon-prefix-padding">{{signIcone}}</mat-icon> -->
         <mat-icon *ngIf="enableSwitch" matTooltip="Switch Sign" style="cursor:pointer" (click)="switchSign()" matSuffix>
           repeat</mat-icon>
 
       </mat-form-field>
 
-      <!-- <mat-form-field *ngIf="data.type == 'expenses'" style="width: 33%;" appearance="none">
-        <mat-slide-toggle matTooltip="Petty Cash?" style="margin-left: 24px;" formControlName="isPettyCash">
-        </mat-slide-toggle>
-
-        <textarea matInput hidden></textarea>
-
-      </mat-form-field> -->
-
-
-      <mat-form-field *ngIf="data.type == 'expenses'" style="width: 49%; margin-left: 1%;" appearance="outline">
+      <mat-form-field *ngIf="data.type != 'hours'" style="width: 49%; margin-left: 1%;" appearance="outline">
         <mat-label>Bank Account</mat-label>
         <mat-select formControlName="bankAccountId">
           <mat-option *ngFor="let bankAccount of bankAccounts" [value]="bankAccount.id">
@@ -81,7 +73,7 @@
       </mat-form-field>
 
 
-      <!-- 
+      <!--
       <div style="display: inline;color: cornflowerblue;" *ngIf="transactionForm.controls.bankAccountId.value!=0">
         Please denote the bank account </div> -->
     </fieldset>

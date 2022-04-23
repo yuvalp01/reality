@@ -29,6 +29,7 @@
         SecurityDeposit = 198,
         Business = 200,
         Balance = 201,
+        CashWithdrawal = 202,
         Bonus = 300,
     }
 }

@@ -51,13 +51,14 @@ export class AddExpenseComponent implements OnInit {
 
   saveTransaction(formValues: any): void {
 
-
     if (this.transactionForm.valid) {
       if (this.transactionForm.dirty) {
 
         let transaction: ITransaction;
         if (this.transactionId == 0) {
           transaction = Object.assign({}, this.transactionForm.value);
+          //Since this property could be disabled we have to do this workaround:
+          transaction.accountId = this.transactionForm.controls["accountId"].value;
         }
         else {
           transaction = { ...this.data.expense, ...this.transactionForm.value }
@@ -66,7 +67,10 @@ export class AddExpenseComponent implements OnInit {
         let isPurchaseCost = this.transactionForm.controls['isPurchaseCost'].value;
         transaction.isPurchaseCost = isPurchaseCost;
 
-        transaction.personalTransactionId = this.calcPersonalTransactionId(transaction);
+        //Predict personal transaction id unless it's cash withdrawal account
+        if (transaction.accountId != 202) {
+          transaction.personalTransactionId = this.calcPersonalTransactionId(transaction);
+        }
 
         //
         if (this.isHourForm) {
@@ -90,10 +94,21 @@ export class AddExpenseComponent implements OnInit {
 
         }
         else {
-          this.expensesService.addExpense(transaction).subscribe((t) => {
-            let snackBarRef = this.snackBar.open(`Expense`, `Transaction ID: ${t.id} added`, { duration: 2000 });
-            this.refreshEmitter.emit();
-          });
+          //Double transaction for cash
+          if (this.data.type == 'receiveCash') {
+            this.expensesService.receiveCash(transaction).subscribe((t) => {
+              let snackBarRef = this.snackBar.open(`Expense`, `Transaction ID: ${t.id} added`, { duration: 2000 });
+              this.refreshEmitter.emit();
+            });
+
+          }
+          else {
+            this.expensesService.addExpense(transaction).subscribe((t) => {
+              let snackBarRef = this.snackBar.open(`Expense`, `Transaction ID: ${t.id} added`, { duration: 2000 });
+              this.refreshEmitter.emit();
+            });
+
+          }
           this.transactionForm.reset();
           this.setSign(0);
         }
@@ -134,7 +149,6 @@ export class AddExpenseComponent implements OnInit {
 
 
   ngOnInit(): void {
-
     this.getAllLists();
 
     this.transactionForm = this.formBuilder.group({
@@ -174,14 +188,7 @@ export class AddExpenseComponent implements OnInit {
           this.transactionForm.controls['isPurchaseCost'].setValue(false);
 
         }
-        if (accountId == 201) {
-          this.transactionForm.controls['apartmentId'].setValue(0);
-          this.transactionForm.controls['apartmentId'].disable();
-        }
-        else {
-          this.transactionForm.controls['apartmentId'].enable();
 
-        }
         this.setSign(accountId);
       }
       else {
@@ -189,56 +196,46 @@ export class AddExpenseComponent implements OnInit {
       }
     });
 
-    // //TODO change!!!
-    // this.transactionForm.get('bankAccountId').valueChanges.subscribe(val => {
-    //   if (this.transactionForm.controls['bankAccountId'].value) {
-    //     let bankAccountId = this.transactionForm.controls['bankAccountId'].value;
-    //     if (bankAccountId == 0) {
-    //       //this.transactionForm.controls['bankAccountId'].clearValidators();
-    //       this.transactionForm.controls['bankAccountId'].setValue(0);
-    //     }
-
-    //   }
-    //   else {
-    //     this.transactionForm.controls['amount'].setValue(0);
-    //   }
-    // });
 
   }
 
   switchSign() {
-    //this.opositSign = this.opositSign * -1;
-    this.sign = this.sign * -1;
-    this.displySign();
+
+    // this.sign = this.sign * -1;
+    // this.displySign();
   }
 
 
   displySign() {
-    if (this.sign == -1) {
+    // if (this.sign == -1) {
 
-      this.signIcone = 'remove';
-      this.tooltipSign = 'Decrease your account';
-    }
-    else {
-      this.signIcone = 'add';
-      this.tooltipSign = 'Increase your account';
-    }
+    //   this.signIcone = 'remove';
+    //   this.tooltipSign = 'Decrease your account';
+    // }
+    // else {
+    //   this.signIcone = 'add';
+    //   this.tooltipSign = 'Increase your account';
+    // }
   }
 
 
   setSign(accountId: number) {
-    if (accountId == 1 || accountId == 198 || accountId == 201) {
+    if (accountId == 1 || accountId == 198 || accountId == 201 || accountId == 202) {
       this.sign = -1;
     }
     else {
       this.sign = 1;
     }
-    if (accountId == 201 || accountId == 198) {
-      this.enableSwitch = true;
-    }
-    else {
-      this.enableSwitch = false;
-    }
+    // if (accountId == 201 || accountId == 198) {
+    //   this.enableSwitch = true;
+    // }
+    // else {
+    //   this.enableSwitch = false;
+    // }
+    // //Receive cash form can only be negative, hence switch invisible
+    // if (this.data.type == "receiveCash") {
+    //   this.enableSwitch = false;
+    // }
     this.displySign();
   }
 
@@ -260,6 +257,11 @@ export class AddExpenseComponent implements OnInit {
 
     this.bankAccountService.getBankAccounts().subscribe(result => {
       this.bankAccounts = result;
+      if (this.data.type == "receiveCash") {
+        //Don't allow to select Petty cash
+        this.bankAccounts = this.bankAccounts.filter(a => a.id > 0);
+      }
+
     }, error => console.error(error));
 
     this.accountService.getAccounts().subscribe(result => {
@@ -287,7 +289,26 @@ export class AddExpenseComponent implements OnInit {
       this.labelDate = "Payment Date";
       this.iconType = "attach_money"
       this.transactionForm.controls['hours'].clearValidators();
+    }
+    else if (this.data.type == "receiveCash") {
+      this.labelTitle = "cash withdrawal";
+      this.labelDate = "Withdrawal Date";
+      this.iconType = "atm"
+      this.transactionForm.controls['hours'].clearValidators();
+      //Receive cash form can only be negative, hence switch invisible
+      this.sign = -1;
+      // this.enableSwitch = false;
+      this.displySign();
+      this.transactionForm.controls['isPurchaseCost'].disable();
+      //this.transactionForm.controls['apartmentId'].disable();
 
+      this.transactionForm.controls['accountId'].setValue(202);
+      this.transactionForm.controls['accountId'].markAsDirty();
+      this.transactionForm.controls['accountId'].disable();
+
+      //remove Petty cash option
+      //  this.transactionForm.controls['apartmentId'].setValidators([Validators.required, Validators.min(0), Validators.max(0)]);
+      this.transactionForm.controls['bankAccountId'].setValidators([Validators.min(1)]);
     }
     else {
       throw "form type not implemented yet"
@@ -315,6 +336,10 @@ export class AddExpenseComponent implements OnInit {
 
       //this.setSign(expense.accountId);
       this.sign = expense.amount < 0 ? -1 : 1;
+      //For cash withdrawal - always negative
+      if (this.data.expense.accountId == 202) {
+        this.sign = -1;
+      }
       this.displySign();
     }
     else {

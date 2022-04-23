@@ -1,16 +1,14 @@
-
 <div>
   <h2 style="text-align: center;    font-style: italic;">
     <span *ngIf="investorReportOverview">
       {{investorReportOverview.name}}
     </span>
-  <span  *ngIf="!investorReportOverview">
-Loading...
-  </span>
-  
+    <span *ngIf="!investorReportOverview">
+      Loading...
+    </span>
+
   </h2>
-  <mat-tab-group  #tabGroup
-   *ngIf="investorReportOverview" dynamicHeight="false" [selectedIndex]="selectedTab">
+  <mat-tab-group #tabGroup *ngIf="investorReportOverview" dynamicHeight="false" [selectedIndex]="selectedTab">
 
     <mat-tab label="Overview">
       <mat-card>
@@ -44,7 +42,8 @@ Loading...
             <mat-divider></mat-divider>
             <mat-list-item style="cursor: pointer;" (click)="tabGroup.selectedIndex=2">
               <mat-icon mat-list-icon>business_center</mat-icon>
-              <span matTooltip="Represents your balance in your virtual account - money that belongs to you and can be withdrawn at any moment. For details see 'Virtual Account' tab">
+              <span
+                matTooltip="Represents your balance in your virtual account - money that belongs to you and can be withdrawn at any moment. For details see 'Virtual Account' tab">
                 Virtual Account Balance
               </span>
               <span [ngClass]="{
@@ -53,39 +52,6 @@ Loading...
         }">{{investorReportOverview.cashBalance| currency:'EUR' : number:'1.0-0'}}</span>
             </mat-list-item>
 
-            <!-- <mat-list-item>
-              <mat-icon mat-list-icon>business_center</mat-icon>
-              <span matTooltip="This is your proportional profit so far for this year that will be distributed to your virtual account at the end of the year.">
-                Pending Profits
-              </span>
-              <span [ngClass]="{
-          positive: isPositive(investorReportOverview.totalPendingProfits),
-          negative: !isPositive(investorReportOverview.totalPendingProfits)
-        }">{{investorReportOverview.totalPendingProfits| currency:'EUR' : number:'1.0-0'}}</span>
-            </mat-list-item> -->
-
-            <!-- <mat-list-item>
-              <mat-icon mat-list-icon>business_center</mat-icon>
-              <span matTooltip="Here are the expenses so far for this year that related to your full ownership apartmenes. This amount will be charged from your virtual account at the end of the year.">
-                Pending Expenses
-              </span>
-              <span (click)="showPendingExpenses()" [ngClass]="{
-          positive: isPositive(investorReportOverview.totalPendingExpenses),
-          negative: !isPositive(investorReportOverview.totalPendingExpenses)
-        }">
-        {{investorReportOverview.totalPendingExpenses| currency:'EUR' : number:'1.0-0'}}</span>
-      </mat-list-item> -->
-
-
-<!-- 
-            <mat-divider></mat-divider>
-            <mat-list-item>
-              <mat-icon mat-list-icon>business_center</mat-icon>
-              <span matTooltip=" Virtual Account Balance + Pending Profits + Pending Expenses">Total Balace</span>
-              <span [ngClass]="{
-          positive: isPositive(investorReportOverview.totalBalace),
-          negative: !isPositive(investorReportOverview.totalBalace)}">{{investorReportOverview.totalBalace| currency:'EUR' : number:'1.0-0'}}</span>
-            </mat-list-item> -->
           </mat-list>
         </mat-card-content>
 
@@ -96,8 +62,10 @@ Loading...
       <mat-card>
         <mat-card>
           <mat-card-title>Portfolio</mat-card-title>
-          <mat-card-subtitle>Here you have a summary of all your investments. Click the apartment for more details.</mat-card-subtitle>
-          <table id="portfolio" *ngIf="portfolioReport&&investorReportOverview" mat-table [dataSource]="portfolioReport" class="mat-elevation-z8">
+          <mat-card-subtitle>Here you have a summary of all your investments. Click the apartment for more details.
+          </mat-card-subtitle>
+          <table id="portfolio" *ngIf="portfolioReport&&investorReportOverview" mat-table [dataSource]="portfolioReport"
+            class="mat-elevation-z8">
 
             <ng-container matColumnDef="apartment">
 
@@ -105,7 +73,8 @@ Loading...
               <td mat-cell *matCellDef="let line">
                 <!--<a class="nav-link text-dark" routerLinkActive="link-active" [routerLink]="['/investor-reports',this.stakeholderId,line.apartmentId]"> {{line.apartment}}</a>-->
 
-                <a mat-button routerLinkActive="link-active" (click)="showApartmentReport(line.apartmentId, line.ownership)">{{line.apartment}}</a>
+                <a mat-button routerLinkActive="link-active"
+                  (click)="showApartmentReport(line.apartmentId, line.ownership)">{{line.apartment}}</a>
               </td>
 
               <td mat-footer-cell *matFooterCellDef> Total</td>
@@ -122,14 +91,16 @@ Loading...
             <ng-container matColumnDef="investment">
               <th mat-header-cell matTooltip="Your part of the investment" *matHeaderCellDef> Investment </th>
               <td mat-cell *matCellDef="let line"> {{line.investment | currency:'EUR' : number:'1.0-0'}} </td>
-              <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalInvestment|currency:'EUR' : number:'1.0-0'}}</td>
+              <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalInvestment|currency:'EUR' :
+                number:'1.0-0'}}</td>
 
             </ng-container>
             <ng-container matColumnDef="netProfit">
               <th mat-header-cell matTooltip="Your part of the net profit" *matHeaderCellDef>
                 Net Profit</th>
               <td mat-cell *matCellDef="let line"> {{line.netProfit | currency:'EUR' : number:'1.0-0'}} </td>
-              <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalNetProfit|currency:'EUR' : number:'1.0-0'}}</td>
+              <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalNetProfit|currency:'EUR' :
+                number:'1.0-0'}}</td>
 
             </ng-container>
             <ng-container matColumnDef="ownership">
@@ -139,34 +110,47 @@ Loading...
             </ng-container>
 
             <ng-container matColumnDef="distributed">
-              <th mat-header-cell matTooltip="Distributed so far (to your virtual account)" *matHeaderCellDef> Distributed </th>
+              <th mat-header-cell matTooltip="Distributed so far (to your virtual account)" *matHeaderCellDef>
+                Distributed </th>
               <td mat-cell *matCellDef="let line"> {{line.distributed | currency:'EUR' : number:'1.0-0'}} </td>
-              <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalDistribution| currency:'EUR' : number:'1.0-0'}}</td>
+              <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalDistribution| currency:'EUR' :
+                number:'1.0-0'}}</td>
             </ng-container>
 
             <ng-container matColumnDef="pendingProfits">
-              <th mat-header-cell matTooltip="This is your proportional profit so far for this year that will be distributed to your virtural account at the end of the year." *matHeaderCellDef> Pending Profits </th>
+              <th mat-header-cell
+                matTooltip="This is your proportional profit so far for this year that will be distributed to your virtural account at the end of the year."
+                *matHeaderCellDef> Pending Profits </th>
               <td mat-cell *matCellDef="let line"> {{line.pendingProfits | currency:'EUR' : number:'1.0-0'}} </td>
-              <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalPendingProfits| currency:'EUR' : number:'1.0-0'}}</td>
+              <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalPendingProfits| currency:'EUR' :
+                number:'1.0-0'}}</td>
             </ng-container>
 
             <ng-container matColumnDef="pendingExpenses">
-              <th mat-header-cell matTooltip="This is the expenses that used on your behalf so far for this year that will be deducted from your virtural account at the end of the year." *matHeaderCellDef> Pending Bonus </th>
+              <th mat-header-cell
+                matTooltip="This is the expenses that used on your behalf so far for this year that will be deducted from your virtural account at the end of the year."
+                *matHeaderCellDef> Pending Bonus </th>
               <td mat-cell *matCellDef="let line"> {{line.pendingExpenses | currency:'EUR' : number:'1.0-0'}} </td>
-              <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalPendingExpenses| currency:'EUR' : number:'1.0-0'}}</td>
+              <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalPendingExpenses| currency:'EUR' :
+                number:'1.0-0'}}</td>
             </ng-container>
 
             <ng-container matColumnDef="pendingBonus">
-              <th mat-header-cell matTooltip="This is the expenses that used on your behalf so far for this year that will be deducted from your virtural account at the end of the year." *matHeaderCellDef> Pending Expenses </th>
+              <th mat-header-cell
+                matTooltip="This is the expenses that used on your behalf so far for this year that will be deducted from your virtural account at the end of the year."
+                *matHeaderCellDef> Pending Expenses </th>
               <td mat-cell *matCellDef="let line"> {{line.pendingBonus | currency:'EUR' : number:'1.0-0'}} </td>
-              <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalPendingExpenses| currency:'EUR' : number:'1.0-0'}}</td>
+              <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalPendingExpenses| currency:'EUR' :
+                number:'1.0-0'}}</td>
             </ng-container>
 
 
             <ng-container matColumnDef="profitsSoFar">
               <th mat-header-cell matTooltip="Distributed + Pending Profits" *matHeaderCellDef> Profits So Far </th>
-              <td mat-cell *matCellDef="let line"> {{line.pendingProfits + line.distributed  | currency:'EUR' : number:'1.0-0'}} </td>
-              <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalPendingProfits + investorReportOverview.totalDistribution | currency:'EUR' : number:'1.0-0'}}</td>
+              <td mat-cell *matCellDef="let line"> {{line.pendingProfits + line.distributed | currency:'EUR' :
+                number:'1.0-0'}} </td>
+              <td mat-footer-cell *matFooterCellDef> {{investorReportOverview.totalPendingProfits +
+                investorReportOverview.totalDistribution | currency:'EUR' : number:'1.0-0'}}</td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="portfolioColumns"></tr>
@@ -184,47 +168,44 @@ Loading...
         <mat-card-title>Virtual Account</mat-card-title>
         <mat-card-subtitle>This is where we settle the accounts between ourselves.</mat-card-subtitle>
 
-<div *hasClaim="['admin']">
+        <div *hasClaim="['admin']">
 
 
-<span>Pending Profits: </span> 
+          <span>Pending Profits: </span>
 
-<span [ngClass]="{
+          <span [ngClass]="{
   positive: isPositive(investorReportOverview.totalPendingProfits),
   negative: !isPositive(investorReportOverview.totalPendingProfits)}">
-        {{investorReportOverview.totalPendingProfits | currency:'EUR' : number:'1.0-0'}}</span>
-<br/>
-<span>Pending Bonus: </span>
+            {{investorReportOverview.totalPendingProfits | currency:'EUR' : number:'1.0-0'}}</span>
+          <br />
+          <span>Pending Bonus: </span>
 
-<span [ngClass]="{
+          <span [ngClass]="{
   positive: isPositive(investorReportOverview.totalPendingBonus),
   negative: !isPositive(investorReportOverview.totalPendingBonus)}">
-        {{investorReportOverview.totalPendingBonus | currency:'EUR' : number:'1.0-0'}}</span>
-<br/>
-<span>Pending Expenses: </span>
+            {{investorReportOverview.totalPendingBonus | currency:'EUR' : number:'1.0-0'}}</span>
+          <br />
+          <span>Pending Expenses: </span>
 
 
-<span style="cursor: pointer;" (click)="showPendingExpenses()"
- [ngClass]="{
+          <span style="cursor: pointer;" (click)="showPendingExpenses()" [ngClass]="{
   positive: isPositive(investorReportOverview.totalPendingExpenses),
   negative: !isPositive(investorReportOverview.totalPendingExpenses)}">
-        {{investorReportOverview.totalPendingExpenses | currency:'EUR' : number:'1.0-0'}}</span>
-        <br/>
-    
-        <span>Actual Balace:</span>
-        <span>
-          {{investorReportOverview.cashBalance
+            {{investorReportOverview.totalPendingExpenses | currency:'EUR' : number:'1.0-0'}}</span>
+          <br />
+
+          <span>Actual Balace:</span>
+          <span>
+            {{investorReportOverview.cashBalance
             +investorReportOverview.totalPendingProfits
             +investorReportOverview.totalPendingBonus
             +investorReportOverview.totalPendingExpenses
             | currency:'EUR' : number:'1.0-0'}}
           </span>
-</div>
+        </div>
 
         <app-personal-trans [stakeholderId]="stakeholderId" [editable]="false"></app-personal-trans>
       </mat-card>
     </mat-tab>
   </mat-tab-group>
 </div>
-
-

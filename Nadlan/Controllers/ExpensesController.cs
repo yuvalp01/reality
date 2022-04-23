@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Nadlan.Models;
 using Nadlan.Models.Enums;
 using Nadlan.Repositories;
 using Nadlan.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Nadlan.Controllers
@@ -62,6 +62,22 @@ namespace Nadlan.Controllers
         }
 
 
+        private decimal AlignSignWithAccount(decimal amount, int accountId)
+        {
+            List<Accounts> positiveAccounts = new List<Accounts> { Accounts.Rent, Accounts.SecurityDeposit, Accounts.CashWithdrawal };
+
+            if (positiveAccounts.Contains((Accounts)accountId))
+            {
+                amount = Math.Abs(amount);
+            }
+            else
+            {
+                amount = Math.Abs(amount) * -1;
+
+            }
+            return amount;
+        }
+
 
         [HttpPost()]
         public async Task<IActionResult> PostExpense([FromBody] TransactionDto transactionDto)
@@ -71,13 +87,35 @@ namespace Nadlan.Controllers
                 return BadRequest(ModelState);
             }
 
+            transactionDto.Amount = AlignSignWithAccount(transactionDto.Amount, transactionDto.AccountId);
+
             var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
             //Expenses will be just a transaction with userAccount 2 (Stella) 
             transaction.CreatedBy = 2;
 
-            await _repositoryWraper.Transaction.CreateExpenseAndTransactionAsync(transaction);
+            await _repositoryWraper.Transaction.CreateTransactionAndExpenseAsync(transaction);
             return CreatedAtAction("PostExpense", new { id = transaction.Id }, transaction);
         }
+
+        [HttpPost("ReceiveCash")]
+        public async Task<IActionResult> ReceiveCash([FromBody] TransactionDto transactionDto)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            transactionDto.Amount = AlignSignWithAccount(transactionDto.Amount, transactionDto.AccountId);
+
+            var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
+            //Expenses will be just a transaction with userAccount 2 (Stella) 
+            transaction.CreatedBy = 2;
+
+            await _repositoryWraper.Transaction.CreateTransactionAndPersonalTransAsync(transaction);
+            return CreatedAtAction("PostExpense", new { id = transaction.Id }, transaction);
+        }
+
 
 
 
@@ -88,9 +126,11 @@ namespace Nadlan.Controllers
             {
                 return BadRequest(ModelState);
             }
+            transaction.Amount = AlignSignWithAccount(transaction.Amount, transaction.AccountId);
 
-            _context.Entry(transaction).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            await _repositoryWraper.Transaction.UpdateExpenseAndTransactionAsync(transaction);
+            //_context.Entry(transaction).State = EntityState.Modified;
+            //await _context.SaveChangesAsync();
             return NoContent();
 
         }

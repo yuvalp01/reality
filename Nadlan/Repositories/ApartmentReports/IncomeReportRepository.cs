@@ -69,6 +69,7 @@ namespace Nadlan.Repositories.ApartmentReports
                         t.AccountId != (int)Accounts.SecurityDeposit &&//Except for Security Deposit
                         t.AccountId != (int)Accounts.Business &&//Except for Business
                         t.AccountId != (int)Accounts.Balance &&//Except for Balance
+                        t.AccountId != (int)Accounts.CashWithdrawal &&
                         t.AccountId != (int)Accounts.Mortgage_Payment;//Mortgage payment is the actual payment but only the interest should be included
                        // t.Account.AccountTypeId == 0;
 
@@ -85,10 +86,8 @@ namespace Nadlan.Repositories.ApartmentReports
             }
 
             var result = Context.Transactions
-                //.Include(a => a.Account)
                 .Where(filter)
                 .Sum(a => a.Amount);
-            // if (year != 0) return result.Where(a => a.Date.Year == year);
             return result;
         }
 

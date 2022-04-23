@@ -131,12 +131,12 @@ namespace Nadlan.Repositories
         public decimal GetPendingExpenses(int apartmentId)
         {
 
-            Func<Transaction, bool> expensesFilter = t =>
-           !t.IsDeleted &&
-            t.PersonalTransactionId == 0;//Not covered yet
+           // Func<Transaction, bool> expensesFilter = t =>
+           //!t.IsDeleted &&
+           // t.PersonalTransactionId == 0;//Not covered yet
             var expenses = Context.Transactions
                 .Where(a => a.IsDeleted == false)
-                .Where(a => a.PersonalTransactionId == 0)
+                .Where(a => a.PersonalTransactionId == 0) //Not covered yet
                 .Where(a => a.ApartmentId == apartmentId)
                 .Sum(a => a.Amount);
             return expenses;

@@ -3,7 +3,6 @@ using Nadlan.Models;
 using Nadlan.Models.Enums;
 using Nadlan.ViewModels.Reports;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,10 +23,10 @@ namespace Nadlan.Repositories.ApartmentReports
         {
             SoFarReport soFarReport = new SoFarReport(apartmentId, currentDate);
 
-            soFarReport.Investment = GetAccountSum(apartmentId, 13);
-            soFarReport.Distributed = GetAccountSum(apartmentId, 100,currentDate);
-            soFarReport.BonusPaid = GetAccountSum(apartmentId, 300,currentDate);
-            soFarReport.GrossIncome = GetAccountSum(apartmentId, 1, currentDate);
+            soFarReport.Investment = GetAccountSum(apartmentId, (int)Accounts.Investment);
+            soFarReport.Distributed = GetAccountSum(apartmentId, (int)Accounts.Distribution, currentDate);
+            soFarReport.BonusPaid = GetAccountSum(apartmentId, (int)Accounts.Bonus, currentDate);
+            soFarReport.GrossIncome = GetAccountSum(apartmentId, (int)Accounts.Rent, currentDate);
             soFarReport.NetIncome = GetNetIncomeNew(apartmentId, currentDate, true);
             soFarReport.PendingExpenses = GetPendingExpenses(apartmentId, currentDate);
 
@@ -56,7 +55,6 @@ namespace Nadlan.Repositories.ApartmentReports
                     soFarReport.RoiForInvestor = (soFarReport.RoiAccumulated - soFarReport.BonusPercentage) / soFarReport.Years;
                     soFarReport.Bonus = soFarReport.BonusPercentage * soFarReport.Investment;
                     soFarReport.PendingBonus = soFarReport.Bonus + soFarReport.BonusPaid;
-                    //summaryReport.BonusExpected = -1 * (summaryReport.BonusSoFar + summaryReport.BonusPaid);
                 }
             }
 
@@ -72,13 +70,12 @@ namespace Nadlan.Repositories.ApartmentReports
         {
             SummaryReport summaryReport = new SummaryReport();
 
-            summaryReport.Investment = GetAccountSum(apartmentId, 13);
-            summaryReport.Distributed = GetAccountSum(apartmentId, 100);
-            //summaryReport.BonusPaid = GetAccountSum(apartmentId, 300);
+            summaryReport.Investment = GetAccountSum(apartmentId, (int)Accounts.Investment);
+            summaryReport.Distributed = GetAccountSum(apartmentId, (int)Accounts.Distribution);
             summaryReport.NetIncome = await Task.FromResult(GetNetIncome(apartmentId, 0));
 
             Apartment apartment = Context.Apartments.Where(a => a.Id == apartmentId).First();
-            summaryReport.RoiAccumulated = CalcAccumulatedRoi(apartment.PurchaseDate, currentDate,  summaryReport.Investment, summaryReport.NetIncome);
+            summaryReport.RoiAccumulated = CalcAccumulatedRoi(apartment.PurchaseDate, currentDate, summaryReport.Investment, summaryReport.NetIncome);
             summaryReport.Years = GetAgeInYears(apartment.PurchaseDate, currentDate);
             //Make sure it's not a future purchase
             if (summaryReport.Years > 0)
@@ -100,7 +97,6 @@ namespace Nadlan.Repositories.ApartmentReports
                     summaryReport.BonusPercentage = (summaryReport.RoiAccumulated - summaryReport.ThresholdAccumulated) / 2;
                     summaryReport.RoiForInvestor = (summaryReport.RoiAccumulated - summaryReport.BonusPercentage) / summaryReport.Years;
                     summaryReport.BonusSoFar = summaryReport.BonusPercentage * summaryReport.Investment;
-                    //summaryReport.BonusExpected = -1 * (summaryReport.BonusSoFar + summaryReport.BonusPaid);
                 }
             }
 
@@ -150,7 +146,7 @@ namespace Nadlan.Repositories.ApartmentReports
                 .Where(a => a.IsDeleted == false)
                 .Where(a => a.PersonalTransactionId == 0)
                 .Where(a => a.ApartmentId == apartmentId)
-                .Where(a=> a.Date<=currentDate)
+                .Where(a => a.Date <= currentDate)
                 .Sum(a => a.Amount);
             return expenses;
         }

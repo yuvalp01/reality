@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, DebugElement } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ITransaction } from '../models';
 import { Observable } from 'rxjs';
@@ -36,6 +36,14 @@ export class ExpensesService {
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     let url = `${this.baseUrl + this.controller}`
     //return this.httpClient.post<ITransaction>(`${this.baseUrl}api/transactions/PostExpenses`, transaction, options);
+    return this.httpClient.post<ITransaction>(url, transaction, options);
+  }
+
+  receiveCash(transaction: ITransaction): Observable<ITransaction> {
+    //(Stalla)
+    transaction.createdBy = 2;
+    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    let url = `${this.baseUrl + this.controller}/ReceiveCash`
     return this.httpClient.post<ITransaction>(url, transaction, options);
   }
 

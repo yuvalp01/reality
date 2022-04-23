@@ -8,10 +8,13 @@
   <button mat-mini-fab (click)="openAddMode('hours')" matTooltip="Log working hours">
     <mat-icon>timer</mat-icon>
   </button>
+
+  <button mat-mini-fab (click)="openAddMode('receiveCash')" matTooltip="Withdraw Cash" style="background-color: green;">
+    <mat-icon>atm</mat-icon>
+  </button>
+
   <button mat-mini-fab (click)="refreshData()" matTooltip="Refresh" color="primary">
     <mat-icon>refresh</mat-icon>
-    <!-- <mat-icon  style="cursor: pointer;padding-left: 5px;">refresh</mat-icon> -->
-
   </button>
   <br />
   Your personal account balance is <b>€{{assistantBalance}}</b>
@@ -64,9 +67,9 @@
     <ng-container matColumnDef="amount">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
       <td mat-cell [ngClass]="{
-          positive: isPositive(transaction.amount),
-          negative: !isPositive(transaction.amount),
-          bold: transaction.bankAccountId==0
+          positive: isPositive(transaction.amount) && (transaction.bankAccountId==0 || transaction.accountId==202),
+          negative: !isPositive(transaction.amount) && (transaction.bankAccountId==0 || transaction.accountId==202),
+          bold: transaction.bankAccountId==0 || transaction.accountId==202
         }" *matCellDef="let transaction">
         {{transaction.amount}}
       </td>

@@ -28,7 +28,10 @@ namespace Nadlan.Repositories.ApartmentReports
             Func<Transaction, bool> result = t =>
                  t.IsDeleted == false &&
                  t.IsBusinessExpense == false &&
-                 t.ApartmentId == apartmetId;
+                 t.ApartmentId == apartmetId &&
+                 t.AccountId != (int)Accounts.Balance &&
+                 t.AccountId != (int)Accounts.CashWithdrawal;
+                
             return result;
         }
 
@@ -135,14 +138,12 @@ namespace Nadlan.Repositories.ApartmentReports
             var predicate = GetRegularTransactionsFilter(apartmentId, 0, true);
 
             var result = Context.Transactions
-                //.Include(a => a.Account)
                 .Where(predicate)
                 //.Where(a => a.Account.IsIncome == false)
                 .Where(a => a.AccountId != (int)Accounts.Rent) // not rent
                 .Where(a => a.AccountId != (int)Accounts.Investment)  //not investment
                 .Sum(a => a.Amount);
             return result;
-            //return result;
         }
 
         protected Func<Transaction, bool> GetRegularTransactionsFilterNew(int apartmentId, bool isPurchaseCost)
@@ -155,6 +156,7 @@ namespace Nadlan.Repositories.ApartmentReports
                         t.AccountId != (int)Accounts.SecurityDeposit &&
                         t.AccountId != (int)Accounts.Business &&
                         t.AccountId != (int)Accounts.Balance &&
+                        t.AccountId != (int)Accounts.CashWithdrawal &&
                         t.AccountId != (int)Accounts.Bonus &&
                         t.AccountId != (int)Accounts.Mortgage_Payment;
 
@@ -176,6 +178,7 @@ namespace Nadlan.Repositories.ApartmentReports
                         t.AccountId != (int)Accounts.SecurityDeposit &&
                         t.AccountId != (int)Accounts.Business && 
                         t.AccountId != (int)Accounts.Balance && 
+                        t.AccountId != (int)Accounts.CashWithdrawal && 
                         t.AccountId != (int)Accounts.Bonus &&
                         t.AccountId != (int)Accounts.Mortgage_Payment;
 
@@ -240,17 +243,6 @@ namespace Nadlan.Repositories.ApartmentReports
 
         }
 
-
-        //Moved to TransactionRepository
-        //public async Task<decimal> GetExpensesBalance()
-        //{
-        //    var balance = Context.Transactions
-        //        .Where(a => !a.IsDeleted)
-        //        .Where(a=> a.CreatedBy == (int)CreatedByEnum.Stella)
-        //        .Where(a=>a.BankAccountId==0)
-        //        .SumAsync(a => a.Amount);
-        //    return await balance * -1;
-        //}
 
     }
 

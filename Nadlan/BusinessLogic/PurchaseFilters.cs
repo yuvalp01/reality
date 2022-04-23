@@ -30,7 +30,7 @@ namespace Nadlan.BusinessLogic
                         t.AccountId != (int)Accounts.SecurityDeposit &&//Except for Security Deposit
                         t.AccountId != (int)Accounts.Business &&//Except for Business
                         t.AccountId != (int)Accounts.Balance &&//Except for Balance
-                        //  !t.Account.IsIncome &&
+                        t.AccountId != (int)Accounts.CashWithdrawal &&
                         t.AccountId != (int)Accounts.Investment && //not investment
                         t.AccountId != (int)Accounts.Rent; // not rent
 

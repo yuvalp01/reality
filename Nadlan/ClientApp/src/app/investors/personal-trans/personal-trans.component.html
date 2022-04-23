@@ -1,4 +1,3 @@
-
 <button class="add-item" *ngIf="editable" mat-mini-fab (click)="openForm(0)" title="Add personal transaction">
   <mat-icon>add</mat-icon>
 </button>
@@ -18,36 +17,31 @@
 </p>-->
 <mat-chip-list>
   <mat-chip (click)="switchFilter('paidOnBehalf')"
-            [ngClass]="{'hide-type':show_paidOnBehalf,'show-type':!show_paidOnBehalf}">
-    <mat-icon style="font-size:20px;"
-              matTooltip="Paid on behalf (money paid from my personal account on your behalf)">
+    [ngClass]="{'hide-type':show_paidOnBehalf,'show-type':!show_paidOnBehalf}">
+    <mat-icon style="font-size:20px;" matTooltip="Paid on behalf (money paid from my personal account on your behalf)">
       money
     </mat-icon>
   </mat-chip>
   <mat-chip (click)="switchFilter('profitDistribution')"
-            [ngClass]="{'hide-type':show_profitDistribution,'show-type':!show_profitDistribution}">
-    <mat-icon style="font-size:20px;"
-              matTooltip="Profit distribution">
+    [ngClass]="{'hide-type':show_profitDistribution,'show-type':!show_profitDistribution}">
+    <mat-icon style="font-size:20px;" matTooltip="Profit distribution">
       trending_up
     </mat-icon>
   </mat-chip>
   <mat-chip (click)="switchFilter('cashWithdrawal')"
-            [ngClass]="{'hide-type':show_cashWithdrawal,'show-type':!show_cashWithdrawal}">
-    <mat-icon style=" font-size:20px;"
-              matTooltip="Cash withdrawal (from your local bank account)">
+    [ngClass]="{'hide-type':show_cashWithdrawal,'show-type':!show_cashWithdrawal}">
+    <mat-icon style=" font-size:20px;" matTooltip="Cash withdrawal (from your local bank account)">
       atm
     </mat-icon>
   </mat-chip>
   <mat-chip (click)="switchFilter('moneyTransfer')"
-            [ngClass]="{'hide-type':show_moneyTransfer,'show-type':!show_moneyTransfer}">
-    <mat-icon style=" font-size:20px;"
-              matTooltip="Money transfer (from your real bank account to mine)">
+    [ngClass]="{'hide-type':show_moneyTransfer,'show-type':!show_moneyTransfer}">
+    <mat-icon style=" font-size:20px;" matTooltip="Money transfer (from your real bank account to mine)">
       swap_horiz
     </mat-icon>
   </mat-chip>
   <mat-chip (click)="switchFilter('')">
-    <mat-icon style=" font-size:20px;cursor: pointer;"
-              matTooltip="Show All">
+    <mat-icon style=" font-size:20px;cursor: pointer;" matTooltip="Show All">
       cancel
     </mat-icon>
   </mat-chip>
@@ -68,23 +62,19 @@
     </ng-container>
     <ng-container matColumnDef="amount">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
-      <td mat-cell
-          (click)="showTransactions(transaction, transaction.transactionType)"
-          [ngClass]="{
+      <td mat-cell (click)="showTransactions(transaction, transaction.transactionType)" [ngClass]="{
           positive: isPositive(transaction.amount),
           negative: !isPositive(transaction.amount),
-          clickable:  transaction.transactionType==10
-        }"
-          *matCellDef="let transaction">
+          clickable:  transaction.transactionType==10 || transaction.transactionType==13
+        }" *matCellDef="let transaction">
         {{transaction.amount | currency:'EUR' : 'symbol':'1.0-0'}}
       </td>
     </ng-container>
     <ng-container matColumnDef="transactionType">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
       <td mat-cell *matCellDef="let transaction">
-        <mat-icon  class="clickable"
-        (click)="showTransactions(transaction, transaction.transactionType)"
-        matTooltip="Paid on behalf" *ngIf="transaction.transactionType==10">money</mat-icon>
+        <mat-icon class="clickable" (click)="showTransactions(transaction, transaction.transactionType)"
+          matTooltip="Paid on behalf" *ngIf="transaction.transactionType==10">money</mat-icon>
         <mat-icon matTooltip="Profit distribution" *ngIf="transaction.transactionType==20">trending_up</mat-icon>
         <mat-icon matTooltip="Cash withdrawal" *ngIf="transaction.transactionType==13">atm</mat-icon>
         <mat-icon matTooltip="Money transfer" *ngIf="transaction.transactionType==5">swap_horiz</mat-icon>
@@ -101,7 +91,7 @@
     <ng-container matColumnDef="comments">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Comments</th>
       <td mat-cell *matCellDef="let transaction">
-        <span>  {{transaction.comments}}</span>
+        <span> {{transaction.comments}}</span>
       </td>
 
     </ng-container>
@@ -123,4 +113,3 @@
   <button mat-button color="primary" (click)="exportAsXLSX()">Export to Excel</button>
 
 </div>
-

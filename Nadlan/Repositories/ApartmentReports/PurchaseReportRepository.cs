@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nadlan.BusinessLogic;
+using Nadlan.Models.Enums;
 using Nadlan.ViewModels.Reports;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,6 @@ namespace Nadlan.Repositories.ApartmentReports
 
         public async Task<PurchaseReport> GetPurchaseReport(int apartmentId)
         {
-            var predicate = GetRegularTransactionsFilter(apartmentId, 0, true);
 
             PurchaseReport purchaseReport = new PurchaseReport();
             purchaseReport.Investment = GetAccountSum(apartmentId, 13);
@@ -43,7 +43,8 @@ namespace Nadlan.Repositories.ApartmentReports
                //.Include(a => a.Account)
                .Where(basic)
                .Where(purchaceFilter)
-               .Where(a => a.AccountId == 6 || a.AccountId == 17)
+               .Where(a => a.AccountId == (int)Accounts.RenovationMiscellaneous ||
+                           a.AccountId == (int)Accounts.RenovationContractor)
                .Sum(a => a.Amount);
         }
 
@@ -52,13 +53,12 @@ namespace Nadlan.Repositories.ApartmentReports
             var basic = GetRegularTransactionsFilter(apartmentId, 0, true);
             var purchaceFilter = purchaseFilters.GetTotalCostFilter();
 
-
-
             return Context.Transactions
-               //.Include(a => a.Account)
                .Where(basic)
                .Where(purchaceFilter)
-               .Where(a => !(a.AccountId == 6 || a.AccountId == 17 || a.AccountId == 12))
+               .Where(a => !(a.AccountId == (int)Accounts.RenovationMiscellaneous ||
+                             a.AccountId == (int)Accounts.RenovationContractor ||
+                             a.AccountId == (int)Accounts.ApartmentCost))
                .Sum(a => a.Amount);
 
         }
@@ -86,15 +86,15 @@ namespace Nadlan.Repositories.ApartmentReports
         private List<AccountSummary> KeepRenovationAccountsTogether(IEnumerable<AccountSummary> accnoutsList_)
         {
             var accnoutsList = accnoutsList_.ToList();
-            var contractorIndex = accnoutsList.FindIndex(a => a.AccountId == 17);
-            var miscellaneousIndex = accnoutsList.FindIndex(a => a.AccountId == 6);
+            var contractorIndex = accnoutsList.FindIndex(a => a.AccountId == (int)Accounts.RenovationContractor);
+            var miscellaneousIndex = accnoutsList.FindIndex(a => a.AccountId == (int)Accounts.RenovationMiscellaneous);
 
             if (contractorIndex == -1 || miscellaneousIndex == -1)
             {
                 return accnoutsList;
             }
-            var miscellaneousRef = accnoutsList.Find(a => a.AccountId == 6);
-            var contractorRef = accnoutsList.Find(a => a.AccountId == 17);
+            var miscellaneousRef = accnoutsList.Find(a => a.AccountId == (int)Accounts.RenovationMiscellaneous);
+            var contractorRef = accnoutsList.Find(a => a.AccountId == (int)Accounts.RenovationContractor);
             var renovationContractor = new AccountSummary()
             {
                 AccountId = accnoutsList[contractorIndex].AccountId,

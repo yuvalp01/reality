@@ -21,8 +21,9 @@ export class ExpensesComponent implements OnInit {
   dataSourceAssistant = new MatTableDataSource<ITransaction>();
   selectedApartment: any;
   assistantBalance: number = 0;
-  visibleAccountsHours: number[] = [4, 6, 11, 16, 18, 20, 200];
-  visibleAccountsExpenses: number[] = [1, 4, 5, 6, 7, 10, 16, 18, 11, 8, 16, 19, 20, 198, 200, 201];
+  visibleAccountsHours: number[] = [4, 6, 11, 16, 18, 200];
+  visibleAccountsReceiveCash: number[] = [202];
+  visibleAccountsExpenses: number[] = [1, 4, 5, 6, 7, 10, 16, 18, 11, 8, 16, 19, 20, 198, 200];
   monthsBack: number = 3;
   currentUser: string = 'unknown';
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -73,12 +74,15 @@ export class ExpensesComponent implements OnInit {
     if (actionType == 'expenses') {
       _visibleAccounts = this.visibleAccountsExpenses;
     }
-    else {
+    else if (actionType == 'hours') {
       _visibleAccounts = this.visibleAccountsHours;
+    }
+    else if (actionType == 'receiveCash') {
+      _visibleAccounts = this.visibleAccountsReceiveCash;
     }
 
     let dialogRef = this.dialog.open(AddExpenseComponent, {
-      height: '600px',
+      height: '500px',
       width: '500px',
       data: { type: actionType, visibleAccounts: _visibleAccounts },
     });
@@ -95,7 +99,12 @@ export class ExpensesComponent implements OnInit {
       let _expense: ITransaction = result;
       let _type;
       let _visibleAccounts
-      if (_expense.hours == 0) {
+      //Cash withdrawal has a special form
+      if (_expense.accountId == 202) {
+        _type = 'receiveCash';
+        _visibleAccounts = [202];
+      }
+      else if (_expense.hours == 0) {
         _type = 'expenses';
         _visibleAccounts = this.visibleAccountsExpenses;
       }
