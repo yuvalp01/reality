@@ -2,7 +2,25 @@
 <button *hasClaim="['admin','stella']" mat-mini-fab (click)="openForm(null)" title="Add New">
   <mat-icon>add</mat-icon>
 </button>
+<fieldset>
+  <mat-form-field style="width: 300px; margin-left: 1%;" appearance="outline">
+    <mat-label>Bank Account</mat-label>
+    <mat-select #bankAccountSelect (selectionChange)='onBankAccountChange(bankAccountSelect)'>
+      <mat-option *ngFor="let bankAccount of bankAccounts" [value]="bankAccount">
+        {{bankAccount.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div style="display: inline;" *ngIf="selectedBankAccount">
+    UserName:
+    <span style="font-weight: bold; margin-right: 5px;">{{selectedBankAccount?.userNameBank}}</span>
 
+    <a target="_blank" href="{{selectedBankAccount?.linkToWebsite}}">Link to online banking</a>
+
+
+  </div>
+
+</fieldset>
 <div id="container">
   <div id="contracts">
     <div *ngIf="dataSource.data.length==0" style="margin-left: 50%;;">

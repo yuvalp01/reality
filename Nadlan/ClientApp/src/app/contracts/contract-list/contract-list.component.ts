@@ -22,7 +22,9 @@ export class ContractListComponent implements OnInit {
     private dialog: MatDialog) { }
   dataSource = new MatTableDataSource<IContract>();
   bankAccounts: IBankAccount[];
+  selectedBankAccount: IBankAccount;
   isAdmin: boolean = false;
+  activeBankAccountsIds = [];
   displayedColumns: string[] = [
     'apartment',
     'tenant',
@@ -38,18 +40,45 @@ export class ContractListComponent implements OnInit {
     if (!this.isAdmin) {
       this.displayedColumns.splice(6, 1);
     }
-    this.bankAccountService.getBankAccounts().subscribe(result => {
-      this.bankAccounts = result;
-    }, error => console.error(error));
+
+    this.dataSource.filterPredicate = (data: IContract, filter: any): boolean => {
+      if (data.bankAccountId == filter) return true
+      else return false;
+    }
     this.loadItems();
   }
 
   loadItems() {
     this.contractService.getAll().subscribe({
-      next: (result) => this.dataSource.data = result,
+      next: (result) => {
+        this.dataSource.data = result
+
+        this.bankAccountService.getBankAccounts().subscribe(result => {
+
+          //Get the distinct bank account ids that link to a contract
+          this.activeBankAccountsIds = this.dataSource.data
+            .filter((value, i, arr) => arr.indexOf(value) === i)
+            .map(a => a.bankAccountId)
+
+          this.bankAccounts = result.filter(a => this.activeBankAccountsIds.includes(a.id));
+        }, error => console.error(error));
+
+
+
+      },
       error: (err) => console.error(err)
     })
   }
+
+  // onlyUnique(value, index, self) {
+  //   return self.indexOf(value) === index;
+  // }
+
+  onBankAccountChange(bankAccountSelect) {
+    this.selectedBankAccount = bankAccountSelect.value;
+    this.dataSource.filter = bankAccountSelect.value.id;
+  }
+
 
   openForm(item: IContract) {
     let dialogLocal = this.dialog.open(ContractFormComponent, {
@@ -117,4 +146,5 @@ export class ContractListComponent implements OnInit {
   styleConfirmed(row): boolean {
     return this.isAdmin && row.isPaymentConfirmed;
   }
+
 }
