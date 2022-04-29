@@ -7,6 +7,7 @@ export interface IIssue {
   priority: number;
   dateOpen: Date;
   dateClose: Date;
+  dateDue: Date;
   aprtment: IApartment;
   isNew: boolean;
   createdBy: string;

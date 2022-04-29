@@ -6,44 +6,52 @@
         </mat-form-field>
     </fieldset>
     <fieldset>
-        <fieldset>
-            <mat-form-field appearance="fill">
-                <mat-label>Apartment</mat-label>
-                <mat-select formControlName="apartmentId">
-                    <mat-option *ngFor="let apartment of apartments" [value]="apartment.id">
-                        {{apartment.address}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-
-        </fieldset>
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
             <mat-label>Description</mat-label>
             <textarea formControlName="description" matInput placeholder="Description"></textarea>
         </mat-form-field>
     </fieldset>
     <fieldset>
-        <mat-form-field appearance="fill">
-            <mat-label>Date Open</mat-label>
-            <input formControlName="dateOpen" matInput [matDatepicker]="picker" placeholder="Date Open">
+        <mat-form-field appearance="outline">
+            <mat-label>Open Date</mat-label>
+            <input formControlName="dateOpen" matInput [matDatepicker]="picker" placeholder="Open Date">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
     </fieldset>
     <fieldset>
-        <mat-form-field appearance="fill">
-            <mat-label>Date Close</mat-label>
-            <input formControlName="dateClose" matInput [matDatepicker]="picker2" placeholder="Date Close">
+        <mat-form-field appearance="outline">
+            <mat-label>Close Date</mat-label>
+            <input formControlName="dateClose" matInput [matDatepicker]="picker2" placeholder="Close Date">
             <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
             <mat-datepicker #picker2></mat-datepicker>
         </mat-form-field>
     </fieldset>
     <fieldset>
-        <mat-form-field style="width: 50%;" apprearance="fill">
+        <mat-form-field appearance="outline">
+            <mat-label>Due Date</mat-label>
+            <input formControlName="dateDue" matInput [matDatepicker]="picker3" placeholder="Due Date">
+            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+            <mat-datepicker #picker3></mat-datepicker>
+        </mat-form-field>
+    </fieldset>
+    <fieldset>
+
+
+        <mat-form-field style="width: 58%; margin-right:2% " appearance="outline">
+            <mat-label>Apartment</mat-label>
+            <mat-select formControlName="apartmentId">
+                <mat-option *ngFor="let apartment of apartments" [value]="apartment.id">
+                    {{apartment.address}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field style="width: 8%; margin-left:2% ;" apprearance="outline">
             <mat-label>Priprity</mat-label>
             <input formControlName="priority" matInput type="number" max="3" min="1" placeholder="Priority">
         </mat-form-field>
-        <mat-checkbox formControlName="isNew" style="width: 50%;">
+        <mat-checkbox style="width: 28%; margin-left:2% " formControlName="isNew">
             Mark As New</mat-checkbox>
 
     </fieldset>

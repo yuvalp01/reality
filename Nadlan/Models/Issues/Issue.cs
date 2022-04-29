@@ -13,6 +13,7 @@ namespace Nadlan.Models.Issues
         public int Priority { get; set; }
         public DateTime DateOpen { get; set; }
         public DateTime? DateClose { get; set; }
+        public DateTime? DateDue { get; set; }
 
         public int ApartmentId { get; set; }
         public Apartment Apartment { get; set; }

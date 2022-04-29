@@ -44,6 +44,7 @@ export class IssueFormComponent implements OnInit {
       apartmentId: 0,
       dateOpen: [new Date(), Validators.required],
       dateClose: null,
+      dateDue: null,
       isNew: [true],
       stakeholderId: [2]
     });
@@ -66,6 +67,7 @@ export class IssueFormComponent implements OnInit {
         issue.createdBy = this.userName;
         issue.dateOpen = this.fixUtcDate(issue.dateOpen);
         issue.dateClose = this.fixUtcDate(issue.dateClose);
+        issue.dateDue = this.fixUtcDate(issue.dateDue);
         // issue.isNew = true;
         if (this.data) {
           this.issueService.updateIssue(issue).subscribe({

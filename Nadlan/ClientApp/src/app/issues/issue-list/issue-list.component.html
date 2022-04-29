@@ -32,7 +32,13 @@
       </mat-panel-title>
       <mat-panel-description
         [ngClass]="{'priority-high':item.priority==1, 'priority-mid':item.priority==2,'priority-low':item.priority==3}">
+        <span style="margin-right: 10px; margin-left: 10px;">Creation date:</span>
         <span matTooltip="Creation date"> {{item.dateOpen | date:'dd-MM-yyyy'}}</span>
+        <span *ngIf="item.dateDue" style="margin-right: 10px; margin-left: 10px;">Due date:</span>
+
+        <span matTooltip="Due date">
+          {{item.dateDue
+          | date:'dd-MM-yyyy'}}</span>
         <mat-icon *ngIf="item.isNew" matTooltip="New or updated">fiber_new</mat-icon>
         <mat-icon *ngIf="item.unreadByMe" matTooltip="New message">mark_email_unread</mat-icon>
         <mat-icon *ngIf="item.unreadByOthers" matTooltip="Message sent">forward_to_inbox</mat-icon>
