@@ -38,7 +38,7 @@
       <mat-form-field *ngIf="isHourForm" style="width: 100%" appearance="outline" class="example-full-width">
         <mat-label>Hours</mat-label>
         <input #_hours formControlName="hours" type="number" min="0.1" matInput placeholder="Hours">
-        <mat-hint align="start">{{_hours.value*9}}</mat-hint>
+        <mat-hint align="start">{{_hours.value*10}}</mat-hint>
       </mat-form-field>
 
       <mat-form-field *ngIf="!isHourForm" style="width: 49%; margin-right: 1%;" appearance="outline"

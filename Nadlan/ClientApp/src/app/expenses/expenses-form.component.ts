@@ -74,7 +74,7 @@ export class AddExpenseComponent implements OnInit {
 
         //
         if (this.isHourForm) {
-          transaction.amount = formValues.hours * 9;
+          transaction.amount = formValues.hours * 10;
         }
         else {
           transaction.hours = 0;
@@ -171,7 +171,7 @@ export class AddExpenseComponent implements OnInit {
     this.transactionForm.get('hours').valueChanges.subscribe(val => {
       if (this.transactionForm.controls['hours'].value) {
         let hours = this.transactionForm.controls['hours'].value;
-        this.transactionForm.controls['amount'].setValue(hours * 9);
+        this.transactionForm.controls['amount'].setValue(hours * 10);
       }
       else {
         this.transactionForm.controls['amount'].setValue(0);
