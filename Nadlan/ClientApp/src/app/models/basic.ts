@@ -110,3 +110,12 @@ export interface IPersonalTransWithFilter {
   personalTransaction: IPersonalTransaction;
   filter: IFilter;
 }
+
+export interface IInsurance {
+  id: number;
+  apartmentId: number;
+  company: string;
+  price: number;
+  dateStart: string;
+  dateEnd: string;
+}
