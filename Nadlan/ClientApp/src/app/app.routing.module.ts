@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CounterComponent } from './counter/counter.component';
 import { AccountListComponent } from './fetch-data/fetch-accounts.component';
 import { TransactionListComponent } from './transactions/fetch-transactions.component';
 import { AddApartmentForm } from './forms/add-apartment.component';
@@ -21,7 +20,6 @@ import { PlanningComponent } from './renovationNew/planning/planning.component';
   imports: [
     RouterModule.forRoot([
       { path: '', component: LoginComponent, pathMatch: 'full' },
-      // { path: 'counter', component: CounterComponent },
       { path: 'add-apartment', component: AddApartmentForm },
       { path: 'fetch-accounts', component: AccountListComponent },
       {
@@ -50,17 +48,18 @@ import { PlanningComponent } from './renovationNew/planning/planning.component';
       {
         path: 'products', component: ProductsComponent,
         canActivate: [AuthGuard],
-        data: { claimType: ['stella','admin'] }
+        data: { claimType: ['stella', 'admin'] }
       },
       {
         path: 'planning', component: PlanningComponent,
         canActivate: [AuthGuard],
         data: { claimType: ['admin'] }
       },
-      { path: 'contract-list', component: ContractListComponent,
+      {
+        path: 'contract-list', component: ContractListComponent,
         canActivate: [AuthGuard],
-        data: {claimType:['stella','admin']}
-     },
+        data: { claimType: ['stella', 'admin'] }
+      },
       { path: 'login', component: LoginComponent },
       { path: 'contract-payments/:contractId', component: ContractPaymentsComponent },
 

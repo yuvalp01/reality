@@ -4,8 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
 import { ApartmentListComponent } from './fetch-data/fetch-apart.component';
 import { ApartmentService } from './services/apartment.service';
 import { AccountService } from './services/account.service';
@@ -48,8 +46,6 @@ import { BankAccountService } from './services/bankAaccount.service';
   declarations: [
     AppComponent,
     NavMenuComponent,
-    HomeComponent,
-    CounterComponent,
     ApartmentListComponent,
     AddApartmentForm,
     AccountListComponent,
