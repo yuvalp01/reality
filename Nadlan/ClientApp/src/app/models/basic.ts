@@ -113,7 +113,7 @@ export interface IPersonalTransWithFilter {
 
 export interface IInsurance {
   id: number;
-  apartmentId: number;
+  apartment: IApartment;
   company: string;
   price: number;
   dateStart: string;

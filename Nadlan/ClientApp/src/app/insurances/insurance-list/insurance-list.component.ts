@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
+import { IInsurance } from 'src/app/models';
+import { InsuranceService } from '../insurance.service';
 
 @Component({
   selector: 'app-insurance-list',
@@ -7,9 +10,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InsuranceListComponent implements OnInit {
 
-  constructor() { }
+  constructor(private insuranceService: InsuranceService) { }
+  dataSource = new MatTableDataSource<IInsurance>();
+  insurances: IInsurance[];
+  displayedColumns: string[] = [
+    'id',
+    'apartment',
+    'company',
+    'price',
+    'dateStart',
+    'dateEnd',
+    // 'actions'
+  ]
 
   ngOnInit() {
+    this.loadItems();
+  }
+
+  loadItems() {
+    this.insuranceService.getAll().subscribe({
+      next: (result) => { this.dataSource.data = result },
+      error: (err) => console.error(err)
+    })
   }
 
 }

@@ -9,6 +9,7 @@ namespace Nadlan.Models
     {
         public int Id { get; set; }
         public int ApartmentId { get; set; }
+        public Apartment Apartment { get; set; }
         public string Company { get; set; }
         public decimal Price { get; set; }
         public DateTime DateStart { get; set; }

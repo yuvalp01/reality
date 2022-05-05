@@ -15,11 +15,11 @@ namespace Nadlan.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class InsuranceController : ControllerBase
+    public class InsurancesController : ControllerBase
     {
         private readonly NadlanConext _context;
 
-        public InsuranceController(NadlanConext context)
+        public InsurancesController(NadlanConext context)
         {
             _context = context;
         }
@@ -27,7 +27,7 @@ namespace Nadlan.Controllers
         [HttpGet]
         public IEnumerable<Insurance> GetInsurances()
         {
-            return _context.Insurances.OrderBy(a => a.Id);
+            return _context.Insurances.Include(a=>a.Apartment).OrderBy(a => a.Id);
         }
 
         // GET: api/Accounts/5
