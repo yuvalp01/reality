@@ -42,6 +42,7 @@ import { ProductFormComponent } from './renovationNew/product-form/product-form.
 import { DriveLinkGenComponent } from './shared/drive-link-gen/drive-link-gen.component';
 import { PlanningComponent } from './renovationNew/planning/planning.component';
 import { BankAccountService } from './services/bankAaccount.service';
+import { InsuranceListComponent } from './insurances/insurance-list/insurance-list.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -67,6 +68,7 @@ import { BankAccountService } from './services/bankAaccount.service';
     ProductFormComponent,
     DriveLinkGenComponent,
     PlanningComponent,
+    InsuranceListComponent,
 
   ],
   imports: [
