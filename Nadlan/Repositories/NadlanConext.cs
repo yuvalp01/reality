@@ -34,6 +34,7 @@ namespace Nadlan.Repositories
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<BankAccount> BankAccounts { get; set; }
+        public DbSet<Insurance> Insurances { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
