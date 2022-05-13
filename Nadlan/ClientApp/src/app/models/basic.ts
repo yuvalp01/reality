@@ -116,6 +116,6 @@ export interface IInsurance {
   apartment: IApartment;
   company: string;
   price: number;
-  dateStart: string;
-  dateEnd: string;
+  dateStart: Date;
+  dateEnd: Date;
 }

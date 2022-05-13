@@ -1,0 +1,47 @@
+<form [formGroup]="insuranceForm" (ngSubmit)="save()">
+    <mat-dialog-content>
+        <fieldset>
+            <mat-form-field class="left" appearance="fill">
+                <mat-label>Apartment</mat-label>
+                <mat-select formControlName="apartmentId">
+                    <mat-option *ngFor="let apartment of apartments" [value]="apartment.id">
+                        {{apartment.address}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="right" appearance="fill">
+                <mat-label>Company</mat-label>
+                <input formControlName="company" matInput placeholder="Company">
+            </mat-form-field>
+        </fieldset>
+
+        <fieldset>
+            <mat-form-field class="left" appearance="fill">
+                <mat-label>Start Date</mat-label>
+                <input formControlName="dateStart" matInput [matDatepicker]="picker" placeholder="Start Date">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="right" appearance="fill">
+                <mat-label>End Date</mat-label>
+                <input formControlName="dateEnd" matInput [matDatepicker]="picker2" placeholder="End Date">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+        </fieldset>
+        <fieldset>
+            <mat-form-field class="left" appearance="fill">
+                <mat-label>Price</mat-label>
+                <input formControlName="price" matInput placeholder="Price">
+            </mat-form-field>
+
+        </fieldset>
+
+        <fieldset>
+            <button mat-flat-button style="background-color: green;" color="primary" name="submit" type="submit">
+                Save
+                <mat-icon>check_circle</mat-icon>
+            </button>
+        </fieldset>
+    </mat-dialog-content>
+</form>

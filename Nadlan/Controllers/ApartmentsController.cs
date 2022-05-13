@@ -115,7 +115,7 @@ namespace Nadlan.Controllers
                 }
             }
 
-            return CreatedAtAction("GetApartment", new { id = apartment.Id }, apartment);
+            return CreatedAtAction("PostApartment", new { id = apartment.Id }, apartment);
         }
 
         // DELETE: api/Apartments/5

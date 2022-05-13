@@ -23,8 +23,8 @@ export class InsuranceService {
   add(insurance: IInsurance): Observable<{}> {
     return this.httpClient.post<IInsurance>(`${this.baseUrl}${this.controller}`, insurance, this.options);
   }
-  update(insurance: IInsurance): Observable<{}> {
-    return this.httpClient.put<IInsurance>(`${this.baseUrl}${this.controller}`, insurance, this.options);
+  update(insurance: IInsurance, id: number): Observable<{}> {
+    return this.httpClient.put<IInsurance>(`${this.baseUrl}${this.controller}/${id}`, insurance, this.options);
   }
   delete(id: number): Observable<{}> {
     return this.httpClient.delete<IInsurance>(`${this.baseUrl}${this.controller}/${id}`, this.options);

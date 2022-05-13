@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace Nadlan.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class InsurancesController : ControllerBase
     {
         private readonly NadlanConext _context;
@@ -27,7 +27,7 @@ namespace Nadlan.Controllers
         [HttpGet]
         public IEnumerable<Insurance> GetInsurances()
         {
-            return _context.Insurances.Include(a=>a.Apartment).OrderBy(a => a.Id);
+            return _context.Insurances.Include(a => a.Apartment).OrderBy(a => a.Id);
         }
 
         // GET: api/Accounts/5
@@ -49,32 +49,91 @@ namespace Nadlan.Controllers
             return Ok(account);
         }
 
-
-        [Authorize]
-        [HttpPut("{id}")]
-        protected async Task<IActionResult> PutInsurance([FromRoute] int id, [FromBody] Insurance insurance)
-        {
-            throw new NotImplementedException("It is not possible to change insurance from the API");
-        }
-
-        [Authorize]
         [HttpPost]
-        protected async Task<IActionResult> PostInsurances([FromBody] Insurance insurance)
+        public async Task<IActionResult> Add([FromBody] Insurance insurance)
         {
-            throw new NotImplementedException("It is not possible to add a new insurance from the API");
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _context.Add(insurance);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (InsuranceExists(insurance.Id))
+                {
+                    return new StatusCodeResult(StatusCodes.Status409Conflict);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return Ok();
         }
 
-        [Authorize]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Insurance insurance)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != insurance.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(insurance).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!InsuranceExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+        private bool InsuranceExists(int id)
+        {
+            return _context.Insurances.Any(e => e.Id == id);
+        }
+
+
         [HttpDelete("{id}")]
-        protected async Task<IActionResult> DeleteInsurance([FromRoute] int id)
+        public async Task<IActionResult> DeleteInsurance([FromRoute] int id)
         {
-            throw new NotImplementedException("It is not possible to delete insurance from the API");
-        }
 
-        //private bool InsuranceExists(int id)
-        //{
-        //    return _context.Insurances.Any(e => e.Id == id);
-        //}
+            try
+            {
+                var insurance = _context.Insurances.Find(id);
+                if (insurance != null)
+                {
+                    _context.Insurances.Remove(insurance);
+                    await _context.SaveChangesAsync();                
+                }
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(500);
+            }
+        }
     }
 }
