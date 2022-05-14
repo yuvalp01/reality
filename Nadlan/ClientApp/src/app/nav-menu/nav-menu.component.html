@@ -13,6 +13,11 @@
               <a mat-button class="nav-link text-dark" [matMenuTriggerFor]="menu">Investors Reports</a>
               <mat-menu #menu="matMenu">
 
+                <button *hasClaim="['admin']" [routerLinkActive]='["link-active"]' class="nav-link text-dark"
+                  mat-menu-item [routerLink]='["/personal-admin","101"]'>
+                  Personal Transactions
+                </button>
+
                 <button *hasClaim="['ohad','admin']" [routerLink]='["/investor-reports",101]' class="nav-link text-dark"
                   mat-menu-item>Ohad</button>
                 <button *hasClaim="['avi','admin']" [routerLink]='["/investor-reports",102]' class="nav-link text-dark"
@@ -26,22 +31,21 @@
               </mat-menu>
             </li>
             <ng-container *hasClaim="['admin']">
-              <!--<li *ngIf="role==1" class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>-->
               <li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-                <a class="nav-link text-dark" [routerLink]='["/reports/1/rented"]'>Rented</a>
-              </li>
+                <a mat-button class="nav-link text-dark" [matMenuTriggerFor]="menuReports">Apartments Reports</a>
 
-              <li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-                <a class="nav-link text-dark" [routerLink]='["/reports/8/inproc"]'>In Process</a>
+                <mat-menu #menuReports="matMenu">
+                  <button mat-menu-item class="nav-link text-dark" [routerLink]='["/reports/1/rented"]'>
+                    Rented</button>
+                  <button mat-menu-item class="nav-link text-dark" [routerLink]='["/reports/8/inproc"]'>
+                    In Process</button>
+                </mat-menu>
               </li>
-
               <li class="nav-item" [routerLinkActive]='["link-active"]'>
                 <a class="nav-link text-dark" [routerLink]='["/fetch-transactions"]'>Transactions</a>
               </li>
 
-              <li class="nav-item" [routerLinkActive]='["link-active"]'>
-                <a class="nav-link text-dark" [routerLink]='["/personal-admin","101"]'>Personal Transactions</a>
-              </li>
+
             </ng-container>
 
             <li *hasClaim="['admin','stella']" class="nav-item" [routerLinkActive]='["link-active"]'>
