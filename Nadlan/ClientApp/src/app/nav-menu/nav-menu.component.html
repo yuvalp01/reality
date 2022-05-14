@@ -80,6 +80,9 @@
             <li *hasClaim="['admin', 'stella']" class="nav-item" [routerLinkActive]='["link-active"]'>
               <a class="nav-link text-dark" [routerLink]='["/insurance-list"]'>Insurances</a>
             </li>
+            <li *hasClaim="['admin']" class="nav-item" [routerLinkActive]='["link-active"]'>
+              <a class="nav-link text-dark" [routerLink]='["/reminder"]'>Reminder</a>
+            </li>
           </ng-container>
 
 

@@ -13,6 +13,7 @@ import { ContractPaymentsComponent } from './contracts/contract-payments/contrac
 import { ProductsComponent } from './renovationNew/products/products.component';
 import { PlanningComponent } from './renovationNew/planning/planning.component';
 import { InsuranceListComponent } from './insurances/insurance-list/insurance-list.component';
+import { ReminderComponent } from './reminder/reminder.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,11 @@ import { InsuranceListComponent } from './insurances/insurance-list/insurance-li
       },
       {
         path: 'insurance-list', component: InsuranceListComponent,
+        canActivate: [AuthGuard],
+        data: { claimType: ['stella', 'admin'] }
+      },
+      {
+        path: 'reminder', component: ReminderComponent,
         canActivate: [AuthGuard],
         data: { claimType: ['stella', 'admin'] }
       },

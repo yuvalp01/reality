@@ -44,6 +44,7 @@ import { PlanningComponent } from './renovationNew/planning/planning.component';
 import { BankAccountService } from './services/bankAaccount.service';
 import { InsuranceListComponent } from './insurances/insurance-list/insurance-list.component';
 import { InsuranceFormComponent } from './insurances/insurance-form/insurance-form.component';
+import { ReminderComponent } from './reminder/reminder.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -71,6 +72,7 @@ import { InsuranceFormComponent } from './insurances/insurance-form/insurance-fo
     PlanningComponent,
     InsuranceListComponent,
     InsuranceFormComponent,
+    ReminderComponent,
 
   ],
   imports: [
