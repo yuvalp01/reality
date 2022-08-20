@@ -104,6 +104,7 @@ export interface IFilter {
   isSoFar: boolean;
   personalTransactionId: number;
   isLiteObject: boolean;
+  isBusinessExpense: boolean;
 }
 
 export interface IPersonalTransWithFilter {

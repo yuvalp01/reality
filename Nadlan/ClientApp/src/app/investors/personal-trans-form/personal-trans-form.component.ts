@@ -227,6 +227,8 @@ export class PersonalTransFormComponent implements OnInit {
     if (this.personalTransForm.controls.filter_isPurchaseCost.value) {
       this.filterTrans.isPurchaseCost = this.personalTransForm.controls.filter_isPurchaseCost.value;
     }
+    //We do not charge business transactions:
+    this.filterTrans.isBusinessExpense = false;
   }
 
   loadTransactions() {

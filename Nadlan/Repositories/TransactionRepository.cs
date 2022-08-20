@@ -20,6 +20,7 @@ namespace Nadlan.Repositories
         public bool? IsSoFar { get; set; }
         public int? PersonalTransactionId { get; set; }
         public bool? IsLiteObject { get; set; }
+        public bool? IsBusinessExpense { get; set; }
     }
 
     public class TransactionRepository : Repository<Transaction>, ITransactionRepository
@@ -492,6 +493,13 @@ namespace Nadlan.Repositories
             query = query.Where(a => filter.IsPurchaseCost == null ? true : a.IsPurchaseCost == filter.IsPurchaseCost);
             //Conditionaly filter PersonalTransactionId:
             query = query.Where(a => filter.PersonalTransactionId == null ? true : a.PersonalTransactionId == filter.PersonalTransactionId);
+
+            //2022-08-22: Conditionaly filter IsBusinessExpense (used only for personal transactions calc)
+            if (filter.IsBusinessExpense != null)
+            {
+                query = query.Where(a => a.IsBusinessExpense == filter.IsBusinessExpense);
+            }
+
             //Conditionaly filter year:
             if (filter.Year != null)
             {
