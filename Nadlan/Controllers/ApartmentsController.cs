@@ -28,7 +28,7 @@ namespace Nadlan.Controllers
         [HttpGet]
         public IEnumerable<Apartment> GetApartment()
         {
-            return _context.Apartments;
+            return _context.Apartments.Where(a=>a.Status>=0);
         }
 
         [HttpGet("{id}")]
