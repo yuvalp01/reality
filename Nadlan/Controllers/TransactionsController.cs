@@ -192,7 +192,7 @@ namespace Nadlan.Controllers
                 return BadRequest("Only rent account (1) is valid");
             }
             var rentTrans = _mapper.Map<TransactionDto, Transaction>(transactionDto);
-
+            rentTrans.CreatedBy = (int)CreatedByEnum.Yuval;
             var result = await _repositoryWraper.Transaction.CreateRentTransactionsAsync(rentTrans);
 
             return Ok(result);

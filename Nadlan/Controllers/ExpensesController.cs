@@ -91,7 +91,7 @@ namespace Nadlan.Controllers
 
             var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
             //Expenses will be just a transaction with userAccount 2 (Stella) 
-            transaction.CreatedBy = 2;
+            transaction.CreatedBy = (int)CreatedByEnum.Stella;
 
             await _repositoryWraper.Transaction.CreateTransactionAndExpenseAsync(transaction);
             return CreatedAtAction("PostExpense", new { id = transaction.Id }, transaction);
@@ -110,7 +110,7 @@ namespace Nadlan.Controllers
 
             var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
             //Expenses will be just a transaction with userAccount 2 (Stella) 
-            transaction.CreatedBy = 2;
+            transaction.CreatedBy = (int) CreatedByEnum.Stella;
 
             await _repositoryWraper.Transaction.CreateTransactionAndPersonalTransAsync(transaction);
             return CreatedAtAction("PostExpense", new { id = transaction.Id }, transaction);
@@ -129,8 +129,6 @@ namespace Nadlan.Controllers
             transaction.Amount = AlignSignWithAccount(transaction.Amount, transaction.AccountId);
 
             await _repositoryWraper.Transaction.UpdateExpenseAndTransactionAsync(transaction);
-            //_context.Entry(transaction).State = EntityState.Modified;
-            //await _context.SaveChangesAsync();
             return NoContent();
 
         }

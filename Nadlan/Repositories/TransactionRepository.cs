@@ -75,7 +75,7 @@ namespace Nadlan.Repositories
                 .Include(a => a.Account)
                 .Include(a => a.Apartment)
                 .Where(a => !a.IsDeleted);
-                
+
             if (createdBy != CreatedByEnum.Any)
             {
                 transactionList = transactionList.Where(a => a.CreatedBy == (int)createdBy);
@@ -98,7 +98,7 @@ namespace Nadlan.Repositories
                 BankAccountId = transaction.BankAccountId,
                 CreatedBy = transaction.CreatedBy,
                 IsPending = transaction.IsPending
-            }).OrderByDescending(a=>a.Date);
+            }).OrderByDescending(a => a.Date);
 
 
             if (monthsBack > 0)
@@ -134,9 +134,6 @@ namespace Nadlan.Repositories
                 var originalTransaction = await Context.Transactions.FindAsync(transaction.Id);
                 transaction.PersonalTransactionId = originalTransaction.PersonalTransactionId;
 
-                ////Charge the original amount. TODO: consider a better flow
-                //transaction.Amount = transaction.Amount * -1;
-
                 PersonalTransaction personalTransaction = await Context.PersonalTransactions.FindAsync(transaction.PersonalTransactionId);
                 BankAccount bankAccount = bankAccount = Context.BankAccounts.Where(a => a.Id == transaction.BankAccountId).FirstOrDefault();
 
@@ -149,49 +146,14 @@ namespace Nadlan.Repositories
                 //Update original transaction:
                 Context.PersonalTransactions.Update(personalTransaction).CurrentValues.SetValues(personalTransaction);
             }
+            else if (transaction.AccountId == (int)Accounts.Rent)
+            {
+                await UpdateRentTransactionsAsync(transaction);
+                return;
+            }
             await Context.SaveChangesAsync();
         }
 
-
-        //public async Task UpdateExpenseAndTransactionAsync_(Transaction transaction)
-        //{
-        //    //Charge the original amount
-        //    transaction.Amount = transaction.Amount * -1;
-        //    //var originalTransaction = Context.Transactions.Find(transaction.Id);
-        //    SwitchIsBusinessExpense(transaction);
-
-        //    //Update original transaction:
-        //    Context.Entry(transaction).State = EntityState.Modified;
-        //    // Context.Entry(originalTransaction).CurrentValues.SetValues(transaction);
-
-        //    if (transaction.AccountId == (int)Accounts.CashWithdrawal)
-        //    {
-        //        PersonalTransaction personalTransaction = await Context.PersonalTransactions.FindAsync(transaction.PersonalTransactionId);
-        //        BankAccount bankAccount = bankAccount = Context.BankAccounts.Where(a => a.Id == transaction.BankAccountId).FirstOrDefault();
-
-        //        personalTransaction.Amount = transaction.Amount;
-        //        personalTransaction.ApartmentId = transaction.ApartmentId;
-        //        personalTransaction.Date = transaction.Date;
-        //        personalTransaction.StakeholderId = bankAccount.StakeholderId;
-        //        personalTransaction.Comments = GetAuotomaticCommentForCashWithdrawal(bankAccount, transaction);
-
-        //        //Update original transaction:
-        //        Context.PersonalTransactions.Update(personalTransaction).CurrentValues.SetValues(personalTransaction);
-
-
-        //    }
-
-
-
-        //    await SaveAsync();
-
-
-
-
-
-
-
-        //}
         internal async Task Confirm(int transactionId)
         {
             var originalTransaction = Context.Transactions.FindAsync(transactionId);
@@ -222,13 +184,16 @@ namespace Nadlan.Repositories
                 transaction.IsPending = true;
             }
 
+            if (transaction.AccountId == (int)Accounts.Rent)
+            {
+                await CreateRentTransactionsAsync(transaction);
+                return;
+            }
+
+
             SwitchIsBusinessExpense(transaction);
-            ////Charge the original amount
-            //transaction.Amount = transaction.Amount * -1;
+
             Create(transaction);
-            //Removed - not using expense table anymore
-            //Expense assiatantExpense = CreateCorrespondingExpense(transaction);
-            //Context.Set<Expense>().Add(assiatantExpense);
 
             await SaveAsync();
         }
@@ -271,10 +236,7 @@ namespace Nadlan.Repositories
             {
                 transaction.IsPending = true;
             }
-            ////Charge the original amount. TODO: consider a better flow
-            //transaction.Amount = transaction.Amount * -1;
 
-            //Removed - not using expense table anymore
             PersonalTransaction personalTransaction = CreateCorrespondingPersonalTransaction(transaction);
             Context.Set<PersonalTransaction>().Add(personalTransaction);
             await SaveAsync();
@@ -523,7 +485,8 @@ namespace Nadlan.Repositories
         {
 
             //Classic transactions (not expenses) will get userAccount 1 
-            rentTrans.CreatedBy = (int)CreatedByEnum.Yuval;
+            //rentTrans.CreatedBy = (int)CreatedByEnum.Yuval;
+            //rentTrans.CreatedBy = (int)createdByEnum;
             //decimal rent = rentTrans.Amount;
             await CreateTransactionAsync(rentTrans);
 
@@ -582,8 +545,20 @@ namespace Nadlan.Repositories
             {
                 managementTrans.PersonalTransactionId = -2; //for partnership use project funds
             }
-            managementTrans.Amount = rentTrans.Amount * 0.1m;
-            managementTrans.Comments = $"Created automatically based on 10% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id})";
+
+            SetAdditionalTransactionCommonValues(managementTrans, rentTrans, 0.1m);
+
+
+            //managementTrans.Amount = rentTrans.Amount * 0.1m;
+            //managementTrans.Comments = $"Created automatically based on 10% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id})";
+            ////Management transaction always by Yuval
+            //if (managementTrans.CreatedBy != (int)CreatedByEnum.Yuval)
+            //{
+            //    managementTrans.Comments += $" (Rent transaction originaly created by {rentTrans.CreatedBy})";
+            //    managementTrans.CreatedBy = (int)CreatedByEnum.Yuval;
+            //}
+            ////If petty cash, always change to general bank account so it won't affect the assistant
+            //managementTrans.BankAccountId = rentTrans.BankAccountId == 0 ? 100 : rentTrans.BankAccountId;
         }
 
         private void SetTaxValues(Transaction rentTrans, Transaction taxTrans)
@@ -591,10 +566,37 @@ namespace Nadlan.Repositories
             //Update new values
             taxTrans.AccountId = (int)Accounts.TaxEstimation; ;
             taxTrans.PersonalTransactionId = -4;//Future payment
-            taxTrans.Amount = rentTrans.Amount * 0.15m;
-            taxTrans.Comments = $"Created automatically based on 15% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id})";
+
+            SetAdditionalTransactionCommonValues(taxTrans, rentTrans, 0.15m);
+
+
+            //taxTrans.Amount = rentTrans.Amount * 0.15m;
+            //taxTrans.Comments = $"Created automatically based on 15% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id})";
+            ////TaxEstimation transaction always by Yuval
+            //if (taxTrans.CreatedBy != (int)CreatedByEnum.Yuval)
+            //{
+            //    taxTrans.Comments += $" (Rent transaction originaly created by {rentTrans.CreatedBy})";
+            //    taxTrans.CreatedBy = (int)CreatedByEnum.Yuval;
+            //}
+            ////If petty cash, always change to general bank account so it won't affect the assistant
+            //taxTrans.BankAccountId = rentTrans.BankAccountId == 0 ? 100 : rentTrans.BankAccountId;
         }
 
+        private void SetAdditionalTransactionCommonValues(Transaction additionalTrans, Transaction rentTrans, decimal percentage)
+        {
+            additionalTrans.Amount = rentTrans.Amount * percentage;
+            additionalTrans.Comments = $"Created automatically based on {(int)(percentage * 100)}% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id})";
+            //TaxEstimation transaction always by Yuval
+            if (additionalTrans.CreatedBy != (int)CreatedByEnum.Yuval)
+            {
+                additionalTrans.Comments += $" (Rent transaction originaly created by {(CreatedByEnum)rentTrans.CreatedBy})";
+                additionalTrans.CreatedBy = (int)CreatedByEnum.Yuval;
+            }
+            //Bank for additional transaction is always General
+            additionalTrans.BankAccountId = 100;
+        }
+
+        //TODO: This function is still not in use
         private void SetMortgageInterestValues(Transaction interestTrans, Transaction rentTrans)
         {
             //Update new values
@@ -603,7 +605,18 @@ namespace Nadlan.Repositories
             interestTrans.PersonalTransactionId = (int)NonPersonalTrasactionId.CoveredWithCreditCard;//Covered as part of the mortgage payments
             interestTrans.Amount = monthlyInerestCost;
             interestTrans.Comments = $"Created automatically based on the mortgage interest rate. (transactionId: {rentTrans.Id})";
+
+            //Mortgage_Interest transaction always by Yuval
+            if (interestTrans.CreatedBy != (int)CreatedByEnum.Yuval)
+            {
+                interestTrans.Comments += $" (Rent transaction originaly created by {rentTrans.CreatedBy})";
+                interestTrans.CreatedBy = (int)CreatedByEnum.Yuval;
+            }
+            //If petty cash, always change to general bank account so it won't affect the assistant
+            interestTrans.BankAccountId = rentTrans.BankAccountId == 0 ? 100 : rentTrans.BankAccountId;
         }
+
+
 
 
         private decimal GetMonthyInterestCost(int apartmentId)
@@ -639,23 +652,33 @@ namespace Nadlan.Repositories
 
             //update Management
             var mngTrans = FindTransByAccount(originalRent, (int)Accounts.Management);
+            mngTrans.Date = rentTrans.Date;
             //reset confirm
             mngTrans.IsConfirmed = false;
             //Update new values
-            mngTrans.Amount = rentTrans.Amount * -0.1m;
-            mngTrans.Date = rentTrans.Date;
-            mngTrans.Comments = $"Created automatically based on 10% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id}";
+            SetAdditionalTransactionCommonValues(mngTrans, rentTrans, 0.1m);
+            mngTrans.Amount = mngTrans.Amount * -1;
+            //mngTrans.Amount = rentTrans.Amount * -0.1m;
+
+            //mngTrans.Comments = $"Created automatically based on 10% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id}";
+
             Context.Entry(mngTrans).State = EntityState.Modified;
 
             //update Tax
             var taxTrans = FindTransByAccount(originalRent, (int)Accounts.TaxEstimation);
+            taxTrans.Date = rentTrans.Date;
             //reset confirm
             taxTrans.IsConfirmed = false;
-            taxTrans.Amount = rentTrans.Amount * -0.15m;
-            taxTrans.Date = rentTrans.Date;
-            taxTrans.Comments = $"Created automatically based on 15% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id}";
+
+            //Update new values
+            SetAdditionalTransactionCommonValues(taxTrans, rentTrans, 0.15m);
+            taxTrans.Amount = taxTrans.Amount * -1;
+
+            //taxTrans.Amount = rentTrans.Amount * -0.15m;
+            //taxTrans.Comments = $"Created automatically based on 15% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id}";
             Context.Entry(taxTrans).State = EntityState.Modified;
 
+            //TODO: not in use at the moment
             Transaction interestTrans = FindTransByAccount(originalRent, (int)Accounts.Mortgage_Interest);
             if (interestTrans != null)
             {
@@ -732,10 +755,6 @@ namespace Nadlan.Repositories
              && a.AccountId == accountId).FirstOrDefault();
             return transaction;
         }
-
-
-
-
 
     }
 
