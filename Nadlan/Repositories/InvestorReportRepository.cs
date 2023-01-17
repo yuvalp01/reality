@@ -136,6 +136,7 @@ namespace Nadlan.Repositories
            // t.PersonalTransactionId == 0;//Not covered yet
             var expenses = Context.Transactions
                 .Where(a => a.IsDeleted == false)
+                .Where(a => a.IsBusinessExpense == false)
                 .Where(a => a.PersonalTransactionId == 0) //Not covered yet
                 .Where(a => a.ApartmentId == apartmentId)
                 .Sum(a => a.Amount);
