@@ -547,18 +547,6 @@ namespace Nadlan.Repositories
             }
 
             SetAdditionalTransactionCommonValues(managementTrans, rentTrans, 0.1m);
-
-
-            //managementTrans.Amount = rentTrans.Amount * 0.1m;
-            //managementTrans.Comments = $"Created automatically based on 10% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id})";
-            ////Management transaction always by Yuval
-            //if (managementTrans.CreatedBy != (int)CreatedByEnum.Yuval)
-            //{
-            //    managementTrans.Comments += $" (Rent transaction originaly created by {rentTrans.CreatedBy})";
-            //    managementTrans.CreatedBy = (int)CreatedByEnum.Yuval;
-            //}
-            ////If petty cash, always change to general bank account so it won't affect the assistant
-            //managementTrans.BankAccountId = rentTrans.BankAccountId == 0 ? 100 : rentTrans.BankAccountId;
         }
 
         private void SetTaxValues(Transaction rentTrans, Transaction taxTrans)
@@ -568,18 +556,6 @@ namespace Nadlan.Repositories
             taxTrans.PersonalTransactionId = -4;//Future payment
 
             SetAdditionalTransactionCommonValues(taxTrans, rentTrans, 0.15m);
-
-
-            //taxTrans.Amount = rentTrans.Amount * 0.15m;
-            //taxTrans.Comments = $"Created automatically based on 15% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id})";
-            ////TaxEstimation transaction always by Yuval
-            //if (taxTrans.CreatedBy != (int)CreatedByEnum.Yuval)
-            //{
-            //    taxTrans.Comments += $" (Rent transaction originaly created by {rentTrans.CreatedBy})";
-            //    taxTrans.CreatedBy = (int)CreatedByEnum.Yuval;
-            //}
-            ////If petty cash, always change to general bank account so it won't affect the assistant
-            //taxTrans.BankAccountId = rentTrans.BankAccountId == 0 ? 100 : rentTrans.BankAccountId;
         }
 
         private void SetAdditionalTransactionCommonValues(Transaction additionalTrans, Transaction rentTrans, decimal percentage)
@@ -594,6 +570,7 @@ namespace Nadlan.Repositories
             }
             //Bank for additional transaction is always General
             additionalTrans.BankAccountId = 100;
+            additionalTrans.IsPending = false;
         }
 
         //TODO: This function is still not in use

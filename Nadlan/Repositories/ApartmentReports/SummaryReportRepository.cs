@@ -141,6 +141,7 @@ namespace Nadlan.Repositories.ApartmentReports
 
             Func<Transaction, bool> expensesFilter = t =>
            !t.IsDeleted &&
+           !t.IsBusinessExpense &&
             t.PersonalTransactionId == 0;//Not covered yet
             var expenses = Context.Transactions
                 .Where(a => a.IsDeleted == false)
