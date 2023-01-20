@@ -68,7 +68,8 @@ namespace Nadlan.Repositories
         {
             var portfolioLines = Context.Portfolios
                                     .Include(a => a.Apartment)
-                                    .Where(a => a.StakeholderId == investorId);
+                                    .Where(a => a.StakeholderId == investorId)
+                                    .Where(a=>a.Apartment.Status>=0);
             return portfolioLines;
         }
 
