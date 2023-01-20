@@ -28,8 +28,8 @@ mat-card {
 }
 
 .disabled {
-  color: lightgray;
-  cursor: default;
+  color: lightgray !important;
+  cursor: default !important;
 }
 
 /*::ng-deep .mat-tab-header {

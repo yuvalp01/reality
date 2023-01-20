@@ -592,15 +592,17 @@
 
             </mat-list-item>
 
-            <mat-list-item>
+            <mat-list-item [ngClass]="{disabled: !partnershipApartments.includes(apartmentId)}">
               <mat-icon mat-list-icon>money</mat-icon>
               <span class="lineTitle">Distribution for this year</span>
               <span [ngClass]="{
                 positive: isPositive(soFarReport.pendingDistribution),
-                negative: !isPositive(soFarReport.pendingDistribution)}">
+                negative: !isPositive(soFarReport.pendingDistribution),
+                disabled: !partnershipApartments.includes(apartmentId)
+                    }">
 
                 {{soFarReport.pendingDistribution| currency:'EUR' | minusSignToParens}}</span>
-              <button [disabled]="math.round(soFarReport.pendingDistribution)==0"
+              <button [disabled]="math.round(soFarReport.pendingDistribution)==0 || !partnershipApartments.includes(apartmentId)"
                 (click)="openTransactionForm('distribution')" matTooltip="Distribute to investors" mat-mini-fab
                 color="accent">
                 <mat-icon>paid</mat-icon>
@@ -612,10 +614,10 @@
               <span class="lineTitle">Compensation for this year</span>
               <span [ngClass]="{
                 positive: isPositive(soFarReport.pendingBonus),
-                negative: !isPositive(soFarReport.pendingBonus)}">
+                negative: !isPositive(soFarReport.pendingBonus)
+                    }">
 
                 {{soFarReport.pendingBonus| currency:'EUR' | minusSignToParens}}</span>
-
               <button [disabled]="math.round(soFarReport.pendingBonus)==0" (click)="openTransactionForm('bonus')"
                 matTooltip="Distribute bonus" mat-mini-fab color="accent">
                 <mat-icon>paid</mat-icon>
