@@ -571,6 +571,7 @@ namespace Nadlan.Repositories
             //Bank for additional transaction is always General
             additionalTrans.BankAccountId = 100;
             additionalTrans.IsPending = false;
+            additionalTrans.IsConfirmed = true;
         }
 
         //TODO: This function is still not in use
