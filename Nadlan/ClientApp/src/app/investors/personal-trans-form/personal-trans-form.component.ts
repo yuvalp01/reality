@@ -34,7 +34,7 @@ export class PersonalTransFormComponent implements OnInit {
   dataSourceTrans = new MatTableDataSource<ITransaction>();
   //displayedColumns: string[] = ['id', 'date', 'apartmentId', 'isPurchaseCost', 'accountId', 'amount', 'comments', 'actions'];
   displayedColumns: string[] = ['id', 'date', 'amount', 'comments', 'account'];
-  years: number[] = [2018, 2019, 2020, 2021, 2022, 2023];
+  years: number[] = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026];
 
   isFilterConfirmed: boolean = false;
   showResults: boolean = false;

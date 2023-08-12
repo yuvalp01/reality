@@ -22,7 +22,7 @@ export class ApartmentReportsComponent implements OnInit {
   soFarReport: ISoFarReport;
   apartmentInfo: IApartment;
   buttonCalcClicked: boolean = false;
-  years: number[] = [2018, 2019, 2020, 2021, 2022, 2023];
+  years: number[] = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026];
   partnershipApartments: number[] = [1, 3, 4, 20];
   selectedYear: number = 0;
   @Input() apartmentId: number = 0;
