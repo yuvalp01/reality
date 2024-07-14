@@ -69,7 +69,7 @@ namespace Nadlan.Controllers
             return NoContent();
         }
 
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMessage([FromRoute] int id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
