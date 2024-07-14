@@ -74,7 +74,8 @@ export class AddExpenseComponent implements OnInit {
 
         //
         if (this.isHourForm) {
-          transaction.amount = formValues.hours * 10;
+          //yp: From 1.7.2024 Stella moves to global salary (no more payments by the hours)
+          transaction.amount = 0;//formValues.hours * 10;
         }
         else {
           transaction.hours = 0;
