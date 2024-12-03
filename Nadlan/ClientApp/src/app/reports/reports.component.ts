@@ -18,27 +18,35 @@ export class ReportsComponent implements OnInit {
   apartments: IApartment[];
   selectedApartmentId: number;
   status: string;
+  ownershipType: number;
   ngOnInit(): void {
     //this.selectedApartmentId = this.route.snapshot.params['apartmentId'];
 
-    //this.status = this.route.snapshot.params['status'];
     this.route.paramMap.subscribe(params => {
       this.status = params.get('status');
+      this.ownershipType = +params.get('ownershipType');
       this.selectedApartmentId = +params.get('apartmentId');
-      this.apartmentService.getApartments().subscribe(result => {
-        this.apartments = result;
-        if (this.status == 'rented') {
-          this.apartments = result.filter(a => a.status == 100 && a.id > 0);
-        }
-        else {
-          this.apartments = result.filter(a => a.status < 100 && a.id > 0);
-        }
+      if (this.ownershipType) {
+        this.apartmentService.getApartmentsByOwnership(this.ownershipType).subscribe(result => {
+          this.apartments = result;
+        }, error => console.error(error));
+      }
+      //TODO: remove, not relevant anymore
+      else {
+        this.apartmentService.getApartments().subscribe(result => {
+          this.apartments = result;
+          if (this.status == 'rented') {
+            this.apartments = result.filter(a => a.status == 100 && a.id > 0);
+          }
+          else {
+            this.apartments = result.filter(a => a.status != 100 && a.id > 0);
+          }
 
-        //this.route.paramMap.subscribe(params => {
-        //  this.selectedApartmentId = +params.get("apartmentId");
-        //});
-      }, error => console.error(error));
-
+          //this.route.paramMap.subscribe(params => {
+          //  this.selectedApartmentId = +params.get("apartmentId");
+          //});
+        }, error => console.error(error));
+      }
     });
 
   }

@@ -59,7 +59,7 @@ namespace Nadlan.Migrations
 
                     b.Property<string>("Door");
 
-                    b.Property<decimal>("FixedMaintanance");
+                    b.Property<int>("Ownership");
 
                     b.Property<int>("Floor");
 

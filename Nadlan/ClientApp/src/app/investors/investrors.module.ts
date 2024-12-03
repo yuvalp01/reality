@@ -31,12 +31,12 @@ import { AuthGuard } from '../security/auth.guard';
     SharedModule,
     RouterModule.forChild([
       { path: 'personal-trans', component: PersonalAdminComponent, pathMatch: 'full' },
-      { path: 'personal-admin/:stakeholderId', component: PersonalAdminComponent },
+      { path: 'personal-admin/:stakeholderId/:ownershipType', component: PersonalAdminComponent },
       {
-        path: 'investor-reports/:stakeholderId',
+        path: 'investor-reports/:stakeholderId/:ownershipType',
         component: InvestorReportComponent,
         canActivate: [AuthGuard],
-        data: { claimType: ['investor', 'admin'] },
+        data: { claimType: ['investor', 'admin','owner'] },
         children: [
           {
             //path: '', redirectTo: '', pathMatch: 'full',

@@ -14,18 +14,34 @@
               <mat-menu #menu="matMenu">
 
                 <button *hasClaim="['admin']" [routerLinkActive]='["link-active"]' class="nav-link text-dark"
-                  mat-menu-item [routerLink]='["/personal-admin","101"]'>
+                        mat-menu-item [routerLink]='["/personal-admin","101"]'>
                   Personal Transactions
                 </button>
 
-                <button *hasClaim="['ohad','admin']" [routerLink]='["/investor-reports",101]' class="nav-link text-dark"
-                  mat-menu-item>Ohad</button>
-                <button *hasClaim="['avi','admin']" [routerLink]='["/investor-reports",102]' class="nav-link text-dark"
-                  mat-menu-item>Avi</button>
-                <button *hasClaim="['etai','admin']" [routerLink]='["/investor-reports",103]' class="nav-link text-dark"
-                  mat-menu-item>Etai</button>
-                <button *hasClaim="['naphtali','admin']" [routerLink]='["/investor-reports",104]'
-                  class="nav-link text-dark" mat-menu-item>Naphtali</button>
+                <button *hasClaim="['ohad','admin']" [routerLink]='["/investor-reports",101,30]' class="nav-link text-dark"
+                        mat-menu-item>
+                  Ohad
+                </button>
+                <button *hasClaim="['avi','admin']" [routerLink]='["/investor-reports",102,30]' class="nav-link text-dark"
+                        mat-menu-item>
+                  Avi
+                </button>
+                <button *hasClaim="['etai','admin']" [routerLink]='["/investor-reports",103,30]' class="nav-link text-dark"
+                        mat-menu-item>
+                  Etai
+                </button>
+                <button *hasClaim="['naphtali','admin']" [routerLink]='["/investor-reports",104,30]'
+                        class="nav-link text-dark" mat-menu-item>
+                  Naphtali
+                </button>
+                <button *hasClaim="['amos','admin']" [routerLink]='["/investor-reports",106,30]'
+                        class="nav-link text-dark" mat-menu-item>
+                  Amos
+                </button>
+                <button *hasClaim="['gert','admin']" [routerLink]='["/investor-reports",201,50]'
+                        class="nav-link text-dark" mat-menu-item>
+                  Gert
+                </button>
                 <!--<button *hasClaim="['shosh','admin']" [routerLink]='["/investor-reports",105]' class="nav-link text-dark" mat-menu-item>Shosh</button>-->
 
               </mat-menu>
@@ -35,10 +51,21 @@
                 <a mat-button class="nav-link text-dark" [matMenuTriggerFor]="menuReports">Apartments Reports</a>
 
                 <mat-menu #menuReports="matMenu">
-                  <button mat-menu-item class="nav-link text-dark" [routerLink]='["/reports/1/rented"]'>
-                    Rented</button>
-                  <button mat-menu-item class="nav-link text-dark" [routerLink]='["/reports/8/inproc"]'>
-                    In Process</button>
+                  <button mat-menu-item class="nav-link text-dark" [routerLink]='["/reports/22/40"]'>
+                    Company
+                  </button>
+                  <button mat-menu-item class="nav-link text-dark" [routerLink]='["/reports/101/50"]'>
+                    Investors
+                  </button>
+                  <button mat-menu-item class="nav-link text-dark" [routerLink]='["/reports/5/30"]'>
+                    Private Investors
+                  </button>
+                  <button mat-menu-item class="nav-link text-dark" [routerLink]='["/reports/3/20"]'>
+                    Partnerships
+                  </button>
+                  <button mat-menu-item class="nav-link text-dark" [routerLink]='["/reports/2/10"]'>
+                    Yuval
+                  </button>
                 </mat-menu>
               </li>
               <li class="nav-item" [routerLinkActive]='["link-active"]'>

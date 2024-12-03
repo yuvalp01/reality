@@ -34,9 +34,9 @@ import { ReminderComponent } from './reminder/reminder.component';
         path: 'reports/:apartmentId',
         component: ReportsComponent,
         canActivate: [AuthGuard],
-        data: { claimType: ['investor', 'admin'] }
+        data: { claimType: ['investor','owner', 'admin'] }
       },
-      { path: 'reports/:apartmentId/:status', component: ReportsComponent },
+      { path: 'reports/:apartmentId/:ownershipType', component: ReportsComponent },
       {
         path: 'expenses', component: ExpensesComponent,
         canActivate: [AuthGuard],

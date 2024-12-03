@@ -39,22 +39,25 @@ export class LoginComponent implements OnInit {
   navigateByUser(userName: string) {
     switch (userName) {
       case 'yuval':
-        this.router.navigateByUrl(`/fetch-transactions`);
+        this.router.navigateByUrl(`/reports/22/40`);
         break;
       case 'stella':
         this.router.navigateByUrl(`/issue-list`);
         break;
       case 'ohad':
-        this.router.navigateByUrl(`/investor-reports/101`);
+        this.router.navigateByUrl(`/investor-reports/101/30`);
         break;
       case 'avi':
-        this.router.navigateByUrl(`/investor-reports/102`);
+        this.router.navigateByUrl(`/investor-reports/102/30`);
         break;
       case 'etai':
-        this.router.navigateByUrl(`/investor-reports/103`);
+        this.router.navigateByUrl(`/investor-reports/103/30`);
         break;
       case 'naphtali':
-        this.router.navigateByUrl(`/investor-reports/104`);
+        this.router.navigateByUrl(`/investor-reports/104/30`);
+        break;
+      case 'gert':
+        this.router.navigateByUrl(`/investor-reports/201/50`);
         break;
       default:
         //this.router.navigateByUrl(`/investor-reports/101`);

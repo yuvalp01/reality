@@ -17,9 +17,9 @@ export class ApartmentService {
   getApartments(): Observable<IApartment[]> {
     return this.httpClient.get<IApartment[]>(this.baseUrl + 'api/apartments');
   }
-  //getApartments(status:number): Observable<IApartment[]> {
-  //  return this.httpClient.get<IApartment[]>(this.baseUrl + 'api/apartments');
-  //}
+  getApartmentsByOwnership(status:number): Observable<IApartment[]> {
+    return this.httpClient.get<IApartment[]>(this.baseUrl + `api/apartments/GetApartmentsByOwnership/${status}`);
+  }
   //getRentedApartments(): Observable<IApartment[]> {
   //  return this.httpClient.get<IApartment[]>(this.baseUrl + 'api/apartments/GetRentedApartments');
   //}

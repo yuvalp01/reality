@@ -16,7 +16,7 @@ namespace Nadlan.Models
         public int Size { get; set; }
         public string Door { get; set; }
         public decimal CurrentRent { get; set; }
-        public decimal FixedMaintanance { get; set; }
+        public int OwnershipType { get; set; }
 
     }
 

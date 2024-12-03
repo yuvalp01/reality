@@ -37,5 +37,14 @@
         Stella = 2
     }
 
+    public enum OwnershipType
+    {
+        Yuval = 10,
+        YuvalPartners = 20,
+        PrivateInvestor = 30,
+        Company = 40,
+        Investor = 50
+    }
+
 }
 

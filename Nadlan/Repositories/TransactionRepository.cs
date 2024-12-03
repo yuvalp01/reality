@@ -486,52 +486,59 @@ namespace Nadlan.Repositories
 
             //Classic transactions (not expenses) will get userAccount 1 
             //rentTrans.CreatedBy = (int)CreatedByEnum.Yuval;
-            //rentTrans.CreatedBy = (int)createdByEnum;
-            //decimal rent = rentTrans.Amount;
             await CreateTransactionAsync(rentTrans);
 
-            //Cloe management transaction based on the rent
-            var managementTrans = Context.Transactions.AsNoTracking()
-                             .FirstOrDefault(e => e.Id == rentTrans.Id);
-            //reset id
-            managementTrans.Id = 0;
-            //Update new values
-            SetManagementValues(rentTrans, managementTrans);
-
-            await CreateTransactionAsync(managementTrans);
-
-            //Clone TaxTrans
-            var taxTrans = Context.Transactions.AsNoTracking()
-                             .FirstOrDefault(e => e.Id == rentTrans.Id);
-            //reset id
-            taxTrans.Id = 0;
-            //Update new values
-            SetTaxValues(rentTrans, taxTrans);
-
-            await CreateTransactionAsync(taxTrans);
-
-            Transaction interestTrans = null;
-            if (apartmentsWithMortgage.Contains(rentTrans.ApartmentId))
+            var apartment = Context.Apartments.Find(rentTrans.ApartmentId);
+            //We do not create expected tax and management transaction automatically for investors
+            if (apartment.OwnershipType == (int)OwnershipType.Investor)
             {
-                //Clone Interest trans
-                interestTrans = Context.Transactions.AsNoTracking()
+                return new RentRelatedTransactionsResponse { Rent = rentTrans };
+            }
+            else
+            {
+                //Cloe management transaction based on the rent
+                var managementTrans = Context.Transactions.AsNoTracking()
                                  .FirstOrDefault(e => e.Id == rentTrans.Id);
                 //reset id
-                interestTrans.Id = 0;
+                managementTrans.Id = 0;
                 //Update new values
-                SetMortgageInterestValues(interestTrans, rentTrans);
+                SetManagementValues(rentTrans, managementTrans);
 
-                await CreateTransactionAsync(interestTrans);
+                await CreateTransactionAsync(managementTrans);
+
+                //Clone TaxTrans
+                var taxTrans = Context.Transactions.AsNoTracking()
+                                 .FirstOrDefault(e => e.Id == rentTrans.Id);
+                //reset id
+                taxTrans.Id = 0;
+                //Update new values
+                SetTaxValues(rentTrans, taxTrans);
+
+                await CreateTransactionAsync(taxTrans);
+
+                Transaction interestTrans = null;
+                if (apartmentsWithMortgage.Contains(rentTrans.ApartmentId))
+                {
+                    //Clone Interest trans
+                    interestTrans = Context.Transactions.AsNoTracking()
+                                     .FirstOrDefault(e => e.Id == rentTrans.Id);
+                    //reset id
+                    interestTrans.Id = 0;
+                    //Update new values
+                    SetMortgageInterestValues(interestTrans, rentTrans);
+
+                    await CreateTransactionAsync(interestTrans);
+                }
+
+                return new RentRelatedTransactionsResponse
+                {
+                    Rent = rentTrans,
+                    Management = managementTrans,
+                    Tax = taxTrans,
+                    Interest = interestTrans
+
+                };
             }
-
-            return new RentRelatedTransactionsResponse
-            {
-                Rent = rentTrans,
-                Management = managementTrans,
-                Tax = taxTrans,
-                Interest = interestTrans
-
-            };
         }
 
         private void SetManagementValues(Transaction rentTrans, Transaction managementTrans)
@@ -628,46 +635,61 @@ namespace Nadlan.Repositories
             rentTrans.IsConfirmed = false;
             Context.Entry(rentTrans).State = EntityState.Modified;
 
-            //update Management
-            var mngTrans = FindTransByAccount(originalRent, (int)Accounts.Management);
-            mngTrans.Date = rentTrans.Date;
-            //reset confirm
-            mngTrans.IsConfirmed = false;
-            //Update new values
-            SetAdditionalTransactionCommonValues(mngTrans, rentTrans, 0.1m);
-            mngTrans.Amount = mngTrans.Amount * -1;
-            //mngTrans.Amount = rentTrans.Amount * -0.1m;
+            Transaction mngTrans = null;
+            Transaction taxTrans = null;
+            Transaction interestTrans = null;
 
-            //mngTrans.Comments = $"Created automatically based on 10% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id}";
-
-            Context.Entry(mngTrans).State = EntityState.Modified;
-
-            //update Tax
-            var taxTrans = FindTransByAccount(originalRent, (int)Accounts.TaxEstimation);
-            taxTrans.Date = rentTrans.Date;
-            //reset confirm
-            taxTrans.IsConfirmed = false;
-
-            //Update new values
-            SetAdditionalTransactionCommonValues(taxTrans, rentTrans, 0.15m);
-            taxTrans.Amount = taxTrans.Amount * -1;
-
-            //taxTrans.Amount = rentTrans.Amount * -0.15m;
-            //taxTrans.Comments = $"Created automatically based on 15% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id}";
-            Context.Entry(taxTrans).State = EntityState.Modified;
-
-            //TODO: not in use at the moment
-            Transaction interestTrans = FindTransByAccount(originalRent, (int)Accounts.Mortgage_Interest);
-            if (interestTrans != null)
+            var apartment = Context.Apartments.Find(rentTrans.ApartmentId);
+            //We do not create expected tax and management automatically for investors, so no need to update
+            if (apartment.OwnershipType != (int)OwnershipType.Investor)
             {
-                //update Interest           
-                decimal monthlyInerestCost = GetMonthyInterestCost(interestTrans.ApartmentId);
-                //reset confirm
-                interestTrans.IsConfirmed = false;
-                interestTrans.Amount = monthlyInerestCost;
-                interestTrans.Date = rentTrans.Date;
-                interestTrans.Comments = $"Created automatically based on the mortgage interest rate. (transactionId: {rentTrans.Id})";
-                Context.Entry(interestTrans).State = EntityState.Modified;
+                //Update Management
+                mngTrans = FindTransByAccount(originalRent, (int)Accounts.Management);
+                if (mngTrans != null)
+                {
+                    mngTrans.Date = rentTrans.Date;
+                    //reset confirm
+                    mngTrans.IsConfirmed = false;
+                    //Update new values
+                    SetAdditionalTransactionCommonValues(mngTrans, rentTrans, 0.1m);
+                    mngTrans.Amount = mngTrans.Amount * -1;
+                    //mngTrans.Amount = rentTrans.Amount * -0.1m;
+
+                    //mngTrans.Comments = $"Created automatically based on 10% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id}";
+
+                    Context.Entry(mngTrans).State = EntityState.Modified;
+                }
+
+                //Update Tax
+                taxTrans = FindTransByAccount(originalRent, (int)Accounts.TaxEstimation);
+                if (taxTrans != null)
+                {
+                    taxTrans.Date = rentTrans.Date;
+                    //reset confirm
+                    taxTrans.IsConfirmed = false;
+
+                    //Update new values
+                    SetAdditionalTransactionCommonValues(taxTrans, rentTrans, 0.15m);
+                    taxTrans.Amount = taxTrans.Amount * -1;
+
+                    //taxTrans.Amount = rentTrans.Amount * -0.15m;
+                    //taxTrans.Comments = $"Created automatically based on 15% of ${rentTrans.Amount} rent. (transactionId: {rentTrans.Id}";
+                    Context.Entry(taxTrans).State = EntityState.Modified;
+                }
+
+                //Update interest transaction (not in use ATM)
+                interestTrans = FindTransByAccount(originalRent, (int)Accounts.Mortgage_Interest);
+                if (interestTrans != null)
+                {
+                    //update Interest           
+                    decimal monthlyInerestCost = GetMonthyInterestCost(interestTrans.ApartmentId);
+                    //reset confirm
+                    interestTrans.IsConfirmed = false;
+                    interestTrans.Amount = monthlyInerestCost;
+                    interestTrans.Date = rentTrans.Date;
+                    interestTrans.Comments = $"Created automatically based on the mortgage interest rate. (transactionId: {rentTrans.Id})";
+                    Context.Entry(interestTrans).State = EntityState.Modified;
+                }
             }
 
             await Context.SaveChangesAsync();

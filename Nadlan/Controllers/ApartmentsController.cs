@@ -49,6 +49,12 @@ namespace Nadlan.Controllers
             return Ok(apartment);
         }
 
+        // GET: api/Apartments
+        [HttpGet("GetApartmentsByOwnership/{ownershipType}")]
+        public IEnumerable<Apartment> GetApartmentsByOwnership([FromRoute] int ownershipType)
+        {
+            return _context.Apartments.Where(a => a.OwnershipType == ownershipType);
+        }
 
 
 

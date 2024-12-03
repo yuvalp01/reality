@@ -25,6 +25,7 @@ export class InvestorReportComponent implements OnInit {
     private securityService: SecurityService,
     private dialog: MatDialog) { }
   @Output() stakeholderId: number;
+  @Output() ownershipType: number;
   investorReportOverview: IInvestorReportOverview;
   portfolioReport: IPortfolioReport[];
   stakeholders: IStakeholder[];
@@ -42,6 +43,7 @@ export class InvestorReportComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.stakeholderId = +params.get("stakeholderId");
+      this.ownershipType = +params.get("ownershipType");
       this.refreshData(this.stakeholderId);
     });
 
@@ -87,11 +89,10 @@ export class InvestorReportComponent implements OnInit {
 
   }
   showApartmentReport(apartmentId, ownership) {
-
     const dialogRef = this.dialog.open(ApartmentReportsComponent, {
       height: 'auto',
       width: 'auto',
-      data: { apartmentId: apartmentId, investorPercentage: ownership }
+      data: { apartmentId: apartmentId, investorPercentage: ownership, ownershipType: this.ownershipType }
     });
   }
 

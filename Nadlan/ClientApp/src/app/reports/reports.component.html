@@ -4,7 +4,8 @@
   <mat-drawer mode="side"   opened>
     <mat-nav-list>
       <a mat-list-item *ngFor="let apartment of apartments"
-         [routerLink]="['/reports',apartment.id,status]"
+         [ngClass]="{'status-sold': apartment.status <= 0, 'status-inProc':  (apartment.status > 0 && apartment.status != 100) }"
+         [routerLink]="['/reports',apartment.id,ownershipType]"
          routerLinkActive="link-active"> {{apartment.address}} ({{apartment.id}})
       </a>
     </mat-nav-list>
@@ -12,7 +13,7 @@
   </mat-drawer>
   <mat-drawer-content>
 
-      <apartment-reports  [apartmentId]="selectedApartmentId">
+      <apartment-reports  [apartmentId]="selectedApartmentId" [ownershipType]="ownershipType">
 
       </apartment-reports>
 

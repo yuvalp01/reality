@@ -1,7 +1,7 @@
 <div>
-  <span *ngIf="this.investorPercentage==1">
+  <!--<span *ngIf="this.investorPercentage==1">
     You have full ownership on this apartment
-  </span>
+  </span>-->
   <ng-container *ngIf="apartmentInfo &&this.investorPercentage && this.investorPercentage!=1">
 
     <mat-icon [matTooltip]="showPercentage?'Click to show full value':'Click to show your part'" style="cursor:pointer;"
@@ -15,7 +15,7 @@
       (100%)</span>
   </ng-container>
   <mat-tab-group #tabGroup dynamicHeight="false">
-    <mat-tab label="Summary">
+    <mat-tab  label="Summary">
       <ng-template mat-tab-label>
         <span>Summary</span>
         <mat-spinner *ngIf="!(summaryReport && apartmentInfo)" diameter="20"></mat-spinner>
@@ -33,13 +33,27 @@
           <mat-list-item>
             <mat-icon mat-list-icon>business_center</mat-icon>
             <span class="lineTitle">Investment</span>
-            <span [ngClass]="'positive'">{{summaryReport.investment *percentage | currency:'EUR' :
-              number:'1.0-0'}}</span>
+            <span [ngClass]="'positive'">
+              {{
+summaryReport.investment *percentage | currency:'EUR' :
+              number:'1.0-0'
+              }}
+            </span>
           </mat-list-item>
 
 
+          <mat-list-item *ngIf="[10, 20, 40, 50].includes(ownershipType)" style="cursor: pointer;" (click)="tabGroup.selectedIndex=2">
+            <mat-icon mat-list-icon>business_center</mat-icon>
+            <span matTooltip="For details see 'Income Report' tab" class="lineTitle">Net income</span>
+            <span [ngClass]="{
+              positive: isPositive(summaryReport.netIncome*percentage),
+              negative: !isPositive(summaryReport.netIncome*percentage)
+            }">
+              {{summaryReport.netIncome * percentage| currency:'EUR' : number:'1.0-0' | minusSignToParens}}
+            </span>
+          </mat-list-item>
 
-          <mat-list-item style="cursor: pointer;" (click)="tabGroup.selectedIndex=2">
+          <mat-list-item *ngIf="[10, 20, 30].includes(ownershipType)" style="cursor: pointer;" (click)="tabGroup.selectedIndex=2">
             <mat-icon mat-list-icon>business_center</mat-icon>
             <span matTooltip="For details see 'Income Report' tab" class="lineTitle">Net income for investor</span>
             <span [ngClass]="{
@@ -52,24 +66,27 @@
 
 
           <div>
-
-            <mat-list-item>
+            <mat-list-item *ngIf="[10, 20, 30].includes(ownershipType)">
               <mat-icon mat-list-icon>trending_up</mat-icon>
               <span class="lineTitle">Annual ROI for investor</span>
               <span>{{summaryReport.roiForInvestor|percent:'1.1-2'}} </span>
             </mat-list-item>
-
             <mat-list-item>
               <mat-icon mat-list-icon>trending_up</mat-icon>
               <span class="lineTitle">Years since purchase</span>
               <span>{{summaryReport.years|number:'1.0-3'}} </span>
+            </mat-list-item>
+            <mat-list-item *ngIf="[10, 20, 40, 50].includes(ownershipType)">
+              <mat-icon mat-list-icon>trending_up</mat-icon>
+              <span class="lineTitle">Net ROI (rent)</span>
+              <span>{{summaryReport.roi|percent:'1.1-2'}} </span>
             </mat-list-item>
 
           </div>
         </mat-list>
       </mat-card>
     </mat-tab>
-    <mat-tab label="Distribution">
+    <mat-tab  *ngIf="ownershipType==20" label="Distribution">
       <ng-template mat-tab-label>
         <span>Distribution</span>
         <mat-spinner *ngIf="!summaryReport" diameter="20"></mat-spinner>
@@ -157,8 +174,12 @@
                 <span>Gross Income</span>
               </mat-panel-title>
               <mat-panel-description>
-                <span [ngClass]="'positive'">{{incomeReport.grossIncome*percentage | currency:'EUR' : number:'1.0-0'|
-                  minusSignToParens}}</span>
+                <span [ngClass]="'positive'">
+                  {{
+incomeReport.grossIncome*percentage | currency:'EUR' : number:'1.0-0'|
+                  minusSignToParens
+                  }}
+                </span>
               </mat-panel-description>
             </mat-expansion-panel-header>
           </mat-expansion-panel>
@@ -171,15 +192,19 @@
               </mat-panel-title>
               <mat-panel-description>
                 <mat-list-item>
-                  <span [ngClass]="'negative'">{{incomeReport.expenses*percentage | currency:'EUR' : number:'1.0-0' |
-                    minusSignToParens}}</span>
+                  <span [ngClass]="'negative'">
+                    {{
+incomeReport.expenses*percentage | currency:'EUR' : number:'1.0-0' |
+                    minusSignToParens
+                    }}
+                  </span>
                 </mat-list-item>
               </mat-panel-description>
             </mat-expansion-panel-header>
             <mat-card-content>
               <mat-list>
                 <mat-list-item class="accounts" (click)="showTrans(account.accountId, account.name, false)"
-                  style="color:#3764ad" *ngFor="let account of incomeReport?.accountsSum" id="{{account.accountId}}">
+                               style="color:#3764ad" *ngFor="let account of incomeReport?.accountsSum" id="{{account.accountId}}">
                   <mat-icon mat-list-icon>business_center</mat-icon>
                   <span>{{account.name}}</span>
                   <span>{{account.total*percentage*percentage | currency:'EUR' : number:'1.0-1'}}</span>
@@ -187,67 +212,75 @@
               </mat-list>
             </mat-card-content>
           </mat-expansion-panel>
-          <mat-divider></mat-divider>
-          <mat-expansion-panel disabled="true">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <mat-icon mat-list-icon>business_center</mat-icon>
-                <span>Net Income</span>
-              </mat-panel-title>
-              <mat-panel-description>
-                <span style="font-weight:bold" [ngClass]="{
+          <div *ngIf="[10, 20, 30].includes(ownershipType)">
+            <mat-divider></mat-divider>
+            <mat-expansion-panel disabled="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon mat-list-icon>business_center</mat-icon>
+                  <span>Net Income</span>
+                </mat-panel-title>
+                <mat-panel-description>
+                  <span style="font-weight:bold" [ngClass]="{
           positive: isPositive(incomeReport.netIncome),
           negative: !isPositive(incomeReport.netIncome)
         }">{{incomeReport.netIncome*percentage | currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-          </mat-expansion-panel>
-          <mat-expansion-panel disabled="true" style="cursor: pointer;" (click)="tabGroup.selectedIndex=5">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <mat-icon mat-list-icon>business_center</mat-icon>
-                <span matTootip="Compensation to entrepreneur">Entrepreneur</span>
-              </mat-panel-title>
-              <mat-panel-description>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+            <mat-expansion-panel disabled="true" style="cursor: pointer;" (click)="tabGroup.selectedIndex=5">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon mat-list-icon>business_center</mat-icon>
+                  <span matTootip="Compensation to entrepreneur">Entrepreneur</span>
+                </mat-panel-title>
+                <mat-panel-description>
 
-                <span [ngClass]="{
+                  <span [ngClass]="{
                     positive: isPositive(incomeReport.bonus),
                     negative: !isPositive(incomeReport.bonus)
-                  }">{{incomeReport.bonus*percentage | currency:'EUR' : number:'1.0-0' | minusSignToParens}}
-                </span>
+                  }">
+                    {{incomeReport.bonus*percentage | currency:'EUR' : number:'1.0-0' | minusSignToParens}}
+                  </span>
 
-                <span *ngIf="false" [ngClass]="{
+                  <span *ngIf="false" [ngClass]="{
                     positive: isPositive(summaryReport.bonusPaid),
                     negative: !isPositive(summaryReport.bonusPaid)
-                  }">{{summaryReport.bonusPaid*percentage | currency:'EUR' : number:'1.0-0' | minusSignToParens}}
-                </span>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-          </mat-expansion-panel>
-          <mat-divider></mat-divider>
-          <mat-expansion-panel disabled="true">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <mat-icon mat-list-icon>business_center</mat-icon>
-                <span matTootip="NetForInvestor">Net for Investor</span>
-              </mat-panel-title>
-              <mat-panel-description>
+                  }">
+                    {{summaryReport.bonusPaid*percentage | currency:'EUR' : number:'1.0-0' | minusSignToParens}}
+                  </span>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+          </div>
+          <div *ngIf="[10, 20, 30].includes(ownershipType)">
+            <mat-divider></mat-divider>
+            <mat-expansion-panel disabled="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon mat-list-icon>business_center</mat-icon>
+                  <span matTootip="NetForInvestor">Net for Investor</span>
+                </mat-panel-title>
+                <mat-panel-description>
 
-                <span *ngIf="selectedYear==0" style="font-weight:bold" [ngClass]="{
+                  <span *ngIf="selectedYear==0" style="font-weight:bold" [ngClass]="{
                     positive: isPositive(summaryReport.netForInvestor),
                     negative: !isPositive(summaryReport.netForInvestor)
-                  }">{{summaryReport.netForInvestor*percentage | currency:'EUR' : number:'1.0-0' | minusSignToParens}}
-                </span>
+                  }">
+                    {{summaryReport.netForInvestor*percentage | currency:'EUR' : number:'1.0-0' | minusSignToParens}}
+                  </span>
 
 
-                <span *ngIf="selectedYear>0" style="font-weight:bold" [ngClass]="{
+                  <span *ngIf="selectedYear>0" style="font-weight:bold" [ngClass]="{
                 positive: isPositive(incomeReport.netForInvestor),
                 negative: !isPositive(incomeReport.netForInvestor)
-              }">{{incomeReport.netForInvestor*percentage | currency:'EUR' : number:'1.0-0' | minusSignToParens}}
-                </span>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-          </mat-expansion-panel>
+              }">
+                    {{incomeReport.netForInvestor*percentage | currency:'EUR' : number:'1.0-0' | minusSignToParens}}
+                  </span>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+          </div>
         </mat-accordion>
 
 
@@ -376,17 +409,17 @@
             <span class="lineTitle">Current Rent</span>
             <span>{{apartmentInfo.currentRent| currency:'EUR' : number:'1.0-0'}}</span>
           </mat-list-item>
-          <mat-list-item>
+          <!--<mat-list-item>
             <mat-icon mat-list-icon>business_center</mat-icon>
             <span class="lineTitle">Status</span>
             <span>{{apartmentInfo.status}}</span>
-          </mat-list-item>
+          </mat-list-item>-->
 
         </mat-list>
       </mat-card>
     </mat-tab>
 
-    <mat-tab label="Entrepreneur">
+    <mat-tab *ngIf="[10, 20, 30].includes(ownershipType)" label="Entrepreneur">
       <ng-template mat-tab-label>
         <span>Entrepreneur</span>
         <mat-spinner *ngIf="!(summaryReport && apartmentInfo)" diameter="20"></mat-spinner>
@@ -460,90 +493,85 @@
         </mat-list>
       </mat-card>
     </mat-tab>
+    <div *ngIf="[10, 20, 30].includes(ownershipType)">
+      <mat-tab *hasClaim="['admin']" label="Calculation">
+        <ng-template mat-tab-label>
 
-    <mat-tab  *hasClaim="['admin']" label="Calculation">
-      <ng-template mat-tab-label>
+          <span>Calculation</span>
+        </ng-template>
+        <mat-card>
+          <mat-card-title>Calculation</mat-card-title>
+          <mat-form-field style="width: 50%" appearance="outline">
+            <mat-label>Year</mat-label>
+            <mat-select [(ngModel)]="selectedYear" placeholder="Placeholder"
+                        name="selectedYear">
+              <mat-option [value]="0">All</mat-option>
+              <mat-option *ngFor="let year of years" [value]="year">
+                {{year}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div style="width: 50%; float: left;" appearance="outline">
+            <button (click)="calcSoForReport()" mat-raised-button color="primary">Calculate</button>
+          </div>
 
-     <span>Calculation</span>
-      </ng-template>
-      <mat-card>
-        <mat-card-title>Calculation</mat-card-title>
-        <mat-form-field style="width: 50%" appearance="outline">
-          <mat-label>Year</mat-label>
-          <mat-select [(ngModel)]="selectedYear" placeholder="Placeholder"
-            name="selectedYear">
-            <mat-option [value]="0">All</mat-option>
-            <mat-option *ngFor="let year of years" [value]="year">
-              {{year}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <div  style="width: 50%; float: left;"  appearance="outline">
-          <button (click)="calcSoForReport()" mat-raised-button color="primary">Calculate</button>
-        </div>
+          <mat-spinner diameter="40" *ngIf="!soFarReport && buttonCalcClicked"></mat-spinner>
 
-        <mat-spinner diameter="40" *ngIf="!soFarReport && buttonCalcClicked"></mat-spinner>
-
-        <ng-container *ngIf="soFarReport">
-          <mat-list style="float: left; width:45%">
-            <mat-list-item>
-              <mat-icon mat-list-icon>business_center</mat-icon>
-              <span
-                class="lineTitle">Investment</span>
-              <span [ngClass]="{
+          <ng-container *ngIf="soFarReport">
+            <mat-list style="float: left; width:45%">
+              <mat-list-item>
+                <mat-icon mat-list-icon>business_center</mat-icon>
+                <span class="lineTitle">Investment</span>
+                <span [ngClass]="{
                 positive: isPositive(soFarReport.investment),
                 negative: !isPositive(soFarReport.investment)}">
-                {{soFarReport.investment| currency:'EUR' : number:'1.0-0' | minusSignToParens}}
-              </span>
-            </mat-list-item>
-            <mat-list-item>
-              <mat-icon mat-list-icon>business_center</mat-icon>
-              <span
-                class="lineTitle">Gross income so far</span>
-              <span [ngClass]="{
+                  {{soFarReport.investment| currency:'EUR' : number:'1.0-0' | minusSignToParens}}
+                </span>
+              </mat-list-item>
+              <mat-list-item>
+                <mat-icon mat-list-icon>business_center</mat-icon>
+                <span class="lineTitle">Gross income so far</span>
+                <span [ngClass]="{
                 positive: isPositive(soFarReport.grossIncome),
                 negative: !isPositive(soFarReport.grossIncome)}">
-                {{soFarReport.grossIncome| currency:'EUR' : number:'1.0-0' | minusSignToParens}}
-              </span>
-            </mat-list-item>
+                  {{soFarReport.grossIncome| currency:'EUR' : number:'1.0-0' | minusSignToParens}}
+                </span>
+              </mat-list-item>
 
-            <mat-list-item>
-              <mat-icon mat-list-icon>business_center</mat-icon>
-              <span class="lineTitle">Net income so far</span>
-              <span [ngClass]="{
+              <mat-list-item>
+                <mat-icon mat-list-icon>business_center</mat-icon>
+                <span class="lineTitle">Net income so far</span>
+                <span [ngClass]="{
                 positive: isPositive(soFarReport.netIncome),
                 negative: !isPositive(soFarReport.netIncome)}">
-                {{soFarReport.netIncome| currency:'EUR' : number:'1.0-0' | minusSignToParens}}
-              </span>
-            </mat-list-item>
+                  {{soFarReport.netIncome| currency:'EUR' : number:'1.0-0' | minusSignToParens}}
+                </span>
+              </mat-list-item>
 
-            <mat-list-item>
-              <mat-icon mat-list-icon>trending_up</mat-icon>
-              <span
-                class="lineTitle">ROI</span>
-              <span>
-                {{soFarReport.roi| percent:'1.1-2' | minusSignToParens}}
-              </span>
-            </mat-list-item>
+              <mat-list-item>
+                <mat-icon mat-list-icon>trending_up</mat-icon>
+                <span class="lineTitle">ROI</span>
+                <span>
+                  {{soFarReport.roi| percent:'1.1-2' | minusSignToParens}}
+                </span>
+              </mat-list-item>
 
-            <mat-list-item>
-              <mat-icon mat-list-icon>trending_up</mat-icon>
-              <span
-                class="lineTitle">Roi for investor</span>
-              <span>
-                {{soFarReport.roiForInvestor| percent:'1.1-2' | minusSignToParens}}
-              </span>
-            </mat-list-item>
-            <mat-list-item>
-              <mat-icon mat-list-icon>trending_up</mat-icon>
-              <span
-                class="lineTitle">Predicted ROI</span>
-              <span>
-                {{soFarReport.predictedROI| percent:'1.1-2' | minusSignToParens}}
-              </span>
-            </mat-list-item>
-          </mat-list>
-    
+              <mat-list-item>
+                <mat-icon mat-list-icon>trending_up</mat-icon>
+                <span class="lineTitle">Roi for investor</span>
+                <span>
+                  {{soFarReport.roiForInvestor| percent:'1.1-2' | minusSignToParens}}
+                </span>
+              </mat-list-item>
+              <mat-list-item>
+                <mat-icon mat-list-icon>trending_up</mat-icon>
+                <span class="lineTitle">Predicted ROI</span>
+                <span>
+                  {{soFarReport.predictedROI| percent:'1.1-2' | minusSignToParens}}
+                </span>
+              </mat-list-item>
+            </mat-list>
+
             <mat-list style="float: left; width:45%">
 
               <mat-list-item>
@@ -554,96 +582,100 @@
                 </span>
               </mat-list-item>
 
-            <mat-list-item>
-              <mat-icon mat-list-icon>my_location</mat-icon>
-              <span class="lineTitle">Total compensation so far</span>
-            
-              <span [ngClass]="{
+              <mat-list-item>
+                <mat-icon mat-list-icon>my_location</mat-icon>
+                <span class="lineTitle">Total compensation so far</span>
+
+                <span [ngClass]="{
                 positive: isPositive(soFarReport.bonus),
                 negative: !isPositive(soFarReport.bonus)}">
-                {{soFarReport.bonus|
-                currency:'EUR' : number:'1.0-0' | minusSignToParens}}</span>
-            </mat-list-item>
+                  {{soFarReport.bonus|
+                currency:'EUR' : number:'1.0-0' | minusSignToParens
+                  }}
+                </span>
+              </mat-list-item>
 
 
 
-            <mat-list-item>
-              <mat-icon mat-list-icon>my_location</mat-icon>
-              <span class="lineTitle">Compensation paid so far</span>
-              <span 
-              [ngClass]="{
+              <mat-list-item>
+                <mat-icon mat-list-icon>my_location</mat-icon>
+                <span class="lineTitle">Compensation paid so far</span>
+                <span [ngClass]="{
                 positive: isPositive(soFarReport.bonusPaid),
                 negative: !isPositive(soFarReport.bonusPaid)}"
-              
-              (click)="loadTransactionNew(300)" style="cursor: pointer;">
-                {{soFarReport.bonusPaid| currency:'EUR' : number:'1.0-0' | minusSignToParens}}
-              </span>
-            </mat-list-item>
+                      (click)="loadTransactionNew(300)" style="cursor: pointer;">
+                  {{soFarReport.bonusPaid| currency:'EUR' : number:'1.0-0' | minusSignToParens}}
+                </span>
+              </mat-list-item>
 
-            <mat-list-item>
-              <mat-icon mat-list-icon>money</mat-icon>
-              <span class="lineTitle">Distribution so far</span>
-              <span [ngClass]="{
+              <mat-list-item>
+                <mat-icon mat-list-icon>money</mat-icon>
+                <span class="lineTitle">Distribution so far</span>
+                <span [ngClass]="{
                 positive: isPositive(soFarReport.distributed),
                 negative: !isPositive(soFarReport.distributed)}"
-                (click)="loadTransactionNew(100)" style="cursor: pointer;">
-                {{soFarReport.distributed| currency:'EUR' : number:'1.0-0' | minusSignToParens}}
-              </span>
+                      (click)="loadTransactionNew(100)" style="cursor: pointer;">
+                  {{soFarReport.distributed| currency:'EUR' : number:'1.0-0' | minusSignToParens}}
+                </span>
 
-            </mat-list-item>
+              </mat-list-item>
 
-            <mat-list-item [ngClass]="{disabled: !partnershipApartments.includes(apartmentId)}">
-              <mat-icon mat-list-icon>money</mat-icon>
-              <span class="lineTitle">Distribution for this year</span>
-              <span [ngClass]="{
+              <mat-list-item [ngClass]="{disabled: !partnershipApartments.includes(apartmentId)}">
+                <mat-icon mat-list-icon>money</mat-icon>
+                <span class="lineTitle">Distribution for this year</span>
+                <span [ngClass]="{
                 positive: isPositive(soFarReport.pendingDistribution),
                 negative: !isPositive(soFarReport.pendingDistribution),
                 disabled: !partnershipApartments.includes(apartmentId)
                     }">
 
-                {{soFarReport.pendingDistribution| currency:'EUR' | minusSignToParens}}</span>
-              <button [disabled]="math.round(soFarReport.pendingDistribution)==0 || !partnershipApartments.includes(apartmentId)"
-                (click)="openTransactionForm('distribution')" matTooltip="Distribute to investors" mat-mini-fab
-                color="accent">
-                <mat-icon>paid</mat-icon>
-              </button>
-            </mat-list-item>
+                  {{soFarReport.pendingDistribution| currency:'EUR' | minusSignToParens}}
+                </span>
+                <button [disabled]="math.round(soFarReport.pendingDistribution)==0 || !partnershipApartments.includes(apartmentId)"
+                        (click)="openTransactionForm('distribution')" matTooltip="Distribute to investors" mat-mini-fab
+                        color="accent">
+                  <mat-icon>paid</mat-icon>
+                </button>
+              </mat-list-item>
 
-            <mat-list-item>
-              <mat-icon mat-list-icon>my_location</mat-icon>
-              <span class="lineTitle">Compensation for this year</span>
-              <span [ngClass]="{
+              <mat-list-item>
+                <mat-icon mat-list-icon>my_location</mat-icon>
+                <span class="lineTitle">Compensation for this year</span>
+                <span [ngClass]="{
                 positive: isPositive(soFarReport.pendingBonus),
                 negative: !isPositive(soFarReport.pendingBonus)
                     }">
 
-                {{soFarReport.pendingBonus| currency:'EUR' | minusSignToParens}}</span>
-              <button [disabled]="math.round(soFarReport.pendingBonus)==0" (click)="openTransactionForm('bonus')"
-                matTooltip="Distribute bonus" mat-mini-fab color="accent">
-                <mat-icon>paid</mat-icon>
-              </button>
-            </mat-list-item>
-            <mat-list-item>
-              <mat-icon mat-list-icon>outbound</mat-icon>
-              <span class="lineTitle">Pending expenses so far</span>
-              <span [ngClass]="{
+                  {{soFarReport.pendingBonus| currency:'EUR' | minusSignToParens}}
+                </span>
+                <button [disabled]="math.round(soFarReport.pendingBonus)==0" (click)="openTransactionForm('bonus')"
+                        matTooltip="Distribute bonus" mat-mini-fab color="accent">
+                  <mat-icon>paid</mat-icon>
+                </button>
+              </mat-list-item>
+              <mat-list-item>
+                <mat-icon mat-list-icon>outbound</mat-icon>
+                <span class="lineTitle">Pending expenses so far</span>
+                <span [ngClass]="{
                 positive: isPositive(soFarReport.pendingExpenses),
-                negative: !isPositive(soFarReport.pendingExpenses)}" 
-                (click)="showPendingExpenses()"
-                style="cursor: pointer;">
-                {{soFarReport.pendingExpenses | currency:'EUR' | minusSignToParens}}
-              </span>
-              <button [disabled]="math.round(soFarReport.pendingExpenses)==0" (click)="openPersonalTransactionForm()"
-              matTooltip="Cover expenses" mat-mini-fab color="accent">
-              <mat-icon>paid</mat-icon>
-            </button>
-            </mat-list-item>
-          </mat-list>
+                negative: !isPositive(soFarReport.pendingExpenses)}"
+                      (click)="showPendingExpenses()"
+                      style="cursor: pointer;">
+                  {{soFarReport.pendingExpenses | currency:'EUR' | minusSignToParens}}
+                </span>
+                <button [disabled]="math.round(soFarReport.pendingExpenses)==0" (click)="openPersonalTransactionForm()"
+                        matTooltip="Cover expenses" mat-mini-fab color="accent">
+                  <mat-icon>paid</mat-icon>
+                </button>
+              </mat-list-item>
+            </mat-list>
           </ng-container>
 
-       
-      </mat-card>
-    </mat-tab>
+
+        </mat-card>
+      </mat-tab>
+    </div>
+
 
 
 <mat-tab *ngIf="false" label="Appraisal">

@@ -26,6 +26,7 @@ export class ApartmentReportsComponent implements OnInit {
   partnershipApartments: number[] = [1, 3, 4, 20];
   selectedYear: number = 0;
   @Input() apartmentId: number = 0;
+  @Input() ownershipType: number = 0;
   dataSource = new MatTableDataSource<ITransaction>();
   isIgnoreChanges: boolean = true;
   @Output() myEvent = new EventEmitter();
@@ -54,14 +55,17 @@ export class ApartmentReportsComponent implements OnInit {
       this.apartmentId = +this.data.apartmentId;
       this.investorPercentage = +this.data.investorPercentage;
       this.percentage = this.investorPercentage;
-      this.loadApartmentReports(this.apartmentId);
+      this.ownershipType = +this.data.ownershipType;
+
+      this.loadApartmentReports(this.apartmentId, this.ownershipType);
       this.isIgnoreChanges = false;
     }
     else {
       this.route.paramMap.subscribe(params => {
         let _apartmentId = +params.get('apartmentId');
         this.apartmentId = _apartmentId;
-        this.loadApartmentReports(this.apartmentId);
+        this.ownershipType = +params.get('ownershipType');
+        this.loadApartmentReports(this.apartmentId, this.ownershipType);
       });
     }
   }
@@ -70,14 +74,14 @@ export class ApartmentReportsComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     if (!this.isIgnoreChanges) {
       this.apartmentId = changes.apartmentId.currentValue;
-      this.loadApartmentReports(this.apartmentId);
+      this.loadApartmentReports(this.apartmentId, this.ownershipType);
     }
 
 
   }
 
 
-  loadApartmentReports(apartmentId: number) {
+  loadApartmentReports(apartmentId: number, ownershipType: number) {
     if (apartmentId) {
       this.summaryReport = null;
       this.purchaseReport = null;
@@ -89,7 +93,6 @@ export class ApartmentReportsComponent implements OnInit {
       this.reportsService.getApartmentInfo(apartmentId).subscribe(result => this.apartmentInfo = result, error => console.error(error));
     }
   }
-
 
   loadTransactionNew(accountId: number) {
     this.filter.apartmentId = this.apartmentId;
