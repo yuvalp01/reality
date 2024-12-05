@@ -55,6 +55,10 @@ export class ApartmentReportsComponent implements OnInit {
       this.apartmentId = +this.data.apartmentId;
       this.investorPercentage = +this.data.investorPercentage;
       this.percentage = this.investorPercentage;
+      //TODO: We should get the ownership type from the database based
+      //on the apartment id, because some investor will have different type of apartments
+      //For now we use take it from the the call
+      
       this.ownershipType = +this.data.ownershipType;
 
       this.loadApartmentReports(this.apartmentId, this.ownershipType);
