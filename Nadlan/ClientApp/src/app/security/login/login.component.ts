@@ -56,8 +56,14 @@ export class LoginComponent implements OnInit {
       case 'naphtali':
         this.router.navigateByUrl(`/investor-reports/104/30`);
         break;
+      case 'amos':
+        this.router.navigateByUrl(`/investor-reports/106/30`);
+        break;
       case 'gert':
         this.router.navigateByUrl(`/investor-reports/201/50`);
+        break;
+      case 'bentzi':
+        this.router.navigateByUrl(`/investor-reports/202/50`);
         break;
       default:
         //this.router.navigateByUrl(`/investor-reports/101`);

@@ -99,6 +99,10 @@ namespace Nadlan.Repositories
                     out netIncome);
                 portfolioLineReport.Investment = investment * portfolioLine.Percentage; //GetTotalInvestment(portfolioLine) * portfolioLine.Percentage;
                 portfolioLineReport.NetProfit = (netIncome - bonusSoFar) * portfolioLine.Percentage;
+                if (apartment.OwnershipType == (int) OwnershipType.Investor)
+                {
+                    portfolioLineReport.NetProfit = netIncome;
+                }
            
                 //In a partenership apartments all expenses included in the apartment funds
                 if (partnershipApartments.Contains(portfolioLine.ApartmentId))
